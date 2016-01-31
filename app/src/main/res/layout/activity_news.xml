@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.NewsActivity">
 
+
+    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+        android:id="@+id/news_progress_loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        style="@style/Widget.MaterialProgressBar.ProgressBar" />
+
     <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

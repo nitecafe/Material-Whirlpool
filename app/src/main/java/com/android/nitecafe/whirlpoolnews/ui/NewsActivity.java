@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.android.nitecafe.whirlpoolnews.controllers.NewsController;
 import com.android.nitecafe.whirlpoolnews.R;
@@ -24,10 +25,12 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 public class NewsActivity extends AppCompatActivity implements INewsActivity {
 
     @Bind(R.id.news_recycle_view) UltimateRecyclerView newsRecyclcView;
+    @Bind(R.id.news_progress_loader) MaterialProgressBar mMaterialProgressBar;
     @Inject NewsController _controller;
     @Inject Bus eventBus;
     private NewsAdapter newsAdapter;
@@ -71,11 +74,7 @@ public class NewsActivity extends AppCompatActivity implements INewsActivity {
         newsAdapter = new NewsAdapter(eventBus);
         newsRecyclcView.setAdapter(newsAdapter);
 
-        newsRecyclcView.setDefaultOnRefreshListener(() ->
-        {
-            LoadNews();
-            newsRecyclcView.setRefreshing(false);
-        });
+        newsRecyclcView.setDefaultOnRefreshListener(() -> LoadNews());
     }
 
     private void LoadNews() {
@@ -88,10 +87,20 @@ public class NewsActivity extends AppCompatActivity implements INewsActivity {
     }
 
     @Override
+    public void HideCenterProgressBar() {
+        mMaterialProgressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
     public void DisplayErrorMessage() {
         Snackbar.make(newsRecyclcView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
                 .setAction("Retry", view -> LoadNews())
                 .show();
+    }
+
+    @Override
+    public void HideRefreshLoader() {
+        newsRecyclcView.setRefreshing(false);
     }
 
     @Subscribe

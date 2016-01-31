@@ -11,5 +11,9 @@ public interface INewsActivity {
 
     void DisplayNews(List<News> news);
 
+    void HideCenterProgressBar();
+
     void DisplayErrorMessage();
+
+    void HideRefreshLoader();
 }

@@ -6,6 +6,8 @@ import android.preference.PreferenceManager;
 
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
+import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
+import com.android.nitecafe.whirlpoolnews.scheduler.SchedulerManager;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
@@ -35,8 +37,7 @@ public class DaggerModule {
     }
 
     @Provides
-    @Singleton
-    OkHttpClient provideOkHttpClient() {
+    @Singleton OkHttpClient provideOkHttpClient() {
         OkHttpClient client = new OkHttpClient();
         client.interceptors().add(chain -> {
             final HttpUrl build = chain.request().httpUrl().newBuilder()
@@ -52,8 +53,7 @@ public class DaggerModule {
     }
 
     @Provides
-    @Singleton
-    Retrofit provideRetrofit(OkHttpClient client){
+    @Singleton Retrofit provideRetrofit(OkHttpClient client) {
         return new Retrofit.Builder()
                 .baseUrl(mBaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -63,28 +63,27 @@ public class DaggerModule {
     }
 
     @Provides
-    @Singleton
-    IWhirlpoolService provideWhirlPoolService(Retrofit retrofit)
-    {
+    @Singleton IWhirlpoolService provideWhirlPoolService(Retrofit retrofit) {
         return retrofit.create(IWhirlpoolService.class);
     }
 
     @Provides
-    @Singleton
-        // Application reference must come from AppModule.class
-    SharedPreferences providesSharedPreferences(Application application) {
+    @Singleton SharedPreferences providesSharedPreferences(Application application) {
         return PreferenceManager.getDefaultSharedPreferences(application);
     }
 
     @Provides
-    @Singleton
-    IWhirlpoolRestClient providesWhirlpoolRestClient(WhirlpoolRestClient restClient){
+    @Singleton IWhirlpoolRestClient providesWhirlpoolRestClient(WhirlpoolRestClient restClient) {
         return restClient;
     }
 
     @Provides
-    @Singleton
-    Bus provideBus(){
+    @Singleton Bus provideBus() {
         return new Bus();
+    }
+
+    @Provides
+    @Singleton ISchedulerManager provideSchedulerManager() {
+        return new SchedulerManager();
     }
 }
