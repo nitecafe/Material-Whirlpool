@@ -1,9 +1,8 @@
-package com.android.nitecafe.whirlpoolnews;
+package com.android.nitecafe.whirlpoolnews.web;
 
-import com.android.nitecafe.whirlpoolnews.models.News;
+import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
-
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -13,7 +12,7 @@ import rx.Observable;
 /**
  * Created by Graham-i5 on 1/30/2016.
  */
-public class WhirlpoolRestClient {
+public class WhirlpoolRestClient implements IWhirlpoolRestClient {
 
     private final IWhirlpoolService whirlpoolService;
 
@@ -23,6 +22,7 @@ public class WhirlpoolRestClient {
         this.whirlpoolService = whirlpoolService;
     }
 
+    @Override
     public Observable<NewsList> GetNews() {
         return whirlpoolService.GetNews();
     }

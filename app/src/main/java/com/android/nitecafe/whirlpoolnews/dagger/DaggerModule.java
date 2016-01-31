@@ -4,12 +4,13 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.android.nitecafe.whirlpoolnews.IWhirlpoolService;
-import com.android.nitecafe.whirlpoolnews.NewsController;
-import com.android.nitecafe.whirlpoolnews.WhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
+import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -73,5 +74,17 @@ public class DaggerModule {
         // Application reference must come from AppModule.class
     SharedPreferences providesSharedPreferences(Application application) {
         return PreferenceManager.getDefaultSharedPreferences(application);
+    }
+
+    @Provides
+    @Singleton
+    IWhirlpoolRestClient providesWhirlpoolRestClient(WhirlpoolRestClient restClient){
+        return restClient;
+    }
+
+    @Provides
+    @Singleton
+    Bus provideBus(){
+        return new Bus();
     }
 }

@@ -1,6 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.dagger;
 
-import com.android.nitecafe.whirlpoolnews.NewsActivity;
+import com.android.nitecafe.whirlpoolnews.ui.NewsActivity;
 
 import javax.inject.Singleton;
 

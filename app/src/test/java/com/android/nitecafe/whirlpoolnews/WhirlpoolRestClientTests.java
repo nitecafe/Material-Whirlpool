@@ -2,8 +2,10 @@ package com.android.nitecafe.whirlpoolnews;
 
 import android.support.annotation.NonNull;
 
+import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
 import com.android.nitecafe.whirlpoolnews.models.News;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
+import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 
 import org.junit.Assert;
 import org.junit.Test;
