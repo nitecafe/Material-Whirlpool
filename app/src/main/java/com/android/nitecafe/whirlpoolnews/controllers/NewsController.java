@@ -10,9 +10,6 @@ import javax.inject.Singleton;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by Graham-i5 on 1/30/2016.
- */
 public class NewsController {
 
     private IWhirlpoolRestClient _client;
@@ -31,15 +28,18 @@ public class NewsController {
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler())
                 .subscribe(newsList -> {
-                    mView.DisplayNews(newsList.getNEWS());
+                    if (mView != null) mView.DisplayNews(newsList.getNEWS());
                     HideAllProgressBar();
                 }, throwable -> {
-                    mView.DisplayErrorMessage();
+                    if (mView != null) mView.DisplayErrorMessage();
                     HideAllProgressBar();
                 });
     }
 
     private void HideAllProgressBar() {
+        if (mView == null)
+            return;
+
         mView.HideRefreshLoader();
         mView.HideCenterProgressBar();
     }

@@ -4,14 +4,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
-import com.android.nitecafe.whirlpoolnews.controllers.NewsController;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
+import com.android.nitecafe.whirlpoolnews.controllers.NewsController;
 import com.android.nitecafe.whirlpoolnews.interfaces.INewsActivity;
 import com.android.nitecafe.whirlpoolnews.models.News;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
@@ -27,7 +26,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class NewsActivity extends AppCompatActivity implements INewsActivity {
+public class NewsActivity extends NavigationDrawerActivity implements INewsActivity {
 
     @Bind(R.id.news_recycle_view) UltimateRecyclerView newsRecyclcView;
     @Bind(R.id.news_progress_loader) MaterialProgressBar mMaterialProgressBar;
@@ -63,6 +62,7 @@ public class NewsActivity extends AppCompatActivity implements INewsActivity {
         _controller.Attach(this);
 
         SetupRecycleView();
+        getSupportActionBar().setTitle("Industry News");
         LoadNews();
     }
 
@@ -74,7 +74,7 @@ public class NewsActivity extends AppCompatActivity implements INewsActivity {
         newsAdapter = new NewsAdapter(eventBus);
         newsRecyclcView.setAdapter(newsAdapter);
 
-        newsRecyclcView.setDefaultOnRefreshListener(() -> LoadNews());
+        newsRecyclcView.setDefaultOnRefreshListener(this::LoadNews);
     }
 
     private void LoadNews() {
