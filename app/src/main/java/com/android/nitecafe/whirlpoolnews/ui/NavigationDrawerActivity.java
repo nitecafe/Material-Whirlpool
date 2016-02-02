@@ -2,12 +2,13 @@ package com.android.nitecafe.whirlpoolnews.ui;
 
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.android.nitecafe.whirlpoolnews.R;
-import com.android.nitecafe.whirlpoolnews.models.News;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -34,9 +35,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this).withHeaderBackground(R.color.primary).build();
 
-        PrimaryDrawerItem newsItem = new PrimaryDrawerItem().withName("News");
+        PrimaryDrawerItem newsItem = new PrimaryDrawerItem().withName("Industry News");
         newsItem.withIcon(R.drawable.ic_news);
-        PrimaryDrawerItem forum = new PrimaryDrawerItem().withName("Forum");
+        PrimaryDrawerItem forum = new PrimaryDrawerItem().withName("Discussion Forum");
         forum.withIcon(R.drawable.ic_forum);
 
         PrimaryDrawerItem popularItems = new PrimaryDrawerItem().withName("Popular Threads");
@@ -46,7 +47,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         PrimaryDrawerItem watchedItems = new PrimaryDrawerItem().withName("Watched Threads");
         watchedItems.withIcon(R.drawable.ic_watched_threads);
 
-        PrimaryDrawerItem whims = new PrimaryDrawerItem().withName("Whims");
+        PrimaryDrawerItem whims = new PrimaryDrawerItem().withName("Private Messages");
         whims.withIcon(R.drawable.ic_whims);
         PrimaryDrawerItem apiKey = new PrimaryDrawerItem().withName("API Key");
         apiKey.withIcon(R.drawable.ic_api_key);
@@ -72,18 +73,20 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
 
     @Override public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 
-        Class activityToStart;
+        Fragment fragmentToStart;
         switch (position) {
             case NEWS_POSITION:
-                activityToStart = NewsActivity.class;
+                fragmentToStart = new NewsFragment();
                 break;
             default:
-                activityToStart = NewsActivity.class;
+                fragmentToStart = new NewsFragment();
         }
 
-        Intent intent = new Intent(this, activityToStart);
-        startActivity(intent);
+        FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
+        fts.replace(R.id.fragment_placeholder, fragmentToStart).addToBackStack(null);
+        fts.commit();
 
+        drawer.closeDrawer();
         return true;
     }
 }

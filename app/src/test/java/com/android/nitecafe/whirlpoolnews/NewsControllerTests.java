@@ -1,7 +1,7 @@
 package com.android.nitecafe.whirlpoolnews;
 
 import com.android.nitecafe.whirlpoolnews.controllers.NewsController;
-import com.android.nitecafe.whirlpoolnews.interfaces.INewsActivity;
+import com.android.nitecafe.whirlpoolnews.interfaces.INewsFragment;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
 
@@ -18,14 +18,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by grahamgoh on 31/01/16.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class NewsControllerTests {
 
     @Mock IWhirlpoolRestClient whirlpoolRestClient;
-    @Mock INewsActivity newsActivity;
+    @Mock INewsFragment newsActivity;
     private NewsController _controller;
 
     @Before

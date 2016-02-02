@@ -3,15 +3,20 @@ package com.android.nitecafe.whirlpoolnews.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.NewsController;
-import com.android.nitecafe.whirlpoolnews.interfaces.INewsActivity;
+import com.android.nitecafe.whirlpoolnews.interfaces.INewsFragment;
 import com.android.nitecafe.whirlpoolnews.models.News;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
@@ -26,55 +31,61 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class NewsActivity extends NavigationDrawerActivity implements INewsActivity {
+public class NewsFragment extends Fragment implements INewsFragment {
 
-    @Bind(R.id.news_recycle_view) UltimateRecyclerView newsRecyclcView;
+    @Bind(R.id.news_recycle_view) UltimateRecyclerView newsRecycleView;
     @Bind(R.id.news_progress_loader) MaterialProgressBar mMaterialProgressBar;
     @Inject NewsController _controller;
     @Inject Bus eventBus;
     private NewsAdapter newsAdapter;
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         eventBus.unregister(this);
         super.onPause();
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         eventBus.register(this);
         super.onResume();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         _controller.Attach(null);
         super.onDestroy();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news);
+    @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View inflate = inflater.inflate(R.layout.fragment_news, container, false);
 
-        ButterKnife.bind(this);
-        ((WhirlpoolApp) getApplication()).getDaggerComponent().inject(this);
+        ButterKnife.bind(this, inflate);
+        ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
         _controller.Attach(this);
 
         SetupRecycleView();
-        getSupportActionBar().setTitle("Industry News");
+
         LoadNews();
+
+        return inflate;
+    }
+
+    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Industry News");
     }
 
     private void SetupRecycleView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        newsRecyclcView.setLayoutManager(layoutManager);
-        newsRecyclcView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        newsRecycleView.setLayoutManager(layoutManager);
+        newsRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
 
         newsAdapter = new NewsAdapter(eventBus);
-        newsRecyclcView.setAdapter(newsAdapter);
+        newsRecycleView.setAdapter(newsAdapter);
 
-        newsRecyclcView.setDefaultOnRefreshListener(this::LoadNews);
+        newsRecycleView.setDefaultOnRefreshListener(this::LoadNews);
     }
 
     private void LoadNews() {
@@ -93,14 +104,14 @@ public class NewsActivity extends NavigationDrawerActivity implements INewsActiv
 
     @Override
     public void DisplayErrorMessage() {
-        Snackbar.make(newsRecyclcView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
+        Snackbar.make(newsRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
                 .setAction("Retry", view -> LoadNews())
                 .show();
     }
 
     @Override
     public void HideRefreshLoader() {
-        newsRecyclcView.setRefreshing(false);
+        newsRecycleView.setRefreshing(false);
     }
 
     @Subscribe

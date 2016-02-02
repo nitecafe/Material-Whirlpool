@@ -1,20 +1,17 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
-import com.android.nitecafe.whirlpoolnews.interfaces.INewsActivity;
+import com.android.nitecafe.whirlpoolnews.interfaces.INewsFragment;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
 public class NewsController {
 
     private IWhirlpoolRestClient _client;
     private ISchedulerManager schedulerManager;
-    private INewsActivity mView;
+    private INewsFragment mView;
 
     @Inject
     @Singleton
@@ -44,7 +41,7 @@ public class NewsController {
         mView.HideCenterProgressBar();
     }
 
-    public void Attach(INewsActivity view) {
+    public void Attach(INewsFragment view) {
         mView = view;
     }
 }
