@@ -31,7 +31,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class NewsFragment extends Fragment implements INewsFragment {
+public class NewsFragment extends BaseFragment implements INewsFragment {
 
     @Bind(R.id.news_recycle_view) UltimateRecyclerView newsRecycleView;
     @Bind(R.id.news_progress_loader) MaterialProgressBar mMaterialProgressBar;
@@ -74,7 +74,7 @@ public class NewsFragment extends Fragment implements INewsFragment {
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Industry News");
+        setToolbarTitle("Industry News");
     }
 
     private void SetupRecycleView() {
@@ -104,7 +104,7 @@ public class NewsFragment extends Fragment implements INewsFragment {
 
     @Override
     public void DisplayErrorMessage() {
-        Snackbar.make(newsRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
+        Snackbar.make(newsRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_SHORT)
                 .setAction("Retry", view -> LoadNews())
                 .show();
     }

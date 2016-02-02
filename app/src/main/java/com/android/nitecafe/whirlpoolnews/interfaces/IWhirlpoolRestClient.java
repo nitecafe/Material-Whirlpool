@@ -4,9 +4,10 @@ import com.android.nitecafe.whirlpoolnews.models.NewsList;
 
 import rx.Observable;
 
-/**
- * Created by Graham-i5 on 1/31/2016.
- */
 public interface IWhirlpoolRestClient {
+    void setApiKey(String apikey);
+
+    Boolean hasApiKeyBeenSet();
+
     Observable<NewsList> GetNews();
 }

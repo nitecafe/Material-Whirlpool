@@ -22,17 +22,12 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 
-/**
- * Created by Graham-i5 on 1/30/2016.
- */
 @Module
 public class DaggerModule {
 
-    private String mApiKey;
     private String mBaseUrl;
 
-    public DaggerModule(String apiKey, String baseUrl) {
-        mApiKey = apiKey;
+    public DaggerModule(String baseUrl) {
         mBaseUrl = baseUrl;
     }
 
@@ -41,7 +36,7 @@ public class DaggerModule {
         OkHttpClient client = new OkHttpClient();
         client.interceptors().add(chain -> {
             final HttpUrl build = chain.request().httpUrl().newBuilder()
-                    .addQueryParameter("key", mApiKey)
+//                    .addQueryParameter("key", mApiKey)
                     .addQueryParameter("output", "json")
                     .build();
 

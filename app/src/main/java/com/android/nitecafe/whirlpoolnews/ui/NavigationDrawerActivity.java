@@ -22,13 +22,14 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
     protected Drawer drawer;
     protected Toolbar toolbar;
 
-    private final int NEWS_POSITION = 1;
-    private final int FORUM_POSITION = 2;
-    private final int POPULAR_POSITION = 4;
-    private final int RECENT_POSITION = 5;
-    private final int WATCHED_POSITION = 6;
-    private final int WHIMS_POSITION = 8;
-    private final int APIKEY_POSITION = 9;
+    public final int NEWS_POSITION = 1;
+    public final int FORUM_POSITION = 2;
+    public final int POPULAR_POSITION = 4;
+    public final int RECENT_POSITION = 5;
+    public final int WATCHED_POSITION = 6;
+    public final int WHIMS_POSITION = 8;
+    public final int APIKEY_POSITION = 10;
+    protected PrimaryDrawerItem apiKey;
 
     protected void onCreateDrawer() {
 
@@ -49,7 +50,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
 
         PrimaryDrawerItem whims = new PrimaryDrawerItem().withName("Private Messages");
         whims.withIcon(R.drawable.ic_whims);
-        PrimaryDrawerItem apiKey = new PrimaryDrawerItem().withName("API Key");
+        apiKey = new PrimaryDrawerItem().withName("API Key");
         apiKey.withIcon(R.drawable.ic_api_key);
 
         drawer = new DrawerBuilder().withActivity(this)
@@ -78,15 +79,27 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
             case NEWS_POSITION:
                 fragmentToStart = new NewsFragment();
                 break;
+            case APIKEY_POSITION:
+                fragmentToStart = new LoginFragment();
+                break;
             default:
                 fragmentToStart = new NewsFragment();
         }
 
+        startFragment(fragmentToStart);
+
+        return true;
+    }
+
+    protected void startFragment(Fragment fragment) {
         FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
-        fts.replace(R.id.fragment_placeholder, fragmentToStart).addToBackStack(null);
+        FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, fragment);
+
+        if (!(fragment instanceof LoginFragment))
+            fragmentTransaction.addToBackStack(null);
+
         fts.commit();
 
         drawer.closeDrawer();
-        return true;
     }
 }
