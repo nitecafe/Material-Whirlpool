@@ -29,12 +29,14 @@ public class LoginController {
     public void login(String apiKey) {
         whirlpoolRestClient.setApiKey(apiKey);
         saveKeyToPreference(apiKey);
+        mView.showHomeScreen();
     }
 
     private void saveKeyToPreference(String apiKey) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(StringConstants.API_PREFERENCE_KEY, apiKey);
         editor.commit();
+        mView.showSavedMessage();
     }
 
 }

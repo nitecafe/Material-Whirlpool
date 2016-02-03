@@ -1,9 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.interfaces;
 
 public interface ILoginFragment {
-    void ShowErrorMessage();
+    void showSavedMessage();
 
-    void ShowLoggingInLoader();
-
-    void HideLoggingInLoadere();
+    void showHomeScreen();
 }

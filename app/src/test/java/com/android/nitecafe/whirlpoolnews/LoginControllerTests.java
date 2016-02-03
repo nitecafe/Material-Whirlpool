@@ -27,6 +27,7 @@ public class LoginControllerTests {
     public void setup() {
         mLoginController = new LoginController(whirlpoolRestClientMock, sharedPreferencesMock);
         Mockito.when(sharedPreferencesMock.edit()).thenReturn(editorMock);
+        mLoginController.attachedView(loginFragmentMock);
     }
 
     @Test
@@ -53,5 +54,31 @@ public class LoginControllerTests {
 
         //assert
         Mockito.verify(editorMock).putString(StringConstants.API_PREFERENCE_KEY, apiKey);
+    }
+
+    @Test
+    public void Login_WhenCalled_ShowSavedMessage() {
+
+        //arrange
+        String apiKey = "1111-1111";
+
+        //act
+        mLoginController.login(apiKey);
+
+        //assert
+        Mockito.verify(loginFragmentMock).showSavedMessage();
+    }
+
+    @Test
+    public void Login_WhenCalled_ShowsHomeScreen() {
+
+        //arrange
+        String apiKey = "1111-1111";
+
+        //act
+        mLoginController.login(apiKey);
+
+        //assert
+        Mockito.verify(loginFragmentMock).showHomeScreen();
     }
 }

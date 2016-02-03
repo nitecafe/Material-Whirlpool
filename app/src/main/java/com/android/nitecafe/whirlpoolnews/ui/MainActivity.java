@@ -8,7 +8,7 @@ import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 
 import javax.inject.Inject;
 
-public class MainActivity extends NavigationDrawerActivity {
+public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener {
 
     @Inject IWhirlpoolRestClient mWhirlpoolRestClient;
 
@@ -23,5 +23,9 @@ public class MainActivity extends NavigationDrawerActivity {
         } else if (savedInstanceState == null) {
             drawer.setSelection(newsItemDrawerItem);
         }
+    }
+
+    @Override public void showHomeScreen() {
+        drawer.setSelection(newsItemDrawerItem);
     }
 }

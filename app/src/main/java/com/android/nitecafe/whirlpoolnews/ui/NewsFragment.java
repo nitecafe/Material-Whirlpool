@@ -104,7 +104,7 @@ public class NewsFragment extends BaseFragment implements INewsFragment {
 
     @Override
     public void DisplayErrorMessage() {
-        Snackbar.make(newsRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_SHORT)
+        Snackbar.make(newsRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
                 .setAction("Retry", view -> LoadNews())
                 .show();
     }

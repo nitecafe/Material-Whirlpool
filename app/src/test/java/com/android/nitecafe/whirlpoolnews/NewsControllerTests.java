@@ -42,8 +42,8 @@ public class NewsControllerTests {
         _controller.GetNews();
 
         //assert
-        verify(newsActivity, times(1)).HideCenterProgressBar();
-        verify(newsActivity, times(1)).HideRefreshLoader();
+        verify(newsActivity).HideCenterProgressBar();
+        verify(newsActivity).HideRefreshLoader();
     }
 
     @Test
@@ -58,7 +58,7 @@ public class NewsControllerTests {
 
         //assert
         verify(newsActivity).DisplayNews(anyList());
-        verify(newsActivity, times(1)).HideRefreshLoader();
+        verify(newsActivity).HideRefreshLoader();
     }
 
 //    @Test
