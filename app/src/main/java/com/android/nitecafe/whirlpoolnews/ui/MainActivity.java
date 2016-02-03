@@ -16,13 +16,12 @@ public class MainActivity extends NavigationDrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ((WhirlpoolApp) getApplication()).getDaggerComponent().inject(this);
-    }
 
-    @Override protected void onResume() {
-        super.onResume();
 
         if (!mWhirlpoolRestClient.hasApiKeyBeenSet()) {
-            drawer.setSelection(apiKey);
+            drawer.setSelection(apiKeyDrawerItem);
+        } else if (savedInstanceState == null) {
+            drawer.setSelection(newsItemDrawerItem);
         }
     }
 }

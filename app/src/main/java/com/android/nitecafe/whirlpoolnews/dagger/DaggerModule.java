@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
@@ -33,16 +34,17 @@ public class DaggerModule {
 
     @Provides
     @Singleton OkHttpClient provideOkHttpClient() {
-        OkHttpClient client = new OkHttpClient();
-        client.interceptors().add(chain -> {
-            final HttpUrl build = chain.request().httpUrl().newBuilder()
-//                    .addQueryParameter("key", mApiKey)
-                    .addQueryParameter("output", "json")
-                    .build();
 
-            final Request request = chain.request().newBuilder().url(build).build();
-            return chain.proceed(request);
-        });
+        OkHttpClient client = new OkHttpClient();
+//        client.interceptors().add(chain -> {
+//            final HttpUrl build = chain.request().httpUrl().newBuilder()
+//                    .addQueryParameter("key", apiKeyDrawerItem)
+//                    .addQueryParameter("output", "json")
+//                    .build();
+//
+//            final Request request = chain.request().newBuilder().url(build).build();
+//            return chain.proceed(request);
+//        });
 
         return client;
     }

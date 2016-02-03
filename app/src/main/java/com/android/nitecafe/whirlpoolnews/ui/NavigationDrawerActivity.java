@@ -1,6 +1,5 @@
 package com.android.nitecafe.whirlpoolnews.ui;
 
-import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -29,15 +28,16 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
     public final int WATCHED_POSITION = 6;
     public final int WHIMS_POSITION = 8;
     public final int APIKEY_POSITION = 10;
-    protected PrimaryDrawerItem apiKey;
+    protected PrimaryDrawerItem apiKeyDrawerItem;
+    protected PrimaryDrawerItem newsItemDrawerItem;
 
     protected void onCreateDrawer() {
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this).withHeaderBackground(R.color.primary).build();
 
-        PrimaryDrawerItem newsItem = new PrimaryDrawerItem().withName("Industry News");
-        newsItem.withIcon(R.drawable.ic_news);
+        newsItemDrawerItem = new PrimaryDrawerItem().withName("Industry News");
+        newsItemDrawerItem.withIcon(R.drawable.ic_news);
         PrimaryDrawerItem forum = new PrimaryDrawerItem().withName("Discussion Forum");
         forum.withIcon(R.drawable.ic_forum);
 
@@ -50,13 +50,13 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
 
         PrimaryDrawerItem whims = new PrimaryDrawerItem().withName("Private Messages");
         whims.withIcon(R.drawable.ic_whims);
-        apiKey = new PrimaryDrawerItem().withName("API Key");
-        apiKey.withIcon(R.drawable.ic_api_key);
+        apiKeyDrawerItem = new PrimaryDrawerItem().withName("Set API Key");
+        apiKeyDrawerItem.withIcon(R.drawable.ic_api_key);
 
         drawer = new DrawerBuilder().withActivity(this)
-                .addDrawerItems(newsItem,
+                .addDrawerItems(newsItemDrawerItem,
                         forum, new DividerDrawerItem(), popularItems, recentItems, watchedItems,
-                        new DividerDrawerItem(), whims, new DividerDrawerItem(), apiKey)
+                        new DividerDrawerItem(), whims, new DividerDrawerItem(), apiKeyDrawerItem)
                 .withActionBarDrawerToggle(false)
                 .withAccountHeader(headerResult)
                 .withOnDrawerItemClickListener(this)

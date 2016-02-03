@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews;
 
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
@@ -27,6 +28,7 @@ import rx.observers.TestObserver;
 public class WhirlpoolRestClientTests {
 
     @Mock IWhirlpoolService whirlpoolServiceMock;
+    @Mock SharedPreferences sharedPreferencesMock;
     @InjectMocks WhirlpoolRestClient whirlpoolRestClient;
 
     @Test

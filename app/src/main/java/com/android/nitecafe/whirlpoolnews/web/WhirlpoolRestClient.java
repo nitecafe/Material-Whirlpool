@@ -1,5 +1,8 @@
 package com.android.nitecafe.whirlpoolnews.web;
 
+import android.content.SharedPreferences;
+
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
@@ -20,11 +23,15 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
 
     @Inject
     @Singleton
-    public WhirlpoolRestClient(Retrofit retrofit, IWhirlpoolService whirlpoolService) {
+    public WhirlpoolRestClient(Retrofit retrofit, IWhirlpoolService whirlpoolService, SharedPreferences sharedPreferences) {
         this.retrofit = retrofit;
         this.whirlpoolService = whirlpoolService;
-    }
 
+        String apiKey = sharedPreferences.getString(StringConstants.API_PREFERENCE_KEY, "");
+        if (!apiKey.isEmpty()) {
+            setApiKey(apiKey);
+        }
+    }
 
     @Override public void setApiKey(String apikey) {
         retrofit.client().interceptors().clear();
@@ -38,7 +45,6 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
             return chain.proceed(request);
         });
         hasApiKeyBeenSet = true;
-
         whirlpoolService = retrofit.create(IWhirlpoolService.class);
     }
 

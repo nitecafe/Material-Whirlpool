@@ -52,9 +52,9 @@ public class NewsFragment extends BaseFragment implements INewsFragment {
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
         _controller.Attach(null);
-        super.onDestroy();
+        super.onDestroyView();
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
