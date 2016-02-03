@@ -6,55 +6,26 @@ import java.util.Map;
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class News {
+public class Forum {
 
-    private String DATE;
-    private String SOURCE;
-    private String BLURB;
+    private Integer SORT;
     private Integer ID;
     private String TITLE;
+    private String SECTION;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
-     * @return The DATE
+     * @return The SORT
      */
-    public String getDATE() {
-        return DATE;
+    public Integer getSORT() {
+        return SORT;
     }
 
     /**
-     * @param DATE The DATE
+     * @param SORT The SORT
      */
-    public void setDATE(String DATE) {
-        this.DATE = DATE;
-    }
-
-    /**
-     * @return The SOURCE
-     */
-    public String getSOURCE() {
-        return SOURCE;
-    }
-
-    /**
-     * @param SOURCE The SOURCE
-     */
-    public void setSOURCE(String SOURCE) {
-        this.SOURCE = SOURCE;
-    }
-
-    /**
-     * @return The BLURB
-     */
-    public String getBLURB() {
-        return BLURB;
-    }
-
-    /**
-     * @param BLURB The BLURB
-     */
-    public void setBLURB(String BLURB) {
-        this.BLURB = BLURB;
+    public void setSORT(Integer SORT) {
+        this.SORT = SORT;
     }
 
     /**
@@ -83,6 +54,20 @@ public class News {
      */
     public void setTITLE(String TITLE) {
         this.TITLE = TITLE;
+    }
+
+    /**
+     * @return The SECTION
+     */
+    public String getSECTION() {
+        return SECTION;
+    }
+
+    /**
+     * @param SECTION The SECTION
+     */
+    public void setSECTION(String SECTION) {
+        this.SECTION = SECTION;
     }
 
     public Map<String, Object> getAdditionalProperties() {

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
+import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.Request;
@@ -55,7 +56,15 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
 
     @Override
     public Observable<NewsList> GetNews() {
-        return whirlpoolService.GetNews();
+        return getWhirlpoolService().GetNews();
+    }
+
+    @Override public Observable<ForumList> GetForum() {
+        return getWhirlpoolService().GetForum();
+    }
+
+    protected IWhirlpoolService getWhirlpoolService(){
+        return whirlpoolService;
     }
 
 }

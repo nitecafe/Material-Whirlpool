@@ -74,16 +74,19 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
 
     @Override public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 
-        Fragment fragmentToStart;
+        FragmentsEnum fragmentToStart;
         switch (position) {
             case NEWS_POSITION:
-                fragmentToStart = new NewsFragment();
+                fragmentToStart = FragmentsEnum.NEWS;
                 break;
             case APIKEY_POSITION:
-                fragmentToStart = new LoginFragment();
+                fragmentToStart = FragmentsEnum.API_KEY;
+                break;
+            case FORUM_POSITION:
+                fragmentToStart = FragmentsEnum.FORUM;
                 break;
             default:
-                fragmentToStart = new NewsFragment();
+                fragmentToStart = FragmentsEnum.NEWS;
         }
 
         startFragment(fragmentToStart);
@@ -91,11 +94,27 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         return true;
     }
 
-    protected void startFragment(Fragment fragment) {
-        FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
-        FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, fragment);
+    protected void startFragment(FragmentsEnum fragment) {
 
-        if (!(fragment instanceof LoginFragment))
+        Fragment fragmentToStart;
+        switch (fragment) {
+            case NEWS:
+                fragmentToStart = new NewsFragment();
+                break;
+            case API_KEY:
+                fragmentToStart = new LoginFragment();
+                break;
+            case FORUM:
+                fragmentToStart = new ForumFragment();
+                break;
+            default:
+                fragmentToStart = new NewsFragment();
+        }
+
+        FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, fragmentToStart);
+
+        if (!(fragmentToStart instanceof LoginFragment))
             fragmentTransaction.addToBackStack(null);
 
         fts.commit();
@@ -103,3 +122,4 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         drawer.closeDrawer();
     }
 }
+
