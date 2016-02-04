@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
-import com.android.nitecafe.whirlpoolnews.controllers.ForumController;
-import com.android.nitecafe.whirlpoolnews.models.Forum;
-import com.android.nitecafe.whirlpoolnews.ui.adapters.ForumStickyHeaderAdapter;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IForumFragment;
+import com.android.nitecafe.whirlpoolnews.controllers.RecentController;
+import com.android.nitecafe.whirlpoolnews.models.Recent;
+import com.android.nitecafe.whirlpoolnews.ui.adapters.RecentStickyHeaderAdapter;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
@@ -27,12 +27,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class ForumFragment extends BaseFragment implements IForumFragment, IRecycleViewItemClick {
+public class RecentFragment extends BaseFragment implements IRecycleViewItemClick, IRecentFragment {
 
-    @Bind(R.id.forum_recycle_view) UltimateRecyclerView forumRecycleView;
-    @Bind(R.id.forum_progress_loader) MaterialProgressBar mMaterialProgressBar;
-    @Inject ForumController _controller;
-    private ForumStickyHeaderAdapter stickyHeaderAdapter;
+    @Inject RecentController _controller;
+    @Bind(R.id.recent_recycle_view) UltimateRecyclerView recentRecycleView;
+    @Bind(R.id.recent_progress_loader) MaterialProgressBar mMaterialProgressBar;
+    private RecentStickyHeaderAdapter stickyHeaderAdapter;
 
     @Override
     public void onDestroyView() {
@@ -42,7 +42,7 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View inflate = inflater.inflate(R.layout.fragment_forum, container, false);
+        View inflate = inflater.inflate(R.layout.fragment_recent, container, false);
 
         ButterKnife.bind(this, inflate);
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
@@ -50,7 +50,7 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
 
         SetupRecycleView();
 
-        loadForum();
+        loadRecent();
 
         return inflate;
     }
@@ -62,22 +62,24 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
 
     private void SetupRecycleView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        forumRecycleView.setLayoutManager(layoutManager);
+        recentRecycleView.setLayoutManager(layoutManager);
 
-        stickyHeaderAdapter = new ForumStickyHeaderAdapter(this);
+        stickyHeaderAdapter = new RecentStickyHeaderAdapter(this);
 
-        forumRecycleView.setAdapter(stickyHeaderAdapter);
-        forumRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
-        forumRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
+        recentRecycleView.setAdapter(stickyHeaderAdapter);
+        recentRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
+        recentRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
+
+        recentRecycleView.setDefaultOnRefreshListener(this::loadRecent);
     }
 
-    private void loadForum() {
-        _controller.getForum();
+    private void loadRecent() {
+        _controller.GetRecent();
     }
 
     @Override
-    public void DisplayForum(List<Forum> forums) {
-        stickyHeaderAdapter.setForum(forums);
+    public void DisplayRecent(List<Recent> recents) {
+        stickyHeaderAdapter.setRecent(recents);
     }
 
     @Override
@@ -87,19 +89,17 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
 
     @Override
     public void DisplayErrorMessage() {
-        Snackbar.make(forumRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
-                .setAction("Retry", view -> loadForum())
+        Snackbar.make(recentRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
+                .setAction("Retry", view -> loadRecent())
                 .show();
     }
 
     @Override
     public void HideRefreshLoader() {
-        forumRecycleView.setRefreshing(false);
+        recentRecycleView.setRefreshing(false);
     }
 
     @Override
     public void OnItemClicked(String itemClicked) {
     }
 }
-
-

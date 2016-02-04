@@ -19,14 +19,14 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class StickyHeaderAdapter extends UltimateViewAdapter<StickyHeaderAdapter.ForumViewHolder> implements View.OnClickListener {
+public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHeaderAdapter.ForumViewHolder> implements View.OnClickListener {
 
     private List<Forum> forums = new ArrayList<>();
     private Map<String, Integer> headerMap = new HashMap<>();
     private int headerId = 0;
     private IRecycleViewItemClick itemClickHandler;
 
-    public StickyHeaderAdapter(IRecycleViewItemClick itemClickHandler) {
+    public ForumStickyHeaderAdapter(IRecycleViewItemClick itemClickHandler) {
         this.itemClickHandler = itemClickHandler;
     }
 

@@ -1,7 +1,6 @@
 package com.android.nitecafe.whirlpoolnews;
 
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
 
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
@@ -9,13 +8,14 @@ import com.android.nitecafe.whirlpoolnews.models.Forum;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.News;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
+import com.android.nitecafe.whirlpoolnews.models.Recent;
+import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -78,6 +78,24 @@ public class WhirlpoolRestClientTests {
         //assert
         List<ForumList> onNextEvents = testObserver.getOnNextEvents();
         Assert.assertEquals(forumList, onNextEvents.get(0));
+    }
+
+    @Test
+    public void GetRecent_WhenCalled_ReturnResponse() {
+        //arrange
+        final TestObserver<RecentList> testObserver = new TestObserver<>();
+        final RecentList recentList = new RecentList();
+        final Recent recent = new Recent();
+        recent.setTITLE("Big pond thread");
+        recentList.getRECENT().add(recent);
+        Mockito.when(whirlpoolRestClient.mWhirlpoolServiceMock.GetRecent()).thenReturn(Observable.just(recentList));
+
+        //act
+        whirlpoolRestClient.GetRecent().subscribe(testObserver);
+
+        //assert
+        List<RecentList> onNextEvents = testObserver.getOnNextEvents();
+        Assert.assertEquals(recentList, onNextEvents.get(0));
     }
 }
 

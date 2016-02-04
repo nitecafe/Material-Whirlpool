@@ -7,6 +7,7 @@ import com.android.nitecafe.whirlpoolnews.ui.interfaces.ILoginFragment;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 public class LoginController {
 
@@ -15,6 +16,7 @@ public class LoginController {
     private SharedPreferences mSharedPreferences;
 
     @Inject
+    @Singleton
     public LoginController(IWhirlpoolRestClient whirlpoolRestClient, SharedPreferences sharedPreferences) {
         this.whirlpoolRestClient = whirlpoolRestClient;
         mSharedPreferences = sharedPreferences;

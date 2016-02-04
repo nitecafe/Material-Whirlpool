@@ -10,4 +10,6 @@ public interface IForumFragment {
     void HideCenterProgressBar();
 
     void DisplayErrorMessage();
+
+    void  HideRefreshLoader();
 }

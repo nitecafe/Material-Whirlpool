@@ -12,6 +12,7 @@ import com.android.nitecafe.whirlpoolnews.ui.FragmentsEnum;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.NewsFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.RecentFragment;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -89,6 +90,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
             case FORUM_POSITION:
                 fragmentToStart = FragmentsEnum.FORUM;
                 break;
+            case RECENT_POSITION:
+                fragmentToStart = FragmentsEnum.RECENT_THREAD;
+                break;
             default:
                 fragmentToStart = FragmentsEnum.NEWS;
         }
@@ -110,6 +114,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
                 break;
             case FORUM:
                 fragmentToStart = new ForumFragment();
+                break;
+            case RECENT_THREAD:
+                fragmentToStart = new RecentFragment();
                 break;
             default:
                 fragmentToStart = new NewsFragment();
