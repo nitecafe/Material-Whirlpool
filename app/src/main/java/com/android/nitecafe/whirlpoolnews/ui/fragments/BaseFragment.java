@@ -1,4 +1,4 @@
-package com.android.nitecafe.whirlpoolnews.ui;
+package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;

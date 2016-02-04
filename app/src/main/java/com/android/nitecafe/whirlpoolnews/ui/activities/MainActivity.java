@@ -1,10 +1,11 @@
-package com.android.nitecafe.whirlpoolnews.ui;
+package com.android.nitecafe.whirlpoolnews.ui.activities;
 
 import android.os.Bundle;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 
 import javax.inject.Inject;
 

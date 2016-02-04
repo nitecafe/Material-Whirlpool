@@ -1,4 +1,4 @@
-package com.android.nitecafe.whirlpoolnews.interfaces;
+package com.android.nitecafe.whirlpoolnews.ui.interfaces;
 
 import com.android.nitecafe.whirlpoolnews.models.News;
 

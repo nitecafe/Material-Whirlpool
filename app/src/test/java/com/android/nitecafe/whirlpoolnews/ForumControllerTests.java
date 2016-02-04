@@ -3,16 +3,19 @@ package com.android.nitecafe.whirlpoolnews;
 import com.android.nitecafe.whirlpoolnews.controllers.ForumController;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
-import com.android.nitecafe.whirlpoolnews.ui.IForumFragment;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IForumFragment;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import rx.Observable;
+
+import static org.mockito.Mockito.anyList;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ForumControllerTests {
@@ -35,7 +38,7 @@ public class ForumControllerTests {
         _controllerToTest.getForum();
 
         //assert
-        Mockito.verify(whirlpoolServiceMock).GetForum();
+        verify(whirlpoolServiceMock).GetForum();
     }
 
     @Test
@@ -43,13 +46,13 @@ public class ForumControllerTests {
 
         //arrange
         ForumList forumList = new ForumList();
-        Mockito.when(whirlpoolServiceMock.GetForum()).thenReturn(Observable.just(forumList));
+        when(whirlpoolServiceMock.GetForum()).thenReturn(Observable.just(forumList));
 
         //act
         _controllerToTest.getForum();
 
         //assert
-        Mockito.verify(forumFragmentMock).DisplayForum(Mockito.anyList());
+        verify(forumFragmentMock).DisplayForum(anyList());
     }
 
 }

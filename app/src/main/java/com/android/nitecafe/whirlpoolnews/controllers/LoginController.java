@@ -2,10 +2,8 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 
 import android.content.SharedPreferences;
 
-import com.android.nitecafe.whirlpoolnews.BuildConfig;
-import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
-import com.android.nitecafe.whirlpoolnews.interfaces.ILoginFragment;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.ILoginFragment;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 
 import javax.inject.Inject;

@@ -1,4 +1,4 @@
-package com.android.nitecafe.whirlpoolnews.ui;
+package com.android.nitecafe.whirlpoolnews.ui.activities;
 
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.android.nitecafe.whirlpoolnews.R;
+import com.android.nitecafe.whirlpoolnews.ui.FragmentsEnum;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.NewsFragment;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;

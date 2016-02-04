@@ -1,4 +1,4 @@
-package com.android.nitecafe.whirlpoolnews.ui;
+package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -14,12 +14,13 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.NewsController;
-import com.android.nitecafe.whirlpoolnews.interfaces.INewsFragment;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.INewsFragment;
 import com.android.nitecafe.whirlpoolnews.models.News;
+import com.android.nitecafe.whirlpoolnews.ui.adapters.NewsAdapter;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class NewsFragment extends BaseFragment implements INewsFragment {
+public class NewsFragment extends BaseFragment implements INewsFragment,IRecycleViewItemClick {
 
     @Bind(R.id.news_recycle_view) UltimateRecyclerView newsRecycleView;
     @Bind(R.id.news_progress_loader) MaterialProgressBar mMaterialProgressBar;
@@ -80,7 +81,7 @@ public class NewsFragment extends BaseFragment implements INewsFragment {
         newsRecycleView.setLayoutManager(layoutManager);
         newsRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
 
-        newsAdapter = new NewsAdapter(eventBus);
+        newsAdapter = new NewsAdapter(this);
         newsRecycleView.setAdapter(newsAdapter);
 
         newsRecycleView.setDefaultOnRefreshListener(this::LoadNews);
@@ -112,9 +113,9 @@ public class NewsFragment extends BaseFragment implements INewsFragment {
         newsRecycleView.setRefreshing(false);
     }
 
-    @Subscribe
-    public void OnItemClicked(String newsId) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(StringConstants.NEWS_REDIRECT_URL + newsId));
+    @Override
+    public void OnItemClicked(String itemClicked) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(StringConstants.NEWS_REDIRECT_URL + itemClicked));
         startActivity(browserIntent);
     }
 }

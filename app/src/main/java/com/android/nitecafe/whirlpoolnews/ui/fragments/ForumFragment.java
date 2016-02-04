@@ -1,29 +1,25 @@
-package com.android.nitecafe.whirlpoolnews.ui;
+package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.controllers.ForumController;
 import com.android.nitecafe.whirlpoolnews.models.Forum;
+import com.android.nitecafe.whirlpoolnews.ui.adapters.StickyHeaderAdapter;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IForumFragment;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
-import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -31,7 +27,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class ForumFragment extends BaseFragment implements IForumFragment {
+public class ForumFragment extends BaseFragment implements IForumFragment, IRecycleViewItemClick {
 
     @Bind(R.id.forum_recycle_view) UltimateRecyclerView forumRecycleView;
     @Bind(R.id.forum_progress_loader) MaterialProgressBar mMaterialProgressBar;
@@ -68,7 +64,7 @@ public class ForumFragment extends BaseFragment implements IForumFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         forumRecycleView.setLayoutManager(layoutManager);
 
-        stickyHeaderAdapter = new StickyHeaderAdapter();
+        stickyHeaderAdapter = new StickyHeaderAdapter(this);
 
         forumRecycleView.setAdapter(stickyHeaderAdapter);
         forumRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
@@ -96,8 +92,8 @@ public class ForumFragment extends BaseFragment implements IForumFragment {
                 .show();
     }
 
-    @Subscribe
-    public void OnItemClicked(String newsId) {
+    @Override
+    public void OnItemClicked(String itemClicked) {
     }
 }
 

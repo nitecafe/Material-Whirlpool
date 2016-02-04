@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.LoginController;
-import com.android.nitecafe.whirlpoolnews.interfaces.ILoginFragment;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.ILoginFragment;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 
 import org.junit.Before;

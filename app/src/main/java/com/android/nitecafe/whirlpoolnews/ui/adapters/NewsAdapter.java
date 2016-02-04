@@ -1,4 +1,4 @@
-package com.android.nitecafe.whirlpoolnews.ui;
+package com.android.nitecafe.whirlpoolnews.ui.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.News;
-import com.squareup.otto.Bus;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +19,10 @@ import butterknife.ButterKnife;
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> implements View.OnClickListener {
 
     private List<News> mNews = new ArrayList<>();
-    private Bus mEventBus;
+    private IRecycleViewItemClick itemClickHandler;
 
-    public NewsAdapter(Bus eventBus) {
-        mEventBus = eventBus;
+    public NewsAdapter(IRecycleViewItemClick itemClickHandler) {
+        this.itemClickHandler = itemClickHandler;
     }
 
     public void SetNews(List<News> news) {
@@ -51,7 +51,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     @Override
     public void onClick(View view) {
-        mEventBus.post(view.getTag().toString());
+        itemClickHandler.OnItemClicked(view.getTag().toString());
     }
 
     public static class NewsViewHolder extends RecyclerView.ViewHolder {

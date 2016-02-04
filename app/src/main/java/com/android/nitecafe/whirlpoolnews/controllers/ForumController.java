@@ -2,7 +2,7 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
-import com.android.nitecafe.whirlpoolnews.ui.IForumFragment;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IForumFragment;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

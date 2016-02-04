@@ -1,7 +1,7 @@
 package com.android.nitecafe.whirlpoolnews;
 
 import com.android.nitecafe.whirlpoolnews.controllers.NewsController;
-import com.android.nitecafe.whirlpoolnews.interfaces.INewsFragment;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.INewsFragment;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
 
@@ -14,7 +14,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import rx.Observable;
 
 import static org.mockito.Mockito.anyList;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

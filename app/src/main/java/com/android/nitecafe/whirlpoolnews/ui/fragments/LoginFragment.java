@@ -1,4 +1,4 @@
-package com.android.nitecafe.whirlpoolnews.ui;
+package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import android.widget.EditText;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.controllers.LoginController;
-import com.android.nitecafe.whirlpoolnews.interfaces.ILoginFragment;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.ILoginFragment;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import javax.inject.Inject;

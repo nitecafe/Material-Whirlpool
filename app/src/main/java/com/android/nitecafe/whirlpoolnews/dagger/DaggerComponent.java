@@ -1,9 +1,9 @@
 package com.android.nitecafe.whirlpoolnews.dagger;
 
-import com.android.nitecafe.whirlpoolnews.ui.ForumFragment;
-import com.android.nitecafe.whirlpoolnews.ui.LoginFragment;
-import com.android.nitecafe.whirlpoolnews.ui.MainActivity;
-import com.android.nitecafe.whirlpoolnews.ui.NewsFragment;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
+import com.android.nitecafe.whirlpoolnews.ui.activities.MainActivity;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.NewsFragment;
 
 import javax.inject.Singleton;
 
@@ -18,5 +18,5 @@ public interface DaggerComponent {
 
     void inject(MainActivity mainActivity);
 
-    void inject(ForumFragment forumFragment);
+    void inject(IRecycleViewItemClick forumFragment);
 }
