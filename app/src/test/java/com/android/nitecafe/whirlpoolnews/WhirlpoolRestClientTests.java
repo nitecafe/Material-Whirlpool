@@ -32,7 +32,6 @@ import rx.observers.TestObserver;
 @RunWith(MockitoJUnitRunner.class)
 public class WhirlpoolRestClientTests {
 
-    @Mock IWhirlpoolService whirlpoolServiceMock;
     @Mock SharedPreferences sharedPreferencesMock;
     TestableWhirlpoolRestClient whirlpoolRestClient;
 
@@ -40,7 +39,7 @@ public class WhirlpoolRestClientTests {
     public void setup() {
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://www.google.com").build();
         Mockito.when(sharedPreferencesMock.getString(StringConstants.API_PREFERENCE_KEY, "")).thenReturn("111-111");
-        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, whirlpoolServiceMock, sharedPreferencesMock);
+        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock);
     }
 
     @Test
@@ -86,8 +85,8 @@ class TestableWhirlpoolRestClient extends WhirlpoolRestClient {
 
     public IWhirlpoolService mWhirlpoolServiceMock;
 
-    public TestableWhirlpoolRestClient(Retrofit retrofit, IWhirlpoolService whirlpoolService, SharedPreferences sharedPreferences) {
-        super(retrofit, whirlpoolService, sharedPreferences);
+    public TestableWhirlpoolRestClient(Retrofit retrofit, SharedPreferences sharedPreferences) {
+        super(retrofit, sharedPreferences);
 
         mWhirlpoolServiceMock = Mockito.mock(IWhirlpoolService.class);
     }

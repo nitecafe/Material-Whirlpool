@@ -30,23 +30,20 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class NewsFragment extends BaseFragment implements INewsFragment,IRecycleViewItemClick {
+public class NewsFragment extends BaseFragment implements INewsFragment, IRecycleViewItemClick {
 
     @Bind(R.id.news_recycle_view) UltimateRecyclerView newsRecycleView;
     @Bind(R.id.news_progress_loader) MaterialProgressBar mMaterialProgressBar;
     @Inject NewsController _controller;
-    @Inject Bus eventBus;
     private NewsAdapter newsAdapter;
 
     @Override
     public void onPause() {
-        eventBus.unregister(this);
         super.onPause();
     }
 
     @Override
     public void onResume() {
-        eventBus.register(this);
         super.onResume();
     }
 

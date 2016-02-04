@@ -4,16 +4,17 @@ import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 
 import rx.Scheduler;
 import rx.schedulers.Schedulers;
+import rx.schedulers.TestScheduler;
 
-/**
- * Created by grahamgoh on 31/01/16.
- */
 public class TestSchedulerManager implements ISchedulerManager {
+
+    public TestScheduler testScheduler = new TestScheduler();
+
     @Override public Scheduler GetMainScheduler() {
-        return Schedulers.io();
+        return testScheduler;
     }
 
     @Override public Scheduler GetIoScheduler() {
-        return Schedulers.io();
+        return testScheduler;
     }
 }

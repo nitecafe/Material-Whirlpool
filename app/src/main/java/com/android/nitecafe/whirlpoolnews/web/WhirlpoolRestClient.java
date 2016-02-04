@@ -24,14 +24,14 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
 
     @Inject
     @Singleton
-    public WhirlpoolRestClient(Retrofit retrofit, IWhirlpoolService whirlpoolService, SharedPreferences sharedPreferences) {
+    public WhirlpoolRestClient(Retrofit retrofit, SharedPreferences sharedPreferences) {
         this.retrofit = retrofit;
-        this.whirlpoolService = whirlpoolService;
 
         String apiKey = sharedPreferences.getString(StringConstants.API_PREFERENCE_KEY, "");
         if (!apiKey.isEmpty()) {
             setApiKey(apiKey);
-        }
+        } else
+            setApiKey("");
     }
 
     @Override public void setApiKey(String apikey) {
@@ -63,7 +63,7 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         return getWhirlpoolService().GetForum();
     }
 
-    protected IWhirlpoolService getWhirlpoolService(){
+    protected IWhirlpoolService getWhirlpoolService() {
         return whirlpoolService;
     }
 

@@ -23,10 +23,13 @@ public class NewsControllerTests {
     @Mock IWhirlpoolRestClient whirlpoolRestClient;
     @Mock INewsFragment newsActivity;
     private NewsController _controller;
+    private TestSchedulerManager testSchedulerManager;
+
 
     @Before
     public void Setup() {
-        _controller = new NewsController(whirlpoolRestClient, new TestSchedulerManager());
+        testSchedulerManager = new TestSchedulerManager();
+        _controller = new NewsController(whirlpoolRestClient, testSchedulerManager);
         _controller.Attach(newsActivity);
     }
 
@@ -39,6 +42,7 @@ public class NewsControllerTests {
 
         //act
         _controller.GetNews();
+        testSchedulerManager.testScheduler.triggerActions();
 
         //assert
         verify(newsActivity).HideCenterProgressBar();
@@ -54,40 +58,42 @@ public class NewsControllerTests {
 
         //act
         _controller.GetNews();
+        testSchedulerManager.testScheduler.triggerActions();
 
         //assert
         verify(newsActivity).DisplayNews(anyList());
-        verify(newsActivity).HideRefreshLoader();
     }
 
-//    @Test
-//    public void GetNews_WhenFailure_HideAllProgressBar() {
-//
-//        //arrange
-//        when(whirlpoolRestClient.GetNews()).thenReturn(Observable.error(new Exception()));
-//
-//        //act
-//        _controller.GetNews();
-//
-//        //assert
-//        verify(newsActivity, times(1)).HideCenterProgressBar();
-//        verify(newsActivity, times(1)).HideRefreshLoader();
-//
-//    }
+    @Test
+    public void GetNews_WhenFailure_HideAllProgressBar() {
 
-//
-//    @Test
-//    public void GetNews_WhenFailure_ShowErrorMessage() {
-//
-//        //arrange
-//        when(whirlpoolRestClient.GetNews()).thenReturn();
-//
-//        //act
-//        _controller.GetNews();
-//
-//        //assert
-//        verify(newsActivity, times(1)).DisplayErrorMessage();
-//    }
+        //arrange
+        when(whirlpoolRestClient.GetNews()).thenReturn(Observable.error(new Exception()));
+
+        //act
+        _controller.GetNews();
+        testSchedulerManager.testScheduler.triggerActions();
+
+        //assert
+        verify(newsActivity).HideCenterProgressBar();
+        verify(newsActivity).HideRefreshLoader();
+
+    }
+
+
+    @Test
+    public void GetNews_WhenFailure_ShowErrorMessage() {
+
+        //arrange
+        when(whirlpoolRestClient.GetNews()).thenReturn(Observable.error(new Exception()));
+
+        //act
+        _controller.GetNews();
+        testSchedulerManager.testScheduler.triggerActions();
+
+        //assert
+        verify(newsActivity).DisplayErrorMessage();
+    }
 }
 
 
