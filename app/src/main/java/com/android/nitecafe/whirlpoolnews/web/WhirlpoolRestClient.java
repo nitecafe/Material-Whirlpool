@@ -8,6 +8,7 @@ import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
 import com.android.nitecafe.whirlpoolnews.models.RecentList;
+import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.Request;
 
@@ -32,8 +33,7 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         if (!apiKey.isEmpty()) {
             setApiKey(apiKey);
             hasApiKeyBeenSet = true;
-        } else
-        {
+        } else {
             setApiKey("");
             hasApiKeyBeenSet = false;
         }
@@ -77,4 +77,7 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         return whirlpoolService;
     }
 
+    @Override public Observable<WatchedList> GetWatched() {
+        return getWhirlpoolService().GetWatched();
+    }
 }

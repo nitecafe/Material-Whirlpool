@@ -1,37 +1,35 @@
 package com.android.nitecafe.whirlpoolnews.models;
 
-import com.google.gson.annotations.SerializedName;
-
 public interface IWhirlpoolThread {
 
     /**
      * @return The FORUMNAME
      */
-    public String getFORUMNAME();
+    String getFORUMNAME();
 
     /**
      * @return The TITLE
      */
-    public String getTITLE();
+    String getTITLE();
 
     /**
      * @return The REPLIES
      */
-    public Integer getREPLIES();
+    Integer getREPLIES();
 
     /**
      * @return The ID
      */
-    public Integer getID();
+    Integer getID();
 
     /**
      * @return The LASTDATE
      */
-    public String getLASTDATE();
+    String getLASTDATE();
 
     /**
      * @return The LastPoster
      */
-    public Poster getLAST();
+    Poster getLAST();
 
 }

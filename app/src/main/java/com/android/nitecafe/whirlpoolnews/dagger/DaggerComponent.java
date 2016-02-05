@@ -5,6 +5,7 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.activities.MainActivity;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.NewsFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.RecentFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.WatchedFragment;
 
 import javax.inject.Singleton;
 
@@ -22,4 +23,6 @@ public interface DaggerComponent {
     void inject(ForumFragment forumFragment);
 
     void inject(RecentFragment recentFragment);
+
+    void inject(WatchedFragment watchedFragment);
 }

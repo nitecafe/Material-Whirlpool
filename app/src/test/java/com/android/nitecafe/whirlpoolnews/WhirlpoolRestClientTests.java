@@ -10,6 +10,8 @@ import com.android.nitecafe.whirlpoolnews.models.News;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
 import com.android.nitecafe.whirlpoolnews.models.Recent;
 import com.android.nitecafe.whirlpoolnews.models.RecentList;
+import com.android.nitecafe.whirlpoolnews.models.Watched;
+import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 
 import org.junit.Assert;
@@ -123,6 +125,25 @@ public class WhirlpoolRestClientTests {
 
         //assert
         Assert.assertTrue(whirlpoolRestClient.hasApiKeyBeenSet());
+    }
+
+    @Test
+    public void GetWatchedThreads_WhenCalled_ReturnResponse(){
+        //arrange
+        final TestObserver<WatchedList> testObserver = new TestObserver<>();
+        final WatchedList watchedList = new WatchedList();
+        final Watched watched = new Watched();
+        watched.setTITLE("Watched thread");
+        watchedList.getWATCHED().add(watched);
+        Mockito.when(whirlpoolRestClient.mWhirlpoolServiceMock.GetWatched()).thenReturn(Observable.just(watchedList));
+
+        //act
+        whirlpoolRestClient.GetWatched().subscribe(testObserver);
+
+        //assert
+        List<WatchedList> onNextEvents = testObserver.getOnNextEvents();
+        Assert.assertEquals(watchedList, onNextEvents.get(0));
+
     }
 }
 

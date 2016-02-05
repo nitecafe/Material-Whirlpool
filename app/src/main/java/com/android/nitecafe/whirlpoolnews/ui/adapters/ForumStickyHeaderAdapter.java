@@ -68,6 +68,7 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
 
     @Override public void onBindViewHolder(ForumViewHolder holder, int position) {
         holder.forumTitle.setText(forums.get(position).getTITLE());
+        holder.itemView.setTag(forums.get(position).getID());
     }
 
     @Override public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
@@ -80,7 +81,6 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
     @Override public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
         TextView textView = (TextView) holder.itemView;
         textView.setText(forums.get(position).getSECTION());
-        holder.itemView.setTag(forums.get(position).getID());
     }
 
     public static class ForumViewHolder extends RecyclerView.ViewHolder {

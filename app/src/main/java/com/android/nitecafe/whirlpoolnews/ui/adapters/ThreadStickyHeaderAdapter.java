@@ -78,11 +78,18 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Ultim
         T thread = threadsList.get(position);
 
         holder.threadTitle.setText(thread.getTITLE());
-        final int postPerPage = thread.getREPLIES() / StringConstants.POST_PER_PAGE;
-        holder.threadTotalPage.setText(String.valueOf(postPerPage));
+        final int pages = getNumberOfPage(thread);
+        holder.threadTotalPage.setText(String.valueOf(pages));
 
         final Date localDateFromString = WhirlpoolDateUtils.getLocalDateFromString(thread.getLASTDATE());
-        holder.threadLastPostInfo.setText(String.format("%s ago by %s", WhirlpoolDateUtils.getTimeSince(localDateFromString), thread.getLAST().getNAME()));
+        holder.threadLastPostInfo.setText(String.format("%s ago by %s",
+                WhirlpoolDateUtils.getTimeSince(localDateFromString), thread.getLAST().getNAME()));
+
+        holder.itemView.setTag(threadsList.get(position).getID());
+    }
+
+    private int getNumberOfPage(T thread) {
+        return (int) Math.ceil((double) thread.getREPLIES() / StringConstants.POST_PER_PAGE);
     }
 
     @Override
@@ -97,7 +104,6 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Ultim
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
         TextView textView = (TextView) holder.itemView;
         textView.setText(threadsList.get(position).getFORUMNAME());
-        holder.itemView.setTag(threadsList.get(position).getID());
     }
 
     public static class ThreadViewHolder extends RecyclerView.ViewHolder {
