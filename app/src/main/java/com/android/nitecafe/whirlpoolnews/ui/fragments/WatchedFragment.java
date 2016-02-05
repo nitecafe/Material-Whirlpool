@@ -13,6 +13,7 @@ import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.controllers.WatchedController;
 import com.android.nitecafe.whirlpoolnews.models.Watched;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ThreadStickyHeaderAdapter;
+import com.android.nitecafe.whirlpoolnews.ui.adapters.WatchedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWatchedFragment;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
@@ -64,7 +65,7 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         watchedRecycleView.setLayoutManager(layoutManager);
 
-        stickyHeaderAdapter = new ThreadStickyHeaderAdapter<>(this);
+        stickyHeaderAdapter = new WatchedThreadAdapter(this);
 
         watchedRecycleView.setAdapter(stickyHeaderAdapter);
         watchedRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));

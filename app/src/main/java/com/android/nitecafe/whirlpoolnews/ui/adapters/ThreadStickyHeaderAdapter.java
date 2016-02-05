@@ -77,7 +77,7 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Ultim
     public void onBindViewHolder(ThreadViewHolder holder, int position) {
         T thread = threadsList.get(position);
 
-        holder.threadTitle.setText(thread.getTITLE());
+        holder.threadTitle.setText(getThreadTitleText(thread));
         final int pages = getNumberOfPage(thread);
         holder.threadTotalPage.setText(String.valueOf(pages));
 
@@ -86,6 +86,13 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Ultim
                 WhirlpoolDateUtils.getTimeSince(localDateFromString), thread.getLAST().getNAME()));
 
         holder.itemView.setTag(threadsList.get(position).getID());
+    }
+
+    /**
+     * A seam to allow modification of the title shows on the UI
+     */
+    protected String getThreadTitleText(T thread) {
+        return thread.getTITLE();
     }
 
     private int getNumberOfPage(T thread) {
