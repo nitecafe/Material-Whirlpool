@@ -1,7 +1,5 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
-import android.util.Log;
-
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IForumFragment;
@@ -29,18 +27,19 @@ public class ForumController {
                 .subscribe(forumList -> {
                     if (forumFragment != null) {
                         forumFragment.DisplayForum(forumList.getFORUM());
-                        forumFragment.HideCenterProgressBar();
-                        forumFragment.HideRefreshLoader();
+                        hideAllLoader();
                     }
                 }, throwable -> {
                     if (forumFragment != null) {
                         forumFragment.DisplayErrorMessage();
-                        forumFragment.HideCenterProgressBar();
-                        forumFragment.HideRefreshLoader();
+                        hideAllLoader();
                     }
-                    Log.e("forum get ",throwable.getMessage());
                 });
+    }
 
+    private void hideAllLoader() {
+        forumFragment.HideCenterProgressBar();
+        forumFragment.HideRefreshLoader();
     }
 
     public void attach(IForumFragment forumFragment) {

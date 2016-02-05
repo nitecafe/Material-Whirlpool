@@ -34,10 +34,11 @@ public class WhirlpoolRestClientTests {
 
     @Mock SharedPreferences sharedPreferencesMock;
     TestableWhirlpoolRestClient whirlpoolRestClient;
+    private Retrofit retrofit;
 
     @Before
     public void setup() {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://www.google.com").build();
+        retrofit = new Retrofit.Builder().baseUrl("http://www.google.com").build();
         Mockito.when(sharedPreferencesMock.getString(StringConstants.API_PREFERENCE_KEY, "")).thenReturn("111-111");
         whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock);
     }
@@ -96,6 +97,32 @@ public class WhirlpoolRestClientTests {
         //assert
         List<RecentList> onNextEvents = testObserver.getOnNextEvents();
         Assert.assertEquals(recentList, onNextEvents.get(0));
+    }
+
+    @Test
+    public void HasApiKeyBeenSet_WhenKeyIsEmpty_ReturnFalse(){
+
+        //arrange
+        Mockito.when(sharedPreferencesMock.getString(StringConstants.API_PREFERENCE_KEY, "")).thenReturn("");
+
+        //act
+        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock);
+
+        //assert
+        Assert.assertFalse(whirlpoolRestClient.hasApiKeyBeenSet());
+    }
+
+    @Test
+    public void HasApiKeyBeenSet_WhenKeyIsSet_ReturnTrue(){
+
+        //arrange
+        Mockito.when(sharedPreferencesMock.getString(StringConstants.API_PREFERENCE_KEY, "")).thenReturn("1111-1111");
+
+        //act
+        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock);
+
+        //assert
+        Assert.assertTrue(whirlpoolRestClient.hasApiKeyBeenSet());
     }
 }
 

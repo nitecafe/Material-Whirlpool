@@ -1,7 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.ui.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,11 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.Recent;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
+import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,25 +41,30 @@ public class RecentStickyHeaderAdapter extends UltimateViewAdapter<RecentStickyH
 
     }
 
-    @Override public RecentViewHolder getViewHolder(View view) {
+    @Override
+    public RecentViewHolder getViewHolder(View view) {
         return null;
     }
 
-    @Override public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
 //        itemClickHandler.OnItemClicked(v.getTag().toString());
     }
 
-    @Override public RecentViewHolder onCreateViewHolder(ViewGroup parent) {
+    @Override
+    public RecentViewHolder onCreateViewHolder(ViewGroup parent) {
         final View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_thread, parent, false);
         inflate.setOnClickListener(this);
         return new RecentViewHolder(inflate);
     }
 
-    @Override public int getAdapterItemCount() {
+    @Override
+    public int getAdapterItemCount() {
         return recentList.size();
     }
 
-    @Override public long generateHeaderId(int position) {
+    @Override
+    public long generateHeaderId(int position) {
         String section = recentList.get(position).getFORUMNAME();
         if (headerMap.containsKey(section))
             return headerMap.get(section);
@@ -68,25 +74,28 @@ public class RecentStickyHeaderAdapter extends UltimateViewAdapter<RecentStickyH
         }
     }
 
-    @Override public void onBindViewHolder(RecentViewHolder holder, int position) {
+    @Override
+    public void onBindViewHolder(RecentViewHolder holder, int position) {
         Recent recentItem = recentList.get(position);
 
         holder.threadTitle.setText(recentItem.getTITLE());
-        holder.threadTotalPage.setText(recentItem.getREPLIES().toString());
+        final int postPerPage = recentItem.getREPLIES() / StringConstants.POST_PER_PAGE;
+        holder.threadTotalPage.setText(String.valueOf(postPerPage));
 
-//        long datePosted = Long.valueOf(recentItem.getLASTDATE());
-//        CharSequence relativeTimeSpanString = DateUtils.getRelativeTimeSpanString(datePosted);
-//     Ad   holder.threadLastPostInfo.setText(String.format("%s by %s", relativeTimeSpanString, recentItem.getLAST().getNAME()));
+        final Date localDateFromString = WhirlpoolDateUtils.getLocalDateFromString(recentItem.getLASTDATE());
+        holder.threadLastPostInfo.setText(String.format("%s ago by %s", WhirlpoolDateUtils.getTimeSince(localDateFromString), recentItem.getLAST().getNAME()));
     }
 
-    @Override public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.view_header_item_forum, parent, false);
         return new RecyclerView.ViewHolder(view) {
         };
     }
 
-    @Override public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+    @Override
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
         TextView textView = (TextView) holder.itemView;
         textView.setText(recentList.get(position).getFORUMNAME());
         holder.itemView.setTag(recentList.get(position).getID());

@@ -31,8 +31,12 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         String apiKey = sharedPreferences.getString(StringConstants.API_PREFERENCE_KEY, "");
         if (!apiKey.isEmpty()) {
             setApiKey(apiKey);
+            hasApiKeyBeenSet = true;
         } else
+        {
             setApiKey("");
+            hasApiKeyBeenSet = false;
+        }
     }
 
     @Override public void setApiKey(String apikey) {
@@ -46,7 +50,7 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
             final Request request = chain.request().newBuilder().url(build).build();
             return chain.proceed(request);
         });
-        hasApiKeyBeenSet = true;
+
         whirlpoolService = retrofit.create(IWhirlpoolService.class);
     }
 
