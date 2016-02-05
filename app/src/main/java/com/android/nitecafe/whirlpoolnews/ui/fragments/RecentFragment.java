@@ -12,7 +12,7 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.controllers.RecentController;
 import com.android.nitecafe.whirlpoolnews.models.Recent;
-import com.android.nitecafe.whirlpoolnews.ui.adapters.RecentStickyHeaderAdapter;
+import com.android.nitecafe.whirlpoolnews.ui.adapters.ThreadStickyHeaderAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
@@ -32,7 +32,7 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
     @Inject RecentController _controller;
     @Bind(R.id.recent_recycle_view) UltimateRecyclerView recentRecycleView;
     @Bind(R.id.recent_progress_loader) MaterialProgressBar mMaterialProgressBar;
-    private RecentStickyHeaderAdapter stickyHeaderAdapter;
+    private ThreadStickyHeaderAdapter<Recent> stickyHeaderAdapter;
 
     @Override
     public void onDestroyView() {
@@ -64,7 +64,7 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recentRecycleView.setLayoutManager(layoutManager);
 
-        stickyHeaderAdapter = new RecentStickyHeaderAdapter(this);
+        stickyHeaderAdapter = new ThreadStickyHeaderAdapter<>(this);
 
         recentRecycleView.setAdapter(stickyHeaderAdapter);
         recentRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
@@ -79,7 +79,7 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
 
     @Override
     public void DisplayRecent(List<Recent> recents) {
-        stickyHeaderAdapter.setRecent(recents);
+        stickyHeaderAdapter.setThreads(recents);
     }
 
     @Override

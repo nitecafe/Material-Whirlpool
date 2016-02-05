@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class Recent {
+public class Recent implements IWhirlpoolThread {
 
     @SerializedName("LAST_DATE")
     private String LASTDATE;

@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
-import com.android.nitecafe.whirlpoolnews.models.Recent;
+import com.android.nitecafe.whirlpoolnews.models.IWhirlpoolThread;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
@@ -22,50 +22,49 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class RecentStickyHeaderAdapter extends UltimateViewAdapter<RecentStickyHeaderAdapter.RecentViewHolder> implements View.OnClickListener {
+public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends UltimateViewAdapter<ThreadStickyHeaderAdapter.ThreadViewHolder> implements View.OnClickListener {
 
-    private List<Recent> recentList = new ArrayList<>();
+    private List<T> threadsList = new ArrayList<>();
     private Map<String, Integer> headerMap = new HashMap<>();
     private int headerId = 0;
     private IRecycleViewItemClick itemClickHandler;
 
-    public RecentStickyHeaderAdapter(IRecycleViewItemClick itemClickHandler) {
+    public ThreadStickyHeaderAdapter(IRecycleViewItemClick itemClickHandler) {
         this.itemClickHandler = itemClickHandler;
     }
 
-    public void setRecent(List<Recent> recent) {
-        this.recentList = recent;
+    public void setThreads(List<T> items) {
+        this.threadsList = items;
         headerMap.clear();
         headerId = 0;
         notifyDataSetChanged();
-
     }
 
     @Override
-    public RecentViewHolder getViewHolder(View view) {
+    public ThreadViewHolder getViewHolder(View view) {
         return null;
     }
 
     @Override
     public void onClick(View v) {
-//        itemClickHandler.OnItemClicked(v.getTag().toString());
+        itemClickHandler.OnItemClicked(v.getTag().toString());
     }
 
     @Override
-    public RecentViewHolder onCreateViewHolder(ViewGroup parent) {
+    public ThreadViewHolder onCreateViewHolder(ViewGroup parent) {
         final View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_thread, parent, false);
         inflate.setOnClickListener(this);
-        return new RecentViewHolder(inflate);
+        return new ThreadViewHolder(inflate);
     }
 
     @Override
     public int getAdapterItemCount() {
-        return recentList.size();
+        return threadsList.size();
     }
 
     @Override
     public long generateHeaderId(int position) {
-        String section = recentList.get(position).getFORUMNAME();
+        String section = threadsList.get(position).getFORUMNAME();
         if (headerMap.containsKey(section))
             return headerMap.get(section);
         else {
@@ -75,15 +74,15 @@ public class RecentStickyHeaderAdapter extends UltimateViewAdapter<RecentStickyH
     }
 
     @Override
-    public void onBindViewHolder(RecentViewHolder holder, int position) {
-        Recent recentItem = recentList.get(position);
+    public void onBindViewHolder(ThreadViewHolder holder, int position) {
+        T thread = threadsList.get(position);
 
-        holder.threadTitle.setText(recentItem.getTITLE());
-        final int postPerPage = recentItem.getREPLIES() / StringConstants.POST_PER_PAGE;
+        holder.threadTitle.setText(thread.getTITLE());
+        final int postPerPage = thread.getREPLIES() / StringConstants.POST_PER_PAGE;
         holder.threadTotalPage.setText(String.valueOf(postPerPage));
 
-        final Date localDateFromString = WhirlpoolDateUtils.getLocalDateFromString(recentItem.getLASTDATE());
-        holder.threadLastPostInfo.setText(String.format("%s ago by %s", WhirlpoolDateUtils.getTimeSince(localDateFromString), recentItem.getLAST().getNAME()));
+        final Date localDateFromString = WhirlpoolDateUtils.getLocalDateFromString(thread.getLASTDATE());
+        holder.threadLastPostInfo.setText(String.format("%s ago by %s", WhirlpoolDateUtils.getTimeSince(localDateFromString), thread.getLAST().getNAME()));
     }
 
     @Override
@@ -97,17 +96,17 @@ public class RecentStickyHeaderAdapter extends UltimateViewAdapter<RecentStickyH
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
         TextView textView = (TextView) holder.itemView;
-        textView.setText(recentList.get(position).getFORUMNAME());
-        holder.itemView.setTag(recentList.get(position).getID());
+        textView.setText(threadsList.get(position).getFORUMNAME());
+        holder.itemView.setTag(threadsList.get(position).getID());
     }
 
-    public static class RecentViewHolder extends RecyclerView.ViewHolder {
+    public static class ThreadViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.thread_title) TextView threadTitle;
         @Bind(R.id.thread_total_page) TextView threadTotalPage;
         @Bind(R.id.thread_last_post_info) TextView threadLastPostInfo;
         public View itemView;
 
-        RecentViewHolder(View itemView) {
+        ThreadViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
             ButterKnife.bind(this, itemView);
