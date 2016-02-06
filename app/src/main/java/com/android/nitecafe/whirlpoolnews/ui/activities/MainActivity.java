@@ -5,15 +5,18 @@ import android.os.Bundle;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.RecentFragment;
 
 import javax.inject.Inject;
 
-public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener {
+public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener, ForumFragment.IOnForumClicked, RecentFragment.IOnThreadClicked {
 
     @Inject IWhirlpoolRestClient mWhirlpoolRestClient;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ((WhirlpoolApp) getApplication()).getDaggerComponent().inject(this);
@@ -26,7 +29,18 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         }
     }
 
-    @Override public void showHomeScreen() {
+    @Override
+    public void showHomeScreen() {
         drawer.setSelection(newsItemDrawerItem);
+    }
+
+    @Override
+    public void onForumClicked(int forumId) {
+
+    }
+
+    @Override
+    public void OnThreadClicked(int threadId) {
+
     }
 }

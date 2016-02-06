@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -33,6 +34,7 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
     @Bind(R.id.forum_progress_loader) MaterialProgressBar mMaterialProgressBar;
     @Inject ForumController _controller;
     private ForumStickyHeaderAdapter stickyHeaderAdapter;
+    private IOnForumClicked listener;
 
     @Override
     public void onDestroyView() {
@@ -40,7 +42,24 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
         super.onDestroyView();
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof IOnForumClicked)
+            listener = (IOnForumClicked) context;
+        else
+            throw new ClassCastException("activity must implement IOnForumClicked.");
+    }
+
+    @Override
+    public void onDetach() {
+        listener = null;
+        super.onDetach();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View inflate = inflater.inflate(R.layout.fragment_forum, container, false);
 
@@ -55,7 +74,8 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
         return inflate;
     }
 
-    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setToolbarTitle("Discussion Forum");
     }
@@ -99,6 +119,11 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
 
     @Override
     public void OnItemClicked(String itemClicked) {
+        listener.onForumClicked(Integer.parseInt(itemClicked));
+    }
+
+    public interface IOnForumClicked {
+        void onForumClicked(int forumId);
     }
 }
 

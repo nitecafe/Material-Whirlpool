@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -33,6 +34,7 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
     @Bind(R.id.recent_recycle_view) UltimateRecyclerView recentRecycleView;
     @Bind(R.id.recent_progress_loader) MaterialProgressBar mMaterialProgressBar;
     private ThreadStickyHeaderAdapter<Recent> stickyHeaderAdapter;
+    private IOnThreadClicked listener;
 
     @Override
     public void onDestroyView() {
@@ -40,7 +42,24 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
         super.onDestroyView();
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof IOnThreadClicked)
+            listener = (IOnThreadClicked) context;
+        else
+            throw new ClassCastException("Activity must implement IOnThreadClicked");
+    }
+
+    @Override
+    public void onDetach() {
+        listener = null;
+        super.onDetach();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View inflate = inflater.inflate(R.layout.fragment_recent, container, false);
 
@@ -55,7 +74,8 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
         return inflate;
     }
 
-    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setToolbarTitle("Discussion Forum");
     }
@@ -101,5 +121,10 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
 
     @Override
     public void OnItemClicked(String itemClicked) {
+        listener.OnThreadClicked(Integer.parseInt(itemClicked));
+    }
+
+    public interface IOnThreadClicked {
+        void OnThreadClicked(int threadId);
     }
 }
