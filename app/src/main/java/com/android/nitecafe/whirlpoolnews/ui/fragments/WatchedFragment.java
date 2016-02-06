@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -34,6 +35,7 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
     @Bind(R.id.watched_recycle_view) UltimateRecyclerView watchedRecycleView;
     @Bind(R.id.watched_progress_loader) MaterialProgressBar mMaterialProgressBar;
     private ThreadStickyHeaderAdapter<Watched> stickyHeaderAdapter;
+    private RecentFragment.IOnThreadClicked listener;
 
     @Override
     public void onDestroyView() {
@@ -41,7 +43,24 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
         super.onDestroyView();
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof RecentFragment.IOnThreadClicked)
+            listener = (RecentFragment.IOnThreadClicked) context;
+        else
+            throw new ClassCastException("Activity must implement IOnThreadClicked");
+    }
+
+    @Override
+    public void onDetach() {
+        listener = null;
+        super.onDetach();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View inflate = inflater.inflate(R.layout.fragment_watched, container, false);
 
@@ -56,7 +75,8 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
         return inflate;
     }
 
-    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setToolbarTitle("Watched Threads");
     }
@@ -102,5 +122,6 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
 
     @Override
     public void OnItemClicked(String itemClicked) {
+        listener.OnThreadClicked(Integer.parseInt(itemClicked));
     }
 }

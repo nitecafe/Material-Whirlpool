@@ -51,6 +51,8 @@ public class LoginFragment extends BaseFragment implements ILoginFragment {
         super.onAttach(context);
         if (context instanceof OnShowHomeScreenListener)
             listener = (OnShowHomeScreenListener) context;
+        else
+            throw new ClassCastException("Activity must implement OnShowHomeScreenListener");
     }
 
     @Override public void onDetach() {
