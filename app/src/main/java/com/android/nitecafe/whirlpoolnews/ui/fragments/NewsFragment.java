@@ -53,7 +53,9 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
         super.onDestroyView();
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View inflate = inflater.inflate(R.layout.fragment_news, container, false);
 
@@ -68,7 +70,8 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
         return inflate;
     }
 
-    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setToolbarTitle("Industry News");
     }
@@ -111,7 +114,7 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
     }
 
     @Override
-    public void OnItemClicked(String itemClicked) {
+    public void OnItemClicked(String itemClicked, String title) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(StringConstants.NEWS_REDIRECT_URL + itemClicked));
         startActivity(browserIntent);
     }

@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.ui.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
@@ -8,6 +9,7 @@ import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.RecentFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.ThreadFragment;
 
 import javax.inject.Inject;
 
@@ -35,12 +37,16 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     }
 
     @Override
-    public void onForumClicked(int forumId) {
-
+    public void onForumClicked(int forumId, String forumTitle) {
+        final ThreadFragment threadFragment = ThreadFragment.newInstance(forumId, forumTitle);
+        FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, threadFragment);
+        fragmentTransaction.addToBackStack(null);
+        fts.commit();
     }
 
     @Override
-    public void OnThreadClicked(int threadId) {
+    public void OnThreadClicked(int threadId, String threadTitle) {
 
     }
 }

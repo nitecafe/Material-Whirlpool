@@ -47,7 +47,7 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Ultim
 
     @Override
     public void onClick(View v) {
-        itemClickHandler.OnItemClicked(v.getTag().toString());
+        itemClickHandler.OnItemClicked(v.getTag().toString(), v.getTag(StringConstants.TAG_TITLE_KEY).toString());
     }
 
     @Override
@@ -85,7 +85,8 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Ultim
         holder.threadLastPostInfo.setText(String.format("%s ago by %s",
                 WhirlpoolDateUtils.getTimeSince(localDateFromString), thread.getLAST().getNAME()));
 
-        holder.itemView.setTag(threadsList.get(position).getID());
+        holder.itemView.setTag(thread.getID());
+        holder.itemView.setTag(StringConstants.TAG_TITLE_KEY, thread.getTITLE());
     }
 
     /**

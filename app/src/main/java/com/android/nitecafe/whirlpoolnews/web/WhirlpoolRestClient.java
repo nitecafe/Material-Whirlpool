@@ -6,6 +6,7 @@ import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
+import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
 import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
@@ -39,7 +40,8 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         }
     }
 
-    @Override public void setApiKey(String apikey) {
+    @Override
+    public void setApiKey(String apikey) {
         retrofit.client().interceptors().clear();
         retrofit.client().interceptors().add(chain -> {
             final HttpUrl build = chain.request().httpUrl().newBuilder()
@@ -54,7 +56,8 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         whirlpoolService = retrofit.create(IWhirlpoolService.class);
     }
 
-    @Override public Boolean hasApiKeyBeenSet() {
+    @Override
+    public Boolean hasApiKeyBeenSet() {
         return hasApiKeyBeenSet;
     }
 
@@ -69,7 +72,8 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         return getWhirlpoolService().GetForum();
     }
 
-    @Override public Observable<RecentList> GetRecent() {
+    @Override
+    public Observable<RecentList> GetRecent() {
         return getWhirlpoolService().GetRecent();
     }
 
@@ -77,7 +81,13 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         return whirlpoolService;
     }
 
-    @Override public Observable<WatchedList> GetWatched() {
+    @Override
+    public Observable<WatchedList> GetWatched() {
         return getWhirlpoolService().GetWatched();
+    }
+
+    @Override
+    public Observable<ForumThreadList> GetThreads(int forumIds, int threadCount) {
+        return getWhirlpoolService().GetThreads(forumIds, threadCount);
     }
 }

@@ -51,7 +51,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     @Override
     public void onClick(View view) {
-        itemClickHandler.OnItemClicked(view.getTag().toString());
+        itemClickHandler.OnItemClicked(view.getTag().toString(), "");
     }
 
     public static class NewsViewHolder extends RecyclerView.ViewHolder {

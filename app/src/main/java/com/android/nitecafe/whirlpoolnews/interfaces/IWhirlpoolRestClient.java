@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.interfaces;
 
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
+import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
 import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
@@ -19,4 +20,6 @@ public interface IWhirlpoolRestClient {
     Observable<RecentList> GetRecent();
 
     Observable<WatchedList> GetWatched();
+
+    Observable<ForumThreadList> GetThreads(int forumIds, int threadCount);
 }

@@ -6,6 +6,8 @@ import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
 import com.android.nitecafe.whirlpoolnews.models.Forum;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
+import com.android.nitecafe.whirlpoolnews.models.ForumThread;
+import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
 import com.android.nitecafe.whirlpoolnews.models.News;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
 import com.android.nitecafe.whirlpoolnews.models.Recent;
@@ -102,7 +104,7 @@ public class WhirlpoolRestClientTests {
     }
 
     @Test
-    public void HasApiKeyBeenSet_WhenKeyIsEmpty_ReturnFalse(){
+    public void HasApiKeyBeenSet_WhenKeyIsEmpty_ReturnFalse() {
 
         //arrange
         Mockito.when(sharedPreferencesMock.getString(StringConstants.API_PREFERENCE_KEY, "")).thenReturn("");
@@ -115,7 +117,7 @@ public class WhirlpoolRestClientTests {
     }
 
     @Test
-    public void HasApiKeyBeenSet_WhenKeyIsSet_ReturnTrue(){
+    public void HasApiKeyBeenSet_WhenKeyIsSet_ReturnTrue() {
 
         //arrange
         Mockito.when(sharedPreferencesMock.getString(StringConstants.API_PREFERENCE_KEY, "")).thenReturn("1111-1111");
@@ -128,7 +130,25 @@ public class WhirlpoolRestClientTests {
     }
 
     @Test
-    public void GetWatchedThreads_WhenCalled_ReturnResponse(){
+    public void GetThreads_WhenCalled_ReturnResponse() {
+        //arrange
+        final TestObserver<ForumThreadList> testObserver = new TestObserver<>();
+        final ForumThreadList threadList = new ForumThreadList();
+        final ForumThread thread = new ForumThread();
+        thread.setTITLE("Big pond thread");
+        threadList.getTHREADS().add(thread);
+        Mockito.when(whirlpoolRestClient.mWhirlpoolServiceMock.GetThreads(1, 30)).thenReturn(Observable.just(threadList));
+
+        //act
+        whirlpoolRestClient.GetThreads(1,30).subscribe(testObserver);
+
+        //assert
+        List<ForumThreadList> onNextEvents = testObserver.getOnNextEvents();
+        Assert.assertEquals(threadList, onNextEvents.get(0));
+    }
+
+    @Test
+    public void GetWatchedThreads_WhenCalled_ReturnResponse() {
         //arrange
         final TestObserver<WatchedList> testObserver = new TestObserver<>();
         final WatchedList watchedList = new WatchedList();
@@ -157,7 +177,8 @@ class TestableWhirlpoolRestClient extends WhirlpoolRestClient {
         mWhirlpoolServiceMock = Mockito.mock(IWhirlpoolService.class);
     }
 
-    @Override protected IWhirlpoolService getWhirlpoolService() {
+    @Override
+    protected IWhirlpoolService getWhirlpoolService() {
         return mWhirlpoolServiceMock;
     }
 

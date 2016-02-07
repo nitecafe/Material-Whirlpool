@@ -118,12 +118,12 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
     }
 
     @Override
-    public void OnItemClicked(String itemClicked) {
-        listener.onForumClicked(Integer.parseInt(itemClicked));
+    public void OnItemClicked(String itemClicked, String title) {
+        listener.onForumClicked(Integer.parseInt(itemClicked), title);
     }
 
     public interface IOnForumClicked {
-        void onForumClicked(int forumId);
+        void onForumClicked(int forumId, String title);
     }
 }
 

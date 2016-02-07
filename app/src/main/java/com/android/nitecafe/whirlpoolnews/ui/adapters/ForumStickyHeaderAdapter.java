@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.Forum;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
@@ -38,25 +39,30 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
 
     }
 
-    @Override public ForumViewHolder getViewHolder(View view) {
+    @Override
+    public ForumViewHolder getViewHolder(View view) {
         return null;
     }
 
-    @Override public void onClick(View v) {
-        itemClickHandler.OnItemClicked(v.getTag().toString());
+    @Override
+    public void onClick(View v) {
+        itemClickHandler.OnItemClicked(v.getTag().toString(), v.getTag(StringConstants.TAG_TITLE_KEY).toString());
     }
 
-    @Override public ForumViewHolder onCreateViewHolder(ViewGroup parent) {
+    @Override
+    public ForumViewHolder onCreateViewHolder(ViewGroup parent) {
         final View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_forum, parent, false);
         inflate.setOnClickListener(this);
         return new ForumViewHolder(inflate);
     }
 
-    @Override public int getAdapterItemCount() {
+    @Override
+    public int getAdapterItemCount() {
         return forums.size();
     }
 
-    @Override public long generateHeaderId(int position) {
+    @Override
+    public long generateHeaderId(int position) {
         String section = forums.get(position).getSECTION();
         if (headerMap.containsKey(section))
             return headerMap.get(section);
@@ -66,19 +72,23 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
         }
     }
 
-    @Override public void onBindViewHolder(ForumViewHolder holder, int position) {
+    @Override
+    public void onBindViewHolder(ForumViewHolder holder, int position) {
         holder.forumTitle.setText(forums.get(position).getTITLE());
         holder.itemView.setTag(forums.get(position).getID());
+        holder.itemView.setTag(StringConstants.TAG_TITLE_KEY, forums.get(position).getTITLE());
     }
 
-    @Override public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.view_header_item_forum, parent, false);
         return new RecyclerView.ViewHolder(view) {
         };
     }
 
-    @Override public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+    @Override
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
         TextView textView = (TextView) holder.itemView;
         textView.setText(forums.get(position).getSECTION());
     }

@@ -11,14 +11,12 @@ import android.view.ViewGroup;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
-import com.android.nitecafe.whirlpoolnews.controllers.RecentController;
-import com.android.nitecafe.whirlpoolnews.models.Recent;
-import com.android.nitecafe.whirlpoolnews.ui.adapters.ThreadStickyHeaderAdapter;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecentFragment;
+import com.android.nitecafe.whirlpoolnews.controllers.ForumThreadController;
+import com.android.nitecafe.whirlpoolnews.models.ForumThread;
+import com.android.nitecafe.whirlpoolnews.ui.adapters.ForumThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
-import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import java.util.List;
 
@@ -28,13 +26,34 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class RecentFragment extends BaseFragment implements IRecycleViewItemClick, IRecentFragment {
+public class ThreadFragment extends BaseFragment implements IRecycleViewItemClick, IThreadFragment {
 
-    @Inject RecentController _controller;
-    @Bind(R.id.recent_recycle_view) UltimateRecyclerView recentRecycleView;
-    @Bind(R.id.recent_progress_loader) MaterialProgressBar mMaterialProgressBar;
-    private ThreadStickyHeaderAdapter<Recent> stickyHeaderAdapter;
+    @Inject ForumThreadController _controller;
+    @Bind(R.id.thread_recycle_view) UltimateRecyclerView mRecycleView;
+    @Bind(R.id.thread_progress_loader) MaterialProgressBar mMaterialProgressBar;
     private IOnThreadClicked listener;
+
+    public static final String FORUM_ID = "ForumId";
+    public static final String FORUM_NAME = "ForumTitle";
+    private int mForumId;
+    private String mForumTitle;
+    private ForumThreadAdapter forumThreadAdapter;
+
+    public static ThreadFragment newInstance(int forumId, String forumName) {
+        ThreadFragment fragment = new ThreadFragment();
+        Bundle args = new Bundle();
+        args.putInt(FORUM_ID, forumId);
+        args.putString(FORUM_NAME, forumName);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mForumId = getArguments().getInt(FORUM_ID, 0);
+        mForumTitle = getArguments().getString(FORUM_NAME, "");
+    }
 
     @Override
     public void onDestroyView() {
@@ -61,7 +80,7 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View inflate = inflater.inflate(R.layout.fragment_recent, container, false);
+        View inflate = inflater.inflate(R.layout.fragment_thread, container, false);
 
         ButterKnife.bind(this, inflate);
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
@@ -69,7 +88,7 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
 
         SetupRecycleView();
 
-        loadRecent();
+        loadThreads();
 
         return inflate;
     }
@@ -77,29 +96,23 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setToolbarTitle("Discussion Forum");
+        setToolbarTitle(mForumTitle);
     }
 
     private void SetupRecycleView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recentRecycleView.setLayoutManager(layoutManager);
+        mRecycleView.setLayoutManager(layoutManager);
 
-        stickyHeaderAdapter = new ThreadStickyHeaderAdapter<>(this);
+        forumThreadAdapter = new ForumThreadAdapter(this);
 
-        recentRecycleView.setAdapter(stickyHeaderAdapter);
-        recentRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
-        recentRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
+        mRecycleView.setAdapter(forumThreadAdapter);
+        mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
 
-        recentRecycleView.setDefaultOnRefreshListener(this::loadRecent);
+        mRecycleView.setDefaultOnRefreshListener(this::loadThreads);
     }
 
-    private void loadRecent() {
-        _controller.GetRecent();
-    }
-
-    @Override
-    public void DisplayRecent(List<Recent> recents) {
-        stickyHeaderAdapter.setThreads(recents);
+    private void loadThreads() {
+        _controller.GetThreads(mForumId);
     }
 
     @Override
@@ -109,18 +122,23 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
 
     @Override
     public void DisplayErrorMessage() {
-        Snackbar.make(recentRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
-                .setAction("Retry", view -> loadRecent())
+        Snackbar.make(mRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
+                .setAction("Retry", view -> loadThreads())
                 .show();
     }
 
     @Override
-    public void HideRefreshLoader() {
-        recentRecycleView.setRefreshing(false);
+    public void DisplayThreads(List<ForumThread> threads) {
+        forumThreadAdapter.SetThreads(threads);
     }
 
     @Override
-    public void OnItemClicked(String itemClicked,String threadTitle) {
+    public void HideRefreshLoader() {
+        mRecycleView.setRefreshing(false);
+    }
+
+    @Override
+    public void OnItemClicked(String itemClicked, String threadTitle) {
         listener.OnThreadClicked(Integer.parseInt(itemClicked), threadTitle);
     }
 
