@@ -14,6 +14,7 @@ import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.controllers.RecentController;
 import com.android.nitecafe.whirlpoolnews.models.Recent;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ThreadStickyHeaderAdapter;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
@@ -124,7 +125,6 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
         listener.OnThreadClicked(itemClicked, threadTitle);
     }
 
-    public interface IOnThreadClicked {
-        void OnThreadClicked(int threadId, String threadTitle);
-    }
+
 }
+

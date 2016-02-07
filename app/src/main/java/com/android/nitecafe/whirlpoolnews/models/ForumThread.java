@@ -1,5 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,9 +10,12 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class ForumThread {
 
+    @SerializedName("LAST_DATE")
     private String LASTDATE;
+    @SerializedName("FORUM_DATE")
     private String FORUMNAME;
     private Poster LAST;
+    @SerializedName("FORUM_ID")
     private Integer FORUMID;
     private Integer ID;
     private String TITLE;

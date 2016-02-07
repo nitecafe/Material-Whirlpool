@@ -10,10 +10,11 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.RecentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ThreadFragment;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 
 import javax.inject.Inject;
 
-public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener, ForumFragment.IOnForumClicked, RecentFragment.IOnThreadClicked {
+public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener, ForumFragment.IOnForumClicked, IOnThreadClicked {
 
     @Inject IWhirlpoolRestClient mWhirlpoolRestClient;
 

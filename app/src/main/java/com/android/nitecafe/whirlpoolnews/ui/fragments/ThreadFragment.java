@@ -14,7 +14,9 @@ import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.controllers.ForumThreadController;
 import com.android.nitecafe.whirlpoolnews.models.ForumThread;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ForumThreadAdapter;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadFragment;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -140,9 +142,5 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
     @Override
     public void OnItemClicked(int itemClicked, String threadTitle) {
         listener.OnThreadClicked(itemClicked, threadTitle);
-    }
-
-    public interface IOnThreadClicked {
-        void OnThreadClicked(int threadId,String threadTitle);
     }
 }

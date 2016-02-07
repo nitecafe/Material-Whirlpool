@@ -15,6 +15,7 @@ import com.android.nitecafe.whirlpoolnews.controllers.WatchedController;
 import com.android.nitecafe.whirlpoolnews.models.Watched;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ThreadStickyHeaderAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.WatchedThreadAdapter;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWatchedFragment;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
@@ -35,7 +36,7 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
     @Bind(R.id.watched_recycle_view) UltimateRecyclerView watchedRecycleView;
     @Bind(R.id.watched_progress_loader) MaterialProgressBar mMaterialProgressBar;
     private ThreadStickyHeaderAdapter<Watched> stickyHeaderAdapter;
-    private RecentFragment.IOnThreadClicked listener;
+    private IOnThreadClicked listener;
 
     @Override
     public void onDestroyView() {
@@ -46,8 +47,8 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof RecentFragment.IOnThreadClicked)
-            listener = (RecentFragment.IOnThreadClicked) context;
+        if (context instanceof IOnThreadClicked)
+            listener = (IOnThreadClicked) context;
         else
             throw new ClassCastException("Activity must implement IOnThreadClicked");
     }
