@@ -114,8 +114,8 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
     }
 
     @Override
-    public void OnItemClicked(String itemClicked, String title) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(StringConstants.NEWS_REDIRECT_URL + itemClicked));
+    public void OnItemClicked(int itemClicked, String title) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(StringConstants.NEWS_REDIRECT_URL + String.valueOf(itemClicked)));
         startActivity(browserIntent);
     }
 }

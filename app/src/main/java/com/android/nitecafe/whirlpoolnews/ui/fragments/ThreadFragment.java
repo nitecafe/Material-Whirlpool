@@ -138,8 +138,8 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
     }
 
     @Override
-    public void OnItemClicked(String itemClicked, String threadTitle) {
-        listener.OnThreadClicked(Integer.parseInt(itemClicked), threadTitle);
+    public void OnItemClicked(int itemClicked, String threadTitle) {
+        listener.OnThreadClicked(itemClicked, threadTitle);
     }
 
     public interface IOnThreadClicked {

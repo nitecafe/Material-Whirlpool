@@ -120,11 +120,11 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
     }
 
     @Override
-    public void OnItemClicked(String itemClicked,String threadTitle) {
-        listener.OnThreadClicked(Integer.parseInt(itemClicked), threadTitle);
+    public void OnItemClicked(int itemClicked, String threadTitle) {
+        listener.OnThreadClicked(itemClicked, threadTitle);
     }
 
     public interface IOnThreadClicked {
-        void OnThreadClicked(int threadId,String threadTitle);
+        void OnThreadClicked(int threadId, String threadTitle);
     }
 }

@@ -121,7 +121,7 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
     }
 
     @Override
-    public void OnItemClicked(String itemClicked, String title) {
-        listener.OnThreadClicked(Integer.parseInt(itemClicked), title);
+    public void OnItemClicked(int itemClicked, String title) {
+        listener.OnThreadClicked(itemClicked, title);
     }
 }

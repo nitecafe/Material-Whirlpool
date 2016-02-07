@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.News;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.RecyclerViewAdapterClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> implements View.OnClickListener {
+public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> implements RecyclerViewAdapterClickListener {
 
     private List<News> mNews = new ArrayList<>();
     private IRecycleViewItemClick itemClickHandler;
@@ -33,8 +34,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     @Override
     public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_news, parent, false);
-        inflate.setOnClickListener(this);
-        return new NewsViewHolder(inflate);
+        return new NewsViewHolder(inflate, this);
     }
 
     @Override
@@ -50,19 +50,28 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     @Override
-    public void onClick(View view) {
-        itemClickHandler.OnItemClicked(view.getTag().toString(), "");
+    public void recyclerViewListClicked(View v, int position) {
+        final News news = mNews.get(position);
+        itemClickHandler.OnItemClicked(news.getID(), news.getTITLE());
     }
 
-    public static class NewsViewHolder extends RecyclerView.ViewHolder {
+    public static class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.news_title) TextView newsTitle;
         @Bind(R.id.news_blurb) TextView newsBlurb;
         public View mItemView;
+        private RecyclerViewAdapterClickListener mListener;
 
-        NewsViewHolder(View itemView) {
+        NewsViewHolder(View itemView, RecyclerViewAdapterClickListener listener) {
             super(itemView);
             mItemView = itemView;
+            mListener = listener;
+            itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mListener.recyclerViewListClicked(v, getAdapterPosition());
         }
     }
 

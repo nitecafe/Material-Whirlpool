@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
-import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.Forum;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.RecyclerViewAdapterClickListener;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHeaderAdapter.ForumViewHolder> implements View.OnClickListener {
+public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHeaderAdapter.ForumViewHolder> implements RecyclerViewAdapterClickListener {
 
     private List<Forum> forums = new ArrayList<>();
     private Map<String, Integer> headerMap = new HashMap<>();
@@ -45,15 +45,9 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
     }
 
     @Override
-    public void onClick(View v) {
-        itemClickHandler.OnItemClicked(v.getTag().toString(), v.getTag(StringConstants.TAG_TITLE_KEY).toString());
-    }
-
-    @Override
     public ForumViewHolder onCreateViewHolder(ViewGroup parent) {
         final View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_forum, parent, false);
-        inflate.setOnClickListener(this);
-        return new ForumViewHolder(inflate);
+        return new ForumViewHolder(inflate, this);
     }
 
     @Override
@@ -75,8 +69,6 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
     @Override
     public void onBindViewHolder(ForumViewHolder holder, int position) {
         holder.forumTitle.setText(forums.get(position).getTITLE());
-        holder.itemView.setTag(forums.get(position).getID());
-        holder.itemView.setTag(StringConstants.TAG_TITLE_KEY, forums.get(position).getTITLE());
     }
 
     @Override
@@ -93,14 +85,28 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
         textView.setText(forums.get(position).getSECTION());
     }
 
-    public static class ForumViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void recyclerViewListClicked(View v, int position) {
+        final Forum forum = forums.get(position);
+        itemClickHandler.OnItemClicked(forum.getID(), forum.getTITLE());
+    }
+
+    public static class ForumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.forum_title) TextView forumTitle;
         public View itemView;
+        private RecyclerViewAdapterClickListener mListener;
 
-        ForumViewHolder(View itemView) {
+        ForumViewHolder(View itemView, RecyclerViewAdapterClickListener listener) {
             super(itemView);
             this.itemView = itemView;
+            mListener = listener;
+            itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mListener.recyclerViewListClicked(v, getAdapterPosition());
         }
     }
 }
