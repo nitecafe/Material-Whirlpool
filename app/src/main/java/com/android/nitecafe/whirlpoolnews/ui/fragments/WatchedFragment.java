@@ -90,7 +90,7 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
 
         watchedRecycleView.setAdapter(stickyHeaderAdapter);
         watchedRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
-        watchedRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
+        watchedRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
 
         watchedRecycleView.setDefaultOnRefreshListener(this::loadWatched);
     }

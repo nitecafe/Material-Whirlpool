@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.ui.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 import com.android.nitecafe.whirlpoolnews.R;
@@ -8,9 +9,10 @@ import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
-import com.android.nitecafe.whirlpoolnews.ui.fragments.RecentFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
+import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 
 import javax.inject.Inject;
 
@@ -39,7 +41,13 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @Override
     public void onForumClicked(int forumId, String forumTitle) {
-        final ThreadFragment threadFragment = ThreadFragment.newInstance(forumId, forumTitle);
+        Fragment threadFragment;
+
+        if (ThreadScraper.isPublicForum(forumId)) {
+            threadFragment = ScrapedThreadFragment.newInstance(forumId, forumTitle, 0);
+        } else
+            threadFragment = ThreadFragment.newInstance(forumId, forumTitle);
+
         FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
         FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, threadFragment);
         fragmentTransaction.addToBackStack(null);

@@ -11,12 +11,11 @@ import android.view.ViewGroup;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
-import com.android.nitecafe.whirlpoolnews.controllers.ForumThreadController;
-import com.android.nitecafe.whirlpoolnews.models.ForumThread;
-import com.android.nitecafe.whirlpoolnews.ui.adapters.ForumThreadAdapter;
+import com.android.nitecafe.whirlpoolnews.controllers.ScrapedThreadController;
+import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
+import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadFragment;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -28,23 +27,26 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class ThreadFragment extends BaseFragment implements IRecycleViewItemClick, IThreadFragment {
+public class ScrapedThreadFragment extends BaseFragment implements IRecycleViewItemClick, IScrapedThreadFragment {
 
     public static final String FORUM_ID = "ForumId";
     public static final String FORUM_NAME = "ForumTitle";
-    @Inject ForumThreadController _controller;
+    public static final String FORUM_GROUP_ID = "ForumGroupId";
+    @Inject ScrapedThreadController _controller;
     @Bind(R.id.thread_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.thread_progress_loader) MaterialProgressBar mMaterialProgressBar;
     private IOnThreadClicked listener;
     private int mForumId;
     private String mForumTitle;
-    private ForumThreadAdapter forumThreadAdapter;
+    private ScrapedThreadAdapter forumThreadAdapter;
+    private int mGroupId;
 
-    public static ThreadFragment newInstance(int forumId, String forumName) {
-        ThreadFragment fragment = new ThreadFragment();
+    public static ScrapedThreadFragment newInstance(int forumId, String forumName, int groupId) {
+        ScrapedThreadFragment fragment = new ScrapedThreadFragment();
         Bundle args = new Bundle();
         args.putInt(FORUM_ID, forumId);
         args.putString(FORUM_NAME, forumName);
+        args.putInt(FORUM_GROUP_ID, groupId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,6 +56,7 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
         super.onCreate(savedInstanceState);
         mForumId = getArguments().getInt(FORUM_ID, 0);
         mForumTitle = getArguments().getString(FORUM_NAME, "");
+        mGroupId = getArguments().getInt(FORUM_GROUP_ID, 0);
     }
 
     @Override
@@ -104,7 +107,7 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecycleView.setLayoutManager(layoutManager);
 
-        forumThreadAdapter = new ForumThreadAdapter(this);
+        forumThreadAdapter = new ScrapedThreadAdapter(this);
 
         mRecycleView.setAdapter(forumThreadAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
@@ -113,7 +116,7 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
     }
 
     private void loadThreads() {
-        _controller.GetThreads(mForumId);
+        _controller.GetScrapedThreads(mForumId, mGroupId);
     }
 
     @Override
@@ -129,7 +132,7 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
     }
 
     @Override
-    public void DisplayThreads(List<ForumThread> threads) {
+    public void DisplayThreads(List<ScrapedThread> threads) {
         forumThreadAdapter.SetThreads(threads);
     }
 

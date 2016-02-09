@@ -7,6 +7,8 @@ import android.preference.PreferenceManager;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.scheduler.SchedulerManager;
+import com.android.nitecafe.whirlpoolnews.utilities.IThreadScraper;
+import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.otto.Bus;
@@ -30,19 +32,7 @@ public class DaggerModule {
 
     @Provides
     @Singleton OkHttpClient provideOkHttpClient() {
-
-        OkHttpClient client = new OkHttpClient();
-//        client.interceptors().add(chain -> {
-//            final HttpUrl build = chain.request().httpUrl().newBuilder()
-//                    .addQueryParameter("key", apiKeyDrawerItem)
-//                    .addQueryParameter("output", "json")
-//                    .build();
-//
-//            final Request request = chain.request().newBuilder().url(build).build();
-//            return chain.proceed(request);
-//        });
-
-        return client;
+        return new OkHttpClient();
     }
 
     @Provides
@@ -78,5 +68,10 @@ public class DaggerModule {
     @Provides
     @Singleton ISchedulerManager provideSchedulerManager() {
         return new SchedulerManager();
+    }
+
+    @Provides
+    @Singleton IThreadScraper provideThreadScraper() {
+        return new ThreadScraper();
     }
 }
