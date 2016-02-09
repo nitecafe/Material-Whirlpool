@@ -42,7 +42,11 @@ public class ScrapedThreadAdapter extends RecyclerView.Adapter<ScrapedThreadAdap
         final ScrapedThread forumThread = mThreads.get(position);
         holder.threadTitle.setText(forumThread.getTitle());
         holder.threadTotalPage.setText(String.valueOf(forumThread.getPageCount()));
-        holder.threadLastPostInfo.setText(forumThread.getLast_poster());
+
+        if (forumThread.isMoved())
+            holder.threadLastPostInfo.setText("This thread has been moved");
+        else
+            holder.threadLastPostInfo.setText(forumThread.getLast_poster());
 
         if (forumThread.isSticky())
             holder.itemView.setBackgroundResource(R.color.primary_light);

@@ -84,7 +84,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IRecycleViewI
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View inflate = inflater.inflate(R.layout.fragment_thread, container, false);
+        View inflate = inflater.inflate(R.layout.fragment_scraped_thread, container, false);
 
         ButterKnife.bind(this, inflate);
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);

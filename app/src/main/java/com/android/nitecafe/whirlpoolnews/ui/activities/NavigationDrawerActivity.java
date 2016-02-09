@@ -3,6 +3,7 @@ package com.android.nitecafe.whirlpoolnews.ui.activities;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -24,9 +25,6 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class NavigationDrawerActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
 
-    protected Drawer drawer;
-    protected Toolbar toolbar;
-
     public final int NEWS_POSITION = 1;
     public final int FORUM_POSITION = 2;
     public final int POPULAR_POSITION = 4;
@@ -34,6 +32,8 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
     public final int WATCHED_POSITION = 6;
     public final int WHIMS_POSITION = 8;
     public final int APIKEY_POSITION = 10;
+    protected Drawer drawer;
+    protected Toolbar toolbar;
     protected PrimaryDrawerItem apiKeyDrawerItem;
     protected PrimaryDrawerItem newsItemDrawerItem;
 
@@ -67,6 +67,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
                 .withAccountHeader(headerResult)
                 .withOnDrawerItemClickListener(this)
                 .build();
+
     }
 
     @Override
@@ -76,6 +77,19 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        setupDrawerToggle();
+    }
+
+    protected void setupDrawerToggle() {
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
+                this, drawer.getDrawerLayout(), toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+        drawer.getDrawerLayout().setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerToggle.syncState();
     }
 
     @Override public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
