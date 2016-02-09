@@ -45,6 +45,10 @@ public class ScrapedThreadAdapter extends RecyclerView.Adapter<ScrapedThreadAdap
 
         if (forumThread.isMoved())
             holder.threadLastPostInfo.setText("This thread has been moved");
+        else if (forumThread.isDeleted())
+            holder.threadLastPostInfo.setText("This thread has been deleted");
+        else if (forumThread.isClosed())
+            holder.threadLastPostInfo.setText("This thread has been closed");
         else
             holder.threadLastPostInfo.setText(forumThread.getLast_poster());
 

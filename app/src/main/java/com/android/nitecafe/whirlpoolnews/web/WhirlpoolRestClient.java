@@ -9,13 +9,12 @@ import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
 import com.android.nitecafe.whirlpoolnews.models.RecentList;
-import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
+import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
+import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.utilities.IThreadScraper;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.Request;
-
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -97,7 +96,11 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     }
 
     @Override
-    public Observable<List<ScrapedThread>> GetScrapedThreads(int forumIds, int pageCount, int groupId) {
+    public Observable<ScrapedThreadList> GetScrapedThreads(int forumIds, int pageCount, int groupId) {
         return threadScraper.scrapeThreadsFromForumObservable(forumIds, pageCount, groupId);
+    }
+
+    @Override public Observable<ScrapedPostList> GetScrapedPosts(int threadId, String threadTitle, int page) {
+        return threadScraper.scrapePostsFromThreadObservable(threadId, threadTitle, page);
     }
 }

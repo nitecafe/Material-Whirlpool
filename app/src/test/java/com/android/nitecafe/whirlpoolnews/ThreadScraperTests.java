@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews;
 
-import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
+import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
+import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 
 import junit.framework.Assert;
@@ -10,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ThreadScraperTests {
@@ -25,8 +26,16 @@ public class ThreadScraperTests {
     @Test
     public void scrapeThreadsFromForum_WhenCalled_ReturnResponse() {
 
-        ArrayList<ScrapedThread> scrapedThreads = _threadScraper.scrapeThreadsFromForum(106, 1, 0);
+        ScrapedThreadList scrapedThreads = _threadScraper.scrapeThreadsFromForum(106, 1, 0);
 
-        Assert.assertNotNull(scrapedThreads);
+        Assert.assertNotNull(scrapedThreads.getThreads());
+    }
+
+    @Test
+    public void scrapePostsFromThread_WhenCalled_ReturnResponse() throws IOException {
+
+        ScrapedPostList scrapedPostList = _threadScraper.scrapePostsFromThread(2459226, "", 1);
+
+        Assert.assertNotNull(scrapedPostList.getScrapedPosts());
     }
 }

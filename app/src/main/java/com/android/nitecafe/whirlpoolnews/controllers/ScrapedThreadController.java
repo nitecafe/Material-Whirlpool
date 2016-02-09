@@ -31,7 +31,7 @@ public class ScrapedThreadController {
                 .subscribeOn(schedulerManager.GetIoScheduler())
                 .subscribe(scrapedThreads -> {
                     if (threadFragment != null) {
-                        threadFragment.DisplayThreads(scrapedThreads);
+                        threadFragment.DisplayThreads(scrapedThreads.getThreads());
                         HideAllProgressBar();
                     }
                 }, throwable -> {

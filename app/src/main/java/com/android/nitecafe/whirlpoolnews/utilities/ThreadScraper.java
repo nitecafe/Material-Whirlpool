@@ -1,6 +1,10 @@
 package com.android.nitecafe.whirlpoolnews.utilities;
 
+import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
+import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
+import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
+import com.android.nitecafe.whirlpoolnews.models.User;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,7 +14,6 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -21,6 +24,8 @@ import rx.Observable;
 public class ThreadScraper implements IThreadScraper {
 
     public static final String FORUM_URL = "http://forums.whirlpool.net.au/forum/";
+    public static final String THREAD_URL = "http://forums.whirlpool.net.au/forum-replies.cfm?t=";
+
     // these forum IDs are public, and we can scrape the data from them
     private static int[] PUBLIC_FORUMS = {92, 100, 142, 82, 9, 107, 135, 80, 136, 125, 116, 63,
             127, 139, 7, 129, 130, 131, 10, 38, 39, 91, 87, 112, 132, 8, 83, 138, 143, 133, 58, 106,
@@ -42,9 +47,9 @@ public class ThreadScraper implements IThreadScraper {
         return false;
     }
 
-    @Override public Observable<List<ScrapedThread>> scrapeThreadsFromForumObservable(int forum_id, int page_number, int group_id) {
+    @Override public Observable<ScrapedThreadList> scrapeThreadsFromForumObservable(int forum_id, int page_number, int group_id) {
         return Observable.create(subscriber -> {
-            ArrayList<ScrapedThread> scrapedThreads = null;
+            ScrapedThreadList scrapedThreads = null;
             try {
                 scrapedThreads = scrapeThreadsFromForum(forum_id, page_number, group_id);
             } catch (Exception e) {
@@ -55,7 +60,7 @@ public class ThreadScraper implements IThreadScraper {
         });
     }
 
-    public ArrayList<ScrapedThread> scrapeThreadsFromForum(int forum_id, int page_number, int group_id) {
+    public ScrapedThreadList scrapeThreadsFromForum(int forum_id, int page_number, int group_id) {
         ArrayList<ScrapedThread> threads = new ArrayList<>();
 
         int page_count = -1;
@@ -138,13 +143,12 @@ public class ThreadScraper implements IThreadScraper {
             }
         }
 
-//        Forum forum = new Forum(forum_id, forum_title, 0, null);
-//        forum.setPageCount(page_count);
-//        forum.setGroups(groups);
-//        forum.setThreads(threads);
+        ScrapedThreadList threadList = new ScrapedThreadList(forum_id, forum_title);
+        threadList.setPageCount(page_count);
+        threadList.setGroups(groups);
+        threadList.setThreads(threads);
 
-//        return forum;
-        return threads;
+        return threadList;
     }
 
     private ScrapedThread getThreadFromTableRow(Element tr, String forum, int forum_id) {
@@ -238,6 +242,145 @@ public class ThreadScraper implements IThreadScraper {
         }
 
         return t;
+    }
+
+    @Override public Observable<ScrapedPostList> scrapePostsFromThreadObservable(int threadId, String threadTitle, int page) {
+        return Observable.create(subscriber -> {
+            ScrapedPostList posts = null;
+            try {
+                posts = scrapePostsFromThread(threadId, threadTitle, page);
+            } catch (IOException e) {
+                e.printStackTrace();
+                subscriber.onError(e);
+            }
+            subscriber.onNext(posts);
+            subscriber.onCompleted();
+        });
+    }
+
+    public ScrapedPostList scrapePostsFromThread(int thread_id, String thread_title, int page) throws IOException {
+
+        ArrayList<ScrapedPost> scrapedPosts = new ArrayList<>();
+
+        String thread_url = THREAD_URL + thread_id;
+        if (page != 1) {
+            thread_url += "&p=" + page;
+        }
+
+        Document doc = downloadPage(thread_url);
+        if (doc == null) {
+            throw new IOException("Error downloading data");
+        }
+
+        // check for an error message
+        Elements alert = doc.select("#alert");
+        if (alert != null && alert.size() > 0) {
+            throw new IOException("Private forum");
+        }
+
+        if (thread_title == null) { // no thread title was passed
+            // scrape the title from the page
+            Elements breadcrumb_elements = doc.select("#breadcrumb li");
+            thread_title = breadcrumb_elements.last().text();
+        }
+
+        // get page count
+        Elements pagination_elements = doc.select("#top_pagination li");
+        int page_count = pagination_elements.size() - 2; // list elements, subtract first date and last date elements
+        if (page_count <= 0) page_count = 1;
+
+        // get notebar (thread header that mods put there sometimes)
+        String notebar = null;
+        try {
+            notebar = doc.select(".notebar").get(0).html();
+        } catch (IndexOutOfBoundsException e) {
+            // no notebar
+        }
+
+        Elements replies = doc.select("#replylist > div");
+
+        for (Element reply : replies) {
+            String id = "";
+            String user_id = "";
+            String user_name = "";
+            String posted_time = "";
+            String content = "";
+            boolean edited = false;
+            boolean op = false;
+            boolean deleted = false;
+
+            // get reply ID
+            id = reply.attr("id").replace("r", "");
+
+            // get author name
+            Element user_name_element;
+            try {
+                user_name_element = reply.select(".bu_name").get(0);
+            } catch (IndexOutOfBoundsException e) {
+                // username not found, probably a deleted scrapedPost
+                user_name_element = reply.select(".replyuser > a > b").get(0);
+            }
+            user_name = user_name_element.text();
+
+            // get author ID
+            Element user_id_element = reply.select(".userid").get(0);
+            user_id = user_id_element.text().replace("User #", "");
+
+            // check if this author is the OP
+            Elements op_element = reply.select(".op");
+            if (!op_element.isEmpty()) { // user is the OP
+                op = true;
+                op_element.get(0).remove(); // remove element so the text doesn't show up
+            }
+
+            // check if this scrapedPost has been edited
+            Elements edited_elements = reply.select(".edited");
+            if (!edited_elements.isEmpty()) {
+                edited = true;
+
+                // remove elements so text doesn't show up
+                for (Element edited_element : edited_elements) {
+                    edited_element.remove();
+                }
+            }
+
+            // get the poster's user group
+            String user_group = "";
+            try {
+                user_group = reply.select(".usergroup").get(0).text();
+            } catch (IndexOutOfBoundsException e) {
+                // no usergroup, probably a deleted scrapedPost
+            }
+
+            // get posted time
+            try {
+                Element date_element = reply.select(".date").get(0);
+                posted_time = date_element.ownText();
+            } catch (IndexOutOfBoundsException e) {
+                // no scrapedPost date, probably a deleted scrapedPost
+                deleted = true;
+            }
+
+            // get the reply content
+            Element content_element = reply.select(".replytext").get(0);
+            content = content_element.html();
+
+            User user = new User(user_id, user_name);
+            user.setGroup(user_group);
+
+            ScrapedPost scrapedPost = new ScrapedPost(id, user, posted_time, content, edited, op);
+
+            scrapedPost.setDeleted(deleted);
+
+            scrapedPosts.add(scrapedPost);
+        }
+
+        ScrapedPostList scrapedPostList = new ScrapedPostList(thread_id, thread_title);
+        scrapedPostList.setPageCount(page_count);
+        scrapedPostList.setNotebar(notebar);
+        scrapedPostList.setScrapedPosts(scrapedPosts);
+
+        return scrapedPostList;
     }
 
     private Document downloadPage(String url) {

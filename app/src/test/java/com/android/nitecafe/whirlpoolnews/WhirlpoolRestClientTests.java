@@ -14,6 +14,7 @@ import com.android.nitecafe.whirlpoolnews.models.Recent;
 import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.Watched;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
+import com.android.nitecafe.whirlpoolnews.utilities.IThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 
 import org.junit.Assert;
@@ -37,6 +38,7 @@ import rx.observers.TestObserver;
 public class WhirlpoolRestClientTests {
 
     @Mock SharedPreferences sharedPreferencesMock;
+    @Mock IThreadScraper threadScraper;
     TestableWhirlpoolRestClient whirlpoolRestClient;
     private Retrofit retrofit;
 
@@ -44,7 +46,7 @@ public class WhirlpoolRestClientTests {
     public void setup() {
         retrofit = new Retrofit.Builder().baseUrl("http://www.google.com").build();
         Mockito.when(sharedPreferencesMock.getString(StringConstants.API_PREFERENCE_KEY, "")).thenReturn("111-111");
-        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock);
+        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock, threadScraper);
     }
 
     @Test
@@ -110,7 +112,7 @@ public class WhirlpoolRestClientTests {
         Mockito.when(sharedPreferencesMock.getString(StringConstants.API_PREFERENCE_KEY, "")).thenReturn("");
 
         //act
-        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock);
+        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock, threadScraper);
 
         //assert
         Assert.assertFalse(whirlpoolRestClient.hasApiKeyBeenSet());
@@ -123,7 +125,7 @@ public class WhirlpoolRestClientTests {
         Mockito.when(sharedPreferencesMock.getString(StringConstants.API_PREFERENCE_KEY, "")).thenReturn("1111-1111");
 
         //act
-        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock);
+        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock, threadScraper);
 
         //assert
         Assert.assertTrue(whirlpoolRestClient.hasApiKeyBeenSet());
@@ -140,7 +142,7 @@ public class WhirlpoolRestClientTests {
         Mockito.when(whirlpoolRestClient.mWhirlpoolServiceMock.GetThreads(1, 30)).thenReturn(Observable.just(threadList));
 
         //act
-        whirlpoolRestClient.GetThreads(1,30).subscribe(testObserver);
+        whirlpoolRestClient.GetThreads(1, 30).subscribe(testObserver);
 
         //assert
         List<ForumThreadList> onNextEvents = testObserver.getOnNextEvents();
@@ -171,8 +173,8 @@ class TestableWhirlpoolRestClient extends WhirlpoolRestClient {
 
     public IWhirlpoolService mWhirlpoolServiceMock;
 
-    public TestableWhirlpoolRestClient(Retrofit retrofit, SharedPreferences sharedPreferences) {
-        super(retrofit, sharedPreferences);
+    public TestableWhirlpoolRestClient(Retrofit retrofit, SharedPreferences sharedPreferences, IThreadScraper threadScraper) {
+        super(retrofit, sharedPreferences, threadScraper);
 
         mWhirlpoolServiceMock = Mockito.mock(IWhirlpoolService.class);
     }
