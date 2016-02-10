@@ -157,10 +157,10 @@ public class WhirlpoolRestClientTests {
         final Watched watched = new Watched();
         watched.setTITLE("Watched thread");
         watchedList.getWATCHED().add(watched);
-        Mockito.when(whirlpoolRestClient.mWhirlpoolServiceMock.GetWatched()).thenReturn(Observable.just(watchedList));
+        Mockito.when(whirlpoolRestClient.mWhirlpoolServiceMock.GetWatched(0)).thenReturn(Observable.just(watchedList));
 
         //act
-        whirlpoolRestClient.GetWatched().subscribe(testObserver);
+        whirlpoolRestClient.GetUnreadWatched().subscribe(testObserver);
 
         //assert
         List<WatchedList> onNextEvents = testObserver.getOnNextEvents();

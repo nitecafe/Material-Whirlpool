@@ -20,8 +20,25 @@ public class WatchedController {
         this.schedulerManager = schedulerManager;
     }
 
-    public void GetWatched() {
-        whirlpoolRestClient.GetWatched()
+    public void GetUnreadWatched() {
+        whirlpoolRestClient.GetUnreadWatched()
+                .observeOn(schedulerManager.GetMainScheduler())
+                .subscribeOn(schedulerManager.GetIoScheduler())
+                .subscribe(watchedList -> {
+                    if (watchedFragment != null) {
+                        watchedFragment.DisplayWatched(watchedList.getWATCHED());
+                        HideAllProgressBar();
+                    }
+                }, throwable -> {
+                    if (watchedFragment != null) {
+                        watchedFragment.DisplayErrorMessage();
+                        HideAllProgressBar();
+                    }
+                });
+    }
+
+    public void GetAllWatched() {
+        whirlpoolRestClient.GetAllWatched()
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler())
                 .subscribe(watchedList -> {

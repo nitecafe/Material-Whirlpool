@@ -96,7 +96,7 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
     }
 
     private void loadWatched() {
-        _controller.GetWatched();
+        _controller.GetUnreadWatched();
     }
 
     @Override

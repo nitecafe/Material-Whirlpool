@@ -86,8 +86,12 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     }
 
     @Override
-    public Observable<WatchedList> GetWatched() {
-        return getWhirlpoolService().GetWatched();
+    public Observable<WatchedList> GetUnreadWatched() {
+        return getWhirlpoolService().GetWatched(0);
+    }
+
+    @Override public Observable<WatchedList> GetAllWatched() {
+        return getWhirlpoolService().GetWatched(1);
     }
 
     @Override

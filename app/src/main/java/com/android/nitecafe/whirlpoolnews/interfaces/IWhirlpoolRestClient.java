@@ -21,7 +21,9 @@ public interface IWhirlpoolRestClient {
 
     Observable<RecentList> GetRecent();
 
-    Observable<WatchedList> GetWatched();
+    Observable<WatchedList> GetUnreadWatched();
+
+    Observable<WatchedList> GetAllWatched();
 
     Observable<ForumThreadList> GetThreads(int forumIds, int threadCount);
 
