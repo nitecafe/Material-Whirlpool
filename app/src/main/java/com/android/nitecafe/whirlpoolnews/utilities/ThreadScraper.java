@@ -244,11 +244,11 @@ public class ThreadScraper implements IThreadScraper {
         return t;
     }
 
-    @Override public Observable<ScrapedPostList> scrapePostsFromThreadObservable(int threadId, String threadTitle, int page) {
+    @Override public Observable<ScrapedPostList> scrapePostsFromThreadObservable(int threadId, int page) {
         return Observable.create(subscriber -> {
             ScrapedPostList posts = null;
             try {
-                posts = scrapePostsFromThread(threadId, threadTitle, page);
+                posts = scrapePostsFromThread(threadId, "", page);
             } catch (IOException e) {
                 e.printStackTrace();
                 subscriber.onError(e);

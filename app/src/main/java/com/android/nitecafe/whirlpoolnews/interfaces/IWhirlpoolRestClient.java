@@ -29,5 +29,5 @@ public interface IWhirlpoolRestClient {
 
     Observable<ScrapedThreadList> GetScrapedThreads(int forumIds, int pageCount, int groupId);
 
-    Observable<ScrapedPostList> GetScrapedPosts(int threadId, String threadTitle, int page);
+    Observable<ScrapedPostList> GetScrapedPosts(int threadId, int page);
 }

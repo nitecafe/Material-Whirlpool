@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.android.nitecafe.whirlpoolnews"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    package="com.android.nitecafe.whirlpoolnews"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".WhirlpoolApp"
         android:allowBackup="true"
@@ -13,8 +14,10 @@
         <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="com.android.nitecafe"/>
             </intent-filter>
         </activity>
     </application>

@@ -104,7 +104,7 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         return threadScraper.scrapeThreadsFromForumObservable(forumIds, pageCount, groupId);
     }
 
-    @Override public Observable<ScrapedPostList> GetScrapedPosts(int threadId, String threadTitle, int page) {
-        return threadScraper.scrapePostsFromThreadObservable(threadId, threadTitle, page);
+    @Override public Observable<ScrapedPostList> GetScrapedPosts(int threadId, int page) {
+        return threadScraper.scrapePostsFromThreadObservable(threadId, page);
     }
 }

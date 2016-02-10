@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.ui.activities;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,6 +10,7 @@ import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
@@ -26,12 +28,20 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         setContentView(R.layout.activity_main);
         ((WhirlpoolApp) getApplication()).getDaggerComponent().inject(this);
 
-
-        if (!mWhirlpoolRestClient.hasApiKeyBeenSet()) {
+        String scheme = getIntent().getScheme();
+        if (IsFromInternalAppLink(scheme)) {
+            Uri intent_uri = getIntent().getData();
+            int threadId = Integer.parseInt(intent_uri.getQueryParameter("threadid"));
+            OnThreadClicked(threadId, "Thread From Link");
+        } else if (!mWhirlpoolRestClient.hasApiKeyBeenSet()) {
             drawer.setSelection(apiKeyDrawerItem);
         } else if (savedInstanceState == null) {
             drawer.setSelection(newsItemDrawerItem);
         }
+    }
+
+    private boolean IsFromInternalAppLink(String scheme) {
+        return scheme != null && scheme.equals("com.nitecafe.whirlpool");
     }
 
     @Override
@@ -48,14 +58,19 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         } else
             threadFragment = ThreadFragment.newInstance(forumId, forumTitle);
 
-        FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
-        FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, threadFragment);
-        fragmentTransaction.addToBackStack(null);
-        fts.commit();
+        startFragment(threadFragment);
     }
 
     @Override
     public void OnThreadClicked(int threadId, String threadTitle) {
+        ScrapedPostFragment scrapedPostFragment = ScrapedPostFragment.newInstance(threadId, threadTitle);
+        startFragment(scrapedPostFragment);
+    }
 
+    private void startFragment(Fragment fragment) {
+        FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fts.commit();
     }
 }
