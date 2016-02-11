@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.ui.adapters;
 
 import android.support.annotation.NonNull;
+import android.text.Html;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +26,7 @@ public class WatchedThreadAdapter extends ThreadStickyHeaderAdapter<Watched> {
     }
 
     protected String getThreadTitleText(Watched thread) {
-        return thread.getTITLE() + " (" + thread.getUNREAD() + " unread)";
+        return Html.fromHtml(thread.getTITLE()).toString() + " (" + thread.getUNREAD() + " unread)";
     }
 
     @NonNull

@@ -2,6 +2,7 @@ package com.android.nitecafe.whirlpoolnews.ui.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,7 +95,7 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Ultim
      * A seam to allow modification of the title shows on the UI
      */
     protected String getThreadTitleText(T thread) {
-        return thread.getTITLE();
+        return Html.fromHtml(thread.getTITLE()).toString();
     }
 
     private int getNumberOfPage(T thread) {
