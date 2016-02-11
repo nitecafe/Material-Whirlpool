@@ -2,8 +2,8 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostFragment;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostFragment;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -34,6 +34,7 @@ public class ScrapedPostController {
                 .subscribe(posts -> {
                     if (postFragment != null) {
                         postFragment.DisplayPosts(posts.getScrapedPosts());
+                        postFragment.SetupPageSpinner(posts.getPageCount(), page);
                         HideAllProgressBar();
                     }
                 }, throwable -> {

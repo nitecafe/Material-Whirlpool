@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -7,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
@@ -17,6 +20,7 @@ import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostFragment;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,6 +37,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     @Inject ScrapedPostController _controller;
     @Bind(R.id.post_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.post_progress_loader) MaterialProgressBar mMaterialProgressBar;
+    @Bind(R.id.spinner_post_page) Spinner pageNumberSpinner;
     private int mThreadId;
     private ScrapedPostAdapter scrapedPostAdapter;
     private String mThreadTitle;
@@ -121,6 +126,17 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     @Override
     public void HideRefreshLoader() {
         mRecycleView.setRefreshing(false);
+    }
+
+    @Override public void SetupPageSpinner(int pageCount, int page) {
+        pageNumberSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        List<String> numberPages = new ArrayList<>();
+        for (int i = 1; i < pageCount; i++) {
+            numberPages.add("Page " + i);
+        }
+        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_row, numberPages);
+        pageNumberSpinner.setAdapter(stringArrayAdapter);
+        pageNumberSpinner.setSelection(page - 1);
     }
 
 }

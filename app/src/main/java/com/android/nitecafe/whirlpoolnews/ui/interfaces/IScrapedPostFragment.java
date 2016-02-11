@@ -12,4 +12,6 @@ public interface IScrapedPostFragment {
     void DisplayPosts(List<ScrapedPost> posts);
 
     void HideRefreshLoader();
+
+    void SetupPageSpinner(int pageCount, int page);
 }
