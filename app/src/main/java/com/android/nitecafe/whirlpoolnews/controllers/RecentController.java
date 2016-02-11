@@ -37,6 +37,17 @@ public class RecentController {
                 });
     }
 
+    public void WatchThread(int threadId) {
+        whirlpoolRestClient.SetThreadAsWatch(threadId)
+                .observeOn(schedulerManager.GetMainScheduler())
+                .subscribeOn(schedulerManager.GetIoScheduler())
+                .subscribe(aVoid -> {
+                            recentFragment.ShowThreadWatchedSuccessfully();
+                        },
+                        throwable -> recentFragment.ShowThreadWatchedFailureMessage()
+                );
+    }
+
     private void HideAllProgressBar() {
         recentFragment.HideCenterProgressBar();
         recentFragment.HideRefreshLoader();

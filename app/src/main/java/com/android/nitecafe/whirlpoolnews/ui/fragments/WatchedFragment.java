@@ -13,7 +13,6 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.controllers.WatchedController;
 import com.android.nitecafe.whirlpoolnews.models.Watched;
-import com.android.nitecafe.whirlpoolnews.ui.adapters.ThreadStickyHeaderAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.WatchedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
@@ -35,7 +34,7 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
     @Inject WatchedController _controller;
     @Bind(R.id.watched_recycle_view) UltimateRecyclerView watchedRecycleView;
     @Bind(R.id.watched_progress_loader) MaterialProgressBar mMaterialProgressBar;
-    private ThreadStickyHeaderAdapter<Watched> stickyHeaderAdapter;
+    private WatchedThreadAdapter stickyHeaderAdapter;
     private IOnThreadClicked listener;
 
     @Override
@@ -87,7 +86,8 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
         watchedRecycleView.setLayoutManager(layoutManager);
 
         stickyHeaderAdapter = new WatchedThreadAdapter(this);
-
+        stickyHeaderAdapter.getOnWatchClickedObservable().subscribe(thread
+                -> unwatchThread(thread.getID()));
         watchedRecycleView.setAdapter(stickyHeaderAdapter);
         watchedRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
         watchedRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
@@ -95,8 +95,13 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
         watchedRecycleView.setDefaultOnRefreshListener(this::loadWatched);
     }
 
-    private void loadWatched() {
+    @Override
+    public void loadWatched() {
         _controller.GetUnreadWatched();
+    }
+
+    private void unwatchThread(int threadId) {
+        _controller.UnwatchThread(threadId);
     }
 
     @Override
@@ -119,6 +124,18 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
     @Override
     public void HideRefreshLoader() {
         watchedRecycleView.setRefreshing(false);
+    }
+
+    @Override
+    public void ShowThreadUnwatchedSuccessfully() {
+        Snackbar.make(watchedRecycleView, "Unwatched successfully", Snackbar.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public void ShowThreadUnwatchedFailureMessage() {
+        Snackbar.make(watchedRecycleView, "Something went wrong. Try again", Snackbar.LENGTH_LONG)
+                .show();
     }
 
     @Override

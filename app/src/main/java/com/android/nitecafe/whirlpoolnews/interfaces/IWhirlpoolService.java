@@ -25,4 +25,10 @@ public interface IWhirlpoolService {
 
     @GET("?get=threads")
     Observable<ForumThreadList> GetThreads(@Query("forumIds") int forumId, @Query("threadcount") int threadCount);
+
+    @GET("?get=watchedremove")
+    Observable<Void> SetThreadAsUnwatched(@Query("watchedremove") int threadId);
+
+    @GET("?get=watchedadd")
+    Observable<Void> SetThreadAsWatched(@Query("watchedadd") int threadId);
 }

@@ -107,4 +107,14 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     @Override public Observable<ScrapedPostList> GetScrapedPosts(int threadId, int page) {
         return threadScraper.scrapePostsFromThreadObservable(threadId, page);
     }
+
+    @Override
+    public Observable<Void> SetThreadAsWatch(int threadId) {
+        return getWhirlpoolService().SetThreadAsWatched(threadId);
+    }
+
+    @Override
+    public Observable<Void> SetThreadAsUnwatch(int threadId) {
+        return getWhirlpoolService().SetThreadAsUnwatched(threadId);
+    }
 }

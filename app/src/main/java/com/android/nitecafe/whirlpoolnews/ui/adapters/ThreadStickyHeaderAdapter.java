@@ -1,6 +1,8 @@
 package com.android.nitecafe.whirlpoolnews.ui.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +25,9 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends UltimateViewAdapter<ThreadStickyHeaderAdapter.ThreadViewHolder> implements RecyclerViewAdapterClickListener {
+    public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends UltimateViewAdapter<ThreadStickyHeaderAdapter.ThreadViewHolder> implements RecyclerViewAdapterClickListener {
 
-    private List<T> threadsList = new ArrayList<>();
+    protected List<T> threadsList = new ArrayList<>();
     private Map<String, Integer> headerMap = new HashMap<>();
     private int headerId = 0;
     private IRecycleViewItemClick itemClickHandler;
@@ -49,6 +51,11 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Ultim
     @Override
     public ThreadViewHolder onCreateViewHolder(ViewGroup parent) {
         final View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_thread, parent, false);
+        return getThreadViewHolderCustom(inflate);
+    }
+
+    @NonNull
+    protected ThreadViewHolder getThreadViewHolderCustom(View inflate) {
         return new ThreadViewHolder(inflate, this);
     }
 
@@ -112,7 +119,7 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Ultim
         itemClickHandler.OnItemClicked(t.getID(), t.getTITLE());
     }
 
-    public static class ThreadViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ThreadViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
         @Bind(R.id.thread_title) TextView threadTitle;
         @Bind(R.id.thread_total_page) TextView threadTotalPage;
         @Bind(R.id.thread_last_post_info) TextView threadLastPostInfo;
@@ -123,6 +130,7 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Ultim
             super(itemView);
             this.itemView = itemView;
             listener = tThreadStickyHeaderAdapter;
+            itemView.setOnCreateContextMenuListener(this);
             itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);
         }
@@ -130,6 +138,15 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Ultim
         @Override
         public void onClick(View v) {
             listener.recyclerViewListClicked(v, getAdapterPosition());
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            onCreateContextMenuCustom(menu);
+        }
+
+        protected void onCreateContextMenuCustom(ContextMenu menu){
+            menu.setHeaderTitle("Select an Action");
         }
     }
 }

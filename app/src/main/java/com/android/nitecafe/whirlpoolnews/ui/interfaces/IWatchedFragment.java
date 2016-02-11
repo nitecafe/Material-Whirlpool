@@ -4,10 +4,9 @@ import com.android.nitecafe.whirlpoolnews.models.Watched;
 
 import java.util.List;
 
-/**
- * Created by grahamgoh on 5/02/16.
- */
 public interface IWatchedFragment {
+    void loadWatched();
+
     void DisplayWatched(List<Watched> watcheds);
 
     void HideCenterProgressBar();
@@ -15,4 +14,8 @@ public interface IWatchedFragment {
     void DisplayErrorMessage();
 
     void HideRefreshLoader();
+
+    void ShowThreadUnwatchedSuccessfully();
+
+    void ShowThreadUnwatchedFailureMessage();
 }

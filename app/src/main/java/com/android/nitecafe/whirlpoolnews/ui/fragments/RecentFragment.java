@@ -13,7 +13,7 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.controllers.RecentController;
 import com.android.nitecafe.whirlpoolnews.models.Recent;
-import com.android.nitecafe.whirlpoolnews.ui.adapters.ThreadStickyHeaderAdapter;
+import com.android.nitecafe.whirlpoolnews.ui.adapters.RecentThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
@@ -34,7 +34,7 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
     @Inject RecentController _controller;
     @Bind(R.id.recent_recycle_view) UltimateRecyclerView recentRecycleView;
     @Bind(R.id.recent_progress_loader) MaterialProgressBar mMaterialProgressBar;
-    private ThreadStickyHeaderAdapter<Recent> stickyHeaderAdapter;
+    private RecentThreadAdapter stickyHeaderAdapter;
     private IOnThreadClicked listener;
 
     @Override
@@ -85,8 +85,9 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recentRecycleView.setLayoutManager(layoutManager);
 
-        stickyHeaderAdapter = new ThreadStickyHeaderAdapter<>(this);
-
+        stickyHeaderAdapter = new RecentThreadAdapter(this);
+        stickyHeaderAdapter.getOnUnwatchedObservable().subscribe(thread
+                -> watchThread(thread.getID()));
         recentRecycleView.setAdapter(stickyHeaderAdapter);
         recentRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
         recentRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
@@ -115,9 +116,27 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
                 .show();
     }
 
+    private void watchThread(int threadId){
+        _controller.WatchThread(threadId);
+    }
+
     @Override
     public void HideRefreshLoader() {
         recentRecycleView.setRefreshing(false);
+    }
+
+    @Override
+    public void ShowThreadWatchedSuccessfully() {
+        Snackbar.make(recentRecycleView, "Thread is now watched.", Snackbar.LENGTH_LONG)
+                .setAction("Retry", view -> loadRecent())
+                .show();
+    }
+
+    @Override
+    public void ShowThreadWatchedFailureMessage() {
+        Snackbar.make(recentRecycleView, "Something went wrong. Please try again.", Snackbar.LENGTH_LONG)
+                .setAction("Retry", view -> loadRecent())
+                .show();
     }
 
     @Override

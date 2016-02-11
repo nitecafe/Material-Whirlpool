@@ -4,9 +4,6 @@ import com.android.nitecafe.whirlpoolnews.models.Recent;
 
 import java.util.List;
 
-/**
- * Created by grahamgoh on 4/02/16.
- */
 public interface IRecentFragment {
     void DisplayRecent(List<Recent> recents);
 
@@ -15,4 +12,8 @@ public interface IRecentFragment {
     void DisplayErrorMessage();
 
     void HideRefreshLoader();
+
+    void ShowThreadWatchedSuccessfully();
+
+    void ShowThreadWatchedFailureMessage();
 }

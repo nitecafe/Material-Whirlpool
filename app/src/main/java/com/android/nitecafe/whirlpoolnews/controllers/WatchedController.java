@@ -54,6 +54,18 @@ public class WatchedController {
                 });
     }
 
+    public void UnwatchThread(int threadId) {
+        whirlpoolRestClient.SetThreadAsUnwatch(threadId)
+                .observeOn(schedulerManager.GetMainScheduler())
+                .subscribeOn(schedulerManager.GetIoScheduler())
+                .subscribe(aVoid -> {
+                            watchedFragment.ShowThreadUnwatchedSuccessfully();
+                            watchedFragment.loadWatched();
+                        },
+                        throwable -> watchedFragment.ShowThreadUnwatchedFailureMessage()
+                );
+    }
+
     private void HideAllProgressBar() {
         watchedFragment.HideCenterProgressBar();
         watchedFragment.HideRefreshLoader();

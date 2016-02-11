@@ -46,6 +46,7 @@ dependencies {
     //rxjava
     compile 'io.reactivex:rxjava:1.0.16'
     compile 'io.reactivex:rxandroid:1.0.1'
+
     compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
     compile 'com.marshalchen.ultimaterecyclerview:library:0.3.18'
     compile 'com.jakewharton:butterknife:7.0.1'
@@ -67,5 +68,10 @@ dependencies {
         transitive = true
     }
     compile 'com.jakewharton.rxbinding:rxbinding:0.3.0'
+    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.3.0'
+    compile 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:0.3.0'
+    compile 'com.jakewharton.rxbinding:rxbinding-design:0.3.0'
+    compile 'com.jakewharton.rxbinding:rxbinding-support-v4:0.3.0'
+
     compile files('libs/jsoup-1.8.3.jar')
 }
