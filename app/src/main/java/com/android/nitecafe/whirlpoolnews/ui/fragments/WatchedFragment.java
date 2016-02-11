@@ -15,7 +15,6 @@ import com.android.nitecafe.whirlpoolnews.controllers.WatchedController;
 import com.android.nitecafe.whirlpoolnews.models.Watched;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.WatchedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWatchedFragment;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
@@ -29,7 +28,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class WatchedFragment extends BaseFragment implements IRecycleViewItemClick, IWatchedFragment {
+public class WatchedFragment extends BaseFragment implements IWatchedFragment {
 
     @Inject WatchedController _controller;
     @Bind(R.id.watched_recycle_view) UltimateRecyclerView watchedRecycleView;
@@ -85,7 +84,10 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         watchedRecycleView.setLayoutManager(layoutManager);
 
-        stickyHeaderAdapter = new WatchedThreadAdapter(this);
+        stickyHeaderAdapter = new WatchedThreadAdapter();
+        stickyHeaderAdapter.getOnThreadClickedObservable().subscribe(watched1 -> {
+            listener.OnWatchedThreadClicked(watched1.getID(), watched1.getTITLE(), watched1.getLASTPAGE());
+        });
         stickyHeaderAdapter.getOnWatchClickedObservable().subscribe(thread
                 -> unwatchThread(thread.getID()));
         stickyHeaderAdapter.getOnMarkAsClickedObservable().subscribe(watched -> markThreadAsRead(watched.getID()));
@@ -141,10 +143,5 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
     public void ShowActionFailedMessage() {
         Snackbar.make(watchedRecycleView, "Something went wrong. Try again", Snackbar.LENGTH_LONG)
                 .show();
-    }
-
-    @Override
-    public void OnItemClicked(int itemClicked, String title) {
-        listener.OnThreadClicked(itemClicked, title);
     }
 }

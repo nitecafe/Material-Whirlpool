@@ -1,6 +1,8 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -17,6 +19,7 @@ import com.android.nitecafe.whirlpoolnews.controllers.ScrapedPostController;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedPostAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -116,6 +119,9 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         Snackbar.make(mRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
                 .setAction("Retry", view -> loadPosts())
                 .show();
+
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ThreadScraper.THREAD_URL + String.valueOf(mThreadId)));
+        startActivity(browserIntent);
     }
 
     @Override
@@ -131,7 +137,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     @Override public void SetupPageSpinner(int pageCount, int page) {
         pageNumberSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         List<String> numberPages = new ArrayList<>();
-        for (int i = 1; i < pageCount; i++) {
+        for (int i = 1; i <= pageCount; i++) {
             numberPages.add("Page " + i);
         }
         ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_row, numberPages);

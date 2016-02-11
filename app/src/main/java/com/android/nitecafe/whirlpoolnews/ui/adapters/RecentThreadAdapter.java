@@ -6,36 +6,31 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.android.nitecafe.whirlpoolnews.models.Recent;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.RecyclerViewAdapterClickListener;
 import com.jakewharton.rxbinding.view.RxMenuItem;
 
 import rx.Observable;
 import rx.subjects.PublishSubject;
 
 public class RecentThreadAdapter extends ThreadStickyHeaderAdapter<Recent> {
-    public RecentThreadAdapter(IRecycleViewItemClick itemClickHandler) {
-        super(itemClickHandler);
-    }
+
+    private PublishSubject<Integer> OnUnwatchClickedObservable = PublishSubject.create();
 
     public Observable<Recent> getOnUnwatchedObservable() {
         return OnUnwatchClickedObservable.map(integer -> threadsList.get(integer)).asObservable();
     }
 
-    private PublishSubject<Integer> OnUnwatchClickedObservable = PublishSubject.create();
-
     @NonNull
     @Override
     protected ThreadViewHolder getThreadViewHolderCustom(View inflate) {
-        return new RecentThreadViewHolder(inflate, this, OnUnwatchClickedObservable);
+        return new RecentThreadViewHolder(inflate, OnThreadClickedObservable, OnUnwatchClickedObservable);
     }
 
     public static class RecentThreadViewHolder extends ThreadViewHolder {
 
         private PublishSubject<Integer> mOnUnwatchClickedObservable;
 
-        RecentThreadViewHolder(View itemView, RecyclerViewAdapterClickListener tThreadStickyHeaderAdapter, PublishSubject<Integer> onUnwatchClickedObservable) {
-            super(itemView, tThreadStickyHeaderAdapter);
+        RecentThreadViewHolder(View itemView, PublishSubject<Integer> onThreadClickedObservable, PublishSubject<Integer> onUnwatchClickedObservable) {
+            super(itemView, onThreadClickedObservable);
             mOnUnwatchClickedObservable = onUnwatchClickedObservable;
         }
 

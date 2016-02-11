@@ -16,7 +16,6 @@ import com.android.nitecafe.whirlpoolnews.models.Recent;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.RecentThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecentFragment;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
@@ -29,7 +28,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class RecentFragment extends BaseFragment implements IRecycleViewItemClick, IRecentFragment {
+public class RecentFragment extends BaseFragment implements IRecentFragment {
 
     @Inject RecentController _controller;
     @Bind(R.id.recent_recycle_view) UltimateRecyclerView recentRecycleView;
@@ -85,7 +84,9 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recentRecycleView.setLayoutManager(layoutManager);
 
-        stickyHeaderAdapter = new RecentThreadAdapter(this);
+        stickyHeaderAdapter = new RecentThreadAdapter();
+        stickyHeaderAdapter.getOnThreadClickedObservable().subscribe(
+                recent -> listener.OnThreadClicked(recent.getID(), recent.getTITLE()));
         stickyHeaderAdapter.getOnUnwatchedObservable().subscribe(thread
                 -> watchThread(thread.getID()));
         recentRecycleView.setAdapter(stickyHeaderAdapter);
@@ -116,7 +117,7 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
                 .show();
     }
 
-    private void watchThread(int threadId){
+    private void watchThread(int threadId) {
         _controller.WatchThread(threadId);
     }
 
@@ -138,12 +139,5 @@ public class RecentFragment extends BaseFragment implements IRecycleViewItemClic
                 .setAction("Retry", view -> loadRecent())
                 .show();
     }
-
-    @Override
-    public void OnItemClicked(int itemClicked, String threadTitle) {
-        listener.OnThreadClicked(itemClicked, threadTitle);
-    }
-
-
 }
 

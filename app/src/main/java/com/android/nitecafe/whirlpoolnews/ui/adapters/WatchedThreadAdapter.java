@@ -6,14 +6,15 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.android.nitecafe.whirlpoolnews.models.Watched;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.RecyclerViewAdapterClickListener;
 import com.jakewharton.rxbinding.view.RxMenuItem;
 
 import rx.Observable;
 import rx.subjects.PublishSubject;
 
 public class WatchedThreadAdapter extends ThreadStickyHeaderAdapter<Watched> {
+
+    private PublishSubject<Integer> OnWatchClickedObservable = PublishSubject.create();
+    private PublishSubject<Integer> OnMarkAsReadClickedObservable = PublishSubject.create();
 
     public Observable<Watched> getOnWatchClickedObservable() {
         return OnWatchClickedObservable.map(threadsList::get).asObservable();
@@ -23,13 +24,6 @@ public class WatchedThreadAdapter extends ThreadStickyHeaderAdapter<Watched> {
         return OnMarkAsReadClickedObservable.map(threadsList::get).asObservable();
     }
 
-    private PublishSubject<Integer> OnWatchClickedObservable = PublishSubject.create();
-    private PublishSubject<Integer> OnMarkAsReadClickedObservable = PublishSubject.create();
-
-    public WatchedThreadAdapter(IRecycleViewItemClick itemClickHandler) {
-        super(itemClickHandler);
-    }
-
     protected String getThreadTitleText(Watched thread) {
         return thread.getTITLE() + " (" + thread.getUNREAD() + " unread)";
     }
@@ -37,7 +31,7 @@ public class WatchedThreadAdapter extends ThreadStickyHeaderAdapter<Watched> {
     @NonNull
     @Override
     protected ThreadViewHolder getThreadViewHolderCustom(View inflate) {
-        return new WatchedThreadViewHolder(inflate, this, OnWatchClickedObservable,OnMarkAsReadClickedObservable);
+        return new WatchedThreadViewHolder(inflate, OnThreadClickedObservable, OnWatchClickedObservable, OnMarkAsReadClickedObservable);
     }
 
     public static class WatchedThreadViewHolder extends ThreadViewHolder {
@@ -45,9 +39,9 @@ public class WatchedThreadAdapter extends ThreadStickyHeaderAdapter<Watched> {
         private PublishSubject<Integer> mWatchedClickedSubject;
         private PublishSubject<Integer> mOnMarkAsReadClickedObservable;
 
-        WatchedThreadViewHolder(View itemView, RecyclerViewAdapterClickListener tThreadStickyHeaderAdapter,
+        WatchedThreadViewHolder(View itemView, PublishSubject<Integer> onThreadClickedObservable,
                                 PublishSubject<Integer> watchedClickedSubject, PublishSubject<Integer> onMarkAsReadClickedObservable) {
-            super(itemView, tThreadStickyHeaderAdapter);
+            super(itemView, onThreadClickedObservable);
             mWatchedClickedSubject = watchedClickedSubject;
             mOnMarkAsReadClickedObservable = onMarkAsReadClickedObservable;
         }

@@ -11,9 +11,8 @@ import android.widget.TextView;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.IWhirlpoolThread;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.RecyclerViewAdapterClickListener;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
+import com.jakewharton.rxbinding.view.RxView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 
 import java.util.ArrayList;
@@ -24,16 +23,19 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.subjects.PublishSubject;
 
-    public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends UltimateViewAdapter<ThreadStickyHeaderAdapter.ThreadViewHolder> implements RecyclerViewAdapterClickListener {
+public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends UltimateViewAdapter<ThreadStickyHeaderAdapter.ThreadViewHolder> {
 
     protected List<T> threadsList = new ArrayList<>();
+    protected PublishSubject<Integer> OnThreadClickedObservable = PublishSubject.create();
     private Map<String, Integer> headerMap = new HashMap<>();
     private int headerId = 0;
-    private IRecycleViewItemClick itemClickHandler;
 
-    public ThreadStickyHeaderAdapter(IRecycleViewItemClick itemClickHandler) {
-        this.itemClickHandler = itemClickHandler;
+    public Observable<T> getOnThreadClickedObservable() {
+        return OnThreadClickedObservable.map(
+                integer -> threadsList.get(integer)).asObservable();
     }
 
     public void setThreads(List<T> items) {
@@ -56,7 +58,7 @@ import butterknife.ButterKnife;
 
     @NonNull
     protected ThreadViewHolder getThreadViewHolderCustom(View inflate) {
-        return new ThreadViewHolder(inflate, this);
+        return new ThreadViewHolder(inflate, OnThreadClickedObservable);
     }
 
     @Override
@@ -113,31 +115,18 @@ import butterknife.ButterKnife;
         textView.setText(threadsList.get(position).getFORUMNAME());
     }
 
-    @Override
-    public void recyclerViewListClicked(View v, int position) {
-        final T t = threadsList.get(position);
-        itemClickHandler.OnItemClicked(t.getID(), t.getTITLE());
-    }
-
-    public static class ThreadViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
+    public static class ThreadViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+        public View itemView;
         @Bind(R.id.thread_title) TextView threadTitle;
         @Bind(R.id.thread_total_page) TextView threadTotalPage;
         @Bind(R.id.thread_last_post_info) TextView threadLastPostInfo;
-        public View itemView;
-        private RecyclerViewAdapterClickListener listener;
 
-        ThreadViewHolder(View itemView, RecyclerViewAdapterClickListener tThreadStickyHeaderAdapter) {
+        ThreadViewHolder(View itemView, PublishSubject<Integer> onThreadClickedObservable) {
             super(itemView);
             this.itemView = itemView;
-            listener = tThreadStickyHeaderAdapter;
             itemView.setOnCreateContextMenuListener(this);
-            itemView.setOnClickListener(this);
+            RxView.clicks(itemView).map(aVoid -> getAdapterPosition()).subscribe(onThreadClickedObservable);
             ButterKnife.bind(this, itemView);
-        }
-
-        @Override
-        public void onClick(View v) {
-            listener.recyclerViewListClicked(v, getAdapterPosition());
         }
 
         @Override
@@ -145,7 +134,7 @@ import butterknife.ButterKnife;
             onCreateContextMenuCustom(menu);
         }
 
-        protected void onCreateContextMenuCustom(ContextMenu menu){
+        protected void onCreateContextMenuCustom(ContextMenu menu) {
             menu.setHeaderTitle("Select an Action");
         }
     }
