@@ -22,7 +22,8 @@ public class ScrapedPostController {
         this.schedulerManager = schedulerManager;
     }
 
-    public void GetScrapedPosts(int threadId) {
+    public void GetScrapedPosts(int threadId, int page) {
+        currentPage = page;
         loadScrapedPosts(threadId, currentPage);
     }
 

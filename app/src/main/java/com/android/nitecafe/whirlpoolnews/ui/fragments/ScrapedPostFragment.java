@@ -29,17 +29,20 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
 
     public static final String THREAD_ID = "ThreadId";
     public static final String THREAD_TITLE = "ThreadTitle";
+    public static final String THREAD_PAGE = "ThreadPage";
     @Inject ScrapedPostController _controller;
     @Bind(R.id.post_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.post_progress_loader) MaterialProgressBar mMaterialProgressBar;
     private int mThreadId;
     private ScrapedPostAdapter scrapedPostAdapter;
     private String mThreadTitle;
+    private int mPage;
 
-    public static ScrapedPostFragment newInstance(int threadId, String threadTitle) {
+    public static ScrapedPostFragment newInstance(int threadId, String threadTitle, int page) {
         ScrapedPostFragment fragment = new ScrapedPostFragment();
         Bundle args = new Bundle();
         args.putInt(THREAD_ID, threadId);
+        args.putInt(THREAD_PAGE, page);
         args.putString(THREAD_TITLE, threadTitle);
         fragment.setArguments(args);
         return fragment;
@@ -49,6 +52,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mThreadId = getArguments().getInt(THREAD_ID, 0);
+        mPage = getArguments().getInt(THREAD_PAGE, 0);
         mThreadTitle = getArguments().getString(THREAD_TITLE, "");
     }
 
@@ -94,7 +98,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     }
 
     private void loadPosts() {
-        _controller.GetScrapedPosts(mThreadId);
+        _controller.GetScrapedPosts(mThreadId, mPage);
     }
 
     @Override
