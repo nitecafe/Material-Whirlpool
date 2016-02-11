@@ -88,6 +88,7 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
         stickyHeaderAdapter = new WatchedThreadAdapter(this);
         stickyHeaderAdapter.getOnWatchClickedObservable().subscribe(thread
                 -> unwatchThread(thread.getID()));
+        stickyHeaderAdapter.getOnMarkAsClickedObservable().subscribe(watched -> markThreadAsRead(watched.getID()));
         watchedRecycleView.setAdapter(stickyHeaderAdapter);
         watchedRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
         watchedRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
@@ -102,6 +103,10 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
 
     private void unwatchThread(int threadId) {
         _controller.UnwatchThread(threadId);
+    }
+
+    private void markThreadAsRead(int threadId) {
+        _controller.MarkThreadAsRead(threadId);
     }
 
     @Override
@@ -127,13 +132,13 @@ public class WatchedFragment extends BaseFragment implements IRecycleViewItemCli
     }
 
     @Override
-    public void ShowThreadUnwatchedSuccessfully() {
-        Snackbar.make(watchedRecycleView, "Unwatched successfully", Snackbar.LENGTH_LONG)
+    public void ShowActionSuccessMessage() {
+        Snackbar.make(watchedRecycleView, "Action successful.", Snackbar.LENGTH_LONG)
                 .show();
     }
 
     @Override
-    public void ShowThreadUnwatchedFailureMessage() {
+    public void ShowActionFailedMessage() {
         Snackbar.make(watchedRecycleView, "Something went wrong. Try again", Snackbar.LENGTH_LONG)
                 .show();
     }

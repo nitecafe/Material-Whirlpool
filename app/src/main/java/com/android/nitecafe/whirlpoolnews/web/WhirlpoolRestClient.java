@@ -117,4 +117,9 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     public Observable<Void> SetThreadAsUnwatch(int threadId) {
         return getWhirlpoolService().SetThreadAsUnwatched(threadId);
     }
+
+    @Override
+    public Observable<Void> SetThreadAsRead(int threadId) {
+        return getWhirlpoolService().SetThreadAsRead(threadId);
+    }
 }

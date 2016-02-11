@@ -31,4 +31,7 @@ public interface IWhirlpoolService {
 
     @GET("?get=watchedadd")
     Observable<Void> SetThreadAsWatched(@Query("watchedadd") int threadId);
+
+    @GET("?get=watchedread")
+    Observable<Void> SetThreadAsRead(@Query("watchedread") int threadId);
 }

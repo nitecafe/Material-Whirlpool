@@ -15,7 +15,7 @@ public interface IWatchedFragment {
 
     void HideRefreshLoader();
 
-    void ShowThreadUnwatchedSuccessfully();
+    void ShowActionSuccessMessage();
 
-    void ShowThreadUnwatchedFailureMessage();
+    void ShowActionFailedMessage();
 }

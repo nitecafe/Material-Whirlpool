@@ -16,10 +16,15 @@ import rx.subjects.PublishSubject;
 public class WatchedThreadAdapter extends ThreadStickyHeaderAdapter<Watched> {
 
     public Observable<Watched> getOnWatchClickedObservable() {
-        return OnWatchClickedObservable.map(integer -> threadsList.get(integer)).asObservable();
+        return OnWatchClickedObservable.map(threadsList::get).asObservable();
+    }
+
+    public Observable<Watched> getOnMarkAsClickedObservable() {
+        return OnMarkAsReadClickedObservable.map(threadsList::get).asObservable();
     }
 
     private PublishSubject<Integer> OnWatchClickedObservable = PublishSubject.create();
+    private PublishSubject<Integer> OnMarkAsReadClickedObservable = PublishSubject.create();
 
     public WatchedThreadAdapter(IRecycleViewItemClick itemClickHandler) {
         super(itemClickHandler);
@@ -32,23 +37,28 @@ public class WatchedThreadAdapter extends ThreadStickyHeaderAdapter<Watched> {
     @NonNull
     @Override
     protected ThreadViewHolder getThreadViewHolderCustom(View inflate) {
-        return new WatchedThreadViewHolder(inflate, this, OnWatchClickedObservable);
+        return new WatchedThreadViewHolder(inflate, this, OnWatchClickedObservable,OnMarkAsReadClickedObservable);
     }
 
     public static class WatchedThreadViewHolder extends ThreadViewHolder {
 
         private PublishSubject<Integer> mWatchedClickedSubject;
+        private PublishSubject<Integer> mOnMarkAsReadClickedObservable;
 
-        WatchedThreadViewHolder(View itemView, RecyclerViewAdapterClickListener tThreadStickyHeaderAdapter, PublishSubject<Integer> watchedClickedSubject) {
+        WatchedThreadViewHolder(View itemView, RecyclerViewAdapterClickListener tThreadStickyHeaderAdapter,
+                                PublishSubject<Integer> watchedClickedSubject, PublishSubject<Integer> onMarkAsReadClickedObservable) {
             super(itemView, tThreadStickyHeaderAdapter);
             mWatchedClickedSubject = watchedClickedSubject;
+            mOnMarkAsReadClickedObservable = onMarkAsReadClickedObservable;
         }
 
         @Override
         protected void onCreateContextMenuCustom(ContextMenu menu) {
             super.onCreateContextMenuCustom(menu);
             MenuItem add = menu.add("Unwatch Thread");
+            MenuItem markAsRead = menu.add("Mark as Read");
             RxMenuItem.clicks(add).map(aVoid -> getAdapterPosition()).subscribe(mWatchedClickedSubject);
+            RxMenuItem.clicks(markAsRead).map(aVoid -> getAdapterPosition()).subscribe(mOnMarkAsReadClickedObservable);
         }
     }
 }

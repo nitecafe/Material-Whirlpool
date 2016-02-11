@@ -59,10 +59,10 @@ public class WatchedController {
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler())
                 .subscribe(aVoid -> {
-                            watchedFragment.ShowThreadUnwatchedSuccessfully();
+                            watchedFragment.ShowActionSuccessMessage();
                             watchedFragment.loadWatched();
                         },
-                        throwable -> watchedFragment.ShowThreadUnwatchedFailureMessage()
+                        throwable -> watchedFragment.ShowActionFailedMessage()
                 );
     }
 
@@ -75,4 +75,15 @@ public class WatchedController {
         this.watchedFragment = watchedFragment;
     }
 
+    public void MarkThreadAsRead(int threadId) {
+        whirlpoolRestClient.SetThreadAsRead(threadId)
+                .observeOn(schedulerManager.GetMainScheduler())
+                .subscribeOn(schedulerManager.GetIoScheduler())
+                .subscribe(aVoid -> {
+                            watchedFragment.ShowActionSuccessMessage();
+                            watchedFragment.loadWatched();
+                        },
+                        throwable -> watchedFragment.ShowActionFailedMessage()
+                );
+    }
 }

@@ -34,4 +34,6 @@ public interface IWhirlpoolRestClient {
     Observable<Void> SetThreadAsWatch(int threadId);
 
     Observable<Void> SetThreadAsUnwatch(int threadId);
+
+    Observable<Void> SetThreadAsRead(int threadId);
 }
