@@ -15,6 +15,7 @@ import android.widget.Spinner;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.ScrapedPostController;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedPostAdapter;
@@ -37,6 +38,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     public static final String THREAD_ID = "ThreadId";
     public static final String THREAD_TITLE = "ThreadTitle";
     public static final String THREAD_PAGE = "ThreadPage";
+    public static final String POST_LAST_READ = "PostLastRead";
     @Inject ScrapedPostController _controller;
     @Bind(R.id.post_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.post_progress_loader) MaterialProgressBar mMaterialProgressBar;
@@ -44,13 +46,15 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     private int mThreadId;
     private ScrapedPostAdapter scrapedPostAdapter;
     private String mThreadTitle;
-    private int mPage;
+    private int mPageToLoad;
+    private int mPostLastReadId;
 
-    public static ScrapedPostFragment newInstance(int threadId, String threadTitle, int page) {
+    public static ScrapedPostFragment newInstance(int threadId, String threadTitle, int page, int postLastRead) {
         ScrapedPostFragment fragment = new ScrapedPostFragment();
         Bundle args = new Bundle();
         args.putInt(THREAD_ID, threadId);
         args.putInt(THREAD_PAGE, page);
+        args.putInt(POST_LAST_READ, postLastRead);
         args.putString(THREAD_TITLE, threadTitle);
         fragment.setArguments(args);
         return fragment;
@@ -60,7 +64,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mThreadId = getArguments().getInt(THREAD_ID, 0);
-        mPage = getArguments().getInt(THREAD_PAGE, 0);
+        mPageToLoad = getArguments().getInt(THREAD_PAGE, 0);
+        mPostLastReadId = getArguments().getInt(POST_LAST_READ, 0);
         mThreadTitle = getArguments().getString(THREAD_TITLE, "");
     }
 
@@ -106,7 +111,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     }
 
     private void loadPosts() {
-        _controller.GetScrapedPosts(mThreadId, mPage);
+        _controller.GetScrapedPosts(mThreadId, mPageToLoad);
     }
 
     @Override
@@ -127,6 +132,14 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     @Override
     public void DisplayPosts(List<ScrapedPost> posts) {
         scrapedPostAdapter.SetPosts(posts);
+        ScrollToFirstUnreadItem();
+    }
+
+    private void ScrollToFirstUnreadItem() {
+        if (mPostLastReadId > 0) {
+            int position = mPostLastReadId - ((mPageToLoad - 1) * StringConstants.POST_PER_PAGE);
+            mRecycleView.scrollVerticallyToPosition(position - 1);
+        }
     }
 
     @Override
@@ -138,7 +151,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         pageNumberSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         List<String> numberPages = new ArrayList<>();
         for (int i = 1; i <= pageCount; i++) {
-            numberPages.add("Page " + i);
+            numberPages.add("Page " + i + " / " + pageCount);
         }
         ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_row, numberPages);
         pageNumberSpinner.setAdapter(stringArrayAdapter);

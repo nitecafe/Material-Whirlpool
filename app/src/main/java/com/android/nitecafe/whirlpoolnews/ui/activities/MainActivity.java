@@ -63,12 +63,12 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @Override
     public void OnThreadClicked(int threadId, String threadTitle) {
-        OnWatchedThreadClicked(threadId, threadTitle, 1);
+        OnWatchedThreadClicked(threadId, threadTitle, 1, 0);
     }
 
     @Override
-    public void OnWatchedThreadClicked(int threadId, String threadTitle, int lastPageRead) {
-        ScrapedPostFragment scrapedPostFragment = ScrapedPostFragment.newInstance(threadId, threadTitle, lastPageRead);
+    public void OnWatchedThreadClicked(int threadId, String threadTitle, int lastPageRead, int lastReadId) {
+        ScrapedPostFragment scrapedPostFragment = ScrapedPostFragment.newInstance(threadId, threadTitle, lastPageRead, lastReadId);
         startFragment(scrapedPostFragment);
     }
 
