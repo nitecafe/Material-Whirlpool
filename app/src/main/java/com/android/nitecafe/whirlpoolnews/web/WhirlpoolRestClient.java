@@ -119,7 +119,7 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     }
 
     @Override
-    public Observable<Void> SetThreadAsRead(int threadId) {
+    public Observable<Void> MarkThreadAsRead(int threadId) {
         return getWhirlpoolService().SetThreadAsRead(threadId);
     }
 }

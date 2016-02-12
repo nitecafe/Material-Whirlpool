@@ -50,6 +50,20 @@ public class ScrapedPostController {
                 });
     }
 
+    public void markThreadAsRead(int threadId) {
+        whirlpoolRestClient.MarkThreadAsRead(threadId)
+                .observeOn(schedulerManager.GetMainScheduler())
+                .subscribeOn(schedulerManager.GetIoScheduler())
+                .subscribe(aVoid -> {
+                    if (postFragment != null) {
+                        postFragment.DisplayThreadMarkedMessage();
+                    }
+                }, throwable -> {
+                    if (postFragment != null)
+                        postFragment.DisplayActionUnsuccessfullyMessage();
+                });
+    }
+
     public void loadNextPage(int threadId) {
         if (IsAtLastPage())
             throw new IllegalArgumentException("Current page is the last page.");

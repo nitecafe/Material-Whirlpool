@@ -3,6 +3,7 @@ package com.android.nitecafe.whirlpoolnews.ui.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -18,7 +19,6 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
-import com.marshalchen.ultimaterecyclerview.ui.floatingactionbutton.FloatingActionButton;
 
 import javax.inject.Inject;
 

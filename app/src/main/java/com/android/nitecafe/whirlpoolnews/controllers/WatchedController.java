@@ -76,7 +76,7 @@ public class WatchedController {
     }
 
     public void MarkThreadAsRead(int threadId) {
-        whirlpoolRestClient.SetThreadAsRead(threadId)
+        whirlpoolRestClient.MarkThreadAsRead(threadId)
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler())
                 .subscribe(aVoid -> {

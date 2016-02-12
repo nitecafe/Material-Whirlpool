@@ -16,4 +16,8 @@ public interface IScrapedPostFragment {
     void SetupPageSpinnerDropDown(int pageCount, int page);
 
     void ShowRefreshLoader();
+
+    void DisplayThreadMarkedMessage();
+
+    void DisplayActionUnsuccessfullyMessage();
 }

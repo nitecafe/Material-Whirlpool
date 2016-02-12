@@ -50,6 +50,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     @Bind(R.id.spinner_post_page) Spinner pageNumberSpinner;
     @Bind(R.id.btn_next) ImageButton buttonNext;
     @Bind(R.id.btn_back) ImageButton buttonPrevious;
+    @Bind(R.id.btn_mark_as_read) ImageButton buttonMarkRead;
     private int mThreadId;
     private ScrapedPostAdapter scrapedPostAdapter;
     private String mThreadTitle;
@@ -197,6 +198,16 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         mRecycleView.setRefreshing(true);
     }
 
+    @Override public void DisplayThreadMarkedMessage() {
+        Snackbar.make(mRecycleView, "Thread has been marked as read", Snackbar.LENGTH_LONG)
+                .show();
+    }
+
+    @Override public void DisplayActionUnsuccessfullyMessage() {
+        Snackbar.make(mRecycleView, "Something went wrong. Try again.", Snackbar.LENGTH_LONG)
+                .show();
+    }
+
     private void updateNavigationButtonVisibility() {
         if (_controller.IsAtFirstPage())
             buttonPrevious.setVisibility(View.INVISIBLE);
@@ -217,6 +228,11 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     @OnClick(R.id.btn_next)
     public void GoToNextPage() {
         _controller.loadNextPage(mThreadId);
+    }
+
+    @OnClick(R.id.btn_mark_as_read)
+    public void MarkThreadAsRead() {
+        _controller.markThreadAsRead(mThreadId);
     }
 
 }
