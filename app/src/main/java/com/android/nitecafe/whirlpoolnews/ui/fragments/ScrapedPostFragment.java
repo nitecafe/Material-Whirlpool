@@ -1,4 +1,4 @@
-package com.android.nitecafe.whirlpoolnews.ui.fragments;
+`package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -52,6 +53,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     private String mThreadTitle;
     private int mPageToLoad;
     private int mPostLastReadId;
+    private int mPreviousSpinnerPosition;
 
     public static ScrapedPostFragment newInstance(int threadId, String threadTitle, int page, int postLastRead) {
         ScrapedPostFragment fragment = new ScrapedPostFragment();
@@ -89,11 +91,30 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
         _controller.attach(this);
 
+        SetSpinnerArrowToWhite();
         SetupRecycleView();
-
         loadPosts();
 
         return inflate;
+    }
+
+    private void SetSpinnerArrowToWhite() {
+        mPreviousSpinnerPosition = mPageToLoad - 1;
+        pageNumberSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        pageNumberSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mPreviousSpinnerPosition != position) {
+                    _controller.GetScrapedPosts(mThreadId, position + 1);
+                    mPreviousSpinnerPosition = position;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -154,8 +175,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     }
 
     @Override
-    public void SetupPageSpinner(int pageCount, int page) {
-        pageNumberSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+    public void SetupPageSpinnerDropDown(int pageCount, int page) {
+
         List<String> numberPages = new ArrayList<>();
         for (int i = 1; i <= pageCount; i++) {
             numberPages.add("Page " + i + " / " + pageCount);

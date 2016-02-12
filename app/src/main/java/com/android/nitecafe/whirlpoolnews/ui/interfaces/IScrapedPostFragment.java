@@ -13,7 +13,7 @@ public interface IScrapedPostFragment {
 
     void HideRefreshLoader();
 
-    void SetupPageSpinner(int pageCount, int page);
+    void SetupPageSpinnerDropDown(int pageCount, int page);
 
     void ShowRefreshLoader();
 }
