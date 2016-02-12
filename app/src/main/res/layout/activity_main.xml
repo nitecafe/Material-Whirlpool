@@ -27,4 +27,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
     </FrameLayout>
 
+    <!--<com.marshalchen.ultimaterecyclerview.ui.floatingactionbutton.FloatingActionButton-->
+        <!--android:id="@+id/fab_reply_post"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_gravity="end|bottom"-->
+        <!--android:src="@drawable/ic_reply_post"/>-->
+
 </android.support.design.widget.CoordinatorLayout>
