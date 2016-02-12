@@ -23,7 +23,6 @@ import com.android.nitecafe.whirlpoolnews.controllers.ScrapedPostController;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedPostAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -36,6 +35,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
+import rx.subjects.PublishSubject;
 
 public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFragment {
 
@@ -43,6 +43,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     public static final String THREAD_TITLE = "ThreadTitle";
     public static final String THREAD_PAGE = "ThreadPage";
     public static final String POST_LAST_READ = "PostLastRead";
+    public PublishSubject<Void> OnFragmentDestroySubject = PublishSubject.create();
     @Inject ScrapedPostController _controller;
     @Bind(R.id.post_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.post_progress_loader) MaterialProgressBar mMaterialProgressBar;
@@ -79,6 +80,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     @Override
     public void onDestroyView() {
         _controller.attach(null);
+        OnFragmentDestroySubject.onNext(null);
+        OnFragmentDestroySubject.onCompleted();
         super.onDestroyView();
     }
 
@@ -151,7 +154,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
                 .setAction("Retry", view -> loadPosts())
                 .show();
 
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ThreadScraper.THREAD_URL + String.valueOf(mThreadId)));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(StringConstants.THREAD_URL + String.valueOf(mThreadId)));
         startActivity(browserIntent);
     }
 

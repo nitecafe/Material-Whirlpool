@@ -1,12 +1,15 @@
 package com.android.nitecafe.whirlpoolnews.ui.activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
@@ -15,18 +18,26 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
+import com.marshalchen.ultimaterecyclerview.ui.floatingactionbutton.FloatingActionButton;
 
 import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener, ForumFragment.IOnForumClicked, IOnThreadClicked {
 
     @Inject IWhirlpoolRestClient mWhirlpoolRestClient;
+    @Bind(R.id.fab_reply_post) FloatingActionButton fabReplyPost;
+    private int mThreadIdLoaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ((WhirlpoolApp) getApplication()).getDaggerComponent().inject(this);
+        ButterKnife.bind(this);
 
         String scheme = getIntent().getScheme();
         if (IsFromInternalAppLink(scheme)) {
@@ -68,8 +79,15 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @Override
     public void OnWatchedThreadClicked(int threadId, String threadTitle, int lastPageRead, int lastReadId) {
+        mThreadIdLoaded = threadId;
         ScrapedPostFragment scrapedPostFragment = ScrapedPostFragment.newInstance(threadId, threadTitle, lastPageRead, lastReadId);
         startFragment(scrapedPostFragment);
+        setUpPostReplyFab(scrapedPostFragment);
+    }
+
+    private void setUpPostReplyFab(ScrapedPostFragment scrapedPostFragment) {
+        scrapedPostFragment.OnFragmentDestroySubject.subscribe(aVoid -> fabReplyPost.setVisibility(View.GONE));
+        fabReplyPost.setVisibility(View.VISIBLE);
     }
 
     private void startFragment(Fragment fragment) {
@@ -77,5 +95,12 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, fragment);
         fragmentTransaction.addToBackStack(null);
         fts.commit();
+    }
+
+    @OnClick(R.id.fab_reply_post)
+    public void launchReplyPageInBrowser() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadIdLoaded)));
+        startActivity(browserIntent);
     }
 }

@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.utilities;
 
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
@@ -23,8 +24,7 @@ import rx.Observable;
 
 public class ThreadScraper implements IThreadScraper {
 
-    public static final String FORUM_URL = "http://forums.whirlpool.net.au/forum/";
-    public static final String THREAD_URL = "http://forums.whirlpool.net.au/forum-replies.cfm?t=";
+
 
     // these forum IDs are public, and we can scrape the data from them
     private static int[] PUBLIC_FORUMS = {92, 100, 142, 82, 9, 107, 135, 80, 136, 125, 116, 63,
@@ -65,7 +65,7 @@ public class ThreadScraper implements IThreadScraper {
 
         int page_count = -1;
 
-        String forum_url = FORUM_URL + forum_id + "?p=" + page_number;
+        String forum_url = StringConstants.FORUM_URL + forum_id + "?p=" + page_number;
 
         if (group_id != 0) {
             forum_url += "&g=" + group_id;
@@ -262,7 +262,7 @@ public class ThreadScraper implements IThreadScraper {
 
         ArrayList<ScrapedPost> scrapedPosts = new ArrayList<>();
 
-        String thread_url = THREAD_URL + thread_id;
+        String thread_url = StringConstants.THREAD_URL + thread_id;
         if (page != 1) {
             thread_url += "&p=" + page;
         }
