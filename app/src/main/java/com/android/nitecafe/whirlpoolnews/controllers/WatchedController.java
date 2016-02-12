@@ -3,6 +3,7 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWatchedFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -11,13 +12,15 @@ public class WatchedController {
 
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
+    private IWatchedThreadIdentifier mWatchedThreadIdentifier;
     private IWatchedFragment watchedFragment;
 
     @Inject
     @Singleton
-    public WatchedController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
+    public WatchedController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager, IWatchedThreadIdentifier watchedThreadIdentifier) {
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.schedulerManager = schedulerManager;
+        mWatchedThreadIdentifier = watchedThreadIdentifier;
     }
 
     public void GetUnreadWatched() {
@@ -61,6 +64,7 @@ public class WatchedController {
                 .subscribe(aVoid -> {
                             watchedFragment.ShowActionSuccessMessage();
                             watchedFragment.loadWatched();
+                            mWatchedThreadIdentifier.removeThreadFromWatch(threadId);
                         },
                         throwable -> watchedFragment.ShowActionFailedMessage()
                 );

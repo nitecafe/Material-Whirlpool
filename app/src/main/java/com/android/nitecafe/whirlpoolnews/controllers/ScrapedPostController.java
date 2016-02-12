@@ -113,6 +113,7 @@ public class ScrapedPostController {
                     if (postFragment != null) {
                         postFragment.DisplayActionSuccessMessage();
                         watchedThreadIdentifier.removeThreadFromWatch(threadId);
+                        postFragment.setUpToolbarActionButtons();
                     }
                 }, throwable -> {
                     if (postFragment != null)
@@ -128,11 +129,11 @@ public class ScrapedPostController {
                     if (postFragment != null) {
                         postFragment.DisplayActionSuccessMessage();
                         watchedThreadIdentifier.addThreadToWatch(threadId);
+                        postFragment.setUpToolbarActionButtons();
                     }
                 }, throwable -> {
                     if (postFragment != null)
                         postFragment.DisplayActionUnsuccessfullyMessage();
                 });
     }
-
 }

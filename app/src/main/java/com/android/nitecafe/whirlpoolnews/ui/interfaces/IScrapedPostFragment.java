@@ -5,9 +5,7 @@ import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import java.util.List;
 
 public interface IScrapedPostFragment {
-    void changeToUnwatched();
-
-    void changeToWatched();
+    void setUpToolbarActionButtons();
 
     void HideCenterProgressBar();
 

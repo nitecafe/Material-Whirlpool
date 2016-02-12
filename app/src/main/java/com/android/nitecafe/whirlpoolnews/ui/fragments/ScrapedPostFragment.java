@@ -107,7 +107,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         return inflate;
     }
 
-    private void setUpToolbarActionButtons() {
+    @Override
+    public void setUpToolbarActionButtons() {
         if (_controller.IsThreadWatched(mThreadId)) {
             changeToWatched();
         } else {
@@ -115,13 +116,13 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         }
     }
 
-    @Override public void changeToUnwatched() {
+    private void changeToUnwatched() {
         buttonMarkRead.setVisibility(View.GONE);
         buttonRemoveFromWatch.setVisibility(View.GONE);
         buttonAddToWatch.setVisibility(View.VISIBLE);
     }
 
-    @Override public void changeToWatched() {
+    private void changeToWatched() {
         buttonRemoveFromWatch.setVisibility(View.VISIBLE);
         buttonAddToWatch.setVisibility(View.GONE);
         buttonMarkRead.setVisibility(View.VISIBLE);
