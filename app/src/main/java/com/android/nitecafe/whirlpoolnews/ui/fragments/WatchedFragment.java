@@ -90,7 +90,8 @@ public class WatchedFragment extends BaseFragment implements IWatchedFragment {
         });
         stickyHeaderAdapter.getOnWatchClickedObservable().subscribe(thread
                 -> unwatchThread(thread.getID()));
-        stickyHeaderAdapter.getOnMarkAsClickedObservable().subscribe(watched -> markThreadAsRead(watched.getID()));
+        stickyHeaderAdapter.getOnMarkAsClickedObservable().subscribe(
+                watched -> markThreadAsRead(watched.getID()));
         watchedRecycleView.setAdapter(stickyHeaderAdapter);
         watchedRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
         watchedRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());

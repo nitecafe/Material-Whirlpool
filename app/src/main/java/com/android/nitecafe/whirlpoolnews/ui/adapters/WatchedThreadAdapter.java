@@ -18,11 +18,11 @@ public class WatchedThreadAdapter extends ThreadStickyHeaderAdapter<Watched> {
     private PublishSubject<Integer> OnMarkAsReadClickedObservable = PublishSubject.create();
 
     public Observable<Watched> getOnWatchClickedObservable() {
-        return OnWatchClickedObservable.map(threadsList::get).asObservable();
+        return OnWatchClickedObservable.map(integer -> threadsList.get(integer)).asObservable();
     }
 
     public Observable<Watched> getOnMarkAsClickedObservable() {
-        return OnMarkAsReadClickedObservable.map(threadsList::get).asObservable();
+        return OnMarkAsReadClickedObservable.map(integer -> threadsList.get(integer)).asObservable();
     }
 
     protected String getThreadTitleText(Watched thread) {
