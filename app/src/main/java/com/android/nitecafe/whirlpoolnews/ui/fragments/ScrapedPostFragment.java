@@ -51,6 +51,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     @Bind(R.id.btn_next) ImageButton buttonNext;
     @Bind(R.id.btn_back) ImageButton buttonPrevious;
     @Bind(R.id.btn_mark_as_read) ImageButton buttonMarkRead;
+    @Bind(R.id.btn_add_to_watch) ImageButton buttonAddToWatch;
+    @Bind(R.id.btn_remove_from_watch) ImageButton buttonRemoveFromWatch;
     private int mThreadId;
     private ScrapedPostAdapter scrapedPostAdapter;
     private String mThreadTitle;
@@ -99,17 +101,30 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         SetSpinnerArrowToWhite();
         SetupRecycleView();
 
-        setUpMarkAsReadButton();
+        setUpToolbarActionButtons();
         loadPosts();
 
         return inflate;
     }
 
-    private void setUpMarkAsReadButton() {
+    private void setUpToolbarActionButtons() {
         if (_controller.IsThreadWatched(mThreadId)) {
-            buttonMarkRead.setVisibility(View.VISIBLE);
-        } else
-            buttonMarkRead.setVisibility(View.GONE);
+            changeToWatched();
+        } else {
+            changeToUnwatched();
+        }
+    }
+
+    @Override public void changeToUnwatched() {
+        buttonMarkRead.setVisibility(View.GONE);
+        buttonRemoveFromWatch.setVisibility(View.GONE);
+        buttonAddToWatch.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void changeToWatched() {
+        buttonRemoveFromWatch.setVisibility(View.VISIBLE);
+        buttonAddToWatch.setVisibility(View.GONE);
+        buttonMarkRead.setVisibility(View.VISIBLE);
     }
 
     private void SetSpinnerArrowToWhite() {
@@ -208,8 +223,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         mRecycleView.setRefreshing(true);
     }
 
-    @Override public void DisplayThreadMarkedMessage() {
-        Snackbar.make(mRecycleView, "Thread has been marked as read", Snackbar.LENGTH_LONG)
+    @Override public void DisplayActionSuccessMessage() {
+        Snackbar.make(mRecycleView, "Success.", Snackbar.LENGTH_LONG)
                 .show();
     }
 
@@ -220,14 +235,15 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
 
     private void updateNavigationButtonVisibility() {
         if (_controller.IsAtFirstPage())
-            buttonPrevious.setVisibility(View.INVISIBLE);
+            buttonPrevious.setVisibility(View.GONE);
         else
             buttonPrevious.setVisibility(View.VISIBLE);
 
         if (_controller.IsAtLastPage())
-            buttonNext.setVisibility(View.INVISIBLE);
+            buttonNext.setVisibility(View.GONE);
         else
             buttonNext.setVisibility(View.VISIBLE);
+
     }
 
     @OnClick(R.id.btn_back)
@@ -243,6 +259,16 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     @OnClick(R.id.btn_mark_as_read)
     public void MarkThreadAsRead() {
         _controller.markThreadAsRead(mThreadId);
+    }
+
+    @OnClick(R.id.btn_remove_from_watch)
+    public void RemoveFromWatch() {
+        _controller.removeFromWatchList(mThreadId);
+    }
+
+    @OnClick(R.id.btn_add_to_watch)
+    public void AddToWatch() {
+        _controller.addToWatchList(mThreadId);
     }
 
 }

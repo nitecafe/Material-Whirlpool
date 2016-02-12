@@ -32,6 +32,24 @@
                 android:layout_centerVertical="true">
 
                 <ImageButton
+                    android:id="@+id/btn_add_to_watch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_watch_thread"/>
+
+                <ImageButton
+                    android:id="@+id/btn_remove_from_watch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_unwatch_thread"/>
+
+                <ImageButton
                     android:id="@+id/btn_mark_as_read"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

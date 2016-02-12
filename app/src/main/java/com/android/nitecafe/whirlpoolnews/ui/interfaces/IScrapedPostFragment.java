@@ -5,6 +5,10 @@ import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import java.util.List;
 
 public interface IScrapedPostFragment {
+    void changeToUnwatched();
+
+    void changeToWatched();
+
     void HideCenterProgressBar();
 
     void DisplayErrorMessage();
@@ -17,7 +21,7 @@ public interface IScrapedPostFragment {
 
     void ShowRefreshLoader();
 
-    void DisplayThreadMarkedMessage();
+    void DisplayActionSuccessMessage();
 
     void DisplayActionUnsuccessfullyMessage();
 }

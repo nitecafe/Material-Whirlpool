@@ -30,6 +30,20 @@ public class WatchedThreadIdentifier implements IWatchedThreadIdentifier {
         return watchedThreads.contains(threadId);
     }
 
+    @Override public void removeThreadFromWatch(int threadId) {
+        if (watchedThreads.contains(threadId)) {
+            watchedThreads.remove(watchedThreads.indexOf(threadId));
+        } else
+            throw new IllegalArgumentException("Do not have this as watched");
+    }
+
+    @Override public void addThreadToWatch(int threadId) {
+        if (!watchedThreads.contains(threadId)) {
+            watchedThreads.add(threadId);
+        } else
+            throw new IllegalArgumentException("Already been watched");
+    }
+
     @Override public void setWatchedThreads(List<Integer> watchedThreads) {
         this.watchedThreads = watchedThreads;
     }

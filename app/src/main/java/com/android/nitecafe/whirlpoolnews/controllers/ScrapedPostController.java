@@ -64,7 +64,7 @@ public class ScrapedPostController {
                 .subscribeOn(schedulerManager.GetIoScheduler())
                 .subscribe(aVoid -> {
                     if (postFragment != null) {
-                        postFragment.DisplayThreadMarkedMessage();
+                        postFragment.DisplayActionSuccessMessage();
                     }
                 }, throwable -> {
                     if (postFragment != null)
@@ -103,6 +103,36 @@ public class ScrapedPostController {
 
     public void attach(IScrapedPostFragment postFragment) {
         this.postFragment = postFragment;
+    }
+
+    public void removeFromWatchList(int threadId) {
+        whirlpoolRestClient.SetThreadAsUnwatch(threadId)
+                .observeOn(schedulerManager.GetMainScheduler())
+                .subscribeOn(schedulerManager.GetIoScheduler())
+                .subscribe(aVoid -> {
+                    if (postFragment != null) {
+                        postFragment.DisplayActionSuccessMessage();
+                        watchedThreadIdentifier.removeThreadFromWatch(threadId);
+                    }
+                }, throwable -> {
+                    if (postFragment != null)
+                        postFragment.DisplayActionUnsuccessfullyMessage();
+                });
+    }
+
+    public void addToWatchList(int threadId) {
+        whirlpoolRestClient.SetThreadAsWatch(threadId)
+                .observeOn(schedulerManager.GetMainScheduler())
+                .subscribeOn(schedulerManager.GetIoScheduler())
+                .subscribe(aVoid -> {
+                    if (postFragment != null) {
+                        postFragment.DisplayActionSuccessMessage();
+                        watchedThreadIdentifier.addThreadToWatch(threadId);
+                    }
+                }, throwable -> {
+                    if (postFragment != null)
+                        postFragment.DisplayActionUnsuccessfullyMessage();
+                });
     }
 
 }
