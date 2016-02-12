@@ -11,6 +11,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.IOException;
+
 import rx.Observable;
 
 import static org.mockito.Mockito.anyList;
@@ -29,7 +31,7 @@ public class ForumControllerTests {
     @Before
     public void setup() {
         testSchedulerManager = new TestSchedulerManager();
-        _controllerToTest = new ForumController(whirlpoolRestClientMock, new TestSchedulerManager());
+        _controllerToTest = new ForumController(whirlpoolRestClientMock, testSchedulerManager);
         _controllerToTest.attach(forumFragmentMock);
     }
 
@@ -47,19 +49,63 @@ public class ForumControllerTests {
         verify(whirlpoolRestClientMock).GetForum();
     }
 
-//    @Test
-//    public void GetForum_WhenCalled_ShowForumsOnView() {
-//
-//        //arrange
-//        ForumList forumList = new ForumList();
-//        when(whirlpoolRestClientMock.GetForum()).thenReturn(Observable.just(forumList));
-//
-//        //act
-//        _controllerToTest.getForum();
-//        testSchedulerManager.testScheduler.triggerActions();
-//
-//        //assert
-//        verify(forumFragmentMock).DisplayForum(anyList());
-//    }
+    @Test
+    public void GetForum_WhenLoaded_ShowForumsOnView() {
 
+        //arrange
+        ForumList forumList = new ForumList();
+        when(whirlpoolRestClientMock.GetForum()).thenReturn(Observable.just(forumList));
+
+        //act
+        _controllerToTest.getForum();
+        testSchedulerManager.testScheduler.triggerActions();
+
+        //assert
+        verify(forumFragmentMock).DisplayForum(forumList.getFORUM());
+    }
+
+    @Test
+    public void GetForum_WhenLoaded_HideAllLoader() {
+
+        //arrange
+        ForumList forumList = new ForumList();
+        when(whirlpoolRestClientMock.GetForum()).thenReturn(Observable.just(forumList));
+
+        //act
+        _controllerToTest.getForum();
+        testSchedulerManager.testScheduler.triggerActions();
+
+        //assert
+        verify(forumFragmentMock).HideCenterProgressBar();
+        verify(forumFragmentMock).HideRefreshLoader();
+    }
+
+    @Test
+    public void GetForum_OnException_DisplayErrorMessage(){
+
+        //arrange
+        when(whirlpoolRestClientMock.GetForum()).thenReturn(Observable.error(new IOException()));
+
+        //act
+        _controllerToTest.getForum();
+        testSchedulerManager.testScheduler.triggerActions();
+
+        //assert
+        verify(forumFragmentMock).DisplayErrorMessage();
+    }
+
+    @Test
+    public void GetForum_OnException_HideAllLoader(){
+
+        //arrange
+        when(whirlpoolRestClientMock.GetForum()).thenReturn(Observable.error(new IOException()));
+
+        //act
+        _controllerToTest.getForum();
+        testSchedulerManager.testScheduler.triggerActions();
+
+        //assert
+        verify(forumFragmentMock).HideCenterProgressBar();
+        verify(forumFragmentMock).HideRefreshLoader();
+    }
 }
