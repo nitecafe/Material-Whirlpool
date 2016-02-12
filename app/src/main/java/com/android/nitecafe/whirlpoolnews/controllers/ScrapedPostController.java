@@ -3,6 +3,7 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -11,15 +12,18 @@ public class ScrapedPostController {
 
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
+    private IWatchedThreadIdentifier watchedThreadIdentifier;
     private IScrapedPostFragment postFragment;
     private int currentPage = 1;
     private int mPageCount;
 
     @Inject
     @Singleton
-    public ScrapedPostController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
+    public ScrapedPostController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager,
+                                 IWatchedThreadIdentifier watchedThreadIdentifier) {
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.schedulerManager = schedulerManager;
+        this.watchedThreadIdentifier = watchedThreadIdentifier;
     }
 
     public void GetScrapedPosts(int threadId, int page) {
@@ -29,6 +33,10 @@ public class ScrapedPostController {
 
         currentPage = page;
         loadScrapedPosts(threadId, currentPage);
+    }
+
+    public boolean IsThreadWatched(int threadId) {
+        return watchedThreadIdentifier.isThreadWatched(threadId);
     }
 
     public void loadScrapedPosts(int threadId, int page) {

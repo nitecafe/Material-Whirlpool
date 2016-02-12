@@ -98,9 +98,18 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
 
         SetSpinnerArrowToWhite();
         SetupRecycleView();
+
+        setUpMarkAsReadButton();
         loadPosts();
 
         return inflate;
+    }
+
+    private void setUpMarkAsReadButton() {
+        if (_controller.IsThreadWatched(mThreadId)) {
+            buttonMarkRead.setVisibility(View.VISIBLE);
+        } else
+            buttonMarkRead.setVisibility(View.GONE);
     }
 
     private void SetSpinnerArrowToWhite() {
@@ -110,6 +119,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (mPreviousSpinnerPosition != position) {
+                    mRecycleView.setRefreshing(true);
                     _controller.GetScrapedPosts(mThreadId, position + 1);
                     mPreviousSpinnerPosition = position;
                 }

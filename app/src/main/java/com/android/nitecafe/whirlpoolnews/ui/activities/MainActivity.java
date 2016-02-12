@@ -18,6 +18,7 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
+import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 
 import javax.inject.Inject;
@@ -30,6 +31,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @Inject IWhirlpoolRestClient mWhirlpoolRestClient;
     @Bind(R.id.fab_reply_post) FloatingActionButton fabReplyPost;
+    @Inject IWatchedThreadIdentifier watchedThreadIdentifier;
     private int mThreadIdLoaded;
 
     @Override
@@ -49,6 +51,11 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         } else if (savedInstanceState == null) {
             drawer.setSelection(newsItemDrawerItem);
         }
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        watchedThreadIdentifier.getWatchedThreads();
     }
 
     private boolean IsFromInternalAppLink(String scheme) {

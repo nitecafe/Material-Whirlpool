@@ -8,7 +8,9 @@ import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.scheduler.SchedulerManager;
 import com.android.nitecafe.whirlpoolnews.utilities.IThreadScraper;
+import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
+import com.android.nitecafe.whirlpoolnews.utilities.WatchedThreadIdentifier;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.otto.Bus;
@@ -58,6 +60,11 @@ public class DaggerModule {
     @Provides
     @Singleton IWhirlpoolRestClient providesWhirlpoolRestClient(WhirlpoolRestClient restClient) {
         return restClient;
+    }
+
+    @Provides
+    @Singleton IWatchedThreadIdentifier providesWatchedThreadIdentifier(WatchedThreadIdentifier watchedThreadIdentifier) {
+        return watchedThreadIdentifier;
     }
 
     @Provides
