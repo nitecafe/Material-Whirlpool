@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.android.nitecafe.whirlpoolnews.R;
@@ -31,6 +32,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFragment {
@@ -43,6 +45,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     @Bind(R.id.post_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.post_progress_loader) MaterialProgressBar mMaterialProgressBar;
     @Bind(R.id.spinner_post_page) Spinner pageNumberSpinner;
+    @Bind(R.id.btn_next) ImageButton buttonNext;
+    @Bind(R.id.btn_back) ImageButton buttonPrevious;
     private int mThreadId;
     private ScrapedPostAdapter scrapedPostAdapter;
     private String mThreadTitle;
@@ -139,7 +143,9 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         if (mPostLastReadId > 0) {
             int position = mPostLastReadId - ((mPageToLoad - 1) * StringConstants.POST_PER_PAGE);
             mRecycleView.scrollVerticallyToPosition(position - 1);
-        }
+            mPostLastReadId = 0;
+        } else
+            mRecycleView.scrollVerticallyToPosition(0);
     }
 
     @Override
@@ -147,7 +153,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         mRecycleView.setRefreshing(false);
     }
 
-    @Override public void SetupPageSpinner(int pageCount, int page) {
+    @Override
+    public void SetupPageSpinner(int pageCount, int page) {
         pageNumberSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         List<String> numberPages = new ArrayList<>();
         for (int i = 1; i <= pageCount; i++) {
@@ -156,6 +163,35 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_row, numberPages);
         pageNumberSpinner.setAdapter(stringArrayAdapter);
         pageNumberSpinner.setSelection(page - 1);
+
+        updateNavigationButtonVisibility();
+    }
+
+    @Override
+    public void ShowRefreshLoader() {
+        mRecycleView.setRefreshing(true);
+    }
+
+    private void updateNavigationButtonVisibility() {
+        if (_controller.IsAtFirstPage())
+            buttonPrevious.setVisibility(View.INVISIBLE);
+        else
+            buttonPrevious.setVisibility(View.VISIBLE);
+
+        if (_controller.IsAtLastPage())
+            buttonNext.setVisibility(View.INVISIBLE);
+        else
+            buttonNext.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.btn_back)
+    public void GoToPreviousPage() {
+        _controller.loadPreviousPage(mThreadId);
+    }
+
+    @OnClick(R.id.btn_next)
+    public void GoToNextPage() {
+        _controller.loadNextPage(mThreadId);
     }
 
 }

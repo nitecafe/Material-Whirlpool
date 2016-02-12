@@ -14,6 +14,7 @@ public class ScrapedPostController {
     private ISchedulerManager schedulerManager;
     private IScrapedPostFragment postFragment;
     private int currentPage = 1;
+    private int mPageCount;
 
     @Inject
     @Singleton
@@ -23,18 +24,23 @@ public class ScrapedPostController {
     }
 
     public void GetScrapedPosts(int threadId, int page) {
+
+        if (page < 1 || threadId < 1)
+            throw new IllegalArgumentException("Need valid thread id or page number");
+
         currentPage = page;
         loadScrapedPosts(threadId, currentPage);
     }
 
-    private void loadScrapedPosts(int threadId, int page) {
+    public void loadScrapedPosts(int threadId, int page) {
         whirlpoolRestClient.GetScrapedPosts(threadId, page)
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler())
                 .subscribe(posts -> {
+                    mPageCount = posts.getPageCount();
                     if (postFragment != null) {
                         postFragment.DisplayPosts(posts.getScrapedPosts());
-                        postFragment.SetupPageSpinner(posts.getPageCount(), page);
+                        postFragment.SetupPageSpinner(mPageCount, page);
                         HideAllProgressBar();
                     }
                 }, throwable -> {
@@ -46,12 +52,27 @@ public class ScrapedPostController {
     }
 
     public void loadNextPage(int threadId) {
+        if (IsAtLastPage())
+            throw new IllegalArgumentException("Current page is the last page.");
+
+        postFragment.ShowRefreshLoader();
         loadScrapedPosts(threadId, ++currentPage);
     }
 
+    public boolean IsAtLastPage() {
+        return currentPage == mPageCount;
+    }
+
     public void loadPreviousPage(int threadId) {
-        if (currentPage > 1)
-            loadScrapedPosts(threadId, --currentPage);
+        if (IsAtFirstPage())
+            throw new IllegalArgumentException("Current page is the first page.");
+
+        postFragment.ShowRefreshLoader();
+        loadScrapedPosts(threadId, --currentPage);
+    }
+
+    public boolean IsAtFirstPage() {
+        return currentPage == 1;
     }
 
     private void HideAllProgressBar() {

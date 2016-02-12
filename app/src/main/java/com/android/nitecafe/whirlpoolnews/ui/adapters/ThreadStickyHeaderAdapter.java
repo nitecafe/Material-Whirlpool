@@ -95,7 +95,7 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Ultim
      * A seam to allow modification of the title shows on the UI
      */
     protected String getThreadTitleText(T thread) {
-        return Html.fromHtml(thread.getTITLE()).toString();
+        return thread.getTITLE();
     }
 
     private int getNumberOfPage(T thread) {

@@ -1,5 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.models;
 
+import android.text.Html;
+
 import java.util.Date;
 
 public class ScrapedThread {
@@ -19,35 +21,11 @@ public class ScrapedThread {
 
     public ScrapedThread(int id, String title, Date last_date, String last_poster, String forum, int forum_id) {
         this.id = id;
-        this.title = removeCommonHtmlChars(title);
+        this.title = Html.fromHtml(title).toString();
         this.last_date = last_date;
         this.last_poster = last_poster;
         this.forum = forum;
         this.forum_id = forum_id;
-    }
-
-    /**
-     * Replaces (some common) HTML characters with the actual character
-     *
-     * @param text String to search for HTML characters
-     * @return String with HTML characters replaced with actual characters
-     */
-    public static String removeCommonHtmlChars(String text) {
-        String[] chars = {
-                "&quot;", "\"",
-                "&amp;", "&",
-                "&frasl;", "/",
-                "&lt;", "<",
-                "&gt;", ">",
-                "&ndash;", "-",
-                "&nbsp;", " "
-        };
-
-        for (int i = 0; i < chars.length; i = i + 2) {
-            text = text.replace(chars[i], chars[i + 1]);
-        }
-
-        return text;
     }
 
     public String getTitle() {

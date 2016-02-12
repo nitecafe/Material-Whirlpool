@@ -26,7 +26,7 @@ public class WatchedThreadAdapter extends ThreadStickyHeaderAdapter<Watched> {
     }
 
     protected String getThreadTitleText(Watched thread) {
-        return Html.fromHtml(thread.getTITLE()).toString() + " (" + thread.getUNREAD() + " unread)";
+        return thread.getTITLE() + " (" + thread.getUNREAD() + " unread)";
     }
 
     @NonNull

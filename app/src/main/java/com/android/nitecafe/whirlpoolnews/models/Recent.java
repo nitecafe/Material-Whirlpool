@@ -1,6 +1,8 @@
 
 package com.android.nitecafe.whirlpoolnews.models;
 
+import android.text.Html;
+
 import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Generated;
@@ -126,7 +128,7 @@ public class Recent implements IWhirlpoolThread {
      * @return The TITLE
      */
     public String getTITLE() {
-        return TITLE;
+        return Html.fromHtml(TITLE).toString();
     }
 
     /**

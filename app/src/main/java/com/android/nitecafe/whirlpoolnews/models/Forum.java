@@ -1,5 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.models;
 
+import android.text.Html;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +48,7 @@ public class Forum {
      * @return The TITLE
      */
     public String getTITLE() {
-        return TITLE;
+        return Html.fromHtml(TITLE).toString();
     }
 
     /**
