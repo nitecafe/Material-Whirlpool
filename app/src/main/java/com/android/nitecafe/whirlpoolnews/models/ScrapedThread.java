@@ -21,7 +21,7 @@ public class ScrapedThread {
 
     public ScrapedThread(int id, String title, Date last_date, String last_poster, String forum, int forum_id) {
         this.id = id;
-        this.title = Html.fromHtml(title).toString();
+        this.title = title;
         this.last_date = last_date;
         this.last_poster = last_poster;
         this.forum = forum;

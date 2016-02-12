@@ -3,6 +3,7 @@ package com.android.nitecafe.whirlpoolnews;
 import com.android.nitecafe.whirlpoolnews.controllers.ScrapedPostController;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostFragment;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import rx.Observable;
 public class ScrapedPostControllerTests {
 
     @Mock IWhirlpoolRestClient whirlpoolRestClientMock;
+    @Mock IScrapedPostFragment mIScrapedPostFragmentMock;
     private TestSchedulerManager testSchedulerManager;
     private ScrapedPostController _controller;
 
@@ -24,6 +26,7 @@ public class ScrapedPostControllerTests {
     public void setUp() {
         testSchedulerManager = new TestSchedulerManager();
         _controller = new ScrapedPostController(whirlpoolRestClientMock, testSchedulerManager);
+        _controller.attach(mIScrapedPostFragmentMock);
     }
 
     @Test

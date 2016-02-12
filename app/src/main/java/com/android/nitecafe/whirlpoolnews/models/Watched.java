@@ -156,7 +156,7 @@ public class Watched implements IWhirlpoolThread {
      * @return The TITLE
      */
     public String getTITLE() {
-        return Html.fromHtml(TITLE).toString();
+        return TITLE;
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.ui.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +69,7 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
 
     @Override
     public void onBindViewHolder(ForumViewHolder holder, int position) {
-        holder.forumTitle.setText(forums.get(position).getTITLE());
+        holder.forumTitle.setText(Html.fromHtml(forums.get(position).getTITLE()));
     }
 
     @Override

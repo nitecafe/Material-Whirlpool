@@ -48,7 +48,7 @@ public class Forum {
      * @return The TITLE
      */
     public String getTITLE() {
-        return Html.fromHtml(TITLE).toString();
+        return TITLE;
     }
 
     /**

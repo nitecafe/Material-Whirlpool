@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.ui.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ public class ScrapedThreadAdapter extends RecyclerView.Adapter<ScrapedThreadAdap
     @Override
     public void onBindViewHolder(ScrapedThreadViewHolder holder, int position) {
         final ScrapedThread forumThread = mThreads.get(position);
-        holder.threadTitle.setText(forumThread.getTitle());
+        holder.threadTitle.setText(Html.fromHtml(forumThread.getTitle()));
         holder.threadTotalPage.setText(String.valueOf(forumThread.getPageCount()));
 
         if (forumThread.isMoved())

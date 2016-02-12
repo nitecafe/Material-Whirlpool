@@ -82,7 +82,7 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Ultim
     public void onBindViewHolder(ThreadViewHolder holder, int position) {
         T thread = threadsList.get(position);
 
-        holder.threadTitle.setText(getThreadTitleText(thread));
+        holder.threadTitle.setText(Html.fromHtml(getThreadTitleText(thread)));
         final int pages = getNumberOfPage(thread);
         holder.threadTotalPage.setText(String.valueOf(pages));
 

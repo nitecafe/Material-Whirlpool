@@ -80,7 +80,7 @@ public class ScrapedPostController {
         postFragment.HideRefreshLoader();
     }
 
-    public void attach(ScrapedPostFragment postFragment) {
+    public void attach(IScrapedPostFragment postFragment) {
         this.postFragment = postFragment;
     }
 
