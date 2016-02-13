@@ -4,8 +4,9 @@ import android.content.SharedPreferences;
 
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.LoginController;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.ILoginFragment;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.ILoginFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,15 +18,16 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class LoginControllerTests {
 
-    private LoginController mLoginController;
     @Mock ILoginFragment loginFragmentMock;
     @Mock IWhirlpoolRestClient whirlpoolRestClientMock;
     @Mock SharedPreferences sharedPreferencesMock;
+    @Mock IWatchedThreadIdentifier watchedThreadIdentifier;
     @Mock SharedPreferences.Editor editorMock;
+    private LoginController mLoginController;
 
     @Before
     public void setup() {
-        mLoginController = new LoginController(whirlpoolRestClientMock, sharedPreferencesMock);
+        mLoginController = new LoginController(whirlpoolRestClientMock, sharedPreferencesMock, watchedThreadIdentifier);
         Mockito.when(sharedPreferencesMock.edit()).thenReturn(editorMock);
         mLoginController.attachedView(loginFragmentMock);
     }

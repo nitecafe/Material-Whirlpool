@@ -19,4 +19,6 @@ public interface IScrapedPostFragment extends IThreadActionMessageFragment {
     void SetupPageSpinnerDropDown(int pageCount, int page);
 
     void ShowRefreshLoader();
+
+    void SetTitle(String thread_title);
 }

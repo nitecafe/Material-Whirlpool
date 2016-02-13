@@ -25,7 +25,6 @@ import rx.Observable;
 public class ThreadScraper implements IThreadScraper {
 
 
-
     // these forum IDs are public, and we can scrape the data from them
     private static int[] PUBLIC_FORUMS = {92, 100, 142, 82, 9, 107, 135, 80, 136, 125, 116, 63,
             127, 139, 7, 129, 130, 131, 10, 38, 39, 91, 87, 112, 132, 8, 83, 138, 143, 133, 58, 106,
@@ -278,7 +277,7 @@ public class ThreadScraper implements IThreadScraper {
             throw new IOException("Private forum");
         }
 
-        if (thread_title == null) { // no thread title was passed
+        if (thread_title == null || thread_title == "") { // no thread title was passed
             // scrape the title from the page
             Elements breadcrumb_elements = doc.select("#breadcrumb li");
             thread_title = breadcrumb_elements.last().text();

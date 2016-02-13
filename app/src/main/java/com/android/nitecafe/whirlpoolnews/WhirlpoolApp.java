@@ -23,7 +23,8 @@ public class WhirlpoolApp extends Application {
                 .daggerModule(new DaggerModule(StringConstants.WHIRLPOOL_API_URL))
                 .build();
 
-        LeakCanary.install(this);  //not working on android 6.0
+        if (BuildConfig.DEBUG)
+            LeakCanary.install(this);  //not working on android 6.0
     }
 
     public DaggerComponent getDaggerComponent() {

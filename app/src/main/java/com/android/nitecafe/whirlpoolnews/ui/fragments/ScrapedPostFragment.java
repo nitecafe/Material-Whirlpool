@@ -258,6 +258,11 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         mRecycleView.setRefreshing(true);
     }
 
+    @Override public void SetTitle(String threadTitle) {
+        mThreadTitle = threadTitle;
+        setToolbarTitle(Html.fromHtml(threadTitle).toString());
+    }
+
     private void updateNavigationButtonVisibility() {
         final MenuItem backItem = postToolbar.getMenu().findItem(R.id.menuitem_back_post);
         final MenuItem nextItem = postToolbar.getMenu().findItem(R.id.menuitem_next_post);

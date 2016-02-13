@@ -7,14 +7,14 @@
         android:icon="@drawable/ic_back_arrow"
         android:orderInCategory="100"
         android:title="Previous Page"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         />
     <item
         android:id="@+id/menuitem_next_post"
         android:icon="@drawable/ic_forward_arrow"
         android:orderInCategory="101"
         android:title="Next page"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
     <item
         android:id="@+id/menuitem_watch_post"
         android:icon="@drawable/ic_watch_thread"
@@ -34,7 +34,7 @@
         android:icon="@drawable/ic_mark_read"
         android:orderInCategory="150"
         android:title="Mark as Read"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         />
 
 </menu>

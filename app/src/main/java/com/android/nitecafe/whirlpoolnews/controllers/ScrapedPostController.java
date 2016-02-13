@@ -48,6 +48,7 @@ public class ScrapedPostController extends ThreadBaseController<IScrapedPostFrag
                     mPageCount = posts.getPageCount();
                     if (postFragment != null) {
                         postFragment.DisplayPosts(posts.getScrapedPosts());
+                        postFragment.SetTitle(posts.getThread_title());
                         postFragment.SetupPageSpinnerDropDown(mPageCount, page);
                         HideAllProgressBar();
                     }
