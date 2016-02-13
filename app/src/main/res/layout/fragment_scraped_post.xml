@@ -41,6 +41,7 @@
             android:id="@+id/post_recycle_view"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:scrollbars="vertical"
             >
         </com.marshalchen.ultimaterecyclerview.UltimateRecyclerView>
     </RelativeLayout>

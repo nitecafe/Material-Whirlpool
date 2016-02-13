@@ -12,6 +12,7 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.ui.FragmentsEnum;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostFragment;
@@ -51,8 +52,10 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             OnThreadClicked(threadId, "Thread From Link");
         } else if (!mWhirlpoolRestClient.hasApiKeyBeenSet()) {
             drawer.setSelection(apiKeyDrawerItem);
+            startFragmentWithNoBackStack(FragmentsEnum.API_KEY);
         } else if (savedInstanceState == null) {
             drawer.setSelection(newsItemDrawerItem);
+            startFragmentWithNoBackStack(FragmentsEnum.NEWS);
         }
     }
 
@@ -114,7 +117,9 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     private void startFragment(Fragment fragment) {
         FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
+        fts.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
         FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, fragment);
+
         fragmentTransaction.addToBackStack(null);
         fts.commit();
     }

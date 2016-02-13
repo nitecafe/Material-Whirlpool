@@ -10,6 +10,8 @@ public class WatchedThreadAdapter extends ThreadStickyHeaderAdapter<Watched> {
     }
 
     protected String getThreadTitleText(Watched thread) {
+        if (thread.getUNREAD() == 0)
+            return thread.getTITLE();
         return thread.getTITLE() + " (" + thread.getUNREAD() + " unread)";
     }
 }

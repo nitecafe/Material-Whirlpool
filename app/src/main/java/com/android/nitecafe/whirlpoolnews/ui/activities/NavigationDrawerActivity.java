@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.ui.activities;
 
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -120,8 +121,30 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         return true;
     }
 
-    protected void startFragment(FragmentsEnum fragment) {
+    protected void startFragmentWithNoBackStack(FragmentsEnum fragmentsEnum) {
+        Fragment fragmentToStart = InstantiateFragment(fragmentsEnum);
+        ReplaceFragment(fragmentToStart, false);
+    }
 
+    protected void startFragment(FragmentsEnum fragment) {
+        Fragment fragmentToStart = InstantiateFragment(fragment);
+        ReplaceFragment(fragmentToStart, true);
+    }
+
+    private void ReplaceFragment(Fragment fragmentToStart, Boolean addToBackStack) {
+        FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
+        fts.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+        FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, fragmentToStart);
+
+        if (addToBackStack)
+            fragmentTransaction.addToBackStack(null);
+
+        fragmentTransaction.commit();
+
+        drawer.closeDrawer();
+    }
+
+    @NonNull private Fragment InstantiateFragment(FragmentsEnum fragment) {
         Fragment fragmentToStart;
         switch (fragment) {
             case NEWS:
@@ -142,16 +165,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
             default:
                 fragmentToStart = new NewsFragment();
         }
-
-        FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
-        FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, fragmentToStart);
-
-        if (!(fragmentToStart instanceof LoginFragment))
-            fragmentTransaction.addToBackStack(null);
-
-        fts.commit();
-
-        drawer.closeDrawer();
+        return fragmentToStart;
     }
 }
 

@@ -1,63 +1,30 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
-import com.android.nitecafe.whirlpoolnews.controllers.WatchedController;
-import com.android.nitecafe.whirlpoolnews.models.Watched;
-import com.android.nitecafe.whirlpoolnews.ui.adapters.WatchedThreadAdapter;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWatchedFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
-import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
-import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
-import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class WatchedFragment extends BaseFragment implements IWatchedFragment {
+public class WatchedFragment extends BaseFragment {
 
-    @Inject WatchedController _controller;
-    @Inject IWatchedThreadIdentifier mIWatchedThreadIdentifier;
-    @Bind(R.id.watched_recycle_view) UltimateRecyclerView watchedRecycleView;
-    @Bind(R.id.watched_progress_loader) MaterialProgressBar mMaterialProgressBar;
-    private WatchedThreadAdapter stickyHeaderAdapter;
-    private IOnThreadClicked listener;
 
-    @Override
-    public void onDestroyView() {
-        _controller.Attach(null);
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof IOnThreadClicked)
-            listener = (IOnThreadClicked) context;
-        else
-            throw new ClassCastException("Activity must implement IOnThreadClicked");
-    }
-
-    @Override
-    public void onDetach() {
-        listener = null;
-        super.onDetach();
-    }
+    @Bind(R.id.viewpager) ViewPager viewPager;
+    @Bind(R.id.tabs) TabLayout tabLayout;
 
     @Nullable
     @Override
@@ -67,11 +34,9 @@ public class WatchedFragment extends BaseFragment implements IWatchedFragment {
 
         ButterKnife.bind(this, inflate);
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
-        _controller.Attach(this);
 
-        SetupRecycleView();
-
-        loadWatched();
+        setupViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
 
         return inflate;
     }
@@ -82,51 +47,40 @@ public class WatchedFragment extends BaseFragment implements IWatchedFragment {
         setToolbarTitle("Watched Threads");
     }
 
-    private void SetupRecycleView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        watchedRecycleView.setLayoutManager(layoutManager);
-
-        stickyHeaderAdapter = new WatchedThreadAdapter(mIWatchedThreadIdentifier);
-
-        stickyHeaderAdapter.getOnThreadClickedObservable().subscribe(watched1 -> {
-            listener.OnWatchedThreadClicked(watched1.getID(), watched1.getTITLE(), watched1.getLASTPAGE(), watched1.getLASTREAD());
-        });
-        stickyHeaderAdapter.getOnUnwatchedObservable().subscribe(thread
-                -> _controller.UnwatchThread(thread.getID()));
-        stickyHeaderAdapter.getOnMarkAsClickedObservable().subscribe(
-                watched -> _controller.MarkThreadAsRead(watched.getID()));
-
-        watchedRecycleView.setAdapter(stickyHeaderAdapter);
-        watchedRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
-        watchedRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
-
-        watchedRecycleView.setDefaultOnRefreshListener(this::loadWatched);
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
+        adapter.addFragment(new WatchedChildFragment(), "Unread");
+        adapter.addFragment(new AllWatchedChildFragment(), "All");
+        viewPager.setAdapter(adapter);
     }
 
-    @Override
-    public void loadWatched() {
-        _controller.GetUnreadWatched();
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 
-    @Override
-    public void DisplayWatched(List<Watched> watcheds) {
-        stickyHeaderAdapter.SetThreads(watcheds);
-    }
-
-    @Override
-    public void HideCenterProgressBar() {
-        mMaterialProgressBar.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void DisplayErrorMessage() {
-        Snackbar.make(watchedRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
-                .setAction("Retry", view -> loadWatched())
-                .show();
-    }
-
-    @Override
-    public void HideRefreshLoader() {
-        watchedRecycleView.setRefreshing(false);
-    }
 }
