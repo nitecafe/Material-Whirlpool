@@ -5,14 +5,14 @@
     <item
         android:id="@+id/menuitem_back_post"
         android:icon="@drawable/ic_back_arrow"
-        android:orderInCategory="100"
+        android:orderInCategory="500"
         android:title="Previous Page"
         app:showAsAction="always"
         />
     <item
         android:id="@+id/menuitem_next_post"
         android:icon="@drawable/ic_forward_arrow"
-        android:orderInCategory="101"
+        android:orderInCategory="501"
         android:title="Next page"
         app:showAsAction="always"/>
     <item
@@ -20,14 +20,14 @@
         android:icon="@drawable/ic_watch_thread"
         android:orderInCategory="200"
         android:title="Watch Thread"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         />
     <item
         android:id="@+id/menuitem_unwatch_post"
         android:icon="@drawable/ic_unwatch_thread"
         android:orderInCategory="200"
         android:title="Unwatch Thread"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         />
     <item
         android:id="@+id/menuitem_mark_read"

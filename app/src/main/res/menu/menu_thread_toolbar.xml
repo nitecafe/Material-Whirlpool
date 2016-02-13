@@ -6,12 +6,12 @@
         android:icon="@drawable/ic_back_arrow"
         android:orderInCategory="200"
         android:title="Previous Page"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         />
     <item
         android:id="@+id/menuitem_next_thread"
         android:icon="@drawable/ic_forward_arrow"
         android:orderInCategory="300"
         android:title="Next page"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 </menu>

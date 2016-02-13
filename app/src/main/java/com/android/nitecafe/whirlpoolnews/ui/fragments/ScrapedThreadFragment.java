@@ -185,6 +185,11 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
     @Override
     public void DisplayThreads(List<ScrapedThread> threads) {
         forumThreadAdapter.SetThreads(threads);
+        ResetScrollPositionToTop();
+    }
+
+    private void ResetScrollPositionToTop() {
+        mRecycleView.scrollVerticallyToPosition(0);
     }
 
     @Override
@@ -248,14 +253,14 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
         final MenuItem backItem = threadToolbar.getMenu().findItem(R.id.menuitem_back_thread);
         final MenuItem nextItem = threadToolbar.getMenu().findItem(R.id.menuitem_next_thread);
         if (_controller.IsAtFirstPage())
-            backItem.setVisible(false);
+            backItem.setEnabled(false);
         else
-            backItem.setVisible(true);
+            backItem.setEnabled(true);
 
         if (_controller.IsAtLastPage())
-            nextItem.setVisible(false);
+            nextItem.setEnabled(false);
         else
-            nextItem.setVisible(true);
+            nextItem.setEnabled(true);
     }
 
     @OnClick(R.id.btn_thread_pages)

@@ -55,7 +55,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     private String mThreadTitle;
     private int mPageToLoad;
     private int mPostLastReadId;
-    private int mPreviousSpinnerPosition;
+    private MenuItem backItem;
+    private MenuItem nextItem;
 
     public static ScrapedPostFragment newInstance(int threadId, String threadTitle, int page, int postLastRead) {
         ScrapedPostFragment fragment = new ScrapedPostFragment();
@@ -96,7 +97,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
 
         OnFragmentCreateViewSubject.onNext(null);
 
-        SetSpinnerArrowToWhite();
+        SetupSpinnerItemEvents();
         SetupRecycleView();
         SetupToolbar();
         setUpToolbarActionButtons();
@@ -105,7 +106,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         return inflate;
     }
 
-    @Override public void onDetach() {
+    @Override
+    public void onDetach() {
         OnFragmentCreateViewSubject.onCompleted();
         OnFragmentDestroySubject.onCompleted();
         super.onDetach();
@@ -113,6 +115,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
 
     private void SetupToolbar() {
         postToolbar.inflateMenu(R.menu.menu_post_toolbar);
+        backItem = postToolbar.getMenu().findItem(R.id.menuitem_back_post);
+        nextItem = postToolbar.getMenu().findItem(R.id.menuitem_next_post);
         postToolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menuitem_back_post:
@@ -162,16 +166,14 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         watchPost.setVisible(false);
     }
 
-    private void SetSpinnerArrowToWhite() {
-        mPreviousSpinnerPosition = mPageToLoad - 1;
+    private void SetupSpinnerItemEvents() {
         pageNumberSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         pageNumberSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (mPreviousSpinnerPosition != position) {
+                if (mPageToLoad - 1 != position) {
                     mRecycleView.setRefreshing(true);
                     _controller.GetScrapedPosts(mThreadId, position + 1);
-                    mPreviousSpinnerPosition = position;
                 }
             }
 
@@ -241,10 +243,10 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
 
     @Override
     public void SetupPageSpinnerDropDown(int pageCount, int page) {
-
+        mPageToLoad = page;
         List<String> numberPages = new ArrayList<>();
         for (int i = 1; i <= pageCount; i++) {
-            numberPages.add("Page " + i + " / " + pageCount);
+            numberPages.add(i + " / " + pageCount);
         }
         ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_row, numberPages);
         pageNumberSpinner.setAdapter(stringArrayAdapter);
@@ -258,23 +260,23 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         mRecycleView.setRefreshing(true);
     }
 
-    @Override public void SetTitle(String threadTitle) {
+    @Override
+    public void SetTitle(String threadTitle) {
         mThreadTitle = threadTitle;
         setToolbarTitle(Html.fromHtml(threadTitle).toString());
     }
 
     private void updateNavigationButtonVisibility() {
-        final MenuItem backItem = postToolbar.getMenu().findItem(R.id.menuitem_back_post);
-        final MenuItem nextItem = postToolbar.getMenu().findItem(R.id.menuitem_next_post);
+
         if (_controller.IsAtFirstPage())
-            backItem.setVisible(false);
+            backItem.setEnabled(false);
         else
-            backItem.setVisible(true);
+            backItem.setEnabled(true);
 
         if (_controller.IsAtLastPage())
-            nextItem.setVisible(false);
+            nextItem.setEnabled(false);
         else
-            nextItem.setVisible(true);
+            nextItem.setEnabled(true);
 
     }
 }
