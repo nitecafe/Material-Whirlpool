@@ -243,14 +243,14 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
         final MenuItem backItem = threadToolbar.getMenu().findItem(R.id.menuitem_back_thread);
         final MenuItem nextItem = threadToolbar.getMenu().findItem(R.id.menuitem_next_thread);
         if (_controller.IsAtFirstPage())
-            backItem.setEnabled(false);
+            backItem.setVisible(false);
         else
-            backItem.setEnabled(true);
+            backItem.setVisible(true);
 
         if (_controller.IsAtLastPage())
-            nextItem.setEnabled(false);
+            nextItem.setVisible(false);
         else
-            nextItem.setEnabled(true);
+            nextItem.setVisible(true);
     }
 
     @OnClick(R.id.btn_thread_pages)

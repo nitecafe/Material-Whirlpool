@@ -7,13 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.android.nitecafe.whirlpoolnews.R;
@@ -33,7 +34,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 import rx.subjects.PublishSubject;
 
@@ -48,11 +48,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     @Bind(R.id.post_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.post_progress_loader) MaterialProgressBar mMaterialProgressBar;
     @Bind(R.id.spinner_post_page) Spinner pageNumberSpinner;
-    @Bind(R.id.btn_next) ImageButton buttonNext;
-    @Bind(R.id.btn_back) ImageButton buttonPrevious;
-    @Bind(R.id.btn_mark_as_read) ImageButton buttonMarkRead;
-    @Bind(R.id.btn_add_to_watch) ImageButton buttonAddToWatch;
-    @Bind(R.id.btn_remove_from_watch) ImageButton buttonRemoveFromWatch;
+    @Bind(R.id.toolbar_post) Toolbar postToolbar;
     private int mThreadId;
     private ScrapedPostAdapter scrapedPostAdapter;
     private String mThreadTitle;
@@ -100,11 +96,35 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
 
         SetSpinnerArrowToWhite();
         SetupRecycleView();
-
+        SetupToolbar();
         setUpToolbarActionButtons();
         loadPosts();
 
         return inflate;
+    }
+
+    private void SetupToolbar() {
+        postToolbar.inflateMenu(R.menu.menu_post_toolbar);
+        postToolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.menuitem_back_post:
+                    _controller.loadPreviousPage(mThreadId);
+                    break;
+                case R.id.menuitem_next_post:
+                    _controller.loadNextPage(mThreadId);
+                    break;
+                case R.id.menuitem_mark_read:
+                    _controller.MarkThreadAsRead(mThreadId);
+                    break;
+                case R.id.menuitem_unwatch_post:
+                    _controller.UnwatchThread(mThreadId);
+                    break;
+                case R.id.menuitem_watch_post:
+                    _controller.WatchThread(mThreadId);
+                    break;
+            }
+            return true;
+        });
     }
 
     @Override
@@ -117,15 +137,21 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     }
 
     private void changeToUnwatched() {
-        buttonMarkRead.setVisibility(View.GONE);
-        buttonRemoveFromWatch.setVisibility(View.GONE);
-        buttonAddToWatch.setVisibility(View.VISIBLE);
+        MenuItem markRead = postToolbar.getMenu().findItem(R.id.menuitem_mark_read);
+        MenuItem watchPost = postToolbar.getMenu().findItem(R.id.menuitem_watch_post);
+        MenuItem unwatchPost = postToolbar.getMenu().findItem(R.id.menuitem_unwatch_post);
+        markRead.setVisible(false);
+        unwatchPost.setVisible(false);
+        watchPost.setVisible(true);
     }
 
     private void changeToWatched() {
-        buttonRemoveFromWatch.setVisibility(View.VISIBLE);
-        buttonAddToWatch.setVisibility(View.GONE);
-        buttonMarkRead.setVisibility(View.VISIBLE);
+        MenuItem markRead = postToolbar.getMenu().findItem(R.id.menuitem_mark_read);
+        MenuItem watchPost = postToolbar.getMenu().findItem(R.id.menuitem_watch_post);
+        MenuItem unwatchPost = postToolbar.getMenu().findItem(R.id.menuitem_unwatch_post);
+        markRead.setVisible(true);
+        unwatchPost.setVisible(true);
+        watchPost.setVisible(false);
     }
 
     private void SetSpinnerArrowToWhite() {
@@ -225,41 +251,17 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     }
 
     private void updateNavigationButtonVisibility() {
+        final MenuItem backItem = postToolbar.getMenu().findItem(R.id.menuitem_back_post);
+        final MenuItem nextItem = postToolbar.getMenu().findItem(R.id.menuitem_next_post);
         if (_controller.IsAtFirstPage())
-            buttonPrevious.setVisibility(View.GONE);
+            backItem.setVisible(false);
         else
-            buttonPrevious.setVisibility(View.VISIBLE);
+            backItem.setVisible(true);
 
         if (_controller.IsAtLastPage())
-            buttonNext.setVisibility(View.GONE);
+            nextItem.setVisible(false);
         else
-            buttonNext.setVisibility(View.VISIBLE);
+            nextItem.setVisible(true);
 
     }
-
-    @OnClick(R.id.btn_back)
-    public void GoToPreviousPage() {
-        _controller.loadPreviousPage(mThreadId);
-    }
-
-    @OnClick(R.id.btn_next)
-    public void GoToNextPage() {
-        _controller.loadNextPage(mThreadId);
-    }
-
-    @OnClick(R.id.btn_mark_as_read)
-    public void MarkThreadAsRead() {
-        _controller.MarkThreadAsRead(mThreadId);
-    }
-
-    @OnClick(R.id.btn_remove_from_watch)
-    public void RemoveFromWatch() {
-        _controller.UnwatchThread(mThreadId);
-    }
-
-    @OnClick(R.id.btn_add_to_watch)
-    public void AddToWatch() {
-        _controller.WatchThread(mThreadId);
-    }
-
 }

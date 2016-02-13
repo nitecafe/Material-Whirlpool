@@ -8,7 +8,7 @@ import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-public class ScrapedPostController extends ThreadBaseController<IScrapedPostFragment>{
+public class ScrapedPostController extends ThreadBaseController<IScrapedPostFragment> {
 
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
@@ -21,7 +21,7 @@ public class ScrapedPostController extends ThreadBaseController<IScrapedPostFrag
     @Singleton
     public ScrapedPostController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager,
                                  IWatchedThreadIdentifier watchedThreadIdentifier) {
-        super(whirlpoolRestClient,schedulerManager,watchedThreadIdentifier);
+        super(whirlpoolRestClient, schedulerManager, watchedThreadIdentifier);
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.schedulerManager = schedulerManager;
         this.watchedThreadIdentifier = watchedThreadIdentifier;
