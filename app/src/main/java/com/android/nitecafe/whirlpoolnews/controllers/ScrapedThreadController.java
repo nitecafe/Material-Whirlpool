@@ -31,10 +31,10 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
         if (forumId < 1)
             throw new IllegalArgumentException("Need valid thread id or groupId");
 
-        loadScrapedThreads(forumId, currentPage, groupId);
+        GetScrapedThreads(forumId, currentPage, groupId);
     }
 
-    protected void loadScrapedThreads(int forumId, int pageNumber, int groupId) {
+    public void GetScrapedThreads(int forumId, int pageNumber, int groupId) {
         whirlpoolRestClient.GetScrapedThreads(forumId, pageNumber, groupId)
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler())
@@ -59,7 +59,7 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
             throw new IllegalArgumentException("Current page is the last page.");
 
         threadFragment.ShowRefreshLoader();
-        loadScrapedThreads(forumId, ++currentPage, groupId);
+        GetScrapedThreads(forumId, ++currentPage, groupId);
     }
 
     public void loadPreviousPage(int forumId, int groupId) {
@@ -67,7 +67,7 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
             throw new IllegalArgumentException("Current page is the first page.");
 
         threadFragment.ShowRefreshLoader();
-        loadScrapedThreads(forumId, --currentPage, groupId);
+        GetScrapedThreads(forumId, --currentPage, groupId);
     }
 
     public boolean IsAtLastPage() {

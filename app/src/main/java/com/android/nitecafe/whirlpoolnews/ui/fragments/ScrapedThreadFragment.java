@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.controllers.ScrapedThreadController;
@@ -35,6 +37,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 public class ScrapedThreadFragment extends BaseFragment implements IScrapedThreadFragment {
@@ -243,5 +246,19 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
             nextItem.setEnabled(false);
         else
             nextItem.setEnabled(true);
+    }
+
+    @OnClick(R.id.btn_thread_pages)
+    public void ShowPageGoToPopup() {
+        new MaterialDialog.Builder(getActivity())
+                .title("Go To Page:")
+                .inputRange(1, 3)
+                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .input("Enter a page number", "", false, (dialog, input) -> {
+
+                })
+                .positiveText("Go")
+                .negativeText("Cancel")
+                .build().show();
     }
 }
