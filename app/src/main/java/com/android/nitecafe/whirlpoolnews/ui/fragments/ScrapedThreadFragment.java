@@ -63,7 +63,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
 
     @Override
     public void onDestroyView() {
-        _controller.attach(null);
+        _controller.Attach(null);
         super.onDestroyView();
     }
 
@@ -90,7 +90,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
 
         ButterKnife.bind(this, inflate);
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
-        _controller.attach(this);
+        _controller.Attach(this);
 
         SetupRecycleView();
 
@@ -112,6 +112,15 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
         forumThreadAdapter = new ScrapedThreadAdapter(mIWatchedThreadIdentifier);
         forumThreadAdapter.getOnThreadClickedObservable()
                 .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle()));
+
+        forumThreadAdapter.getOnThreadClickedObservable().subscribe(
+                recent -> listener.OnThreadClicked(recent.getID(), recent.getTitle()));
+        forumThreadAdapter.getOnWatchClickedObservable().subscribe(thread
+                -> _controller.WatchThread(thread.getID()));
+        forumThreadAdapter.getOnUnwatchedObservable().subscribe(recent ->
+                _controller.UnwatchThread(recent.getID()));
+        forumThreadAdapter.getOnMarkAsClickedObservable().subscribe(recent ->
+                _controller.MarkThreadAsRead(recent.getID()));
 
         mRecycleView.setAdapter(forumThreadAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());

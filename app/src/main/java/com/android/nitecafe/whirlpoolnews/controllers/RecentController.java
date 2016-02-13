@@ -3,11 +3,12 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecentFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-public class RecentController {
+public class RecentController extends ThreadBaseController<IRecentFragment> {
 
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
@@ -15,7 +16,10 @@ public class RecentController {
 
     @Inject
     @Singleton
-    public RecentController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
+    public RecentController(IWhirlpoolRestClient whirlpoolRestClient,
+                            ISchedulerManager schedulerManager,
+                            IWatchedThreadIdentifier watchedThreadIdentifier) {
+        super(whirlpoolRestClient, schedulerManager, watchedThreadIdentifier);
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.schedulerManager = schedulerManager;
     }
@@ -37,23 +41,14 @@ public class RecentController {
                 });
     }
 
-    public void WatchThread(int threadId) {
-        whirlpoolRestClient.SetThreadAsWatch(threadId)
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
-                .subscribe(aVoid -> {
-                            recentFragment.ShowThreadWatchedSuccessfully();
-                        },
-                        throwable -> recentFragment.ShowThreadWatchedFailureMessage()
-                );
-    }
-
     private void HideAllProgressBar() {
         recentFragment.HideCenterProgressBar();
         recentFragment.HideRefreshLoader();
     }
 
-    public void attach(IRecentFragment recentFragment) {
+    @Override
+    public void Attach(IRecentFragment recentFragment) {
+        super.Attach(recentFragment);
         this.recentFragment = recentFragment;
     }
 

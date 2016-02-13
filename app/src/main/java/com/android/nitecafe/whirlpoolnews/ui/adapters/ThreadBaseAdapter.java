@@ -102,13 +102,13 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
             menu.setHeaderTitle("Select an Action");
             final T t = threadsList.get(getAdapterPosition());
             if (mWatchedThreadIdentifier.isThreadWatched(t.getID())) {
-                MenuItem add = menu.add("Unwatch Thread");
+                MenuItem unwatch = menu.add("Unwatch Thread");
                 MenuItem markAsRead = menu.add("Mark as Read");
-                RxMenuItem.clicks(add).map(aVoid -> getAdapterPosition()).subscribe(mWatchedClickedSubject);
+                RxMenuItem.clicks(unwatch).map(aVoid -> getAdapterPosition()).subscribe(mOnUnwatchClickedObservable);
                 RxMenuItem.clicks(markAsRead).map(aVoid -> getAdapterPosition()).subscribe(mOnMarkAsReadClickedObservable);
             } else {
-                MenuItem add = menu.add("Watch Thread");
-                RxMenuItem.clicks(add).map(aVoid -> getAdapterPosition()).subscribe(mOnUnwatchClickedObservable);
+                MenuItem watch = menu.add("Watch Thread");
+                RxMenuItem.clicks(watch).map(aVoid -> getAdapterPosition()).subscribe(mWatchedClickedSubject);
             }
         }
     }

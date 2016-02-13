@@ -40,7 +40,7 @@ public class WatchedFragment extends BaseFragment implements IWatchedFragment {
 
     @Override
     public void onDestroyView() {
-        _controller.attach(null);
+        _controller.Attach(null);
         super.onDestroyView();
     }
 
@@ -67,7 +67,7 @@ public class WatchedFragment extends BaseFragment implements IWatchedFragment {
 
         ButterKnife.bind(this, inflate);
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
-        _controller.attach(this);
+        _controller.Attach(this);
 
         SetupRecycleView();
 
@@ -87,13 +87,15 @@ public class WatchedFragment extends BaseFragment implements IWatchedFragment {
         watchedRecycleView.setLayoutManager(layoutManager);
 
         stickyHeaderAdapter = new WatchedThreadAdapter(mIWatchedThreadIdentifier);
+
         stickyHeaderAdapter.getOnThreadClickedObservable().subscribe(watched1 -> {
             listener.OnWatchedThreadClicked(watched1.getID(), watched1.getTITLE(), watched1.getLASTPAGE(), watched1.getLASTREAD());
         });
-        stickyHeaderAdapter.getOnWatchClickedObservable().subscribe(thread
-                -> unwatchThread(thread.getID()));
+        stickyHeaderAdapter.getOnUnwatchedObservable().subscribe(thread
+                -> _controller.UnwatchThread(thread.getID()));
         stickyHeaderAdapter.getOnMarkAsClickedObservable().subscribe(
-                watched -> markThreadAsRead(watched.getID()));
+                watched -> _controller.MarkThreadAsRead(watched.getID()));
+
         watchedRecycleView.setAdapter(stickyHeaderAdapter);
         watchedRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
         watchedRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
@@ -104,14 +106,6 @@ public class WatchedFragment extends BaseFragment implements IWatchedFragment {
     @Override
     public void loadWatched() {
         _controller.GetUnreadWatched();
-    }
-
-    private void unwatchThread(int threadId) {
-        _controller.UnwatchThread(threadId);
-    }
-
-    private void markThreadAsRead(int threadId) {
-        _controller.MarkThreadAsRead(threadId);
     }
 
     @Override
@@ -134,17 +128,5 @@ public class WatchedFragment extends BaseFragment implements IWatchedFragment {
     @Override
     public void HideRefreshLoader() {
         watchedRecycleView.setRefreshing(false);
-    }
-
-    @Override
-    public void ShowActionSuccessMessage() {
-        Snackbar.make(watchedRecycleView, "Action successful.", Snackbar.LENGTH_LONG)
-                .show();
-    }
-
-    @Override
-    public void ShowActionFailedMessage() {
-        Snackbar.make(watchedRecycleView, "Something went wrong. Try again", Snackbar.LENGTH_LONG)
-                .show();
     }
 }

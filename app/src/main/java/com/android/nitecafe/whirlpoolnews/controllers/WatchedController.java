@@ -8,19 +8,24 @@ import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-public class WatchedController {
+public class WatchedController extends ThreadBaseController<IWatchedFragment> {
 
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
-    private IWatchedThreadIdentifier mWatchedThreadIdentifier;
     private IWatchedFragment watchedFragment;
 
     @Inject
     @Singleton
     public WatchedController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager, IWatchedThreadIdentifier watchedThreadIdentifier) {
+        super(whirlpoolRestClient, schedulerManager, watchedThreadIdentifier);
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.schedulerManager = schedulerManager;
-        mWatchedThreadIdentifier = watchedThreadIdentifier;
+    }
+
+    @Override
+    public void Attach(IWatchedFragment baseFragment) {
+        super.Attach(baseFragment);
+        this.watchedFragment = baseFragment;
     }
 
     public void GetUnreadWatched() {
@@ -57,37 +62,20 @@ public class WatchedController {
                 });
     }
 
-    public void UnwatchThread(int threadId) {
-        whirlpoolRestClient.SetThreadAsUnwatch(threadId)
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
-                .subscribe(aVoid -> {
-                            watchedFragment.ShowActionSuccessMessage();
-                            watchedFragment.loadWatched();
-                            mWatchedThreadIdentifier.removeThreadFromWatch(threadId);
-                        },
-                        throwable -> watchedFragment.ShowActionFailedMessage()
-                );
+    @Override
+    protected void onUnwatchThreadSuccess() {
+        super.onUnwatchThreadSuccess();
+        watchedFragment.loadWatched();
+    }
+
+    @Override
+    protected void onMarkThreadAsReadSuccess() {
+        super.onMarkThreadAsReadSuccess();
+        watchedFragment.loadWatched();
     }
 
     private void HideAllProgressBar() {
         watchedFragment.HideCenterProgressBar();
         watchedFragment.HideRefreshLoader();
-    }
-
-    public void attach(IWatchedFragment watchedFragment) {
-        this.watchedFragment = watchedFragment;
-    }
-
-    public void MarkThreadAsRead(int threadId) {
-        whirlpoolRestClient.MarkThreadAsRead(threadId)
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
-                .subscribe(aVoid -> {
-                            watchedFragment.ShowActionSuccessMessage();
-                            watchedFragment.loadWatched();
-                        },
-                        throwable -> watchedFragment.ShowActionFailedMessage()
-                );
     }
 }

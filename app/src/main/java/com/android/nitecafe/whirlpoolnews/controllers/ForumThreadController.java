@@ -4,11 +4,15 @@ import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-public class ForumThreadController {
+/**
+ * For controlling threads obtained from the API, not the scrapped threads
+ */
+public class ForumThreadController extends ThreadBaseController<IThreadFragment> {
 
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
@@ -16,7 +20,10 @@ public class ForumThreadController {
 
     @Inject
     @Singleton
-    public ForumThreadController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
+    public ForumThreadController(IWhirlpoolRestClient whirlpoolRestClient,
+                                 ISchedulerManager schedulerManager,
+                                 IWatchedThreadIdentifier watchedThreadIdentifier) {
+        super(whirlpoolRestClient, schedulerManager, watchedThreadIdentifier);
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.schedulerManager = schedulerManager;
     }
@@ -43,7 +50,9 @@ public class ForumThreadController {
         threadFragment.HideRefreshLoader();
     }
 
-    public void attach(IThreadFragment threadFragment) {
+    @Override
+    public void Attach(IThreadFragment threadFragment) {
+        super.Attach(threadFragment);
         this.threadFragment = threadFragment;
     }
 

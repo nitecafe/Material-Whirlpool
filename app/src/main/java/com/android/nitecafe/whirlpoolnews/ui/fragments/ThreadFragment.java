@@ -60,7 +60,7 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
 
     @Override
     public void onDestroyView() {
-        _controller.attach(null);
+        _controller.Attach(null);
         super.onDestroyView();
     }
 
@@ -87,7 +87,7 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
 
         ButterKnife.bind(this, inflate);
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
-        _controller.attach(this);
+        _controller.Attach(this);
 
         SetupRecycleView();
 
@@ -106,9 +106,17 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecycleView.setLayoutManager(layoutManager);
 
-        forumThreadAdapter = new ForumThreadAdapter(mIWatchedThreadIdentifier);
+        forumThreadAdapter = new ForumThreadAdapter<>(mIWatchedThreadIdentifier);
+
         forumThreadAdapter.getOnThreadClickedObservable().subscribe(
                 thread -> listener.OnThreadClicked(thread.getID(), thread.getTITLE()));
+        forumThreadAdapter.getOnWatchClickedObservable().subscribe(thread
+                -> _controller.WatchThread(thread.getID()));
+        forumThreadAdapter.getOnUnwatchedObservable().subscribe(recent ->
+                _controller.UnwatchThread(recent.getID()));
+        forumThreadAdapter.getOnMarkAsClickedObservable().subscribe(recent ->
+                _controller.MarkThreadAsRead(recent.getID()));
+
         mRecycleView.setAdapter(forumThreadAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
 
