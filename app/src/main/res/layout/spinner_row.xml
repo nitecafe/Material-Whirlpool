@@ -12,5 +12,4 @@
     android:paddingRight="16dp"
     android:paddingTop="10dp"
     android:textColor="@android:color/white"
-    android:textIsSelectable="false"
-    android:textSize="@dimen/material_text_subhead"/>
+    android:textIsSelectable="false"/>

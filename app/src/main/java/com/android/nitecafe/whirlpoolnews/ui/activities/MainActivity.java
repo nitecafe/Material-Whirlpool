@@ -26,13 +26,16 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.subjects.PublishSubject;
 
 public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener, ForumFragment.IOnForumClicked, IOnThreadClicked {
 
     @Inject IWhirlpoolRestClient mWhirlpoolRestClient;
     @Bind(R.id.fab_reply_post) FloatingActionButton fabReplyPost;
+    @Bind(R.id.fab_create_thread) FloatingActionButton fabCreateThread;
     @Inject IWatchedThreadIdentifier watchedThreadIdentifier;
     private int mThreadIdLoaded;
+    private int mForumId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,14 +72,17 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @Override
     public void onForumClicked(int forumId, String forumTitle) {
-        Fragment threadFragment;
+        mForumId = forumId;
 
         if (ThreadScraper.isPublicForum(forumId)) {
-            threadFragment = ScrapedThreadFragment.newInstance(forumId, forumTitle, 0);
-        } else
-            threadFragment = ThreadFragment.newInstance(forumId, forumTitle);
-
-        startFragment(threadFragment);
+            ScrapedThreadFragment scrapedThreadFragment = ScrapedThreadFragment.newInstance(forumId, forumTitle, 0);
+            setUpThreadCreateFab(scrapedThreadFragment.OnFragmentCreateViewSubject, scrapedThreadFragment.OnFragmentDestroySubject);
+            startFragment(scrapedThreadFragment);
+        } else {
+            ThreadFragment threadFragment = ThreadFragment.newInstance(forumId, forumTitle);
+            setUpThreadCreateFab(threadFragment.OnFragmentCreateViewSubject, threadFragment.OnFragmentDestroySubject);
+            startFragment(threadFragment);
+        }
     }
 
     @Override
@@ -88,13 +94,22 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     public void OnWatchedThreadClicked(int threadId, String threadTitle, int lastPageRead, int lastReadId) {
         mThreadIdLoaded = threadId;
         ScrapedPostFragment scrapedPostFragment = ScrapedPostFragment.newInstance(threadId, threadTitle, lastPageRead, lastReadId);
-        startFragment(scrapedPostFragment);
         setUpPostReplyFab(scrapedPostFragment);
+        startFragment(scrapedPostFragment);
     }
 
     private void setUpPostReplyFab(ScrapedPostFragment scrapedPostFragment) {
-        scrapedPostFragment.OnFragmentDestroySubject.subscribe(aVoid -> fabReplyPost.setVisibility(View.GONE));
-        fabReplyPost.setVisibility(View.VISIBLE);
+        scrapedPostFragment.OnFragmentDestroySubject.subscribe(aVoid ->
+                fabReplyPost.setVisibility(View.GONE));
+        scrapedPostFragment.OnFragmentCreateViewSubject.subscribe(aVoid ->
+                fabReplyPost.setVisibility(View.VISIBLE));
+    }
+
+    private void setUpThreadCreateFab(PublishSubject<Void> createStream, PublishSubject<Void> destroyStream) {
+        destroyStream.subscribe(aVoid ->
+                fabCreateThread.setVisibility(View.GONE));
+        createStream.subscribe(aVoid ->
+                fabCreateThread.setVisibility(View.VISIBLE));
     }
 
     private void startFragment(Fragment fragment) {
@@ -108,6 +123,13 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     public void launchReplyPageInBrowser() {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadIdLoaded)));
+        startActivity(browserIntent);
+    }
+
+    @OnClick(R.id.fab_create_thread)
+    public void launchCreateThreadInBrowser() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(StringConstants.NEW_THREAD_URL + String.valueOf(mForumId)));
         startActivity(browserIntent);
     }
 }

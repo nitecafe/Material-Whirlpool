@@ -40,12 +40,15 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
+import rx.subjects.PublishSubject;
 
 public class ScrapedThreadFragment extends BaseFragment implements IScrapedThreadFragment {
 
     public static final String FORUM_ID = "ForumId";
     public static final String FORUM_NAME = "ForumTitle";
     public static final String FORUM_GROUP_ID = "ForumGroupId";
+    public PublishSubject<Void> OnFragmentDestroySubject = PublishSubject.create();
+    public PublishSubject<Void> OnFragmentCreateViewSubject = PublishSubject.create();
     @Inject ScrapedThreadController _controller;
     @Inject IWatchedThreadIdentifier mIWatchedThreadIdentifier;
     @Bind(R.id.thread_recycle_view) UltimateRecyclerView mRecycleView;
@@ -81,6 +84,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
     @Override
     public void onDestroyView() {
         _controller.Attach(null);
+        OnFragmentDestroySubject.onNext(null);
         super.onDestroyView();
     }
 
@@ -96,6 +100,8 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
     @Override
     public void onDetach() {
         listener = null;
+        OnFragmentCreateViewSubject.onCompleted();
+        OnFragmentDestroySubject.onCompleted();
         super.onDetach();
     }
 
@@ -108,6 +114,8 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
         ButterKnife.bind(this, inflate);
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
         _controller.Attach(this);
+
+        OnFragmentCreateViewSubject.onNext(null);
 
         SetSpinnerArrowToWhite();
         SetupRecycleView();
@@ -145,9 +153,6 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
         forumThreadAdapter = new ScrapedThreadAdapter(mIWatchedThreadIdentifier);
         forumThreadAdapter.getOnThreadClickedObservable()
                 .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle()));
-
-        forumThreadAdapter.getOnThreadClickedObservable().subscribe(
-                recent -> listener.OnThreadClicked(recent.getID(), recent.getTitle()));
         forumThreadAdapter.getOnWatchClickedObservable().subscribe(thread
                 -> _controller.WatchThread(thread.getID()));
         forumThreadAdapter.getOnUnwatchedObservable().subscribe(recent ->

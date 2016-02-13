@@ -44,6 +44,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     public static final String THREAD_PAGE = "ThreadPage";
     public static final String POST_LAST_READ = "PostLastRead";
     public PublishSubject<Void> OnFragmentDestroySubject = PublishSubject.create();
+    public PublishSubject<Void> OnFragmentCreateViewSubject = PublishSubject.create();
     @Inject ScrapedPostController _controller;
     @Bind(R.id.post_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.post_progress_loader) MaterialProgressBar mMaterialProgressBar;
@@ -80,7 +81,6 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     public void onDestroyView() {
         _controller.attach(null);
         OnFragmentDestroySubject.onNext(null);
-        OnFragmentDestroySubject.onCompleted();
         super.onDestroyView();
     }
 
@@ -94,6 +94,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
         _controller.attach(this);
 
+        OnFragmentCreateViewSubject.onNext(null);
+
         SetSpinnerArrowToWhite();
         SetupRecycleView();
         SetupToolbar();
@@ -101,6 +103,12 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         loadPosts();
 
         return inflate;
+    }
+
+    @Override public void onDetach() {
+        OnFragmentCreateViewSubject.onCompleted();
+        OnFragmentDestroySubject.onCompleted();
+        super.onDetach();
     }
 
     private void SetupToolbar() {

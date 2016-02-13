@@ -28,11 +28,14 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
+import rx.subjects.PublishSubject;
 
 public class ThreadFragment extends BaseFragment implements IRecycleViewItemClick, IThreadFragment {
 
     public static final String FORUM_ID = "ForumId";
     public static final String FORUM_NAME = "ForumTitle";
+    public PublishSubject<Void> OnFragmentDestroySubject = PublishSubject.create();
+    public PublishSubject<Void> OnFragmentCreateViewSubject = PublishSubject.create();
     @Inject ForumThreadController _controller;
     @Inject IWatchedThreadIdentifier mIWatchedThreadIdentifier;
     @Bind(R.id.thread_recycle_view) UltimateRecyclerView mRecycleView;
@@ -61,6 +64,7 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
     @Override
     public void onDestroyView() {
         _controller.Attach(null);
+        OnFragmentDestroySubject.onNext(null);
         super.onDestroyView();
     }
 
@@ -76,6 +80,8 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
     @Override
     public void onDetach() {
         listener = null;
+        OnFragmentDestroySubject.onCompleted();
+        OnFragmentCreateViewSubject.onCompleted();
         super.onDetach();
     }
 
@@ -89,8 +95,9 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
         _controller.Attach(this);
 
-        SetupRecycleView();
+        OnFragmentCreateViewSubject.onNext(null);
 
+        SetupRecycleView();
         loadThreads();
 
         return inflate;

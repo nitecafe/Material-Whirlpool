@@ -37,4 +37,13 @@
         android:src="@drawable/ic_reply_post"
         android:visibility="gone"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_create_thread"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_create_thread"
+        android:visibility="gone"/>
+
 </android.support.design.widget.CoordinatorLayout>
