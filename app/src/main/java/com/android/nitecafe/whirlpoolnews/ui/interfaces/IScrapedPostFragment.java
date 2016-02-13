@@ -1,10 +1,11 @@
 package com.android.nitecafe.whirlpoolnews.ui.interfaces;
 
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.IThreadActionMessageFragment;
 
 import java.util.List;
 
-public interface IScrapedPostFragment {
+public interface IScrapedPostFragment extends IThreadActionMessageFragment {
     void setUpToolbarActionButtons();
 
     void HideCenterProgressBar();
@@ -18,8 +19,4 @@ public interface IScrapedPostFragment {
     void SetupPageSpinnerDropDown(int pageCount, int page);
 
     void ShowRefreshLoader();
-
-    void DisplayActionSuccessMessage();
-
-    void DisplayActionUnsuccessfullyMessage();
 }

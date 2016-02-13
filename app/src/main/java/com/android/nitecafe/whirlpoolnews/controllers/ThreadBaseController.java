@@ -2,15 +2,15 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
-import com.android.nitecafe.whirlpoolnews.ui.fragments.IBaseFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.IThreadActionMessageFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
-public abstract class ThreadBaseController<T extends IBaseFragment> {
+public abstract class ThreadBaseController<T extends IThreadActionMessageFragment> {
 
     private IWhirlpoolRestClient mWhirlpoolRestClient;
     private ISchedulerManager mSchedulerManager;
     private IWatchedThreadIdentifier mWatchedThreadIdentifier;
-    private IBaseFragment mBaseFragment;
+    private IThreadActionMessageFragment mBaseFragment;
 
     public ThreadBaseController(IWhirlpoolRestClient whirlpoolRestClient,
                                 ISchedulerManager schedulerManager,
@@ -26,8 +26,8 @@ public abstract class ThreadBaseController<T extends IBaseFragment> {
                 .subscribeOn(mSchedulerManager.GetIoScheduler())
                 .subscribe(
                         aVoid -> {
-                            onUnwatchThreadSuccess();
                             mWatchedThreadIdentifier.removeThreadFromWatch(threadId);
+                            onUnwatchThreadSuccess();
                         },
                         throwable ->
                                 onUnWatchThreadFailure()
@@ -55,8 +55,8 @@ public abstract class ThreadBaseController<T extends IBaseFragment> {
                 .observeOn(mSchedulerManager.GetMainScheduler())
                 .subscribeOn(mSchedulerManager.GetIoScheduler())
                 .subscribe(aVoid -> {
-                            OnWatchThreadSuccess();
                             mWatchedThreadIdentifier.addThreadToWatch(threadId);
+                            OnWatchThreadSuccess();
                         },
                         throwable ->
                                 OnWatchThreadFailure()
@@ -68,11 +68,11 @@ public abstract class ThreadBaseController<T extends IBaseFragment> {
     }
 
     protected void onUnwatchThreadSuccess() {
-        mBaseFragment.ShowActionSuccessMessage();
+        mBaseFragment.ShowThreadUnWatchedSuccessMessage();
     }
 
     protected void OnWatchThreadSuccess() {
-        mBaseFragment.ShowActionSuccessMessage();
+        mBaseFragment.ShowThreadWatchedSuccessMessage();
     }
 
     protected void OnWatchThreadFailure() {
@@ -80,7 +80,7 @@ public abstract class ThreadBaseController<T extends IBaseFragment> {
     }
 
     protected void onMarkThreadAsReadSuccess() {
-        mBaseFragment.ShowActionSuccessMessage();
+        mBaseFragment.ShowMarkAsReadSuccessMessage();
     }
 
     protected void onMarkThreadAsReadFailure() {

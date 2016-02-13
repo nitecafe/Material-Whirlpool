@@ -8,7 +8,7 @@ import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-public class ScrapedPostController {
+public class ScrapedPostController extends ThreadBaseController<IScrapedPostFragment>{
 
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
@@ -21,6 +21,7 @@ public class ScrapedPostController {
     @Singleton
     public ScrapedPostController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager,
                                  IWatchedThreadIdentifier watchedThreadIdentifier) {
+        super(whirlpoolRestClient,schedulerManager,watchedThreadIdentifier);
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.schedulerManager = schedulerManager;
         this.watchedThreadIdentifier = watchedThreadIdentifier;
@@ -58,20 +59,6 @@ public class ScrapedPostController {
                 });
     }
 
-    public void markThreadAsRead(int threadId) {
-        whirlpoolRestClient.MarkThreadAsRead(threadId)
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
-                .subscribe(aVoid -> {
-                    if (postFragment != null) {
-                        postFragment.DisplayActionSuccessMessage();
-                    }
-                }, throwable -> {
-                    if (postFragment != null)
-                        postFragment.DisplayActionUnsuccessfullyMessage();
-                });
-    }
-
     public void loadNextPage(int threadId) {
         if (IsAtLastPage())
             throw new IllegalArgumentException("Current page is the last page.");
@@ -102,38 +89,19 @@ public class ScrapedPostController {
     }
 
     public void attach(IScrapedPostFragment postFragment) {
+        super.Attach(postFragment);
         this.postFragment = postFragment;
     }
 
-    public void removeFromWatchList(int threadId) {
-        whirlpoolRestClient.SetThreadAsUnwatch(threadId)
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
-                .subscribe(aVoid -> {
-                    if (postFragment != null) {
-                        postFragment.DisplayActionSuccessMessage();
-                        watchedThreadIdentifier.removeThreadFromWatch(threadId);
-                        postFragment.setUpToolbarActionButtons();
-                    }
-                }, throwable -> {
-                    if (postFragment != null)
-                        postFragment.DisplayActionUnsuccessfullyMessage();
-                });
+    @Override
+    protected void onUnwatchThreadSuccess() {
+        super.onUnwatchThreadSuccess();
+        postFragment.setUpToolbarActionButtons();
     }
 
-    public void addToWatchList(int threadId) {
-        whirlpoolRestClient.SetThreadAsWatch(threadId)
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
-                .subscribe(aVoid -> {
-                    if (postFragment != null) {
-                        postFragment.DisplayActionSuccessMessage();
-                        watchedThreadIdentifier.addThreadToWatch(threadId);
-                        postFragment.setUpToolbarActionButtons();
-                    }
-                }, throwable -> {
-                    if (postFragment != null)
-                        postFragment.DisplayActionUnsuccessfullyMessage();
-                });
+    @Override
+    protected void OnWatchThreadSuccess() {
+        super.OnWatchThreadSuccess();
+        postFragment.setUpToolbarActionButtons();
     }
 }

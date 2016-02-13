@@ -224,16 +224,6 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         mRecycleView.setRefreshing(true);
     }
 
-    @Override public void DisplayActionSuccessMessage() {
-        Snackbar.make(mRecycleView, "Success.", Snackbar.LENGTH_LONG)
-                .show();
-    }
-
-    @Override public void DisplayActionUnsuccessfullyMessage() {
-        Snackbar.make(mRecycleView, "Something went wrong. Try again.", Snackbar.LENGTH_LONG)
-                .show();
-    }
-
     private void updateNavigationButtonVisibility() {
         if (_controller.IsAtFirstPage())
             buttonPrevious.setVisibility(View.GONE);
@@ -259,17 +249,17 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
 
     @OnClick(R.id.btn_mark_as_read)
     public void MarkThreadAsRead() {
-        _controller.markThreadAsRead(mThreadId);
+        _controller.MarkThreadAsRead(mThreadId);
     }
 
     @OnClick(R.id.btn_remove_from_watch)
     public void RemoveFromWatch() {
-        _controller.removeFromWatchList(mThreadId);
+        _controller.UnwatchThread(mThreadId);
     }
 
     @OnClick(R.id.btn_add_to_watch)
     public void AddToWatch() {
-        _controller.addToWatchList(mThreadId);
+        _controller.WatchThread(mThreadId);
     }
 
 }

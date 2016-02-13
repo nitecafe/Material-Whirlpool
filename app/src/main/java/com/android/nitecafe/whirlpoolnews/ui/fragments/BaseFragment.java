@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
-public class BaseFragment extends Fragment implements IBaseFragment {
+public class BaseFragment extends Fragment implements IThreadActionMessageFragment {
 
     protected void setToolbarTitle(String title) {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -15,8 +15,20 @@ public class BaseFragment extends Fragment implements IBaseFragment {
     }
 
     @Override
-    public void ShowActionSuccessMessage() {
-        Snackbar.make(getView(), "Done", Snackbar.LENGTH_LONG)
+    public void ShowMarkAsReadSuccessMessage() {
+        Snackbar.make(getView(), "Marked as read.", Snackbar.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public void ShowThreadWatchedSuccessMessage() {
+        Snackbar.make(getView(), "Thread is now being watched.", Snackbar.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public void ShowThreadUnWatchedSuccessMessage() {
+        Snackbar.make(getView(), "Thread is now unwatched.", Snackbar.LENGTH_LONG)
                 .show();
     }
 
