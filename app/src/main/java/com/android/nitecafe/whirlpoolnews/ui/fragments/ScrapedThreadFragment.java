@@ -15,8 +15,8 @@ import com.android.nitecafe.whirlpoolnews.controllers.ScrapedThreadController;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedThreadFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -28,12 +28,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class ScrapedThreadFragment extends BaseFragment implements IRecycleViewItemClick, IScrapedThreadFragment {
+public class ScrapedThreadFragment extends BaseFragment implements IScrapedThreadFragment {
 
     public static final String FORUM_ID = "ForumId";
     public static final String FORUM_NAME = "ForumTitle";
     public static final String FORUM_GROUP_ID = "ForumGroupId";
     @Inject ScrapedThreadController _controller;
+    @Inject IWatchedThreadIdentifier mIWatchedThreadIdentifier;
     @Bind(R.id.thread_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.thread_progress_loader) MaterialProgressBar mMaterialProgressBar;
     private IOnThreadClicked listener;
@@ -108,7 +109,9 @@ public class ScrapedThreadFragment extends BaseFragment implements IRecycleViewI
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecycleView.setLayoutManager(layoutManager);
 
-        forumThreadAdapter = new ScrapedThreadAdapter(this);
+        forumThreadAdapter = new ScrapedThreadAdapter(mIWatchedThreadIdentifier);
+        forumThreadAdapter.getOnThreadClickedObservable()
+                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle()));
 
         mRecycleView.setAdapter(forumThreadAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
@@ -140,10 +143,5 @@ public class ScrapedThreadFragment extends BaseFragment implements IRecycleViewI
     @Override
     public void HideRefreshLoader() {
         mRecycleView.setRefreshing(false);
-    }
-
-    @Override
-    public void OnItemClicked(int itemClicked, String threadTitle) {
-        listener.OnThreadClicked(itemClicked, threadTitle);
     }
 }

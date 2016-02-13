@@ -17,6 +17,7 @@ import com.android.nitecafe.whirlpoolnews.ui.adapters.ForumThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -33,12 +34,13 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
     public static final String FORUM_ID = "ForumId";
     public static final String FORUM_NAME = "ForumTitle";
     @Inject ForumThreadController _controller;
+    @Inject IWatchedThreadIdentifier mIWatchedThreadIdentifier;
     @Bind(R.id.thread_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.thread_progress_loader) MaterialProgressBar mMaterialProgressBar;
     private IOnThreadClicked listener;
     private int mForumId;
     private String mForumTitle;
-    private ForumThreadAdapter forumThreadAdapter;
+    private ForumThreadAdapter<ForumThread> forumThreadAdapter;
 
     public static ThreadFragment newInstance(int forumId, String forumName) {
         ThreadFragment fragment = new ThreadFragment();
@@ -104,8 +106,9 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecycleView.setLayoutManager(layoutManager);
 
-        forumThreadAdapter = new ForumThreadAdapter(this);
-
+        forumThreadAdapter = new ForumThreadAdapter(mIWatchedThreadIdentifier);
+        forumThreadAdapter.getOnThreadClickedObservable().subscribe(
+                thread -> listener.OnThreadClicked(thread.getID(), thread.getTITLE()));
         mRecycleView.setAdapter(forumThreadAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
 

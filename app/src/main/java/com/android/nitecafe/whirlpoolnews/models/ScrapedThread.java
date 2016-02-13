@@ -4,7 +4,7 @@ import android.text.Html;
 
 import java.util.Date;
 
-public class ScrapedThread {
+public class ScrapedThread implements IThreadBase {
 
     private final int id;
     private final Date last_date;
@@ -30,10 +30,6 @@ public class ScrapedThread {
 
     public String getTitle() {
         return title;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public Date getLast_date() {
@@ -98,5 +94,10 @@ public class ScrapedThread {
 
     public void setMoved(boolean moved) {
         this.moved = moved;
+    }
+
+    @Override
+    public Integer getID() {
+        return id;
     }
 }

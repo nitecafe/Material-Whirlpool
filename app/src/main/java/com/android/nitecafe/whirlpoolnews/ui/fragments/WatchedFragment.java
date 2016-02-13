@@ -16,6 +16,7 @@ import com.android.nitecafe.whirlpoolnews.models.Watched;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.WatchedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWatchedFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
@@ -31,6 +32,7 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 public class WatchedFragment extends BaseFragment implements IWatchedFragment {
 
     @Inject WatchedController _controller;
+    @Inject IWatchedThreadIdentifier mIWatchedThreadIdentifier;
     @Bind(R.id.watched_recycle_view) UltimateRecyclerView watchedRecycleView;
     @Bind(R.id.watched_progress_loader) MaterialProgressBar mMaterialProgressBar;
     private WatchedThreadAdapter stickyHeaderAdapter;
@@ -84,7 +86,7 @@ public class WatchedFragment extends BaseFragment implements IWatchedFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         watchedRecycleView.setLayoutManager(layoutManager);
 
-        stickyHeaderAdapter = new WatchedThreadAdapter();
+        stickyHeaderAdapter = new WatchedThreadAdapter(mIWatchedThreadIdentifier);
         stickyHeaderAdapter.getOnThreadClickedObservable().subscribe(watched1 -> {
             listener.OnWatchedThreadClicked(watched1.getID(), watched1.getTITLE(), watched1.getLASTPAGE(), watched1.getLASTREAD());
         });
@@ -114,7 +116,7 @@ public class WatchedFragment extends BaseFragment implements IWatchedFragment {
 
     @Override
     public void DisplayWatched(List<Watched> watcheds) {
-        stickyHeaderAdapter.setThreads(watcheds);
+        stickyHeaderAdapter.SetThreads(watcheds);
     }
 
     @Override

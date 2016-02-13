@@ -16,6 +16,7 @@ import com.android.nitecafe.whirlpoolnews.models.Recent;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.RecentThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecentFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
@@ -31,6 +32,7 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 public class RecentFragment extends BaseFragment implements IRecentFragment {
 
     @Inject RecentController _controller;
+    @Inject IWatchedThreadIdentifier mIWatchedThreadIdentifier;
     @Bind(R.id.recent_recycle_view) UltimateRecyclerView recentRecycleView;
     @Bind(R.id.recent_progress_loader) MaterialProgressBar mMaterialProgressBar;
     private RecentThreadAdapter stickyHeaderAdapter;
@@ -84,7 +86,7 @@ public class RecentFragment extends BaseFragment implements IRecentFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recentRecycleView.setLayoutManager(layoutManager);
 
-        stickyHeaderAdapter = new RecentThreadAdapter();
+        stickyHeaderAdapter = new RecentThreadAdapter(mIWatchedThreadIdentifier);
         stickyHeaderAdapter.getOnThreadClickedObservable().subscribe(
                 recent -> listener.OnThreadClicked(recent.getID(), recent.getTITLE()));
         stickyHeaderAdapter.getOnUnwatchedObservable().subscribe(thread
@@ -102,7 +104,7 @@ public class RecentFragment extends BaseFragment implements IRecentFragment {
 
     @Override
     public void DisplayRecent(List<Recent> recents) {
-        stickyHeaderAdapter.setThreads(recents);
+        stickyHeaderAdapter.SetThreads(recents);
     }
 
     @Override

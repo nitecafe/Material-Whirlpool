@@ -1,6 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.models;
 
-public interface IWhirlpoolThread {
+public interface IWhirlpoolThread extends IThreadBase {
 
     /**
      * @return The FORUMNAME
@@ -16,11 +16,6 @@ public interface IWhirlpoolThread {
      * @return The REPLIES
      */
     Integer getREPLIES();
-
-    /**
-     * @return The ID
-     */
-    Integer getID();
 
     /**
      * @return The LASTDATE

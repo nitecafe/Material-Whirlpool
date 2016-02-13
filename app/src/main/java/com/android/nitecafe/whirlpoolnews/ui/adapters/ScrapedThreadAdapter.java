@@ -2,45 +2,22 @@ package com.android.nitecafe.whirlpoolnews.ui.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.RecyclerViewAdapterClickListener;
+import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
-import java.util.ArrayList;
-import java.util.List;
+public class ScrapedThreadAdapter extends ThreadBaseAdapter<ScrapedThread> {
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-public class ScrapedThreadAdapter extends RecyclerView.Adapter<ScrapedThreadAdapter.ScrapedThreadViewHolder> implements RecyclerViewAdapterClickListener {
-
-    private List<ScrapedThread> mThreads = new ArrayList<>();
-    private IRecycleViewItemClick itemClickHandler;
-
-    public ScrapedThreadAdapter(IRecycleViewItemClick itemClickHandler) {
-        this.itemClickHandler = itemClickHandler;
-    }
-
-    public void SetThreads(List<ScrapedThread> threads) {
-        mThreads = threads;
-        notifyDataSetChanged();
+    public ScrapedThreadAdapter(IWatchedThreadIdentifier watchedThreadIdentifier) {
+        super(watchedThreadIdentifier);
     }
 
     @Override
-    public ScrapedThreadViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_thread, parent, false);
-        return new ScrapedThreadViewHolder(inflate, this);
-    }
-
-    @Override
-    public void onBindViewHolder(ScrapedThreadViewHolder holder, int position) {
-        final ScrapedThread forumThread = mThreads.get(position);
+    public void onBindViewHolder(ForumThreadAdapter.ThreadViewHolder holder, int position) {
+        final ScrapedThread forumThread = threadsList.get(position);
         holder.threadTitle.setText(Html.fromHtml(forumThread.getTitle()));
         holder.threadTotalPage.setText(String.valueOf(forumThread.getPageCount()));
 
@@ -60,34 +37,22 @@ public class ScrapedThreadAdapter extends RecyclerView.Adapter<ScrapedThreadAdap
     }
 
     @Override
-    public int getItemCount() {
-        return mThreads.size();
+    public ThreadViewHolder getViewHolder(View view) {
+        return null;
     }
 
     @Override
-    public void recyclerViewListClicked(View v, int position) {
-        final ScrapedThread forumThread = mThreads.get(position);
-        itemClickHandler.OnItemClicked(forumThread.getId(), forumThread.getTitle());
+    public long generateHeaderId(int position) {
+        return 0;
     }
 
-    public static class ScrapedThreadViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public View itemView;
-        @Bind(R.id.thread_title) TextView threadTitle;
-        @Bind(R.id.thread_total_page) TextView threadTotalPage;
-        @Bind(R.id.thread_last_post_info) TextView threadLastPostInfo;
-        private RecyclerViewAdapterClickListener mListener;
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        return null;
+    }
 
-        ScrapedThreadViewHolder(View itemView, RecyclerViewAdapterClickListener listener) {
-            super(itemView);
-            this.itemView = itemView;
-            mListener = listener;
-            itemView.setOnClickListener(this);
-            ButterKnife.bind(this, itemView);
-        }
+    @Override
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        @Override
-        public void onClick(View v) {
-            mListener.recyclerViewListClicked(v, getAdapterPosition());
-        }
     }
 }
