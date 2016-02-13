@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -110,6 +111,13 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
 
         SetSpinnerArrowToWhite();
         SetupRecycleView();
+        SetupToolbar();
+        loadThreads();
+
+        return inflate;
+    }
+
+    private void SetupToolbar() {
         threadToolbar.inflateMenu(R.menu.menu_thread_toolbar);
         threadToolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
@@ -122,9 +130,6 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
             }
             return true;
         });
-        loadThreads();
-
-        return inflate;
     }
 
     @Override
@@ -252,10 +257,16 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
     public void ShowPageGoToPopup() {
         new MaterialDialog.Builder(getActivity())
                 .title("Go To Page:")
-                .inputRange(1, 3)
                 .inputType(InputType.TYPE_CLASS_NUMBER)
                 .input("Enter a page number", "", false, (dialog, input) -> {
+                    try {
+                        int pageNumber = Integer.parseInt(input.toString());
+                        if (pageNumber <= _controller.getTotalPage())
+                            _controller.GetScrapedThreads(mForumId, pageNumber, mGroupId);
 
+                    } catch (NumberFormatException e) {
+                        Log.e("Enter a page number", "Failed to parse input text into a number");
+                    }
                 })
                 .positiveText("Go")
                 .negativeText("Cancel")

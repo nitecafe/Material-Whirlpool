@@ -26,6 +26,10 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
         this.schedulerManager = schedulerManager;
     }
 
+    public int getTotalPage() {
+        return mPageCount;
+    }
+
     public void GetScrapedThreads(int forumId, int groupId) {
 
         if (forumId < 1)
@@ -44,6 +48,7 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
                         threadFragment.DisplayThreads(scrapedThreads.getThreads());
                         threadFragment.SetupPageSpinnerDropDown(mPageCount, pageNumber);
                         threadFragment.SetupGroupSpinnerDropDown(scrapedThreads.getGroups(), groupId);
+                        currentPage = pageNumber;
                         HideAllProgressBar();
                     }
                 }, throwable -> {
