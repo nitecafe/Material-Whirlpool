@@ -4,6 +4,7 @@ import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.IThreadActionMessageFragment;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IScrapedThreadFragment extends IThreadActionMessageFragment {
     void HideCenterProgressBar();
@@ -13,4 +14,10 @@ public interface IScrapedThreadFragment extends IThreadActionMessageFragment {
     void DisplayThreads(List<ScrapedThread> threads);
 
     void HideRefreshLoader();
+
+    void ShowRefreshLoader();
+
+    void SetupPageSpinnerDropDown(int pageCount, int pageNumber);
+
+    void SetupGroupSpinnerDropDown(Map<String, Integer> groups, int groupId);
 }

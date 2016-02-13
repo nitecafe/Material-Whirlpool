@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.fragments.ThreadFragment">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_scraped_thread"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize">
+
+        <Spinner
+            android:id="@+id/spinner_scraped_groups"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"/>
+
+        <Button
+            android:id="@+id/btn_thread_pages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/white"/>
+    </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,28 +41,11 @@
             android:layout_centerInParent="true"
             android:indeterminate="true"/>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bottom Toolbar"/>
-        </android.support.v7.widget.Toolbar>
 
         <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
             android:id="@+id/thread_recycle_view"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/toolbar_bottom"
             >
         </com.marshalchen.ultimaterecyclerview.UltimateRecyclerView>
 

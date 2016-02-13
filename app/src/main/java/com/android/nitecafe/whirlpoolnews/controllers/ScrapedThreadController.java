@@ -14,6 +14,7 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
     private ISchedulerManager schedulerManager;
     private IScrapedThreadFragment threadFragment;
     private int currentPage = 1;
+    private int mPageCount;
 
     @Inject
     @Singleton
@@ -26,6 +27,10 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
     }
 
     public void GetScrapedThreads(int forumId, int groupId) {
+
+        if (forumId < 1)
+            throw new IllegalArgumentException("Need valid thread id or groupId");
+
         loadScrapedThreads(forumId, currentPage, groupId);
     }
 
@@ -34,8 +39,11 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler())
                 .subscribe(scrapedThreads -> {
+                    mPageCount = scrapedThreads.getPageCount();
                     if (threadFragment != null) {
                         threadFragment.DisplayThreads(scrapedThreads.getThreads());
+                        threadFragment.SetupPageSpinnerDropDown(mPageCount, pageNumber);
+                        threadFragment.SetupGroupSpinnerDropDown(scrapedThreads.getGroups(), groupId);
                         HideAllProgressBar();
                     }
                 }, throwable -> {
@@ -47,12 +55,27 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
     }
 
     public void loadNextPage(int forumId, int groupId) {
+        if (IsAtLastPage())
+            throw new IllegalArgumentException("Current page is the last page.");
+
+        threadFragment.ShowRefreshLoader();
         loadScrapedThreads(forumId, ++currentPage, groupId);
     }
 
     public void loadPreviousPage(int forumId, int groupId) {
-        if (currentPage > 1)
-            loadScrapedThreads(forumId, --currentPage, groupId);
+        if (IsAtFirstPage())
+            throw new IllegalArgumentException("Current page is the first page.");
+
+        threadFragment.ShowRefreshLoader();
+        loadScrapedThreads(forumId, --currentPage, groupId);
+    }
+
+    public boolean IsAtLastPage() {
+        return currentPage == mPageCount;
+    }
+
+    public boolean IsAtFirstPage() {
+        return currentPage == 1;
     }
 
     private void HideAllProgressBar() {

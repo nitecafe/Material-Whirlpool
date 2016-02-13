@@ -1,13 +1,20 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
@@ -20,7 +27,9 @@ import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -37,11 +46,15 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
     @Inject IWatchedThreadIdentifier mIWatchedThreadIdentifier;
     @Bind(R.id.thread_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.thread_progress_loader) MaterialProgressBar mMaterialProgressBar;
+    @Bind(R.id.toolbar_scraped_thread) Toolbar threadToolbar;
+    @Bind(R.id.spinner_scraped_groups) Spinner mSpinner;
+    @Bind(R.id.btn_thread_pages) Button mButtonSelectPage;
     private IOnThreadClicked listener;
     private int mForumId;
     private String mForumTitle;
     private ScrapedThreadAdapter forumThreadAdapter;
     private int mGroupId;
+    private Map<String, Integer> mThreadGroups;
 
     public static ScrapedThreadFragment newInstance(int forumId, String forumName, int groupId) {
         ScrapedThreadFragment fragment = new ScrapedThreadFragment();
@@ -92,8 +105,20 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
         _controller.Attach(this);
 
+        SetSpinnerArrowToWhite();
         SetupRecycleView();
-
+        threadToolbar.inflateMenu(R.menu.menu_thread_toolbar);
+        threadToolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.menuitem_back_thread:
+                    _controller.loadPreviousPage(mForumId, mGroupId);
+                    break;
+                case R.id.menuitem_next_thread:
+                    _controller.loadNextPage(mForumId, mGroupId);
+                    break;
+            }
+            return true;
+        });
         loadThreads();
 
         return inflate;
@@ -152,5 +177,71 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
     @Override
     public void HideRefreshLoader() {
         mRecycleView.setRefreshing(false);
+    }
+
+    @Override
+    public void ShowRefreshLoader() {
+        mRecycleView.setRefreshing(true);
+    }
+
+    @Override
+    public void SetupPageSpinnerDropDown(int pageCount, int page) {
+        mButtonSelectPage.setText(String.format("%d / %d", page, pageCount));
+        updateNavigationButtonVisibility();
+    }
+
+    private void SetSpinnerArrowToWhite() {
+        mSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    mRecycleView.setRefreshing(true);
+                    _controller.GetScrapedThreads(mForumId, 0);
+                    mGroupId = 0;
+                } else {
+                    final String item = (String) mSpinner.getAdapter().getItem(position);
+                    if ((mThreadGroups.containsKey(item) && mGroupId != mThreadGroups.get(item))) {
+                        mRecycleView.setRefreshing(true);
+                        _controller.GetScrapedThreads(mForumId, mThreadGroups.get(item));
+                        mGroupId = mThreadGroups.get(item);
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    @Override
+    public void SetupGroupSpinnerDropDown(Map<String, Integer> groups, int groupId) {
+
+        if (mThreadGroups == null) {
+            List<String> groupsList = new ArrayList<>();
+            groupsList.add("All");
+            for (String g : groups.keySet()) {
+                groupsList.add(g);
+            }
+            ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_row, groupsList);
+            mSpinner.setAdapter(stringArrayAdapter);
+            mThreadGroups = groups;
+        }
+    }
+
+    private void updateNavigationButtonVisibility() {
+        final MenuItem backItem = threadToolbar.getMenu().findItem(R.id.menuitem_back_thread);
+        final MenuItem nextItem = threadToolbar.getMenu().findItem(R.id.menuitem_next_thread);
+        if (_controller.IsAtFirstPage())
+            backItem.setEnabled(false);
+        else
+            backItem.setEnabled(true);
+
+        if (_controller.IsAtLastPage())
+            nextItem.setEnabled(false);
+        else
+            nextItem.setEnabled(true);
     }
 }
