@@ -10,6 +10,7 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.WatchedChildFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.WatchedFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.WhimsFragment;
 
 import javax.inject.Singleton;
 
@@ -37,4 +38,6 @@ public interface DaggerComponent {
     void inject(ScrapedPostFragment scrapedPostFragment);
 
     void inject(WatchedChildFragment watchedChildFragment);
+
+    void inject(WhimsFragment whimsFragment);
 }

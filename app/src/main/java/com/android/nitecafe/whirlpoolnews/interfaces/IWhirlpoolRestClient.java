@@ -7,6 +7,7 @@ import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
+import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 
 import rx.Observable;
 
@@ -36,4 +37,6 @@ public interface IWhirlpoolRestClient {
     Observable<Void> SetThreadAsUnwatch(int threadId);
 
     Observable<Void> MarkThreadAsRead(int threadId);
+
+    Observable<WhimsList> GetWhims();
 }

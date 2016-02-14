@@ -11,5 +11,5 @@ public interface IForumFragment {
 
     void DisplayErrorMessage();
 
-    void  HideRefreshLoader();
+    void HideRefreshLoader();
 }

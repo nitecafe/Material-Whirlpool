@@ -14,6 +14,7 @@ import com.android.nitecafe.whirlpoolnews.models.Recent;
 import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.Watched;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
+import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.utilities.IThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 
@@ -167,6 +168,36 @@ public class WhirlpoolRestClientTests {
         Assert.assertEquals(watchedList, onNextEvents.get(0));
 
     }
+
+    @Test
+    public void GetWhims_WhenCalled_ReturnResponse() {
+
+        //arrange
+        final TestObserver<WhimsList> testObserver = new TestObserver<>();
+        WhimsList whimsList = new WhimsList();
+        Mockito.when(whirlpoolRestClient.mWhirlpoolServiceMock.GetWhims()).thenReturn(Observable.just(whimsList));
+
+        //act
+        whirlpoolRestClient.GetWhims().subscribe(testObserver);
+
+        //assert
+        List<WhimsList> onNextEvents = testObserver.getOnNextEvents();
+        Assert.assertEquals(whimsList, onNextEvents.get(0));
+    }
+
+    @Test
+    public void MarkWhimAsRead_WhenCalled_RetrofitServiceCalled() {
+
+        //arrange
+        int whimId = 111;
+
+        //act
+        whirlpoolRestClient.MarkWhimAsRead(whimId);
+
+        //assert
+        Mockito.verify(whirlpoolRestClient.mWhirlpoolServiceMock).MarkWhimAsRead(whimId);
+    }
+
 }
 
 class TestableWhirlpoolRestClient extends WhirlpoolRestClient {

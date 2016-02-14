@@ -12,6 +12,7 @@ import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
+import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.utilities.IThreadScraper;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.Request;
@@ -121,5 +122,14 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     @Override
     public Observable<Void> MarkThreadAsRead(int threadId) {
         return getWhirlpoolService().SetThreadAsRead(threadId);
+    }
+
+    @Override
+    public Observable<WhimsList> GetWhims() {
+        return getWhirlpoolService().GetWhims();
+    }
+
+    public void MarkWhimAsRead(int whimId) {
+        getWhirlpoolService().MarkWhimAsRead(whimId);
     }
 }
