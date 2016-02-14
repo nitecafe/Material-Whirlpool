@@ -14,11 +14,13 @@ import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.ui.FragmentsEnum;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.IndividualWhimFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnWhimClicked;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 
@@ -29,14 +31,16 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.subjects.PublishSubject;
 
-public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener, ForumFragment.IOnForumClicked, IOnThreadClicked {
+public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener, ForumFragment.IOnForumClicked, IOnThreadClicked, IOnWhimClicked {
 
     @Inject IWhirlpoolRestClient mWhirlpoolRestClient;
     @Bind(R.id.fab_reply_post) FloatingActionButton fabReplyPost;
     @Bind(R.id.fab_create_thread) FloatingActionButton fabCreateThread;
+    @Bind(R.id.fab_reply_whim) FloatingActionButton fabReplyWhim;
     @Inject IWatchedThreadIdentifier watchedThreadIdentifier;
     private int mThreadIdLoaded;
     private int mForumId;
+    private int whimId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +112,13 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
                 fabReplyPost.setVisibility(View.VISIBLE));
     }
 
+    private void setUpWhimReplyFab(IndividualWhimFragment individualWhimFragment) {
+        individualWhimFragment.OnFragmentDestroySubject.subscribe(aVoid ->
+                fabReplyWhim.setVisibility(View.GONE));
+        individualWhimFragment.OnFragmentCreateViewSubject.subscribe(aVoid ->
+                fabReplyWhim.setVisibility(View.VISIBLE));
+    }
+
     private void setUpThreadCreateFab(PublishSubject<Void> createStream, PublishSubject<Void> destroyStream) {
         destroyStream.subscribe(aVoid ->
                 fabCreateThread.setVisibility(View.GONE));
@@ -135,6 +146,20 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     public void launchCreateThreadInBrowser() {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse(StringConstants.NEW_THREAD_URL + String.valueOf(mForumId)));
+        startActivity(browserIntent);
+    }
+
+    @Override public void OnWhimClicked(int id, String message, String sender) {
+        whimId = id;
+        IndividualWhimFragment individualWhimFragment = IndividualWhimFragment.newInstance(message, sender);
+        setUpWhimReplyFab(individualWhimFragment);
+        startFragment(individualWhimFragment);
+    }
+
+    @OnClick(R.id.fab_reply_whim)
+    public void launchReplyWhimInBrowser() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(StringConstants.WHIM_REPLY_URL + String.valueOf(whimId)));
         startActivity(browserIntent);
     }
 }

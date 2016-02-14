@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,7 @@ import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.controllers.WhimsController;
 import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.WhimsAdapter;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnWhimClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWhimsFragment;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
@@ -32,6 +34,7 @@ public class WhimsFragment extends BaseFragment implements IWhimsFragment {
     @Bind(R.id.whim_progress_loader) MaterialProgressBar progressBar;
     @Bind(R.id.whim_recycle_view) UltimateRecyclerView recyclerView;
     private WhimsAdapter whimAdapter;
+    private IOnWhimClicked listener;
 
     @Override
     public void onDestroyView() {
@@ -39,6 +42,20 @@ public class WhimsFragment extends BaseFragment implements IWhimsFragment {
         super.onDestroyView();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof IOnWhimClicked)
+            listener = (IOnWhimClicked) context;
+        else
+            throw new ClassCastException("Activity must implement IOnWhimClicked");
+    }
+
+    @Override
+    public void onDetach() {
+        listener = null;
+        super.onDetach();
+    }
 
     @Nullable
     @Override
@@ -61,10 +78,17 @@ public class WhimsFragment extends BaseFragment implements IWhimsFragment {
         recyclerView.setLayoutManager(layoutManager);
 
         whimAdapter = new WhimsAdapter();
+        whimAdapter.getOnWhimClickedSubject().subscribe(whim ->
+                OpenWhim(whim.getID(), whim.getMESSAGE(), whim.getFROM().getNAME()));
 
         recyclerView.setAdapter(whimAdapter);
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
         recyclerView.setDefaultOnRefreshListener(() -> loadWhims());
+    }
+
+    private void OpenWhim(Integer id, String message, String sender) {
+
+        listener.OnWhimClicked(id, message, sender);
     }
 
     private void loadWhims() {

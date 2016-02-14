@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
+import com.jakewharton.rxbinding.view.RxView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,10 +19,13 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.subjects.PublishSubject;
 
 public class WhimsAdapter extends RecyclerView.Adapter<WhimsAdapter.WhimViewHolder> {
 
     private List<Whim> whims = new ArrayList<>();
+    private PublishSubject<Integer> OnWhimClickedSubject = PublishSubject.create();
 
     public void SetWhims(List<Whim> whims) {
         this.whims = whims;
@@ -53,6 +57,9 @@ public class WhimsAdapter extends RecyclerView.Adapter<WhimsAdapter.WhimViewHold
         return whims.size();
     }
 
+    public Observable<Whim> getOnWhimClickedSubject() {
+        return OnWhimClickedSubject.map(integer -> whims.get(integer)).asObservable();
+    }
 
     public class WhimViewHolder extends RecyclerView.ViewHolder {
 
@@ -62,6 +69,7 @@ public class WhimsAdapter extends RecyclerView.Adapter<WhimsAdapter.WhimViewHold
 
         public WhimViewHolder(View itemView) {
             super(itemView);
+            RxView.clicks(itemView).map(aVoid -> getAdapterPosition()).subscribe(OnWhimClickedSubject);
             ButterKnife.bind(this, itemView);
         }
     }
