@@ -10,12 +10,15 @@ import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
 import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
+import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.utilities.IThreadScraper;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.Request;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -129,7 +132,12 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         return getWhirlpoolService().GetWhims();
     }
 
-    public void MarkWhimAsRead(int whimId) {
-        getWhirlpoolService().MarkWhimAsRead(whimId);
+    @Override public Observable<Void> MarkWhimAsRead(int whimId) {
+        return getWhirlpoolService().MarkWhimAsRead(whimId);
+    }
+
+    @Override
+    public Observable<ArrayList<ScrapedThread>> GetPopularThreads() {
+        return threadScraper.ScrapPopularThreadsObservable();
     }
 }

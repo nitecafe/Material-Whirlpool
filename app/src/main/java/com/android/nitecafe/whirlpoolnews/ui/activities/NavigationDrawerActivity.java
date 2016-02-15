@@ -14,6 +14,7 @@ import com.android.nitecafe.whirlpoolnews.ui.FragmentsEnum;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.NewsFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.PopularThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.RecentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.WatchedFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.WhimsFragment;
@@ -117,6 +118,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
             case WHIMS_POSITION:
                 fragmentToStart = FragmentsEnum.WHIMS;
                 break;
+            case POPULAR_POSITION:
+                fragmentToStart = FragmentsEnum.POPULAR_THREAD;
+                break;
             default:
                 fragmentToStart = FragmentsEnum.NEWS;
         }
@@ -169,6 +173,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
                 break;
             case WHIMS:
                 fragmentToStart = new WhimsFragment();
+                break;
+            case POPULAR_THREAD:
+                fragmentToStart = new PopularThreadFragment();
                 break;
             default:
                 fragmentToStart = new NewsFragment();

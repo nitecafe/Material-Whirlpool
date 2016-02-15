@@ -13,6 +13,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 
+import rx.observers.TestSubscriber;
+
 @RunWith(MockitoJUnitRunner.class)
 public class ThreadScraperTests {
 
@@ -37,5 +39,19 @@ public class ThreadScraperTests {
         ScrapedPostList scrapedPostList = _threadScraper.scrapePostsFromThread(2459226, "", 1);
 
         Assert.assertNotNull(scrapedPostList.getScrapedPosts());
+    }
+
+    @Test
+    public void ScrapPopularThreadsObservable_WhenCalled_ReturnResponse() {
+
+        //arrange
+        TestSubscriber testSubscriber = new TestSubscriber();
+
+        //act
+        _threadScraper.ScrapPopularThreadsObservable().subscribe(testSubscriber);
+
+        //assert
+        testSubscriber.assertNoErrors();
+        testSubscriber.onCompleted();
     }
 }

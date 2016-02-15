@@ -31,5 +31,5 @@ public interface IWhirlpoolService {
 
     @GET("?get=whims") Observable<WhimsList> GetWhims();
 
-    @GET("?get=whim") void MarkWhimAsRead(@Query("whimid") int whimId);
+    @GET("?get=whim") Observable<Void> MarkWhimAsRead(@Query("whimid") int whimId);
 }

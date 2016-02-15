@@ -198,6 +198,16 @@ public class WhirlpoolRestClientTests {
         Mockito.verify(whirlpoolRestClient.mWhirlpoolServiceMock).MarkWhimAsRead(whimId);
     }
 
+    @Test
+    public void GetPopularThreads_WhenCalled_ThreadScraperCalled() {
+
+        //act
+        whirlpoolRestClient.GetPopularThreads();
+
+        //assert
+        Mockito.verify(threadScraper).ScrapPopularThreadsObservable();
+    }
+
 }
 
 class TestableWhirlpoolRestClient extends WhirlpoolRestClient {

@@ -94,12 +94,12 @@ public class WhimsControllerTests {
 
         //arrange
         int whimId = 111;
-        Mockito.when(whirlpoolRestClientMock.MarkThreadAsRead(whimId)).thenReturn(Observable.<Void>empty());
+        Mockito.when(whirlpoolRestClientMock.MarkWhimAsRead(whimId)).thenReturn(Observable.<Void>empty());
 
         //act
         _controller.MarkWhimAsRead(whimId);
 
         //assert
-        Mockito.verify(whirlpoolRestClientMock).MarkThreadAsRead(whimId);
+        Mockito.verify(whirlpoolRestClientMock).MarkWhimAsRead(whimId);
     }
 }

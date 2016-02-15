@@ -4,6 +4,7 @@ import com.android.nitecafe.whirlpoolnews.ui.activities.MainActivity;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.NewsFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.PopularThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.RecentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedThreadFragment;
@@ -40,4 +41,6 @@ public interface DaggerComponent {
     void inject(WatchedChildFragment watchedChildFragment);
 
     void inject(WhimsFragment whimsFragment);
+
+    void inject(PopularThreadFragment popularThreadFragment);
 }

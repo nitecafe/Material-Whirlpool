@@ -45,7 +45,7 @@ public class WhimsController {
     }
 
     public void MarkWhimAsRead(int whimId) {
-        whirlpoolRestClient.MarkThreadAsRead(whimId)
+        whirlpoolRestClient.MarkWhimAsRead(whimId)
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler())
                 .subscribe(aVoid -> {

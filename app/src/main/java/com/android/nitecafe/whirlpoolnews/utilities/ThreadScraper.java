@@ -397,4 +397,59 @@ public class ThreadScraper implements IThreadScraper {
 
         return null;
     }
+
+    @Override public Observable<ArrayList<ScrapedThread>> ScrapPopularThreadsObservable() {
+        return Observable.create(subscriber -> {
+            ArrayList<ScrapedThread> scrapedThreads = null;
+            try {
+                scrapedThreads = downloadPopularThreads();
+            } catch (IOException e) {
+                e.printStackTrace();
+                subscriber.onError(e);
+            }
+            subscriber.onNext(scrapedThreads);
+            subscriber.onCompleted();
+        });
+    }
+
+    private ArrayList<ScrapedThread> downloadPopularThreads() throws IOException {
+        ArrayList<ScrapedThread> threads = new ArrayList<>();
+
+        Document doc = downloadPage(StringConstants.POPULAR_URL);
+        if (doc == null) {
+            throw new IOException("Unable to download popular thread page");
+        }
+
+        Elements trs = doc.select("tr");
+
+        String current_forum = null;
+        int current_forum_id = 0;
+
+        for (Element tr : trs) {
+            Set<String> tr_classes = tr.classNames();
+
+            // section - contains a forum name
+            if (tr_classes.contains("section")) {
+                current_forum = tr.text();
+
+                // get the forum ID
+                String forum_url = tr.select("a").attr("href");
+                Pattern forum_id_regex = Pattern.compile("/forum/([0-9]+)");
+                Matcher m = forum_id_regex.matcher(forum_url);
+                while (m.find()) {
+                    current_forum_id = Integer.parseInt(m.group(1));
+                }
+            }
+            // thread
+            else {
+                if (current_forum == null) continue;
+
+                ScrapedThread t = getThreadFromTableRow(tr, current_forum, current_forum_id);
+                threads.add(t);
+            }
+        }
+
+        return threads;
+    }
+
 }
