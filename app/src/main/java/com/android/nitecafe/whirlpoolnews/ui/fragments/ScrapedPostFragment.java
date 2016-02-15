@@ -34,6 +34,8 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import icepick.Icepick;
+import icepick.State;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 import rx.subjects.PublishSubject;
 
@@ -50,10 +52,10 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     @Bind(R.id.post_progress_loader) MaterialProgressBar mMaterialProgressBar;
     @Bind(R.id.spinner_post_page) Spinner pageNumberSpinner;
     @Bind(R.id.toolbar_post) Toolbar postToolbar;
+    @State int mPageToLoad;
     private int mThreadId;
     private ScrapedPostAdapter scrapedPostAdapter;
     private String mThreadTitle;
-    private int mPageToLoad;
     private int mPostLastReadId;
     private MenuItem backItem;
     private MenuItem nextItem;
@@ -78,6 +80,12 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         mThreadTitle = getArguments().getString(THREAD_TITLE, "");
     }
 
+
+    @Override public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
+    }
+
     @Override
     public void onDestroyView() {
         _controller.attach(null);
@@ -96,6 +104,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         _controller.attach(this);
 
         OnFragmentCreateViewSubject.onNext(null);
+        Icepick.restoreInstanceState(this, savedInstanceState);
 
         SetupSpinnerItemEvents();
         SetupRecycleView();
