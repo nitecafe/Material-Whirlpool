@@ -38,6 +38,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
     protected Toolbar toolbar;
     protected PrimaryDrawerItem apiKeyDrawerItem;
     protected PrimaryDrawerItem newsItemDrawerItem;
+    protected PrimaryDrawerItem whimsDrawerItem;
 
     protected void onCreateDrawer() {
 
@@ -56,15 +57,15 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         PrimaryDrawerItem watchedItems = new PrimaryDrawerItem().withName("Watched Threads");
         watchedItems.withIcon(R.drawable.ic_watched_threads);
 
-        PrimaryDrawerItem whims = new PrimaryDrawerItem().withName("Private Messages");
-        whims.withIcon(R.drawable.ic_whims);
+        whimsDrawerItem = new PrimaryDrawerItem().withName("Private Messages");
+        whimsDrawerItem.withIcon(R.drawable.ic_whims);
         apiKeyDrawerItem = new PrimaryDrawerItem().withName("Set API Key");
         apiKeyDrawerItem.withIcon(R.drawable.ic_api_key);
 
         drawer = new DrawerBuilder().withActivity(this)
                 .addDrawerItems(newsItemDrawerItem,
                         forum, new DividerDrawerItem(), popularItems, recentItems, watchedItems,
-                        new DividerDrawerItem(), whims, new DividerDrawerItem(), apiKeyDrawerItem)
+                        new DividerDrawerItem(), whimsDrawerItem, new DividerDrawerItem(), apiKeyDrawerItem)
                 .withActionBarDrawerToggle(false)
                 .withAccountHeader(headerResult)
                 .withOnDrawerItemClickListener(this)

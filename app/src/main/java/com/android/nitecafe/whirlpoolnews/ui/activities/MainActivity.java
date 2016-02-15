@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.ui.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +24,8 @@ import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnWhimClicked;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
+import com.android.nitecafe.whirlpoolnews.utilities.WhimsService;
+import com.mikepenz.materialdrawer.holder.BadgeStyle;
 
 import javax.inject.Inject;
 
@@ -38,6 +41,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Bind(R.id.fab_create_thread) FloatingActionButton fabCreateThread;
     @Bind(R.id.fab_reply_whim) FloatingActionButton fabReplyWhim;
     @Inject IWatchedThreadIdentifier watchedThreadIdentifier;
+    @Inject WhimsService whimsService;
     private int mThreadIdLoaded;
     private int mForumId;
     private int whimId;
@@ -66,6 +70,14 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Override protected void onResume() {
         super.onResume();
         watchedThreadIdentifier.getWatchedThreads();
+        whimsService.GetNumberOfUnreadWhims().
+                subscribe(integer -> setPrivateMessagesBadgeCount(integer));
+    }
+
+    private void setPrivateMessagesBadgeCount(Integer integer) {
+        whimsDrawerItem.withBadge(String.valueOf(integer))
+                .withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).
+                        withColorRes(R.color.primary));
     }
 
     private boolean IsFromInternalAppLink(String scheme) {

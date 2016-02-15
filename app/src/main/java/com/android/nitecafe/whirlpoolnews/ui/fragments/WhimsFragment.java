@@ -87,7 +87,6 @@ public class WhimsFragment extends BaseFragment implements IWhimsFragment {
     }
 
     private void OpenWhim(Integer id, String message, String sender) {
-
         listener.OnWhimClicked(id, message, sender);
     }
 

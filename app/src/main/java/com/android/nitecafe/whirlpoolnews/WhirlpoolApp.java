@@ -7,7 +7,6 @@ import com.android.nitecafe.whirlpoolnews.dagger.AppModule;
 import com.android.nitecafe.whirlpoolnews.dagger.DaggerComponent;
 import com.android.nitecafe.whirlpoolnews.dagger.DaggerDaggerComponent;
 import com.android.nitecafe.whirlpoolnews.dagger.DaggerModule;
-import com.squareup.leakcanary.LeakCanary;
 
 public class WhirlpoolApp extends Application {
 
@@ -23,7 +22,7 @@ public class WhirlpoolApp extends Application {
                 .daggerModule(new DaggerModule(StringConstants.WHIRLPOOL_API_URL))
                 .build();
 
-        LeakCanary.install(this);  //not working on android 6.0
+//        LeakCanary.install(this);  //not working on android 6.0
     }
 
     public DaggerComponent getDaggerComponent() {
