@@ -59,15 +59,16 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             int threadId = Integer.parseInt(intent_uri.getQueryParameter("threadid"));
             OnThreadClicked(threadId, "Thread From Link");
         } else if (!mWhirlpoolRestClient.hasApiKeyBeenSet()) {
-            drawer.setSelection(apiKeyDrawerItem);
+            drawer.setSelection(apiKeyDrawerItem, false);
             startFragmentWithNoBackStack(FragmentsEnum.API_KEY);
         } else if (savedInstanceState == null) {
-            drawer.setSelection(newsItemDrawerItem);
+            drawer.setSelection(newsItemDrawerItem, false);
             startFragmentWithNoBackStack(FragmentsEnum.NEWS);
         }
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
         watchedThreadIdentifier.getWatchedThreads();
         whimsService.GetNumberOfUnreadWhims().
@@ -161,7 +162,8 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         startActivity(browserIntent);
     }
 
-    @Override public void OnWhimClicked(int id, String message, String sender) {
+    @Override
+    public void OnWhimClicked(int id, String message, String sender) {
         whimId = id;
         IndividualWhimFragment individualWhimFragment = IndividualWhimFragment.newInstance(message, sender);
         setUpWhimReplyFab(individualWhimFragment);
