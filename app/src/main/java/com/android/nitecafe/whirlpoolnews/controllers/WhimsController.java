@@ -7,17 +7,24 @@ import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWhimsFragment;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+
+import rx.subjects.PublishSubject;
 
 public class WhimsController {
 
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
+    private PublishSubject<Void> whimSubject;
     private IWhimsFragment whimsFragment;
 
     @Inject
-    public WhimsController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
+    public WhimsController(IWhirlpoolRestClient whirlpoolRestClient,
+                           ISchedulerManager schedulerManager,
+                           @Named("whim") PublishSubject<Void> whimSubject) {
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.schedulerManager = schedulerManager;
+        this.whimSubject = whimSubject;
     }
 
     public void GetWhims() {
@@ -47,6 +54,7 @@ public class WhimsController {
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler())
                 .subscribe(aVoid -> {
+                    whimSubject.onNext(null);
                 }, throwable -> {
                     Log.e("WhimsController", "Failed to load mark whims as read");
                 });

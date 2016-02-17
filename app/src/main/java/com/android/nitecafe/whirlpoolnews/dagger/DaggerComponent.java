@@ -18,7 +18,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 @Singleton
-@Component(modules = {AppModule.class, DaggerModule.class})
+@Component(modules = {AppModule.class, DaggerModule.class, SubjectModule.class})
 public interface DaggerComponent {
     void inject(NewsFragment activity);
 

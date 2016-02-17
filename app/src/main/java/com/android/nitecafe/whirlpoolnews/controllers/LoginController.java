@@ -8,6 +8,9 @@ import com.android.nitecafe.whirlpoolnews.ui.interfaces.ILoginFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+
+import rx.subjects.PublishSubject;
 
 public class LoginController {
 
@@ -15,14 +18,17 @@ public class LoginController {
     private IWhirlpoolRestClient whirlpoolRestClient;
     private SharedPreferences sharedPreferences;
     private IWatchedThreadIdentifier watchedThreadIdentifier;
+    private PublishSubject<Void> whimSubject;
 
     @Inject
     public LoginController(IWhirlpoolRestClient whirlpoolRestClient,
                            SharedPreferences sharedPreferences,
-                           IWatchedThreadIdentifier watchedThreadIdentifier) {
+                           IWatchedThreadIdentifier watchedThreadIdentifier,
+                           @Named("whim") PublishSubject<Void> whimSubject) {
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.sharedPreferences = sharedPreferences;
         this.watchedThreadIdentifier = watchedThreadIdentifier;
+        this.whimSubject = whimSubject;
     }
 
     public void attachedView(ILoginFragment view) {
@@ -33,6 +39,7 @@ public class LoginController {
         whirlpoolRestClient.setApiKey(apiKey);
         saveKeyToPreference(apiKey);
         watchedThreadIdentifier.getWatchedThreads(); // refresh watched threads
+        whimSubject.onNext(null);
         if (loginFragment != null)
             loginFragment.showHomeScreen();
     }

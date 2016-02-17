@@ -15,6 +15,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import rx.observers.TestSubscriber;
+import rx.subjects.PublishSubject;
+
 @RunWith(MockitoJUnitRunner.class)
 public class LoginControllerTests {
 
@@ -24,10 +27,12 @@ public class LoginControllerTests {
     @Mock IWatchedThreadIdentifier watchedThreadIdentifier;
     @Mock SharedPreferences.Editor editorMock;
     private LoginController mLoginController;
+    private PublishSubject<Void> whimSubject;
 
     @Before
     public void setup() {
-        mLoginController = new LoginController(whirlpoolRestClientMock, sharedPreferencesMock, watchedThreadIdentifier);
+        whimSubject = PublishSubject.create();
+        mLoginController = new LoginController(whirlpoolRestClientMock, sharedPreferencesMock, watchedThreadIdentifier, whimSubject);
         Mockito.when(sharedPreferencesMock.edit()).thenReturn(editorMock);
         mLoginController.attachedView(loginFragmentMock);
     }
@@ -82,5 +87,20 @@ public class LoginControllerTests {
 
         //assert
         Mockito.verify(loginFragmentMock).showHomeScreen();
+    }
+
+    @Test
+    public void Login_WhenCalled_TriggerWhimSubject() {
+
+        //arrange
+        String apiKey = "1111-1111";
+        TestSubscriber<Void> testSubscriber = new TestSubscriber<>();
+        whimSubject.subscribe(testSubscriber);
+
+        //act
+        mLoginController.login(apiKey);
+
+        //assert
+        testSubscriber.assertValue(null);
     }
 }

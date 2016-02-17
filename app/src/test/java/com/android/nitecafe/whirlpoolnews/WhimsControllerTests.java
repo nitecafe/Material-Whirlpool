@@ -15,6 +15,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.io.IOException;
 
 import rx.Observable;
+import rx.observers.TestSubscriber;
+import rx.subjects.PublishSubject;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WhimsControllerTests {
@@ -23,12 +25,14 @@ public class WhimsControllerTests {
     @Mock IWhimsFragment whimsFragmentMock;
     private WhimsController _controller;
     private TestSchedulerManager testSchedulerManager;
+    private PublishSubject<Void> whimSubject;
 
 
     @Before
     public void setUp() {
         testSchedulerManager = new TestSchedulerManager();
-        _controller = new WhimsController(whirlpoolRestClientMock, testSchedulerManager);
+        whimSubject = PublishSubject.create();
+        _controller = new WhimsController(whirlpoolRestClientMock, testSchedulerManager, whimSubject);
         _controller.Attach(whimsFragmentMock);
     }
 
@@ -102,4 +106,22 @@ public class WhimsControllerTests {
         //assert
         Mockito.verify(whirlpoolRestClientMock).MarkWhimAsRead(whimId);
     }
+
+    @Test
+    public void MarkWhimAsRead_WhenSuccess_TriggerWhimSubject() {
+
+        //arrange
+        int whimId = 111;
+        TestSubscriber<Void> testObserver = new TestSubscriber<>();
+        whimSubject.subscribe(testObserver);
+        Mockito.when(whirlpoolRestClientMock.MarkWhimAsRead(whimId)).thenReturn(Observable.just(null));
+
+        //act
+        _controller.MarkWhimAsRead(whimId);
+        testSchedulerManager.testScheduler.triggerActions();
+
+        //assert
+        testObserver.assertValue(null);
+    }
+
 }

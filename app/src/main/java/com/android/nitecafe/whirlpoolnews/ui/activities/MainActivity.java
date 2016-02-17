@@ -29,6 +29,7 @@ import com.android.nitecafe.whirlpoolnews.utilities.WhimsService;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,6 +44,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Bind(R.id.fab_reply_whim) FloatingActionButton fabReplyWhim;
     @Inject IWatchedThreadIdentifier watchedThreadIdentifier;
     @Inject WhimsService whimsService;
+    @Inject @Named("whim") PublishSubject<Void> whimSubject;
     private int mThreadIdLoaded;
     private int mForumId;
     private int whimId;
@@ -66,6 +68,8 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             drawer.setSelection(newsItemDrawerItem, false);
             startFragmentWithNoBackStack(FragmentsEnum.NEWS);
         }
+
+        whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge());
     }
 
     @Override
