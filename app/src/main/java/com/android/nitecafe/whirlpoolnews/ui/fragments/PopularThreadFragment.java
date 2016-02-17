@@ -13,12 +13,15 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.controllers.PopularThreadsController;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
+import com.android.nitecafe.whirlpoolnews.ui.adapters.PopularScrapedStickyThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IPopularFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.utilities.StickyHeaderUtil;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
+import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import java.util.ArrayList;
 
@@ -78,7 +81,7 @@ public class PopularThreadFragment extends BaseFragment implements IPopularFragm
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        popularThreadAdapter = new ScrapedThreadAdapter(watchedThreadIdentifier);
+        popularThreadAdapter = new PopularScrapedStickyThreadAdapter(watchedThreadIdentifier, new StickyHeaderUtil());
         popularThreadAdapter.getOnThreadClickedObservable()
                 .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle()));
         popularThreadAdapter.getOnWatchClickedObservable().subscribe(thread
@@ -89,6 +92,7 @@ public class PopularThreadFragment extends BaseFragment implements IPopularFragm
                 popularThreadsController.MarkThreadAsRead(recent.getID()));
 
         recyclerView.setAdapter(popularThreadAdapter);
+        recyclerView.addItemDecoration(new StickyRecyclerHeadersDecoration(popularThreadAdapter));
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
 
         recyclerView.setDefaultOnRefreshListener(this::loadPopularThreads);

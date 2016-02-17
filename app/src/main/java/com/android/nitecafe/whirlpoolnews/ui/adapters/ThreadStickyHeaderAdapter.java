@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.IWhirlpoolThread;
+import com.android.nitecafe.whirlpoolnews.utilities.IStickyHeaderUtil;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 
@@ -21,26 +22,22 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Forum
 
     private Map<String, Integer> headerMap = new HashMap<>();
     private int headerId = 0;
+    private IStickyHeaderUtil mStickyHeaderUtil;
 
-    public ThreadStickyHeaderAdapter(IWatchedThreadIdentifier watchedThreadIdentifier) {
+    public ThreadStickyHeaderAdapter(IWatchedThreadIdentifier watchedThreadIdentifier, IStickyHeaderUtil stickyHeaderUtil) {
         super(watchedThreadIdentifier);
+        mStickyHeaderUtil = stickyHeaderUtil;
     }
 
     @Override
     protected void resetHeader() {
-        headerMap.clear();
-        headerId = 0;
+        mStickyHeaderUtil.resetHeader();
     }
 
     @Override
     public long generateHeaderId(int position) {
         String section = threadsList.get(position).getFORUMNAME();
-        if (headerMap.containsKey(section))
-            return headerMap.get(section);
-        else {
-            headerMap.put(section, ++headerId);
-            return headerId;
-        }
+        return mStickyHeaderUtil.generateHeaderId(section);
     }
 
     @Override
