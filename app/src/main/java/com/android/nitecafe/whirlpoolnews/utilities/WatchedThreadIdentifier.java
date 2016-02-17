@@ -13,13 +13,13 @@ import javax.inject.Singleton;
 
 import rx.Observable;
 
+@Singleton
 public class WatchedThreadIdentifier implements IWatchedThreadIdentifier {
 
     private List<Integer> watchedThreads = new ArrayList<>();
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
 
-    @Singleton
     @Inject
     public WatchedThreadIdentifier(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
         this.whirlpoolRestClient = whirlpoolRestClient;

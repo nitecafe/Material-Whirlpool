@@ -26,6 +26,7 @@ import javax.inject.Singleton;
 import retrofit.Retrofit;
 import rx.Observable;
 
+@Singleton
 public class WhirlpoolRestClient implements IWhirlpoolRestClient {
 
     private IWhirlpoolService whirlpoolService;
@@ -34,7 +35,6 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     private boolean hasApiKeyBeenSet;
 
     @Inject
-    @Singleton
     public WhirlpoolRestClient(Retrofit retrofit, SharedPreferences sharedPreferences, IThreadScraper threadScraper) {
         this.retrofit = retrofit;
         this.threadScraper = threadScraper;

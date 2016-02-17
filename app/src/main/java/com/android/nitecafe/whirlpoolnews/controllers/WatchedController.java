@@ -65,13 +65,15 @@ public class WatchedController extends ThreadBaseController<IWatchedFragment> {
     @Override
     protected void onUnwatchThreadSuccess() {
         super.onUnwatchThreadSuccess();
-        watchedFragment.loadWatched();
+        if (watchedFragment != null)
+            watchedFragment.loadWatched();
     }
 
     @Override
     protected void onMarkThreadAsReadSuccess() {
         super.onMarkThreadAsReadSuccess();
-        watchedFragment.loadWatched();
+        if (watchedFragment != null)
+            watchedFragment.loadWatched();
     }
 
     private void HideAllProgressBar() {

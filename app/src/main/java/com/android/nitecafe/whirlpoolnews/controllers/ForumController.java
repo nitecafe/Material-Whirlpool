@@ -5,7 +5,6 @@ import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IForumFragment;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class ForumController {
 
@@ -14,7 +13,6 @@ public class ForumController {
     private IWhirlpoolRestClient whirlpoolRestClient;
 
     @Inject
-    @Singleton
     public ForumController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.schedulerManager = schedulerManager;

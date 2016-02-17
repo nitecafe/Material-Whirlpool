@@ -8,13 +8,13 @@ import javax.inject.Singleton;
 
 import rx.Observable;
 
+@Singleton
 public class WhimsService {
 
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
 
     @Inject
-    @Singleton
     public WhimsService(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.schedulerManager = schedulerManager;

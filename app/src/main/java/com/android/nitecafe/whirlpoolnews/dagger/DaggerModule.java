@@ -47,11 +47,6 @@ public class DaggerModule {
                 .build();
     }
 
-//    @Provides
-//    @Singleton IWhirlpoolService provideWhirlPoolService(Retrofit retrofit) {
-//        return retrofit.create(IWhirlpoolService.class);
-//    }
-
     @Provides
     @Singleton SharedPreferences providesSharedPreferences(Application application) {
         return PreferenceManager.getDefaultSharedPreferences(application);

@@ -6,7 +6,6 @@ import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecentFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class RecentController extends ThreadBaseController<IRecentFragment> {
 
@@ -15,7 +14,6 @@ public class RecentController extends ThreadBaseController<IRecentFragment> {
     private IRecentFragment recentFragment;
 
     @Inject
-    @Singleton
     public RecentController(IWhirlpoolRestClient whirlpoolRestClient,
                             ISchedulerManager schedulerManager,
                             IWatchedThreadIdentifier watchedThreadIdentifier) {

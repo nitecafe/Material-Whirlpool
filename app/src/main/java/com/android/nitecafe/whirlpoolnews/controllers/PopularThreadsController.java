@@ -6,16 +6,14 @@ import com.android.nitecafe.whirlpoolnews.ui.interfaces.IPopularFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class PopularThreadsController extends ThreadBaseController<IPopularFragment> {
 
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
-    private IPopularFragment mView;
+    private IPopularFragment popularFragment;
 
     @Inject
-    @Singleton
     public PopularThreadsController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager, IWatchedThreadIdentifier watchedThreadIdentifier) {
         super(whirlpoolRestClient, schedulerManager, watchedThreadIdentifier);
         this.whirlpoolRestClient = whirlpoolRestClient;
@@ -27,23 +25,23 @@ public class PopularThreadsController extends ThreadBaseController<IPopularFragm
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler())
                 .subscribe(threadList -> {
-                    if (mView != null) mView.DisplayPopularThreads(threadList);
+                    if (popularFragment != null) popularFragment.DisplayPopularThreads(threadList);
                     HideAllProgressBar();
                 }, throwable -> {
-                    if (mView != null) mView.DisplayErrorMessage();
+                    if (popularFragment != null) popularFragment.DisplayErrorMessage();
                     HideAllProgressBar();
                 });
     }
 
     private void HideAllProgressBar() {
-        if (mView == null)
+        if (popularFragment == null)
             return;
 
-        mView.HideCenterProgressBar();
+        popularFragment.HideCenterProgressBar();
     }
 
     public void Attach(IPopularFragment view) {
-        mView = view;
+        popularFragment = view;
     }
 }
 

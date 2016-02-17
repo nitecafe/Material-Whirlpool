@@ -64,26 +64,26 @@ public abstract class ThreadBaseController<T extends IThreadActionMessageFragmen
     }
 
     protected void onUnWatchThreadFailure() {
-        mBaseFragment.ShowActionFailedMessage();
+        if (mBaseFragment != null) mBaseFragment.ShowActionFailedMessage();
     }
 
     protected void onUnwatchThreadSuccess() {
-        mBaseFragment.ShowThreadUnWatchedSuccessMessage();
+        if (mBaseFragment != null) mBaseFragment.ShowThreadUnWatchedSuccessMessage();
     }
 
     protected void OnWatchThreadSuccess() {
-        mBaseFragment.ShowThreadWatchedSuccessMessage();
+        if (mBaseFragment != null) mBaseFragment.ShowThreadWatchedSuccessMessage();
     }
 
     protected void OnWatchThreadFailure() {
-        mBaseFragment.ShowActionFailedMessage();
+        if (mBaseFragment != null) mBaseFragment.ShowActionFailedMessage();
     }
 
     protected void onMarkThreadAsReadSuccess() {
-        mBaseFragment.ShowMarkAsReadSuccessMessage();
+        if (mBaseFragment != null) mBaseFragment.ShowMarkAsReadSuccessMessage();
     }
 
     protected void onMarkThreadAsReadFailure() {
-        mBaseFragment.ShowActionFailedMessage();
+        if (mBaseFragment != null) mBaseFragment.ShowActionFailedMessage();
     }
 }

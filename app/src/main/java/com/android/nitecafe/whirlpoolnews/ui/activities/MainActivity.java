@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 
 import com.android.nitecafe.whirlpoolnews.R;
@@ -72,7 +73,8 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         super.onResume();
         watchedThreadIdentifier.getWatchedThreads();
         whimsService.GetNumberOfUnreadWhims().
-                subscribe(integer -> setPrivateMessagesBadgeCount(integer));
+                subscribe(integer -> setPrivateMessagesBadgeCount(integer),
+                        throwable -> Log.e("MainActivity", "Failed to retrieve whim."));
     }
 
     private void setPrivateMessagesBadgeCount(Integer integer) {

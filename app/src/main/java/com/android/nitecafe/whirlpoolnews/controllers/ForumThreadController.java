@@ -7,7 +7,6 @@ import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * For controlling threads obtained from the API, not the scrapped threads
@@ -19,7 +18,6 @@ public class ForumThreadController extends ThreadBaseController<IThreadFragment>
     private IThreadFragment threadFragment;
 
     @Inject
-    @Singleton
     public ForumThreadController(IWhirlpoolRestClient whirlpoolRestClient,
                                  ISchedulerManager schedulerManager,
                                  IWatchedThreadIdentifier watchedThreadIdentifier) {

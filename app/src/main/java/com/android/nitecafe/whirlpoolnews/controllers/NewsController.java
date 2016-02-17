@@ -1,48 +1,47 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.INewsFragment;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.INewsFragment;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class NewsController {
 
-    private IWhirlpoolRestClient _client;
+    private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
-    private INewsFragment mView;
+    private INewsFragment newsFragment;
 
     @Inject
-    @Singleton
     public NewsController(IWhirlpoolRestClient _client, ISchedulerManager schedulerManager) {
-        this._client = _client;
+        this.whirlpoolRestClient = _client;
         this.schedulerManager = schedulerManager;
     }
 
     public void GetNews() {
-        _client.GetNews()
+        whirlpoolRestClient.GetNews()
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler())
                 .subscribe(newsList -> {
-                    if (mView != null) mView.DisplayNews(newsList.getNEWS());
-                    HideAllProgressBar();
+                    if (newsFragment != null) {
+                        newsFragment.DisplayNews(newsList.getNEWS());
+                        HideAllProgressBar();
+                    }
                 }, throwable -> {
-                    if (mView != null) mView.DisplayErrorMessage();
-                    HideAllProgressBar();
+                    if (newsFragment != null) {
+                        newsFragment.DisplayErrorMessage();
+                        HideAllProgressBar();
+                    }
                 });
     }
 
     private void HideAllProgressBar() {
-        if (mView == null)
-            return;
-
-        mView.HideRefreshLoader();
-        mView.HideCenterProgressBar();
+        newsFragment.HideRefreshLoader();
+        newsFragment.HideCenterProgressBar();
     }
 
     public void Attach(INewsFragment view) {
-        mView = view;
+        newsFragment = view;
     }
 }
 

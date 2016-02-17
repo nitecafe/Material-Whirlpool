@@ -7,7 +7,6 @@ import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWhimsFragment;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class WhimsController {
 
@@ -16,7 +15,6 @@ public class WhimsController {
     private IWhimsFragment whimsFragment;
 
     @Inject
-    @Singleton
     public WhimsController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.schedulerManager = schedulerManager;

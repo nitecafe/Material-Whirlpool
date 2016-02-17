@@ -6,7 +6,6 @@ import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class ScrapedThreadController extends ThreadBaseController<IScrapedThreadFragment> {
 
@@ -17,7 +16,6 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
     private int mPageCount;
 
     @Inject
-    @Singleton
     public ScrapedThreadController(IWhirlpoolRestClient whirlpoolRestClient,
                                    ISchedulerManager schedulerManager,
                                    IWatchedThreadIdentifier watchedThreadIdentifier) {

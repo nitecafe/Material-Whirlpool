@@ -6,7 +6,6 @@ import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class ScrapedPostController extends ThreadBaseController<IScrapedPostFragment> {
 
@@ -18,7 +17,6 @@ public class ScrapedPostController extends ThreadBaseController<IScrapedPostFrag
     private int mPageCount;
 
     @Inject
-    @Singleton
     public ScrapedPostController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager,
                                  IWatchedThreadIdentifier watchedThreadIdentifier) {
         super(whirlpoolRestClient, schedulerManager, watchedThreadIdentifier);
@@ -97,12 +95,14 @@ public class ScrapedPostController extends ThreadBaseController<IScrapedPostFrag
     @Override
     protected void onUnwatchThreadSuccess() {
         super.onUnwatchThreadSuccess();
-        postFragment.setUpToolbarActionButtons();
+        if (postFragment != null)
+            postFragment.setUpToolbarActionButtons();
     }
 
     @Override
     protected void OnWatchThreadSuccess() {
         super.OnWatchThreadSuccess();
-        postFragment.setUpToolbarActionButtons();
+        if (postFragment != null)
+            postFragment.setUpToolbarActionButtons();
     }
 }
