@@ -33,7 +33,7 @@
                 android:id="@+id/input_apikey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="API Key"
+                android:hint="API Key (including dashes)"
                 android:inputType="text"/>
         </android.support.design.widget.TextInputLayout>
 
