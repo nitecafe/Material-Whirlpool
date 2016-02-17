@@ -7,9 +7,9 @@
     android:background="@color/colorPrimary"
     android:gravity="left|center_vertical"
     android:minWidth="105dp"
-    android:paddingBottom="10dp"
+    android:paddingBottom="8dp"
     android:paddingLeft="10dp"
     android:paddingRight="16dp"
-    android:paddingTop="10dp"
+    android:paddingTop="8dp"
     android:textColor="@android:color/white"
     android:textIsSelectable="false"/>
