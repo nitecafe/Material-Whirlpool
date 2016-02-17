@@ -72,6 +72,10 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     protected void onResume() {
         super.onResume();
         watchedThreadIdentifier.getWatchedThreads();
+        updateWhimDrawerItemBadge();
+    }
+
+    private void updateWhimDrawerItemBadge() {
         whimsService.GetNumberOfUnreadWhims().
                 subscribe(integer -> setPrivateMessagesBadgeCount(integer),
                         throwable -> Log.e("MainActivity", "Failed to retrieve whim."));
@@ -81,6 +85,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         whimsDrawerItem.withBadge(String.valueOf(integer))
                 .withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).
                         withColorRes(R.color.primary));
+        drawer.updateItem(whimsDrawerItem);
     }
 
     private boolean IsFromInternalAppLink(String scheme) {
