@@ -39,6 +39,8 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import icepick.Icepick;
+import icepick.State;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 import rx.subjects.PublishSubject;
 
@@ -56,12 +58,14 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
     @Bind(R.id.toolbar_scraped_thread) Toolbar threadToolbar;
     @Bind(R.id.spinner_scraped_groups) Spinner mSpinner;
     @Bind(R.id.btn_thread_pages) Button mButtonSelectPage;
+    @State int mGroupId;
+    @State int spinnerSelectedPosition;
+    @State int pageToLoad = 1;
+    Map<String, Integer> mThreadGroups;
     private IOnThreadClicked listener;
     private int mForumId;
     private String mForumTitle;
     private ScrapedThreadAdapter forumThreadAdapter;
-    private int mGroupId;
-    private Map<String, Integer> mThreadGroups;
 
     public static ScrapedThreadFragment newInstance(int forumId, String forumName, int groupId) {
         ScrapedThreadFragment fragment = new ScrapedThreadFragment();
@@ -105,6 +109,11 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
         super.onDetach();
     }
 
+    @Override public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -114,7 +123,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
         ButterKnife.bind(this, inflate);
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
         _controller.Attach(this);
-
+        Icepick.restoreInstanceState(this, savedInstanceState);
         OnFragmentCreateViewSubject.onNext(null);
 
         SetSpinnerArrowToWhite();
@@ -167,7 +176,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
     }
 
     private void loadThreads() {
-        _controller.GetScrapedThreads(mForumId, mGroupId);
+        _controller.GetScrapedThreads(mForumId, pageToLoad, mGroupId);
     }
 
     @Override
@@ -204,39 +213,28 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
 
     @Override
     public void SetupPageSpinnerDropDown(int pageCount, int page) {
+        pageToLoad = page;
         mButtonSelectPage.setText(String.format("%d / %d", page, pageCount));
         updateNavigationButtonVisibility();
     }
 
     private void SetSpinnerArrowToWhite() {
         mSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    mRecycleView.setRefreshing(true);
-                    _controller.GetScrapedThreads(mForumId, 0);
-                    mGroupId = 0;
-                } else {
-                    final String item = (String) mSpinner.getAdapter().getItem(position);
-                    if ((mThreadGroups.containsKey(item) && mGroupId != mThreadGroups.get(item))) {
-                        mRecycleView.setRefreshing(true);
-                        _controller.GetScrapedThreads(mForumId, mThreadGroups.get(item));
-                        mGroupId = mThreadGroups.get(item);
-                    }
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+    }
 
-            }
-        });
+    private int getCurrentGroupId(String item) {
+        int currentGroupId;
+        if (mThreadGroups.containsKey(item))
+            currentGroupId = mThreadGroups.get(item);
+        else
+            currentGroupId = 0;
+        return currentGroupId;
     }
 
     @Override
     public void SetupGroupSpinnerDropDown(Map<String, Integer> groups, int groupId) {
-
+        mGroupId = groupId;
         if (mThreadGroups == null) {
             List<String> groupsList = new ArrayList<>();
             groupsList.add("All");
@@ -245,8 +243,32 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
             }
             ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_row, groupsList);
             mSpinner.setAdapter(stringArrayAdapter);
+            mSpinner.setSelection(spinnerSelectedPosition);
+            setSpinnerListener();
             mThreadGroups = groups;
         }
+
+    }
+
+    private void setSpinnerListener() {
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerSelectedPosition = position;
+                final String item = (String) mSpinner.getAdapter().getItem(position);
+                int selectedGroupId = getCurrentGroupId(item);
+
+                if (mGroupId != selectedGroupId) {
+                    mRecycleView.setRefreshing(true);
+                    _controller.GetScrapedThreads(mForumId, mThreadGroups.get(item));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void updateNavigationButtonVisibility() {

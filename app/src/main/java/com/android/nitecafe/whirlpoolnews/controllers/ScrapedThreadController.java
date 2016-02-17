@@ -5,8 +5,12 @@ import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
-import javax.inject.Inject;
+import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class ScrapedThreadController extends ThreadBaseController<IScrapedThreadFragment> {
 
     private IWhirlpoolRestClient whirlpoolRestClient;
@@ -14,6 +18,7 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
     private IScrapedThreadFragment threadFragment;
     private int currentPage = 1;
     private int mPageCount;
+    private Map<String, Integer> groups;
 
     @Inject
     public ScrapedThreadController(IWhirlpoolRestClient whirlpoolRestClient,
@@ -45,7 +50,8 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
                     if (threadFragment != null) {
                         threadFragment.DisplayThreads(scrapedThreads.getThreads());
                         threadFragment.SetupPageSpinnerDropDown(mPageCount, pageNumber);
-                        threadFragment.SetupGroupSpinnerDropDown(scrapedThreads.getGroups(), groupId);
+                        saveGroups(scrapedThreads.getGroups());
+                        threadFragment.SetupGroupSpinnerDropDown(groups, groupId);
                         currentPage = pageNumber;
                         HideAllProgressBar();
                     }
@@ -55,6 +61,12 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
                         HideAllProgressBar();
                     }
                 });
+    }
+
+    // keep copy of groups for when configuration changes
+    private void saveGroups(Map<String, Integer> threadGroup) {
+        if (threadGroup.size() > 0)
+            groups = threadGroup;
     }
 
     public void loadNextPage(int forumId, int groupId) {
