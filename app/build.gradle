@@ -41,12 +41,6 @@ android {
     }
 }
 
-//Add these lines
-def WHIRLPOOL_API_KEY = '"' + WhirlpoolApiKey + '"' ?: '"Define Twitter Consumer key"';
-
-android.buildTypes.each { type ->
-    type.buildConfigField 'String', 'WHIRLPOOL_API_KEY', WHIRLPOOL_API_KEY
-}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
