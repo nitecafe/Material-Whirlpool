@@ -5,7 +5,7 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.IThreadActionMessageFragm
 
 import java.util.List;
 
-public interface ISearchFragment extends IThreadActionMessageFragment {
+public interface ISearchResultFragment extends IThreadActionMessageFragment {
 
     void DisplaySearchResults(List<ScrapedThread> scrapedThreads);
 

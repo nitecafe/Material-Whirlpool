@@ -14,9 +14,9 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
-import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.ui.FragmentsEnum;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.IOnSearchClicked;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.IndividualWhimFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostFragment;
@@ -30,18 +30,15 @@ import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 import com.android.nitecafe.whirlpoolnews.utilities.WhimsService;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 
-public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener, ForumFragment.IOnForumClicked, IOnThreadClicked, IOnWhimClicked {
+public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener, ForumFragment.IOnForumClicked, IOnThreadClicked, IOnWhimClicked, IOnSearchClicked {
 
     @Inject IWhirlpoolRestClient mWhirlpoolRestClient;
     @Bind(R.id.fab_reply_post) FloatingActionButton fabReplyPost;
@@ -50,7 +47,6 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Inject IWatchedThreadIdentifier watchedThreadIdentifier;
     @Inject WhimsService whimsService;
     @Inject @Named("whim") PublishSubject<Void> whimSubject;
-    @Inject @Named("search") BehaviorSubject<List<ScrapedThread>> searchResultSubject;
     private int mThreadIdLoaded;
     private int mForumId;
     private int whimId;
@@ -76,12 +72,6 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         }
 
         whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge());
-        searchResultSubject.subscribe(scrapedThreads -> showSearchResults());
-    }
-
-    private void showSearchResults() {
-        final SearchResultThreadFragment searchResultThreadFragment = new SearchResultThreadFragment();
-        startFragment(searchResultThreadFragment);
     }
 
     @Override
@@ -198,5 +188,10 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse(StringConstants.WHIM_REPLY_URL + String.valueOf(whimId)));
         startActivity(browserIntent);
+    }
+
+    @Override public void onSearchClicked(String query, int forumId, int groupId) {
+        final SearchResultThreadFragment searchResultThreadFragment = SearchResultThreadFragment.newInstance(query, forumId, groupId);
+        startFragment(searchResultThreadFragment);
     }
 }
