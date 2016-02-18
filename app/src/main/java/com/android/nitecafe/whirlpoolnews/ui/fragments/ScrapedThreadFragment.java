@@ -235,7 +235,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
     @Override
     public void SetupGroupSpinnerDropDown(Map<String, Integer> groups, int groupId) {
         mGroupId = groupId;
-        if (mThreadGroups == null) {
+        if (mSpinner.getAdapter() == null) {
             List<String> groupsList = new ArrayList<>();
             groupsList.add("All");
             for (String g : groups.keySet()) {
