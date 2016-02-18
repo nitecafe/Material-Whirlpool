@@ -1,40 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    <item
+        android:id="@+id/menuitem_mark_read"
+        android:icon="@drawable/ic_mark_read"
+        android:orderInCategory="100"
+        android:title="Mark as Read"
+        app:showAsAction="always"
+        />
     <item
         android:id="@+id/menuitem_back_post"
         android:icon="@drawable/ic_back_arrow"
-        android:orderInCategory="500"
+        android:orderInCategory="200"
         android:title="Previous Page"
         app:showAsAction="always"
         />
     <item
         android:id="@+id/menuitem_next_post"
         android:icon="@drawable/ic_forward_arrow"
-        android:orderInCategory="501"
+        android:orderInCategory="300"
         android:title="Next page"
         app:showAsAction="always"/>
     <item
+        android:id="@+id/menuitem_go_to_first_page"
+        android:icon="@drawable/ic_go_to_first_post"
+        android:orderInCategory="301"
+        android:title="Go To First Page"
+        app:showAsAction="never"/>t
+    <item
+        android:id="@+id/menuitem_go_to_last_page"
+        android:icon="@drawable/ic_go_to_last_post"
+        android:orderInCategory="302"
+        android:title="Go To Last Page"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/menuitem_watch_post"
         android:icon="@drawable/ic_watch_thread"
-        android:orderInCategory="200"
+        android:orderInCategory="400"
         android:title="Watch Thread"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/menuitem_unwatch_post"
         android:icon="@drawable/ic_unwatch_thread"
-        android:orderInCategory="200"
+        android:orderInCategory="400"
         android:title="Unwatch Thread"
         app:showAsAction="never"
         />
-    <item
-        android:id="@+id/menuitem_mark_read"
-        android:icon="@drawable/ic_mark_read"
-        android:orderInCategory="150"
-        android:title="Mark as Read"
-        app:showAsAction="always"
-        />
-
 </menu>

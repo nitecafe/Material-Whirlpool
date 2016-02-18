@@ -5,6 +5,7 @@ import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -18,7 +19,7 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
     private IScrapedThreadFragment threadFragment;
     private int currentPage = 1;
     private int mPageCount;
-    private Map<String, Integer> groups;
+    private Map<String, Integer> groups = new HashMap<>();
 
     @Inject
     public ScrapedThreadController(IWhirlpoolRestClient whirlpoolRestClient,

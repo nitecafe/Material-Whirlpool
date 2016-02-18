@@ -38,7 +38,7 @@ public class ScrapedPostController extends ThreadBaseController<IScrapedPostFrag
         return watchedThreadIdentifier.isThreadWatched(threadId);
     }
 
-    public void loadScrapedPosts(int threadId, int page) {
+    private void loadScrapedPosts(int threadId, int page) {
         whirlpoolRestClient.GetScrapedPosts(threadId, page)
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler())
@@ -56,6 +56,14 @@ public class ScrapedPostController extends ThreadBaseController<IScrapedPostFrag
                         HideAllProgressBar();
                     }
                 });
+    }
+
+    public void GoToLastPage(int threadId, int lastPage) {
+        GetScrapedPosts(threadId, lastPage);
+    }
+
+    public void GoToFirstPage(int threadId) {
+        GetScrapedPosts(threadId, 1);
     }
 
     public void loadNextPage(int threadId) {
@@ -105,4 +113,5 @@ public class ScrapedPostController extends ThreadBaseController<IScrapedPostFrag
         if (postFragment != null)
             postFragment.setUpToolbarActionButtons();
     }
+
 }

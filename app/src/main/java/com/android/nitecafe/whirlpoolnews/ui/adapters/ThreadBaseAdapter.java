@@ -33,6 +33,10 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
     private PublishSubject<Integer> OnMarkAsReadClickedObservable = PublishSubject.create();
     private PublishSubject<Integer> OnUnwatchClickedObservable = PublishSubject.create();
 
+    public ThreadBaseAdapter(IWatchedThreadIdentifier watchedThreadIdentifier) {
+        this.mWatchedThreadIdentifier = watchedThreadIdentifier;
+    }
+
     public Observable<T> getOnWatchClickedObservable() {
         return OnWatchClickedObservable.map(integer -> threadsList.get(integer)).asObservable();
     }
@@ -49,10 +53,6 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
         return OnThreadClickedObservable.map(integer -> threadsList.get(integer)).asObservable();
     }
 
-    public ThreadBaseAdapter(IWatchedThreadIdentifier watchedThreadIdentifier) {
-        this.mWatchedThreadIdentifier = watchedThreadIdentifier;
-    }
-
     public void SetThreads(List<T> threads) {
         threadsList = threads;
         notifyDataSetChanged();
@@ -65,7 +65,7 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
     @Override
     public ThreadViewHolder onCreateViewHolder(ViewGroup parent) {
         final View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_thread, parent, false);
-        return new ThreadViewHolder(inflate, OnThreadClickedObservable, OnWatchClickedObservable, OnMarkAsReadClickedObservable, OnUnwatchClickedObservable);
+        return new ThreadViewHolder(inflate);
     }
 
     @Override
@@ -75,24 +75,15 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
 
     public class ThreadViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         public View itemView;
-        private PublishSubject<Integer> mWatchedClickedSubject;
-        private PublishSubject<Integer> mOnMarkAsReadClickedObservable;
-        private PublishSubject<Integer> mOnUnwatchClickedObservable;
         @Bind(R.id.thread_title) TextView threadTitle;
         @Bind(R.id.thread_total_page) TextView threadTotalPage;
         @Bind(R.id.thread_last_post_info) TextView threadLastPostInfo;
 
-        ThreadViewHolder(View itemView, PublishSubject<Integer> onThreadClickedObservable,
-                         PublishSubject<Integer> watchedClickedSubject,
-                         PublishSubject<Integer> onMarkAsReadClickedObservable,
-                         PublishSubject<Integer> onUnwatchClickedObservable) {
+        ThreadViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
-            mWatchedClickedSubject = watchedClickedSubject;
-            mOnMarkAsReadClickedObservable = onMarkAsReadClickedObservable;
-            mOnUnwatchClickedObservable = onUnwatchClickedObservable;
             itemView.setOnCreateContextMenuListener(this);
-            RxView.clicks(itemView).map(aVoid -> getAdapterPosition()).subscribe(onThreadClickedObservable);
+            RxView.clicks(itemView).map(aVoid -> getAdapterPosition()).subscribe(OnThreadClickedObservable);
             ButterKnife.bind(this, itemView);
         }
 
@@ -104,11 +95,11 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
             if (mWatchedThreadIdentifier.isThreadWatched(t.getID())) {
                 MenuItem unwatch = menu.add("Unwatch Thread");
                 MenuItem markAsRead = menu.add("Mark as Read");
-                RxMenuItem.clicks(unwatch).map(aVoid -> getAdapterPosition()).subscribe(mOnUnwatchClickedObservable);
-                RxMenuItem.clicks(markAsRead).map(aVoid -> getAdapterPosition()).subscribe(mOnMarkAsReadClickedObservable);
+                RxMenuItem.clicks(unwatch).map(aVoid -> getAdapterPosition()).subscribe(OnUnwatchClickedObservable);
+                RxMenuItem.clicks(markAsRead).map(aVoid -> getAdapterPosition()).subscribe(OnMarkAsReadClickedObservable);
             } else {
                 MenuItem watch = menu.add("Watch Thread");
-                RxMenuItem.clicks(watch).map(aVoid -> getAdapterPosition()).subscribe(mWatchedClickedSubject);
+                RxMenuItem.clicks(watch).map(aVoid -> getAdapterPosition()).subscribe(OnWatchClickedObservable);
             }
         }
     }

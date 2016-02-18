@@ -59,6 +59,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     private int mPostLastReadId;
     private MenuItem backItem;
     private MenuItem nextItem;
+    private int lastPage = 1;
 
     public static ScrapedPostFragment newInstance(int threadId, String threadTitle, int page, int postLastRead) {
         ScrapedPostFragment fragment = new ScrapedPostFragment();
@@ -81,7 +82,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     }
 
 
-    @Override public void onSaveInstanceState(Bundle outState) {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
     }
@@ -142,6 +144,12 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
                     break;
                 case R.id.menuitem_watch_post:
                     _controller.WatchThread(mThreadId);
+                    break;
+                case R.id.menuitem_go_to_last_page:
+                    _controller.GoToLastPage(mThreadId, lastPage);
+                    break;
+                case R.id.menuitem_go_to_first_page:
+                    _controller.GoToFirstPage(mThreadId);
                     break;
             }
             return true;
@@ -253,6 +261,7 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
     @Override
     public void SetupPageSpinnerDropDown(int pageCount, int page) {
         mPageToLoad = page;
+        lastPage = pageCount;
         List<String> numberPages = new ArrayList<>();
         for (int i = 1; i <= pageCount; i++) {
             numberPages.add(i + " / " + pageCount);
