@@ -44,13 +44,13 @@ public class WatchedFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setToolbarTitle("Watched Threads");
+        setToolbarTitle(getActivity().getString(R.string.title_watched_threads));
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new WatchedChildFragment(), "Unread");
-        adapter.addFragment(new AllWatchedChildFragment(), "All");
+        adapter.addFragment(new WatchedChildFragment(), getActivity().getString(R.string.title_watched_unread));
+        adapter.addFragment(new AllWatchedChildFragment(), getActivity().getString(R.string.title_watched_all));
         viewPager.setAdapter(adapter);
     }
 

@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
+import com.android.nitecafe.whirlpoolnews.R;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadActionMessageFragment;
+
 public class BaseFragment extends Fragment implements IThreadActionMessageFragment {
 
     protected void setToolbarTitle(String title) {
@@ -16,25 +19,25 @@ public class BaseFragment extends Fragment implements IThreadActionMessageFragme
 
     @Override
     public void ShowMarkAsReadSuccessMessage() {
-        Snackbar.make(getView(), "Marked as read.", Snackbar.LENGTH_LONG)
+        Snackbar.make(getView(), R.string.message_marked_read, Snackbar.LENGTH_LONG)
                 .show();
     }
 
     @Override
     public void ShowThreadWatchedSuccessMessage() {
-        Snackbar.make(getView(), "Thread is now being watched.", Snackbar.LENGTH_LONG)
+        Snackbar.make(getView(), R.string.message_thread_watched, Snackbar.LENGTH_LONG)
                 .show();
     }
 
     @Override
     public void ShowThreadUnWatchedSuccessMessage() {
-        Snackbar.make(getView(), "Thread is now unwatched.", Snackbar.LENGTH_LONG)
+        Snackbar.make(getView(), R.string.message_thread_unwatched, Snackbar.LENGTH_LONG)
                 .show();
     }
 
     @Override
     public void ShowActionFailedMessage() {
-        Snackbar.make(getView(), "Something went wrong. Try again", Snackbar.LENGTH_LONG)
+        Snackbar.make(getView(), R.string.message_generic_error, Snackbar.LENGTH_LONG)
                 .show();
     }
 }

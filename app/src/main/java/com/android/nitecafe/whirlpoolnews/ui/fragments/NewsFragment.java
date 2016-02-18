@@ -14,13 +14,12 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.NewsController;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.INewsFragment;
 import com.android.nitecafe.whirlpoolnews.models.News;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.NewsAdapter;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.INewsFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
-import com.squareup.otto.Bus;
 
 import java.util.List;
 
@@ -73,7 +72,7 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setToolbarTitle("Industry News");
+        setToolbarTitle(getActivity().getString(R.string.title_industry_news));
     }
 
     private void SetupRecycleView() {
@@ -103,8 +102,8 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
 
     @Override
     public void DisplayErrorMessage() {
-        Snackbar.make(newsRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
-                .setAction("Retry", view -> LoadNews())
+        Snackbar.make(newsRecycleView, R.string.message_check_connection, Snackbar.LENGTH_LONG)
+                .setAction(R.string.action_message_retry, view -> LoadNews())
                 .show();
     }
 

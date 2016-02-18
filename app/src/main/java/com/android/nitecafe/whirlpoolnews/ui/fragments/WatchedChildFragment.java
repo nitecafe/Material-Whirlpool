@@ -119,8 +119,8 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
 
     @Override
     public void DisplayErrorMessage() {
-        Snackbar.make(watchedRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
-                .setAction("Retry", view -> loadWatched())
+        Snackbar.make(watchedRecycleView, R.string.message_check_connection, Snackbar.LENGTH_LONG)
+                .setAction(R.string.action_message_retry, view -> loadWatched())
                 .show();
     }
 

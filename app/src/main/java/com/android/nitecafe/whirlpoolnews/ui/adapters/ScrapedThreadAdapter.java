@@ -22,11 +22,11 @@ public class ScrapedThreadAdapter extends ThreadBaseAdapter<ScrapedThread> {
         holder.threadTotalPage.setText(String.valueOf(forumThread.getPageCount()));
 
         if (forumThread.isMoved())
-            holder.threadLastPostInfo.setText("This thread has been moved");
+            holder.threadLastPostInfo.setText(R.string.message_thread_moved);
         else if (forumThread.isDeleted())
-            holder.threadLastPostInfo.setText("This thread has been deleted");
+            holder.threadLastPostInfo.setText(R.string.message_thread_deleted);
         else if (forumThread.isClosed())
-            holder.threadLastPostInfo.setText("This thread has been closed");
+            holder.threadLastPostInfo.setText(R.string.message_thread_closed);
         else
             holder.threadLastPostInfo.setText(forumThread.getLast_poster());
 

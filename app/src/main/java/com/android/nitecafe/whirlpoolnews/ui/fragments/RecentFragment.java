@@ -80,7 +80,7 @@ public class RecentFragment extends BaseFragment implements IRecentFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setToolbarTitle("Discussion Forum");
+        setToolbarTitle(getActivity().getString(R.string.title_recent_posts));
     }
 
     private void SetupRecycleView() {
@@ -121,7 +121,7 @@ public class RecentFragment extends BaseFragment implements IRecentFragment {
 
     @Override
     public void DisplayErrorMessage() {
-        Snackbar.make(recentRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
+        Snackbar.make(recentRecycleView, R.string.message_check_connection, Snackbar.LENGTH_LONG)
                 .setAction("Retry", view -> loadRecent())
                 .show();
     }

@@ -105,7 +105,7 @@ public class PopularThreadFragment extends BaseFragment implements IPopularFragm
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setToolbarTitle("Popular Threads");
+        setToolbarTitle(getActivity().getString(R.string.title_popular_threads));
     }
 
     @Override public void DisplayPopularThreads(ArrayList<ScrapedThread> threadList) {
@@ -113,7 +113,7 @@ public class PopularThreadFragment extends BaseFragment implements IPopularFragm
     }
 
     @Override public void DisplayErrorMessage() {
-        Snackbar.make(getView(), "Something went wrong. Try again", Snackbar.LENGTH_LONG)
+        Snackbar.make(getView(), R.string.message_generic_error, Snackbar.LENGTH_LONG)
                 .show();
     }
 

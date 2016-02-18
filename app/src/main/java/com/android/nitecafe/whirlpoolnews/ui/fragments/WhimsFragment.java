@@ -98,11 +98,11 @@ public class WhimsFragment extends BaseFragment implements IWhimsFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setToolbarTitle("Private Messages");
+        setToolbarTitle(getActivity().getString(R.string.title_private_messages));
     }
 
     @Override public void ShowErrorMessage() {
-        Snackbar.make(getView(), "Something went wrong. Try again", Snackbar.LENGTH_LONG)
+        Snackbar.make(getView(), R.string.message_generic_error, Snackbar.LENGTH_LONG)
                 .show();
     }
 

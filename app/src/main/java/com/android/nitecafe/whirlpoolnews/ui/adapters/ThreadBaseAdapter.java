@@ -90,15 +90,15 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
-            menu.setHeaderTitle("Select an Action");
+            menu.setHeaderTitle(R.string.context_menu_title);
             final T t = threadsList.get(getAdapterPosition());
             if (mWatchedThreadIdentifier.isThreadWatched(t.getID())) {
-                MenuItem unwatch = menu.add("Unwatch Thread");
-                MenuItem markAsRead = menu.add("Mark as Read");
+                MenuItem unwatch = menu.add(R.string.context_menu_unwatch_thread);
+                MenuItem markAsRead = menu.add(R.string.context_menu_mark_read);
                 RxMenuItem.clicks(unwatch).map(aVoid -> getAdapterPosition()).subscribe(OnUnwatchClickedObservable);
                 RxMenuItem.clicks(markAsRead).map(aVoid -> getAdapterPosition()).subscribe(OnMarkAsReadClickedObservable);
             } else {
-                MenuItem watch = menu.add("Watch Thread");
+                MenuItem watch = menu.add(R.string.context_menu_watch_thread);
                 RxMenuItem.clicks(watch).map(aVoid -> getAdapterPosition()).subscribe(OnWatchClickedObservable);
             }
         }

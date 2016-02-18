@@ -72,7 +72,7 @@ public class LoginFragment extends BaseFragment implements ILoginFragment {
     }
 
     @Override public void showSavedMessage() {
-        Snackbar.make(getView(), "API Key saved successfully.", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(getView(), R.string.message_api_key_saved, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override public void showHomeScreen() {

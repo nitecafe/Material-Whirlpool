@@ -2,8 +2,8 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
-import com.android.nitecafe.whirlpoolnews.ui.fragments.IThreadActionMessageFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.ISearchResultFragment;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadActionMessageFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 
 import javax.inject.Inject;

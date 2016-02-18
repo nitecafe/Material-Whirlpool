@@ -1,7 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.ui.interfaces;
 
 import com.android.nitecafe.whirlpoolnews.models.Watched;
-import com.android.nitecafe.whirlpoolnews.ui.fragments.IThreadActionMessageFragment;
 
 import java.util.List;
 

@@ -3,4 +3,30 @@
     <string name="navigation_drawer_open">Open Drawer</string>
     <string name="navigation_drawer_close">Close Drawer</string>
     <string name="edited">Edited</string>
+
+    <string name="message_marked_read">Marked as read.</string>
+    <string name="message_thread_watched">Thread is now being watched.</string>
+    <string name="message_thread_unwatched">Thread is now unwatched.</string>
+    <string name="message_generic_error">Something went wrong. Try again</string>
+    <string name="message_api_key_saved">API Key saved successfully.</string>
+    <string name="message_thread_moved">This thread has been moved</string>
+    <string name="message_thread_deleted">This thread has been deleted</string>
+    <string name="message_thread_closed">This thread has been closed</string>
+
+    <string name="title_discussion_forum">Discussion Forum</string>
+    <string name="title_industry_news">Industry News</string>
+    <string name="title_popular_threads">Popular Threads</string>
+    <string name="title_recent_posts">Recent Posts</string>
+    <string name="title_watched_threads">Watched Threads</string>
+    <string name="title_private_messages">Private Messages</string>
+    <string name="title_search">Search</string>
+
+    <string name="context_menu_title">Select an Action</string>
+    <string name="context_menu_unwatch_thread">Unwatch Thread</string>
+    <string name="context_menu_mark_read">Mark as Read</string>
+    <string name="context_menu_watch_thread">Watch Thread</string>
+    <string name="message_check_connection">Can\'t load. Please check connection.</string>
+    <string name="action_message_retry">Retry</string>
+    <string name="title_watched_unread">Unread</string>
+    <string name="title_watched_all">All</string>
 </resources>

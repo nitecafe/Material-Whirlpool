@@ -230,8 +230,8 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
 
     @Override
     public void DisplayErrorMessage() {
-        Snackbar.make(mRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
-                .setAction("Retry", view -> loadPosts())
+        Snackbar.make(mRecycleView, R.string.message_check_connection, Snackbar.LENGTH_LONG)
+                .setAction(R.string.action_message_retry, view -> loadPosts())
                 .show();
 
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(StringConstants.THREAD_URL + String.valueOf(mThreadId)));

@@ -141,8 +141,8 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
 
     @Override
     public void DisplayErrorMessage() {
-        Snackbar.make(mRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
-                .setAction("Retry", view -> loadThreads())
+        Snackbar.make(mRecycleView, R.string.message_check_connection, Snackbar.LENGTH_LONG)
+                .setAction(R.string.action_message_retry, view -> loadThreads())
                 .show();
     }
 

@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnSearchClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
@@ -56,6 +57,12 @@ public class SearchFragment extends BaseFragment {
     public void onDetach() {
         listener = null;
         super.onDetach();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setToolbarTitle(getActivity().getString(R.string.title_search));
     }
 
     @OnClick(R.id.btn_search)

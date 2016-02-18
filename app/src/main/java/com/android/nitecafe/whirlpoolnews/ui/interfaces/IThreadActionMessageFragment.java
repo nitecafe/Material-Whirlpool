@@ -1,4 +1,4 @@
-package com.android.nitecafe.whirlpoolnews.ui.fragments;
+package com.android.nitecafe.whirlpoolnews.ui.interfaces;
 
 public interface IThreadActionMessageFragment {
     void ShowMarkAsReadSuccessMessage();

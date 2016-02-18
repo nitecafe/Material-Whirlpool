@@ -77,7 +77,7 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setToolbarTitle("Discussion Forum");
+        setToolbarTitle(getActivity().getString(R.string.title_discussion_forum));
     }
 
     private void SetupRecycleView() {
@@ -107,8 +107,8 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
 
     @Override
     public void DisplayErrorMessage() {
-        Snackbar.make(forumRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
-                .setAction("Retry", view -> loadForum())
+        Snackbar.make(forumRecycleView, R.string.message_check_connection, Snackbar.LENGTH_LONG)
+                .setAction(R.string.action_message_retry, view -> loadForum())
                 .show();
     }
 
