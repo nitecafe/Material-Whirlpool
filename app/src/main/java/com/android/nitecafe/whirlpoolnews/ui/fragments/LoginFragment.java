@@ -47,6 +47,12 @@ public class LoginFragment extends BaseFragment implements ILoginFragment {
         return inflate;
     }
 
+    @Override
+    public void onDestroyView() {
+        mLoginController.attachedView(null);
+        super.onDestroyView();
+    }
+
     @Override public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnShowHomeScreenListener)

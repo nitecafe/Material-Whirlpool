@@ -13,8 +13,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -46,7 +49,18 @@ public class ThreadScraper implements IThreadScraper {
         return false;
     }
 
-    @Override public Observable<ScrapedThreadList> scrapeThreadsFromForumObservable(int forum_id, int page_number, int group_id) {
+    private static String buildSearchUrl(int forum_id, int group_id, String query) {
+        URI uri;
+        try {
+            uri = new URI("http", "forums.whirlpool.net.au", "/forum/", "action=threads_search&f=" + forum_id + "&fg=" + group_id + "&q=" + query, null);
+        } catch (URISyntaxException e) {
+            return null;
+        }
+        return uri.toASCIIString();
+    }
+
+    @Override
+    public Observable<ScrapedThreadList> scrapeThreadsFromForumObservable(int forum_id, int page_number, int group_id) {
         return Observable.create(subscriber -> {
             ScrapedThreadList scrapedThreads = null;
             try {
@@ -243,7 +257,8 @@ public class ThreadScraper implements IThreadScraper {
         return t;
     }
 
-    @Override public Observable<ScrapedPostList> scrapePostsFromThreadObservable(int threadId, int page) {
+    @Override
+    public Observable<ScrapedPostList> scrapePostsFromThreadObservable(int threadId, int page) {
         return Observable.create(subscriber -> {
             ScrapedPostList posts = null;
             try {
@@ -398,7 +413,8 @@ public class ThreadScraper implements IThreadScraper {
         return null;
     }
 
-    @Override public Observable<ArrayList<ScrapedThread>> ScrapPopularThreadsObservable() {
+    @Override
+    public Observable<ArrayList<ScrapedThread>> ScrapPopularThreadsObservable() {
         return Observable.create(subscriber -> {
             ArrayList<ScrapedThread> scrapedThreads = null;
             try {
@@ -418,6 +434,65 @@ public class ThreadScraper implements IThreadScraper {
         Document doc = downloadPage(StringConstants.POPULAR_URL);
         if (doc == null) {
             throw new IOException("Unable to download popular thread page");
+        }
+
+        Elements trs = doc.select("tr");
+
+        String current_forum = null;
+        int current_forum_id = 0;
+
+        for (Element tr : trs) {
+            Set<String> tr_classes = tr.classNames();
+
+            // section - contains a forum name
+            if (tr_classes.contains("section")) {
+                current_forum = tr.text();
+
+                // get the forum ID
+                String forum_url = tr.select("a").attr("href");
+                Pattern forum_id_regex = Pattern.compile("/forum/([0-9]+)");
+                Matcher m = forum_id_regex.matcher(forum_url);
+                while (m.find()) {
+                    current_forum_id = Integer.parseInt(m.group(1));
+                }
+            }
+            // thread
+            else {
+                if (current_forum == null) continue;
+
+                ScrapedThread t = getThreadFromTableRow(tr, current_forum, current_forum_id);
+                threads.add(t);
+            }
+        }
+
+        return threads;
+    }
+
+    @Override
+    public Observable<List<ScrapedThread>> searchThreadsObservable(int forum_id, int group_id, String query) {
+        return Observable.create(subscriber -> {
+            try {
+                final List<ScrapedThread> scrapedThreads = searchThreads(forum_id, group_id, query);
+                subscriber.onNext(scrapedThreads);
+                subscriber.onCompleted();
+            } catch (Exception e) {
+                subscriber.onError(e);
+            }
+        });
+    }
+
+    private List<ScrapedThread> searchThreads(int forum_id, int group_id, String query) {
+        String search_url = buildSearchUrl(forum_id, group_id, query);
+
+        if (search_url == null) {
+            return null;
+        }
+
+        List<ScrapedThread> threads = new ArrayList<>();
+
+        Document doc = downloadPage(search_url);
+        if (doc == null) {
+            return null;
         }
 
         Elements trs = doc.select("tr");

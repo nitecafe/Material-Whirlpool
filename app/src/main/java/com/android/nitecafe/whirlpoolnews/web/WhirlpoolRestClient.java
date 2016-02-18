@@ -19,6 +19,7 @@ import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.Request;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -139,5 +140,10 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     @Override
     public Observable<ArrayList<ScrapedThread>> GetPopularThreads() {
         return threadScraper.ScrapPopularThreadsObservable();
+    }
+
+    @Override
+    public Observable<List<ScrapedThread>> SearchThreads(int forumId, int groupId, String query) {
+        return threadScraper.searchThreadsObservable(forumId, groupId, query);
     }
 }

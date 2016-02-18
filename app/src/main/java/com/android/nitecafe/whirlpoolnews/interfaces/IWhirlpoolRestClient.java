@@ -11,6 +11,7 @@ import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 
@@ -46,4 +47,6 @@ public interface IWhirlpoolRestClient {
     Observable<Void> MarkWhimAsRead(int whimId);
 
     Observable<ArrayList<ScrapedThread>> GetPopularThreads();
+
+    Observable<List<ScrapedThread>> SearchThreads(int forumId, int groupId, String query);
 }

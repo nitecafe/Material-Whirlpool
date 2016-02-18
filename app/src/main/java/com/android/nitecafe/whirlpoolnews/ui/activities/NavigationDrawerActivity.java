@@ -16,6 +16,7 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.NewsFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.PopularThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.RecentFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.SearchFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.WatchedFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.WhimsFragment;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -34,12 +35,14 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
     public final int RECENT_POSITION = 5;
     public final int WATCHED_POSITION = 6;
     public final int WHIMS_POSITION = 8;
-    public final int APIKEY_POSITION = 10;
+    public final int SEARCH_POSITION = 10;
+    public final int APIKEY_POSITION = 11;
     protected Drawer drawer;
     protected Toolbar toolbar;
     protected PrimaryDrawerItem apiKeyDrawerItem;
     protected PrimaryDrawerItem newsItemDrawerItem;
     protected PrimaryDrawerItem whimsDrawerItem;
+    private PrimaryDrawerItem searchDrawerItem;
 
     protected void onCreateDrawer() {
 
@@ -62,11 +65,13 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         whimsDrawerItem.withIcon(R.drawable.ic_whims);
         apiKeyDrawerItem = new PrimaryDrawerItem().withName("Set API Key");
         apiKeyDrawerItem.withIcon(R.drawable.ic_api_key);
+        searchDrawerItem = new PrimaryDrawerItem().withName("Search");
+        searchDrawerItem.withIcon(R.drawable.ic_search_threads);
 
         drawer = new DrawerBuilder().withActivity(this)
                 .addDrawerItems(newsItemDrawerItem,
                         forum, new DividerDrawerItem(), popularItems, recentItems, watchedItems,
-                        new DividerDrawerItem(), whimsDrawerItem, new DividerDrawerItem(), apiKeyDrawerItem)
+                        new DividerDrawerItem(), whimsDrawerItem, new DividerDrawerItem(), searchDrawerItem, apiKeyDrawerItem)
                 .withActionBarDrawerToggle(false)
                 .withAccountHeader(headerResult)
                 .withOnDrawerItemClickListener(this)
@@ -96,7 +101,8 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         mDrawerToggle.syncState();
     }
 
-    @Override public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+    @Override
+    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 
         FragmentsEnum fragmentToStart;
         switch (position) {
@@ -120,6 +126,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
                 break;
             case POPULAR_POSITION:
                 fragmentToStart = FragmentsEnum.POPULAR_THREAD;
+                break;
+            case SEARCH_POSITION:
+                fragmentToStart = FragmentsEnum.SEARCH;
                 break;
             default:
                 fragmentToStart = FragmentsEnum.NEWS;
@@ -153,7 +162,8 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         drawer.closeDrawer();
     }
 
-    @NonNull private Fragment InstantiateFragment(FragmentsEnum fragment) {
+    @NonNull
+    private Fragment InstantiateFragment(FragmentsEnum fragment) {
         Fragment fragmentToStart;
         switch (fragment) {
             case NEWS:
@@ -176,6 +186,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
                 break;
             case POPULAR_THREAD:
                 fragmentToStart = new PopularThreadFragment();
+                break;
+            case SEARCH:
+                fragmentToStart = new SearchFragment();
                 break;
             default:
                 fragmentToStart = new NewsFragment();
