@@ -40,7 +40,9 @@ public class PopularThreadsController extends ThreadBaseController<IPopularFragm
         popularFragment.HideCenterProgressBar();
     }
 
+    @Override
     public void Attach(IPopularFragment view) {
+        super.Attach(view);
         popularFragment = view;
     }
 }
