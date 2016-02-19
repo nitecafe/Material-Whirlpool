@@ -1,29 +1,23 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
-import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadActionMessageFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
 
 public abstract class ThreadBaseController<T extends IThreadActionMessageFragment> {
 
-    private IWhirlpoolRestClient mWhirlpoolRestClient;
-    private ISchedulerManager mSchedulerManager;
+    private IWhirlpoolRestService whirlpoolRestService;
     private IWatchedThreadIdentifier mWatchedThreadIdentifier;
     private IThreadActionMessageFragment mBaseFragment;
 
-    public ThreadBaseController(IWhirlpoolRestClient whirlpoolRestClient,
-                                ISchedulerManager schedulerManager,
+    public ThreadBaseController(IWhirlpoolRestService whirlpoolRestService,
                                 IWatchedThreadIdentifier watchedThreadIdentifier) {
-        mWhirlpoolRestClient = whirlpoolRestClient;
-        mSchedulerManager = schedulerManager;
+        this.whirlpoolRestService = whirlpoolRestService;
         mWatchedThreadIdentifier = watchedThreadIdentifier;
     }
 
     public void UnwatchThread(int threadId) {
-        mWhirlpoolRestClient.SetThreadAsUnwatch(threadId)
-                .observeOn(mSchedulerManager.GetMainScheduler())
-                .subscribeOn(mSchedulerManager.GetIoScheduler())
+        whirlpoolRestService.SetThreadAsUnwatch(threadId)
                 .subscribe(
                         aVoid -> {
                             mWatchedThreadIdentifier.removeThreadFromWatch(threadId);
@@ -39,9 +33,7 @@ public abstract class ThreadBaseController<T extends IThreadActionMessageFragmen
     }
 
     public void MarkThreadAsRead(int threadId) {
-        mWhirlpoolRestClient.MarkThreadAsRead(threadId)
-                .observeOn(mSchedulerManager.GetMainScheduler())
-                .subscribeOn(mSchedulerManager.GetIoScheduler())
+        whirlpoolRestService.MarkThreadAsRead(threadId)
                 .subscribe(aVoid -> {
                             onMarkThreadAsReadSuccess();
                         },
@@ -51,9 +43,7 @@ public abstract class ThreadBaseController<T extends IThreadActionMessageFragmen
     }
 
     public void WatchThread(int threadId) {
-        mWhirlpoolRestClient.SetThreadAsWatch(threadId)
-                .observeOn(mSchedulerManager.GetMainScheduler())
-                .subscribeOn(mSchedulerManager.GetIoScheduler())
+        whirlpoolRestService.SetThreadAsWatch(threadId)
                 .subscribe(aVoid -> {
                             mWatchedThreadIdentifier.addThreadToWatch(threadId);
                             OnWatchThreadSuccess();

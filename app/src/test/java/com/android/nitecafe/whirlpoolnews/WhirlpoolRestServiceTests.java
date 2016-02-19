@@ -223,7 +223,7 @@ public class WhirlpoolRestServiceTests {
         when(whirlpoolRestClientMock.GetUnreadWatched()).thenReturn(Observable.<WatchedList>empty());
 
         //act
-        whirlpoolRestService.GetUnread();
+        whirlpoolRestService.GetUnreadWatched();
 
         //assert
         verify(whirlpoolRestClientMock).GetUnreadWatched();
@@ -239,7 +239,7 @@ public class WhirlpoolRestServiceTests {
         when(whirlpoolRestClientMock.GetUnreadWatched()).thenReturn(Observable.<WatchedList>empty());
 
         //act
-        whirlpoolRestService.GetUnread().subscribe(subscriber);
+        whirlpoolRestService.GetUnreadWatched().subscribe(subscriber);
 
         //assert
         subscriber.assertReceivedOnNext(Arrays.asList(watchedList));
@@ -253,7 +253,7 @@ public class WhirlpoolRestServiceTests {
         when(whirlpoolRestClientMock.GetUnreadWatched()).thenReturn(Observable.just(watchedList));
 
         //act
-        whirlpoolRestService.GetUnread();
+        whirlpoolRestService.GetUnreadWatched();
         testSchedulerManager.testScheduler.triggerActions();
 
         //assert

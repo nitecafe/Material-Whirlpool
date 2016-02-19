@@ -1,27 +1,24 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
-import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
 
 import javax.inject.Inject;
 
 public class ScrapedPostController extends ThreadBaseController<IScrapedPostFragment> {
 
-    private IWhirlpoolRestClient whirlpoolRestClient;
-    private ISchedulerManager schedulerManager;
+    private IWhirlpoolRestService whirlpoolRestService;
     private IWatchedThreadIdentifier watchedThreadIdentifier;
     private IScrapedPostFragment postFragment;
     private int currentPage = 1;
     private int mPageCount;
 
     @Inject
-    public ScrapedPostController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager,
+    public ScrapedPostController(IWhirlpoolRestService whirlpoolRestService,
                                  IWatchedThreadIdentifier watchedThreadIdentifier) {
-        super(whirlpoolRestClient, schedulerManager, watchedThreadIdentifier);
-        this.whirlpoolRestClient = whirlpoolRestClient;
-        this.schedulerManager = schedulerManager;
+        super(whirlpoolRestService, watchedThreadIdentifier);
+        this.whirlpoolRestService = whirlpoolRestService;
         this.watchedThreadIdentifier = watchedThreadIdentifier;
     }
 
@@ -39,9 +36,7 @@ public class ScrapedPostController extends ThreadBaseController<IScrapedPostFrag
     }
 
     private void loadScrapedPosts(int threadId, int page) {
-        whirlpoolRestClient.GetScrapedPosts(threadId, page)
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
+        whirlpoolRestService.GetScrapedPosts(threadId, page)
                 .subscribe(posts -> {
                     mPageCount = posts.getPageCount();
                     if (postFragment != null) {

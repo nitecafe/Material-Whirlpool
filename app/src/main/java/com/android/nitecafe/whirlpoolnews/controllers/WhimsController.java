@@ -2,9 +2,8 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 
 import android.util.Log;
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
-import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWhimsFragment;
+import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -13,24 +12,19 @@ import rx.subjects.PublishSubject;
 
 public class WhimsController {
 
-    private IWhirlpoolRestClient whirlpoolRestClient;
-    private ISchedulerManager schedulerManager;
+    private IWhirlpoolRestService whirlpoolRestService;
     private PublishSubject<Void> whimSubject;
     private IWhimsFragment whimsFragment;
 
     @Inject
-    public WhimsController(IWhirlpoolRestClient whirlpoolRestClient,
-                           ISchedulerManager schedulerManager,
+    public WhimsController(IWhirlpoolRestService whirlpoolRestService,
                            @Named("whim") PublishSubject<Void> whimSubject) {
-        this.whirlpoolRestClient = whirlpoolRestClient;
-        this.schedulerManager = schedulerManager;
+        this.whirlpoolRestService = whirlpoolRestService;
         this.whimSubject = whimSubject;
     }
 
     public void GetWhims() {
-        whirlpoolRestClient.GetWhims()
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
+        whirlpoolRestService.GetWhims()
                 .subscribe(whimsList -> {
                     if (whimsFragment != null) {
                         whimsFragment.DisplayWhims(whimsList.getWHIMS());
@@ -50,9 +44,7 @@ public class WhimsController {
     }
 
     public void MarkWhimAsRead(int whimId) {
-        whirlpoolRestClient.MarkWhimAsRead(whimId)
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
+        whirlpoolRestService.MarkWhimAsRead(whimId)
                 .subscribe(aVoid -> {
                     whimSubject.onNext(null);
                 }, throwable -> {

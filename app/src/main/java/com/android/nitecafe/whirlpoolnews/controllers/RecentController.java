@@ -1,31 +1,25 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
-import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecentFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
 
 import javax.inject.Inject;
 
 public class RecentController extends ThreadBaseController<IRecentFragment> {
 
-    private IWhirlpoolRestClient whirlpoolRestClient;
-    private ISchedulerManager schedulerManager;
+    private IWhirlpoolRestService whirlpoolRestService;
     private IRecentFragment recentFragment;
 
     @Inject
-    public RecentController(IWhirlpoolRestClient whirlpoolRestClient,
-                            ISchedulerManager schedulerManager,
+    public RecentController(IWhirlpoolRestService whirlpoolRestService,
                             IWatchedThreadIdentifier watchedThreadIdentifier) {
-        super(whirlpoolRestClient, schedulerManager, watchedThreadIdentifier);
-        this.whirlpoolRestClient = whirlpoolRestClient;
-        this.schedulerManager = schedulerManager;
+        super(whirlpoolRestService, watchedThreadIdentifier);
+        this.whirlpoolRestService = whirlpoolRestService;
     }
 
     public void GetRecent() {
-        whirlpoolRestClient.GetRecent()
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
+        whirlpoolRestService.GetRecent()
                 .subscribe(recentList -> {
                     if (recentFragment != null) {
                         recentFragment.DisplayRecent(recentList.getRECENT());

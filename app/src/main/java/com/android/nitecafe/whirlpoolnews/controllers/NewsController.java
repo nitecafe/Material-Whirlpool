@@ -11,8 +11,8 @@ public class NewsController {
     private INewsFragment newsFragment;
 
     @Inject
-    public NewsController(IWhirlpoolRestService _client) {
-        this.whirlpoolRestService = _client;
+    public NewsController(IWhirlpoolRestService whirlpoolRestService) {
+        this.whirlpoolRestService = whirlpoolRestService;
     }
 
     public void GetNews() {
