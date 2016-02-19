@@ -1,27 +1,22 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
-import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IForumFragment;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import javax.inject.Inject;
 
 public class ForumController {
 
-    private ISchedulerManager schedulerManager;
     private IForumFragment forumFragment;
-    private IWhirlpoolRestClient whirlpoolRestClient;
+    private IWhirlpoolRestService whirlpoolRestService;
 
     @Inject
-    public ForumController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
-        this.whirlpoolRestClient = whirlpoolRestClient;
-        this.schedulerManager = schedulerManager;
+    public ForumController(IWhirlpoolRestService whirlpoolRestClient) {
+        this.whirlpoolRestService = whirlpoolRestClient;
     }
 
     public void getForum() {
-        whirlpoolRestClient.GetForum()
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
+        whirlpoolRestService.GetForum()
                 .subscribe(forumList -> {
                     if (forumFragment != null) {
                         forumFragment.DisplayForum(forumList.getFORUM());

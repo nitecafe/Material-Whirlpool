@@ -7,13 +7,16 @@ import android.preference.PreferenceManager;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.scheduler.SchedulerManager;
+import com.android.nitecafe.whirlpoolnews.utilities.CachingUtils;
+import com.android.nitecafe.whirlpoolnews.utilities.ICachingUtils;
 import com.android.nitecafe.whirlpoolnews.utilities.IThreadScraper;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
-import com.android.nitecafe.whirlpoolnews.utilities.WatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.WatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -58,13 +61,8 @@ public class DaggerModule {
     }
 
     @Provides
-    @Singleton IWatchedThreadIdentifier providesWatchedThreadIdentifier(WatchedThreadIdentifier watchedThreadIdentifier) {
-        return watchedThreadIdentifier;
-    }
-
-    @Provides
-    @Singleton Bus provideBus() {
-        return new Bus();
+    @Singleton IWatchedThreadService providesWatchedThreadIdentifier(WatchedThreadService watchedThreadService) {
+        return watchedThreadService;
     }
 
     @Provides
@@ -75,5 +73,15 @@ public class DaggerModule {
     @Provides
     @Singleton IThreadScraper provideThreadScraper() {
         return new ThreadScraper();
+    }
+
+    @Provides
+    @Singleton ICachingUtils provideCacheUtils(CachingUtils cachingUtils) {
+        return cachingUtils;
+    }
+
+    @Provides
+    @Singleton IWhirlpoolRestService provideWhirlpoolRestService(WhirlpoolRestService whirlpoolRestService) {
+        return whirlpoolRestService;
     }
 }

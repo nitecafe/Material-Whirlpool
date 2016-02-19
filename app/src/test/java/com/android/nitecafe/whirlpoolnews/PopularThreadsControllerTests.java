@@ -1,9 +1,9 @@
 package com.android.nitecafe.whirlpoolnews;
 
 import com.android.nitecafe.whirlpoolnews.controllers.PopularThreadsController;
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IPopularFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,17 +17,15 @@ import rx.Observable;
 @RunWith(MockitoJUnitRunner.class)
 public class PopularThreadsControllerTests {
 
-    @Mock IWhirlpoolRestClient mIWhirlpoolRestClientMock;
-    @Mock IWatchedThreadIdentifier mIWatchedThreadIdentifierMock;
+    @Mock IWhirlpoolRestService mIWhirlpoolRestClientMock;
+    @Mock IWatchedThreadService mIWatchedThreadServiceMock;
     @Mock IPopularFragment mIPopularFragmentMock;
     private PopularThreadsController controller;
-    private TestSchedulerManager testSchedulerManager;
 
 
     @Before
     public void Setup() {
-        testSchedulerManager = new TestSchedulerManager();
-        controller = new PopularThreadsController(mIWhirlpoolRestClientMock, testSchedulerManager, mIWatchedThreadIdentifierMock);
+        controller = new PopularThreadsController(mIWhirlpoolRestClientMock, mIWatchedThreadServiceMock);
         controller.Attach(mIPopularFragmentMock);
     }
 
@@ -41,7 +39,6 @@ public class PopularThreadsControllerTests {
 
         //act
         controller.WatchThread(threadId);
-        testSchedulerManager.testScheduler.triggerActions();
 
         //assert
         Mockito.verify(mIPopularFragmentMock).ShowThreadWatchedSuccessMessage();

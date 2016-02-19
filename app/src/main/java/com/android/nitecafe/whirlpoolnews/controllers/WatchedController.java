@@ -1,25 +1,21 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
-import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWatchedFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import javax.inject.Inject;
 
 public class WatchedController extends ThreadBaseController<IWatchedFragment> {
 
-    private IWhirlpoolRestClient whirlpoolRestClient;
-    private ISchedulerManager schedulerManager;
+    private IWhirlpoolRestService whirlpoolRestService;
     private IWatchedFragment watchedFragment;
 
     @Inject
-    public WatchedController(IWhirlpoolRestClient whirlpoolRestClient,
-                             ISchedulerManager schedulerManager,
-                             IWatchedThreadIdentifier watchedThreadIdentifier) {
-        super(whirlpoolRestClient, schedulerManager, watchedThreadIdentifier);
-        this.whirlpoolRestClient = whirlpoolRestClient;
-        this.schedulerManager = schedulerManager;
+    public WatchedController(IWhirlpoolRestService whirlpoolRestService,
+                             IWatchedThreadService watchedThreadIdentifier) {
+        super(whirlpoolRestService, watchedThreadIdentifier);
+        this.whirlpoolRestService = whirlpoolRestService;
     }
 
     @Override
@@ -29,9 +25,7 @@ public class WatchedController extends ThreadBaseController<IWatchedFragment> {
     }
 
     public void GetUnreadWatched() {
-        whirlpoolRestClient.GetUnreadWatched()
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
+        whirlpoolRestService.GetUnreadWatched()
                 .subscribe(watchedList -> {
                     if (watchedFragment != null) {
                         watchedFragment.DisplayWatched(watchedList.getWATCHED());
@@ -46,9 +40,7 @@ public class WatchedController extends ThreadBaseController<IWatchedFragment> {
     }
 
     public void GetAllWatched() {
-        whirlpoolRestClient.GetAllWatched()
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
+        whirlpoolRestService.GetAllWatched()
                 .subscribe(watchedList -> {
                     if (watchedFragment != null) {
                         watchedFragment.DisplayWatched(watchedList.getWATCHED());

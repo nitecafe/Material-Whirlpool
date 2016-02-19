@@ -6,7 +6,7 @@ import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.LoginController;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.ILoginFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class LoginControllerTests {
     @Mock ILoginFragment loginFragmentMock;
     @Mock IWhirlpoolRestClient whirlpoolRestClientMock;
     @Mock SharedPreferences sharedPreferencesMock;
-    @Mock IWatchedThreadIdentifier watchedThreadIdentifier;
+    @Mock IWatchedThreadService watchedThreadIdentifier;
     @Mock SharedPreferences.Editor editorMock;
     private LoginController mLoginController;
     private PublishSubject<Void> whimSubject;

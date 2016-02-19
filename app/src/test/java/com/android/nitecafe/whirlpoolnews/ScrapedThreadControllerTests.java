@@ -2,10 +2,10 @@ package com.android.nitecafe.whirlpoolnews;
 
 
 import com.android.nitecafe.whirlpoolnews.controllers.ScrapedThreadController;
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedThreadFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,16 +20,14 @@ import rx.Observable;
 @RunWith(MockitoJUnitRunner.class)
 public class ScrapedThreadControllerTests {
 
-    @Mock IWhirlpoolRestClient mIWhirlpoolRestClientMock;
-    @Mock IWatchedThreadIdentifier mIWatchedThreadIdentifierMock;
+    @Mock IWhirlpoolRestService mIWhirlpoolRestClientMock;
+    @Mock IWatchedThreadService mIWatchedThreadServiceMock;
     @Mock IScrapedThreadFragment mFragmentMock;
     private ScrapedThreadController controller;
-    private TestSchedulerManager testSchedulerManager;
 
     @Before
     public void Setup() {
-        testSchedulerManager = new TestSchedulerManager();
-        controller = new ScrapedThreadController(mIWhirlpoolRestClientMock, testSchedulerManager, mIWatchedThreadIdentifierMock);
+        controller = new ScrapedThreadController(mIWhirlpoolRestClientMock, mIWatchedThreadServiceMock);
         controller.Attach(mFragmentMock);
     }
 
@@ -72,7 +70,6 @@ public class ScrapedThreadControllerTests {
 
         //act
         controller.GetScrapedThreads(forumId, groupId);
-        testSchedulerManager.testScheduler.triggerActions();
 
         //assert
         Assert.assertEquals(pageCount, controller.getTotalPage());

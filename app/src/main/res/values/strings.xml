@@ -20,6 +20,8 @@
     <string name="title_watched_threads">Watched Threads</string>
     <string name="title_private_messages">Private Messages</string>
     <string name="title_search">Search</string>
+    <string name="title_watched_unread">Unread</string>
+    <string name="title_watched_all">All</string>
 
     <string name="context_menu_title">Select an Action</string>
     <string name="context_menu_unwatch_thread">Unwatch Thread</string>
@@ -27,6 +29,15 @@
     <string name="context_menu_watch_thread">Watch Thread</string>
     <string name="message_check_connection">Can\'t load. Please check connection.</string>
     <string name="action_message_retry">Retry</string>
-    <string name="title_watched_unread">Unread</string>
-    <string name="title_watched_all">All</string>
+
+    <string name="aboutLibraries_description_showIcon">true</string>
+    <string name="aboutLibraries_description_showVersion">true</string>
+    <string name="aboutLibraries_description_text">This is my first android app.
+        This was created in my spare time to practice android development. I hate ads and so
+    i will be keeping this app free of it. Whirlpool is a great community and has taught me a lot of
+    things over the years and this is just another way to give back to the community.
+    Shout out to the author of WhirlDroid, Greg Smith for creating that amazing app! I use it all the time too.
+    I reused his forum scraper code for Whirlpool which helped made my development faster.
+    Below are a list of libraries i used for any developers that are interested.
+        From your friendly whirlpoolian, Graham.</string>
 </resources>

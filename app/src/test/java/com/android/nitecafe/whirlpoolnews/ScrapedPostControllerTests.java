@@ -1,10 +1,10 @@
 package com.android.nitecafe.whirlpoolnews;
 
 import com.android.nitecafe.whirlpoolnews.controllers.ScrapedPostController;
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,16 +18,14 @@ import rx.Observable;
 @RunWith(MockitoJUnitRunner.class)
 public class ScrapedPostControllerTests {
 
-    @Mock IWhirlpoolRestClient whirlpoolRestClientMock;
+    @Mock IWhirlpoolRestService whirlpoolRestClientMock;
     @Mock IScrapedPostFragment mIScrapedPostFragmentMock;
-    @Mock IWatchedThreadIdentifier watchedThreadIdentifier;
-    private TestSchedulerManager testSchedulerManager;
+    @Mock IWatchedThreadService watchedThreadIdentifier;
     private ScrapedPostController _controller;
 
     @Before
     public void setUp() {
-        testSchedulerManager = new TestSchedulerManager();
-        _controller = new ScrapedPostController(whirlpoolRestClientMock, testSchedulerManager, watchedThreadIdentifier);
+        _controller = new ScrapedPostController(whirlpoolRestClientMock, watchedThreadIdentifier);
         _controller.attach(mIScrapedPostFragmentMock);
     }
 
@@ -118,7 +116,6 @@ public class ScrapedPostControllerTests {
         Mockito.when(whirlpoolRestClientMock.GetScrapedPosts(threadId, pageToLoad))
                 .thenReturn(Observable.just(postList));
         _controller.GetScrapedPosts(threadId, pageToLoad);
-        testSchedulerManager.testScheduler.triggerActions();
 
         //act
         _controller.loadNextPage(threadId);
@@ -133,7 +130,6 @@ public class ScrapedPostControllerTests {
         Mockito.when(whirlpoolRestClientMock.GetScrapedPosts(threadId, pageToLoad))
                 .thenReturn(Observable.<ScrapedPostList>empty());
         _controller.GetScrapedPosts(threadId, pageToLoad);
-        testSchedulerManager.testScheduler.triggerActions();
 
         //act
         _controller.loadPreviousPage(threadId);

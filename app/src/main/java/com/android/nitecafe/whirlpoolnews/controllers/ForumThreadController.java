@@ -1,10 +1,9 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
-import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import javax.inject.Inject;
 
@@ -13,23 +12,18 @@ import javax.inject.Inject;
  */
 public class ForumThreadController extends ThreadBaseController<IThreadFragment> {
 
-    private IWhirlpoolRestClient whirlpoolRestClient;
-    private ISchedulerManager schedulerManager;
+    private IWhirlpoolRestService whirlpoolRestService;
     private IThreadFragment threadFragment;
 
     @Inject
-    public ForumThreadController(IWhirlpoolRestClient whirlpoolRestClient,
-                                 ISchedulerManager schedulerManager,
-                                 IWatchedThreadIdentifier watchedThreadIdentifier) {
-        super(whirlpoolRestClient, schedulerManager, watchedThreadIdentifier);
-        this.whirlpoolRestClient = whirlpoolRestClient;
-        this.schedulerManager = schedulerManager;
+    public ForumThreadController(IWhirlpoolRestService whirlpoolRestService,
+                                 IWatchedThreadService watchedThreadIdentifier) {
+        super(whirlpoolRestService, watchedThreadIdentifier);
+        this.whirlpoolRestService = whirlpoolRestService;
     }
 
     public void GetThreads(int forumId) {
-        whirlpoolRestClient.GetThreads(forumId, StringConstants.DEFAULT_THREAD_COUNT)
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
+        whirlpoolRestService.GetThreads(forumId, StringConstants.DEFAULT_THREAD_COUNT)
                 .subscribe(threadLIst -> {
                     if (threadFragment != null) {
                         threadFragment.DisplayThreads(threadLIst.getTHREADS());

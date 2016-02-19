@@ -1,29 +1,25 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
-import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IPopularFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import javax.inject.Inject;
 
 public class PopularThreadsController extends ThreadBaseController<IPopularFragment> {
 
-    private IWhirlpoolRestClient whirlpoolRestClient;
-    private ISchedulerManager schedulerManager;
+    private IWhirlpoolRestService whirlpoolRestService;
     private IPopularFragment popularFragment;
 
     @Inject
-    public PopularThreadsController(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager, IWatchedThreadIdentifier watchedThreadIdentifier) {
-        super(whirlpoolRestClient, schedulerManager, watchedThreadIdentifier);
-        this.whirlpoolRestClient = whirlpoolRestClient;
-        this.schedulerManager = schedulerManager;
+    public PopularThreadsController(IWhirlpoolRestService whirlpoolRestService,
+                                    IWatchedThreadService watchedThreadIdentifier) {
+        super(whirlpoolRestService, watchedThreadIdentifier);
+        this.whirlpoolRestService = whirlpoolRestService;
     }
 
     public void GetPopularThreads() {
-        whirlpoolRestClient.GetPopularThreads()
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
+        whirlpoolRestService.GetPopularThreads()
                 .subscribe(threadList -> {
                     if (popularFragment != null) popularFragment.DisplayPopularThreads(threadList);
                     HideAllProgressBar();

@@ -25,9 +25,9 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.ThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnSearchClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnWhimClicked;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
-import com.android.nitecafe.whirlpoolnews.utilities.WhimsService;
+import com.android.nitecafe.whirlpoolnews.web.WhimsService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
 
 import javax.inject.Inject;
@@ -44,7 +44,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Bind(R.id.fab_reply_post) FloatingActionButton fabReplyPost;
     @Bind(R.id.fab_create_thread) FloatingActionButton fabCreateThread;
     @Bind(R.id.fab_reply_whim) FloatingActionButton fabReplyWhim;
-    @Inject IWatchedThreadIdentifier watchedThreadIdentifier;
+    @Inject IWatchedThreadService watchedThreadIdentifier;
     @Inject WhimsService whimsService;
     @Inject @Named("whim") PublishSubject<Void> whimSubject;
     private int mThreadIdLoaded;

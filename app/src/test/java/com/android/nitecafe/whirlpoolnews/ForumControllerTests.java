@@ -1,9 +1,9 @@
 package com.android.nitecafe.whirlpoolnews;
 
 import com.android.nitecafe.whirlpoolnews.controllers.ForumController;
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IForumFragment;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,23 +15,20 @@ import java.io.IOException;
 
 import rx.Observable;
 
-import static org.mockito.Mockito.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ForumControllerTests {
 
-    @Mock IWhirlpoolRestClient whirlpoolRestClientMock;
+    @Mock IWhirlpoolRestService whirlpoolRestServiceMock;
     @Mock IForumFragment forumFragmentMock;
     private ForumController _controllerToTest;
-    private TestSchedulerManager testSchedulerManager;
 
 
     @Before
     public void setup() {
-        testSchedulerManager = new TestSchedulerManager();
-        _controllerToTest = new ForumController(whirlpoolRestClientMock, testSchedulerManager);
+        _controllerToTest = new ForumController(whirlpoolRestServiceMock);
         _controllerToTest.attach(forumFragmentMock);
     }
 
@@ -40,13 +37,13 @@ public class ForumControllerTests {
 
         //arrange
         ForumList forumList = new ForumList();
-        when(whirlpoolRestClientMock.GetForum()).thenReturn(Observable.just(forumList));
+        when(whirlpoolRestServiceMock.GetForum()).thenReturn(Observable.just(forumList));
 
         //act
         _controllerToTest.getForum();
 
         //assert
-        verify(whirlpoolRestClientMock).GetForum();
+        verify(whirlpoolRestServiceMock).GetForum();
     }
 
     @Test
@@ -54,11 +51,10 @@ public class ForumControllerTests {
 
         //arrange
         ForumList forumList = new ForumList();
-        when(whirlpoolRestClientMock.GetForum()).thenReturn(Observable.just(forumList));
+        when(whirlpoolRestServiceMock.GetForum()).thenReturn(Observable.just(forumList));
 
         //act
         _controllerToTest.getForum();
-        testSchedulerManager.testScheduler.triggerActions();
 
         //assert
         verify(forumFragmentMock).DisplayForum(forumList.getFORUM());
@@ -69,11 +65,10 @@ public class ForumControllerTests {
 
         //arrange
         ForumList forumList = new ForumList();
-        when(whirlpoolRestClientMock.GetForum()).thenReturn(Observable.just(forumList));
+        when(whirlpoolRestServiceMock.GetForum()).thenReturn(Observable.just(forumList));
 
         //act
         _controllerToTest.getForum();
-        testSchedulerManager.testScheduler.triggerActions();
 
         //assert
         verify(forumFragmentMock).HideCenterProgressBar();
@@ -81,28 +76,26 @@ public class ForumControllerTests {
     }
 
     @Test
-    public void GetForum_OnException_DisplayErrorMessage(){
+    public void GetForum_OnException_DisplayErrorMessage() {
 
         //arrange
-        when(whirlpoolRestClientMock.GetForum()).thenReturn(Observable.error(new IOException()));
+        when(whirlpoolRestServiceMock.GetForum()).thenReturn(Observable.error(new IOException()));
 
         //act
         _controllerToTest.getForum();
-        testSchedulerManager.testScheduler.triggerActions();
 
         //assert
         verify(forumFragmentMock).DisplayErrorMessage();
     }
 
     @Test
-    public void GetForum_OnException_HideAllLoader(){
+    public void GetForum_OnException_HideAllLoader() {
 
         //arrange
-        when(whirlpoolRestClientMock.GetForum()).thenReturn(Observable.error(new IOException()));
+        when(whirlpoolRestServiceMock.GetForum()).thenReturn(Observable.error(new IOException()));
 
         //act
         _controllerToTest.getForum();
-        testSchedulerManager.testScheduler.triggerActions();
 
         //assert
         verify(forumFragmentMock).HideCenterProgressBar();

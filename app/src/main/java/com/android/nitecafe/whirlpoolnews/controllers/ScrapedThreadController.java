@@ -1,9 +1,8 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
-import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedThreadFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,20 +13,17 @@ import javax.inject.Singleton;
 @Singleton
 public class ScrapedThreadController extends ThreadBaseController<IScrapedThreadFragment> {
 
-    private IWhirlpoolRestClient whirlpoolRestClient;
-    private ISchedulerManager schedulerManager;
+    private IWhirlpoolRestService whirlpoolRestService;
     private IScrapedThreadFragment threadFragment;
     private int currentPage = 1;
     private int mPageCount;
     private Map<String, Integer> groups = new HashMap<>();
 
     @Inject
-    public ScrapedThreadController(IWhirlpoolRestClient whirlpoolRestClient,
-                                   ISchedulerManager schedulerManager,
-                                   IWatchedThreadIdentifier watchedThreadIdentifier) {
-        super(whirlpoolRestClient, schedulerManager, watchedThreadIdentifier);
-        this.whirlpoolRestClient = whirlpoolRestClient;
-        this.schedulerManager = schedulerManager;
+    public ScrapedThreadController(IWhirlpoolRestService whirlpoolRestService,
+                                   IWatchedThreadService watchedThreadIdentifier) {
+        super(whirlpoolRestService, watchedThreadIdentifier);
+        this.whirlpoolRestService = whirlpoolRestService;
     }
 
     public int getTotalPage() {
@@ -43,9 +39,7 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
     }
 
     public void GetScrapedThreads(int forumId, int pageNumber, int groupId) {
-        whirlpoolRestClient.GetScrapedThreads(forumId, pageNumber, groupId)
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
+        whirlpoolRestService.GetScrapedThreads(forumId, pageNumber, groupId)
                 .subscribe(scrapedThreads -> {
                     mPageCount = scrapedThreads.getPageCount();
                     if (threadFragment != null) {

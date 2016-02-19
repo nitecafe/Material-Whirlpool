@@ -1,9 +1,10 @@
-package com.android.nitecafe.whirlpoolnews.utilities;
+package com.android.nitecafe.whirlpoolnews.web;
 
 import android.util.Log;
 
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +14,20 @@ import javax.inject.Singleton;
 
 import rx.Observable;
 
+/**
+ * For retrieving list of watched threads at the start of app to allow app
+ * to create the right context menu depending if thread is
+ * watched or not.
+ */
 @Singleton
-public class WatchedThreadIdentifier implements IWatchedThreadIdentifier {
+public class WatchedThreadService implements IWatchedThreadService {
 
     private List<Integer> watchedThreads = new ArrayList<>();
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
 
     @Inject
-    public WatchedThreadIdentifier(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
+    public WatchedThreadService(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.schedulerManager = schedulerManager;
     }
@@ -56,7 +62,7 @@ public class WatchedThreadIdentifier implements IWatchedThreadIdentifier {
                 .flatMap(watcheds -> Observable.from(watcheds))
                 .map(watched -> watched.getID())
                 .subscribe(integer -> watchedThreads.add(integer), throwable -> {
-                    Log.e("WatchedThreadIdentifier", "failed to get watched threads");
+                    Log.e("WatchedThreadService", "failed to get watched threads");
                 });
     }
 }
