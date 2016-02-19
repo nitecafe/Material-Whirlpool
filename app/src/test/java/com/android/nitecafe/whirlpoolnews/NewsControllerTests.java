@@ -1,9 +1,9 @@
 package com.android.nitecafe.whirlpoolnews;
 
 import com.android.nitecafe.whirlpoolnews.controllers.NewsController;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.INewsFragment;
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.INewsFragment;
+import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,16 +20,13 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class NewsControllerTests {
 
-    @Mock IWhirlpoolRestClient whirlpoolRestClient;
+    @Mock IWhirlpoolRestService whirlpoolRestService;
     @Mock INewsFragment newsActivity;
     private NewsController _controller;
-    private TestSchedulerManager testSchedulerManager;
-
 
     @Before
     public void Setup() {
-        testSchedulerManager = new TestSchedulerManager();
-        _controller = new NewsController(whirlpoolRestClient, testSchedulerManager);
+        _controller = new NewsController(whirlpoolRestService);
         _controller.Attach(newsActivity);
     }
 
@@ -38,11 +35,10 @@ public class NewsControllerTests {
 
         //arrange
         NewsList newsList = new NewsList();
-        when(whirlpoolRestClient.GetNews()).thenReturn(Observable.just(newsList));
+        when(whirlpoolRestService.GetNews()).thenReturn(Observable.just(newsList));
 
         //act
         _controller.GetNews();
-        testSchedulerManager.testScheduler.triggerActions();
 
         //assert
         verify(newsActivity).HideCenterProgressBar();
@@ -54,11 +50,10 @@ public class NewsControllerTests {
 
         //arrange
         NewsList newsList = new NewsList();
-        when(whirlpoolRestClient.GetNews()).thenReturn(Observable.just(newsList));
+        when(whirlpoolRestService.GetNews()).thenReturn(Observable.just(newsList));
 
         //act
         _controller.GetNews();
-        testSchedulerManager.testScheduler.triggerActions();
 
         //assert
         verify(newsActivity).DisplayNews(anyList());
@@ -68,11 +63,10 @@ public class NewsControllerTests {
     public void GetNews_WhenFailure_HideAllProgressBar() {
 
         //arrange
-        when(whirlpoolRestClient.GetNews()).thenReturn(Observable.error(new Exception()));
+        when(whirlpoolRestService.GetNews()).thenReturn(Observable.error(new Exception()));
 
         //act
         _controller.GetNews();
-        testSchedulerManager.testScheduler.triggerActions();
 
         //assert
         verify(newsActivity).HideCenterProgressBar();
@@ -85,11 +79,10 @@ public class NewsControllerTests {
     public void GetNews_WhenFailure_ShowErrorMessage() {
 
         //arrange
-        when(whirlpoolRestClient.GetNews()).thenReturn(Observable.error(new Exception()));
+        when(whirlpoolRestService.GetNews()).thenReturn(Observable.error(new Exception()));
 
         //act
         _controller.GetNews();
-        testSchedulerManager.testScheduler.triggerActions();
 
         //assert
         verify(newsActivity).DisplayErrorMessage();
