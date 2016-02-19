@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.IThreadBase;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.jakewharton.rxbinding.view.RxMenuItem;
 import com.jakewharton.rxbinding.view.RxView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
@@ -26,14 +26,14 @@ import rx.subjects.PublishSubject;
 public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateViewAdapter<ThreadBaseAdapter.ThreadViewHolder> {
 
     protected List<T> threadsList = new ArrayList<>();
-    private IWatchedThreadIdentifier mWatchedThreadIdentifier;
+    private IWatchedThreadService mWatchedThreadIdentifier;
 
     private PublishSubject<Integer> OnThreadClickedObservable = PublishSubject.create();
     private PublishSubject<Integer> OnWatchClickedObservable = PublishSubject.create();
     private PublishSubject<Integer> OnMarkAsReadClickedObservable = PublishSubject.create();
     private PublishSubject<Integer> OnUnwatchClickedObservable = PublishSubject.create();
 
-    public ThreadBaseAdapter(IWatchedThreadIdentifier watchedThreadIdentifier) {
+    public ThreadBaseAdapter(IWatchedThreadService watchedThreadIdentifier) {
         this.mWatchedThreadIdentifier = watchedThreadIdentifier;
     }
 

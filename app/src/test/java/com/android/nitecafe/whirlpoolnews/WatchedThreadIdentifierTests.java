@@ -1,7 +1,7 @@
 package com.android.nitecafe.whirlpoolnews;
 
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
-import com.android.nitecafe.whirlpoolnews.utilities.WatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.WatchedThreadService;
 
 import junit.framework.Assert;
 
@@ -18,12 +18,12 @@ import java.util.List;
 public class WatchedThreadIdentifierTests {
 
     @Mock IWhirlpoolRestClient whirlpoolRestClient;
-    private WatchedThreadIdentifier _classToTest;
+    private WatchedThreadService _classToTest;
 
     @Before
     public void setUp() {
         TestSchedulerManager testSchedulerManager = new TestSchedulerManager();
-        _classToTest = new WatchedThreadIdentifier(whirlpoolRestClient, testSchedulerManager);
+        _classToTest = new WatchedThreadService(whirlpoolRestClient, testSchedulerManager);
     }
 
     @Test

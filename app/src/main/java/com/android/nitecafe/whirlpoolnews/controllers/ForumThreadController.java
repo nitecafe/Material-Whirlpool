@@ -2,8 +2,8 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
-import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import javax.inject.Inject;
 
@@ -17,7 +17,7 @@ public class ForumThreadController extends ThreadBaseController<IThreadFragment>
 
     @Inject
     public ForumThreadController(IWhirlpoolRestService whirlpoolRestService,
-                                 IWatchedThreadIdentifier watchedThreadIdentifier) {
+                                 IWatchedThreadService watchedThreadIdentifier) {
         super(whirlpoolRestService, watchedThreadIdentifier);
         this.whirlpoolRestService = whirlpoolRestService;
     }

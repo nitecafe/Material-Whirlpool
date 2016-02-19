@@ -1,17 +1,17 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadActionMessageFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
-import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 public abstract class ThreadBaseController<T extends IThreadActionMessageFragment> {
 
     private IWhirlpoolRestService whirlpoolRestService;
-    private IWatchedThreadIdentifier mWatchedThreadIdentifier;
+    private IWatchedThreadService mWatchedThreadIdentifier;
     private IThreadActionMessageFragment mBaseFragment;
 
     public ThreadBaseController(IWhirlpoolRestService whirlpoolRestService,
-                                IWatchedThreadIdentifier watchedThreadIdentifier) {
+                                IWatchedThreadService watchedThreadIdentifier) {
         this.whirlpoolRestService = whirlpoolRestService;
         mWatchedThreadIdentifier = watchedThreadIdentifier;
     }

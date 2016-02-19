@@ -2,8 +2,8 @@ package com.android.nitecafe.whirlpoolnews;
 
 import com.android.nitecafe.whirlpoolnews.controllers.PopularThreadsController;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IPopularFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
-import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,14 +18,14 @@ import rx.Observable;
 public class PopularThreadsControllerTests {
 
     @Mock IWhirlpoolRestService mIWhirlpoolRestClientMock;
-    @Mock IWatchedThreadIdentifier mIWatchedThreadIdentifierMock;
+    @Mock IWatchedThreadService mIWatchedThreadServiceMock;
     @Mock IPopularFragment mIPopularFragmentMock;
     private PopularThreadsController controller;
 
 
     @Before
     public void Setup() {
-        controller = new PopularThreadsController(mIWhirlpoolRestClientMock, mIWatchedThreadIdentifierMock);
+        controller = new PopularThreadsController(mIWhirlpoolRestClientMock, mIWatchedThreadServiceMock);
         controller.Attach(mIPopularFragmentMock);
     }
 

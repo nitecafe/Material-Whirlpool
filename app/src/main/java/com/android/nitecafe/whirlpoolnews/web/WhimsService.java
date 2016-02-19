@@ -1,4 +1,4 @@
-package com.android.nitecafe.whirlpoolnews.utilities;
+package com.android.nitecafe.whirlpoolnews.web;
 
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
@@ -8,6 +8,10 @@ import javax.inject.Singleton;
 
 import rx.Observable;
 
+/**
+ * At the start of the app, check how many unread whims
+ * and display it as a badge on the navigation drawer.
+ */
 @Singleton
 public class WhimsService {
 

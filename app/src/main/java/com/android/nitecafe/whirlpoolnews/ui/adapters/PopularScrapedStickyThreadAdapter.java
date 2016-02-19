@@ -8,13 +8,13 @@ import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.utilities.IStickyHeaderUtil;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
 public class PopularScrapedStickyThreadAdapter extends ScrapedThreadAdapter {
 
     private IStickyHeaderUtil mStickyHeaderUtil;
 
-    public PopularScrapedStickyThreadAdapter(IWatchedThreadIdentifier watchedThreadIdentifier, IStickyHeaderUtil stickyHeaderUtil) {
+    public PopularScrapedStickyThreadAdapter(IWatchedThreadService watchedThreadIdentifier, IStickyHeaderUtil stickyHeaderUtil) {
         super(watchedThreadIdentifier);
         mStickyHeaderUtil = stickyHeaderUtil;
     }

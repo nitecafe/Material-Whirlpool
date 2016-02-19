@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.ILoginFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -17,13 +17,13 @@ public class LoginController {
     private ILoginFragment loginFragment;
     private IWhirlpoolRestClient whirlpoolRestClient;
     private SharedPreferences sharedPreferences;
-    private IWatchedThreadIdentifier watchedThreadIdentifier;
+    private IWatchedThreadService watchedThreadIdentifier;
     private PublishSubject<Void> whimSubject;
 
     @Inject
     public LoginController(IWhirlpoolRestClient whirlpoolRestClient,
                            SharedPreferences sharedPreferences,
-                           IWatchedThreadIdentifier watchedThreadIdentifier,
+                           IWatchedThreadService watchedThreadIdentifier,
                            @Named("whim") PublishSubject<Void> whimSubject) {
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.sharedPreferences = sharedPreferences;

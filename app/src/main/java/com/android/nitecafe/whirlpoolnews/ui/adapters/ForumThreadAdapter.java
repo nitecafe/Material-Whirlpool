@@ -7,14 +7,14 @@ import android.view.ViewGroup;
 
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.IWhirlpoolThread;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
 import java.util.Date;
 
 public class ForumThreadAdapter<T extends IWhirlpoolThread> extends ThreadBaseAdapter<T> {
 
-    public ForumThreadAdapter(IWatchedThreadIdentifier watchedThreadIdentifier) {
+    public ForumThreadAdapter(IWatchedThreadService watchedThreadIdentifier) {
         super(watchedThreadIdentifier);
     }
 

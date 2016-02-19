@@ -1,8 +1,8 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedThreadFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
-import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
 
     @Inject
     public ScrapedThreadController(IWhirlpoolRestService whirlpoolRestService,
-                                   IWatchedThreadIdentifier watchedThreadIdentifier) {
+                                   IWatchedThreadService watchedThreadIdentifier) {
         super(whirlpoolRestService, watchedThreadIdentifier);
         this.whirlpoolRestService = whirlpoolRestService;
     }

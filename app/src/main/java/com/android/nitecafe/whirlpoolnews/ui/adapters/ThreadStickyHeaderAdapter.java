@@ -11,8 +11,8 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.IWhirlpoolThread;
 import com.android.nitecafe.whirlpoolnews.utilities.IStickyHeaderUtil;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +24,7 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Forum
     private int headerId = 0;
     private IStickyHeaderUtil mStickyHeaderUtil;
 
-    public ThreadStickyHeaderAdapter(IWatchedThreadIdentifier watchedThreadIdentifier, IStickyHeaderUtil stickyHeaderUtil) {
+    public ThreadStickyHeaderAdapter(IWatchedThreadService watchedThreadIdentifier, IStickyHeaderUtil stickyHeaderUtil) {
         super(watchedThreadIdentifier);
         mStickyHeaderUtil = stickyHeaderUtil;
     }

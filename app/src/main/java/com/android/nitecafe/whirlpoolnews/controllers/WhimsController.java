@@ -3,7 +3,7 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 import android.util.Log;
 
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWhimsFragment;
-import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import javax.inject.Inject;
 import javax.inject.Named;

@@ -17,8 +17,8 @@ import com.android.nitecafe.whirlpoolnews.ui.adapters.PopularScrapedStickyThread
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IPopularFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.android.nitecafe.whirlpoolnews.utilities.StickyHeaderUtil;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
@@ -34,7 +34,7 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 public class PopularThreadFragment extends BaseFragment implements IPopularFragment {
 
     @Inject PopularThreadsController popularThreadsController;
-    @Inject IWatchedThreadIdentifier watchedThreadIdentifier;
+    @Inject IWatchedThreadService watchedThreadIdentifier;
     @Bind(R.id.popular_thread_progress_loader) MaterialProgressBar progressBar;
     @Bind(R.id.popular_thread_recycle_view) UltimateRecyclerView recyclerView;
     private ScrapedThreadAdapter popularThreadAdapter;

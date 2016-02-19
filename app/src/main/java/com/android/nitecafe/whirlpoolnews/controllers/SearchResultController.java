@@ -2,8 +2,8 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.ISearchResultFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadActionMessageFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
-import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import javax.inject.Inject;
 
@@ -14,7 +14,7 @@ public class SearchResultController extends ThreadBaseController<IThreadActionMe
 
     @Inject
     public SearchResultController(IWhirlpoolRestService whirlpoolRestService,
-                                  IWatchedThreadIdentifier watchedThreadIdentifier) {
+                                  IWatchedThreadService watchedThreadIdentifier) {
         super(whirlpoolRestService, watchedThreadIdentifier);
         this.whirlpoolRestService = whirlpoolRestService;
     }

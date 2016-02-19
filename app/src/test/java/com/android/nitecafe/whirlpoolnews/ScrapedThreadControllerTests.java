@@ -4,8 +4,8 @@ package com.android.nitecafe.whirlpoolnews;
 import com.android.nitecafe.whirlpoolnews.controllers.ScrapedThreadController;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedThreadFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
-import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,13 +21,13 @@ import rx.Observable;
 public class ScrapedThreadControllerTests {
 
     @Mock IWhirlpoolRestService mIWhirlpoolRestClientMock;
-    @Mock IWatchedThreadIdentifier mIWatchedThreadIdentifierMock;
+    @Mock IWatchedThreadService mIWatchedThreadServiceMock;
     @Mock IScrapedThreadFragment mFragmentMock;
     private ScrapedThreadController controller;
 
     @Before
     public void Setup() {
-        controller = new ScrapedThreadController(mIWhirlpoolRestClientMock, mIWatchedThreadIdentifierMock);
+        controller = new ScrapedThreadController(mIWhirlpoolRestClientMock, mIWatchedThreadServiceMock);
         controller.Attach(mFragmentMock);
     }
 

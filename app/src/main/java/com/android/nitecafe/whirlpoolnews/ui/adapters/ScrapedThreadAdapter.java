@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
 public class ScrapedThreadAdapter extends ThreadBaseAdapter<ScrapedThread> {
 
-    public ScrapedThreadAdapter(IWatchedThreadIdentifier watchedThreadIdentifier) {
+    public ScrapedThreadAdapter(IWatchedThreadService watchedThreadIdentifier) {
         super(watchedThreadIdentifier);
     }
 

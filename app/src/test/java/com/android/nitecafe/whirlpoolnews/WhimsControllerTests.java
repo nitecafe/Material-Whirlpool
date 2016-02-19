@@ -3,7 +3,7 @@ package com.android.nitecafe.whirlpoolnews;
 import com.android.nitecafe.whirlpoolnews.controllers.WhimsController;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWhimsFragment;
-import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import org.junit.Before;
 import org.junit.Test;

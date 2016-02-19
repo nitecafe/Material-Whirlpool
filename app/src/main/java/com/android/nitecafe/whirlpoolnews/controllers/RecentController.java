@@ -1,8 +1,8 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecentFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
-import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import javax.inject.Inject;
 
@@ -13,7 +13,7 @@ public class RecentController extends ThreadBaseController<IRecentFragment> {
 
     @Inject
     public RecentController(IWhirlpoolRestService whirlpoolRestService,
-                            IWatchedThreadIdentifier watchedThreadIdentifier) {
+                            IWatchedThreadService watchedThreadIdentifier) {
         super(whirlpoolRestService, watchedThreadIdentifier);
         this.whirlpoolRestService = whirlpoolRestService;
     }

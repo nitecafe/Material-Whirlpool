@@ -26,7 +26,7 @@ import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedThreadFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -52,7 +52,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
     public PublishSubject<Void> OnFragmentDestroySubject = PublishSubject.create();
     public PublishSubject<Void> OnFragmentCreateViewSubject = PublishSubject.create();
     @Inject ScrapedThreadController _controller;
-    @Inject IWatchedThreadIdentifier mIWatchedThreadIdentifier;
+    @Inject IWatchedThreadService mIWatchedThreadService;
     @Bind(R.id.thread_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.thread_progress_loader) MaterialProgressBar mMaterialProgressBar;
     @Bind(R.id.toolbar_scraped_thread) Toolbar threadToolbar;
@@ -159,7 +159,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecycleView.setLayoutManager(layoutManager);
 
-        forumThreadAdapter = new ScrapedThreadAdapter(mIWatchedThreadIdentifier);
+        forumThreadAdapter = new ScrapedThreadAdapter(mIWatchedThreadService);
         forumThreadAdapter.getOnThreadClickedObservable()
                 .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle()));
         forumThreadAdapter.getOnWatchClickedObservable().subscribe(thread

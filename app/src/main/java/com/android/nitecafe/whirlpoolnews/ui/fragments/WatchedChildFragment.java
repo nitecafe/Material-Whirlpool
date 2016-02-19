@@ -16,8 +16,8 @@ import com.android.nitecafe.whirlpoolnews.models.Watched;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.WatchedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWatchedFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.android.nitecafe.whirlpoolnews.utilities.StickyHeaderUtil;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
@@ -33,7 +33,7 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 public class WatchedChildFragment extends BaseFragment implements IWatchedFragment {
 
     @Inject WatchedController _controller;
-    @Inject IWatchedThreadIdentifier mIWatchedThreadIdentifier;
+    @Inject IWatchedThreadService mIWatchedThreadService;
     @Bind(R.id.watched_recycle_view) UltimateRecyclerView watchedRecycleView;
     @Bind(R.id.watched_progress_loader) MaterialProgressBar mMaterialProgressBar;
     private WatchedThreadAdapter stickyHeaderAdapter;
@@ -81,7 +81,7 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         watchedRecycleView.setLayoutManager(layoutManager);
 
-        stickyHeaderAdapter = new WatchedThreadAdapter(mIWatchedThreadIdentifier, new StickyHeaderUtil());
+        stickyHeaderAdapter = new WatchedThreadAdapter(mIWatchedThreadService, new StickyHeaderUtil());
 
         stickyHeaderAdapter.getOnThreadClickedObservable().subscribe(watched1 -> {
             listener.OnWatchedThreadClicked(watched1.getID(), watched1.getTITLE(), watched1.getLASTPAGE(), watched1.getLASTREAD());

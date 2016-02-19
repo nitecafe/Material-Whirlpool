@@ -1,22 +1,22 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
-import com.android.nitecafe.whirlpoolnews.web.IWhirlpoolRestService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import javax.inject.Inject;
 
 public class ScrapedPostController extends ThreadBaseController<IScrapedPostFragment> {
 
     private IWhirlpoolRestService whirlpoolRestService;
-    private IWatchedThreadIdentifier watchedThreadIdentifier;
+    private IWatchedThreadService watchedThreadIdentifier;
     private IScrapedPostFragment postFragment;
     private int currentPage = 1;
     private int mPageCount;
 
     @Inject
     public ScrapedPostController(IWhirlpoolRestService whirlpoolRestService,
-                                 IWatchedThreadIdentifier watchedThreadIdentifier) {
+                                 IWatchedThreadService watchedThreadIdentifier) {
         super(whirlpoolRestService, watchedThreadIdentifier);
         this.whirlpoolRestService = whirlpoolRestService;
         this.watchedThreadIdentifier = watchedThreadIdentifier;

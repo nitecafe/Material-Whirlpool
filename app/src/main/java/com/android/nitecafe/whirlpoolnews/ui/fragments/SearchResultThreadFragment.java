@@ -16,8 +16,8 @@ import com.android.nitecafe.whirlpoolnews.ui.adapters.PopularScrapedStickyThread
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.ISearchResultFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IWatchedThreadIdentifier;
 import com.android.nitecafe.whirlpoolnews.utilities.StickyHeaderUtil;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
@@ -36,7 +36,7 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
     private static final String FORUM_ID = "ForumId";
     private static final String GROUP_ID = "GroupId";
     @Inject SearchResultController controller;
-    @Inject IWatchedThreadIdentifier watchedThreadIdentifier;
+    @Inject IWatchedThreadService watchedThreadIdentifier;
     @Bind(R.id.popular_thread_recycle_view) UltimateRecyclerView recyclerView;
     @Bind(R.id.popular_thread_progress_loader) MaterialProgressBar progressBar;
     private ScrapedThreadAdapter popularThreadAdapter;
