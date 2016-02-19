@@ -19,6 +19,8 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.RecentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.SearchFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.WatchedFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.WhimsFragment;
+import com.mikepenz.aboutlibraries.LibsBuilder;
+import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -37,12 +39,14 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
     public final int WHIMS_POSITION = 8;
     public final int SEARCH_POSITION = 10;
     public final int APIKEY_POSITION = 11;
+    public final int ABOUT_POSITION = 12;
     protected Drawer drawer;
     protected Toolbar toolbar;
     protected PrimaryDrawerItem apiKeyDrawerItem;
     protected PrimaryDrawerItem newsItemDrawerItem;
     protected PrimaryDrawerItem whimsDrawerItem;
     private PrimaryDrawerItem searchDrawerItem;
+    private PrimaryDrawerItem aboutDrawerItem;
 
     protected void onCreateDrawer() {
 
@@ -67,11 +71,13 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         apiKeyDrawerItem.withIcon(R.drawable.ic_api_key);
         searchDrawerItem = new PrimaryDrawerItem().withName("Search");
         searchDrawerItem.withIcon(R.drawable.ic_search_threads);
+        aboutDrawerItem = new PrimaryDrawerItem().withName("About").withIcon(R.drawable.ic_about_me);
 
         drawer = new DrawerBuilder().withActivity(this)
                 .addDrawerItems(newsItemDrawerItem,
                         forum, new DividerDrawerItem(), popularItems, recentItems, watchedItems,
-                        new DividerDrawerItem(), whimsDrawerItem, new DividerDrawerItem(), searchDrawerItem, apiKeyDrawerItem)
+                        new DividerDrawerItem(), whimsDrawerItem, new DividerDrawerItem(),
+                        searchDrawerItem, apiKeyDrawerItem, aboutDrawerItem)
                 .withActionBarDrawerToggle(false)
                 .withAccountHeader(headerResult)
                 .withOnDrawerItemClickListener(this)
@@ -130,6 +136,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
             case SEARCH_POSITION:
                 fragmentToStart = FragmentsEnum.SEARCH;
                 break;
+            case ABOUT_POSITION:
+                fragmentToStart = FragmentsEnum.ABOUT;
+                break;
             default:
                 fragmentToStart = FragmentsEnum.NEWS;
         }
@@ -146,6 +155,11 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
 
     protected void startFragment(FragmentsEnum fragment) {
         Fragment fragmentToStart = InstantiateFragment(fragment);
+
+        //need a way to set title as i dont own the About Fragment
+        if (fragment == FragmentsEnum.ABOUT)
+            getSupportActionBar().setTitle("About");
+
         ReplaceFragment(fragmentToStart, true);
     }
 
@@ -190,10 +204,20 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
             case SEARCH:
                 fragmentToStart = new SearchFragment();
                 break;
+            case ABOUT:
+                fragmentToStart = CreateAboutFragment();
+                break;
             default:
                 fragmentToStart = new NewsFragment();
         }
         return fragmentToStart;
+    }
+
+    private LibsSupportFragment CreateAboutFragment() {
+        return new LibsBuilder()
+                .withExcludedLibraries("NineOldAndroids",
+                        "AboutLibraries")
+                .supportFragment();
     }
 }
 

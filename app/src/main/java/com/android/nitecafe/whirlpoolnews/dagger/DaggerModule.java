@@ -17,7 +17,6 @@ import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -64,11 +63,6 @@ public class DaggerModule {
     @Provides
     @Singleton IWatchedThreadService providesWatchedThreadIdentifier(WatchedThreadService watchedThreadService) {
         return watchedThreadService;
-    }
-
-    @Provides
-    @Singleton Bus provideBus() {
-        return new Bus();
     }
 
     @Provides
