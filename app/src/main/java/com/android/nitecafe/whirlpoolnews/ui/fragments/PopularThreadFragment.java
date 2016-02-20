@@ -83,7 +83,7 @@ public class PopularThreadFragment extends BaseFragment implements IPopularFragm
 
         popularThreadAdapter = new PopularScrapedStickyThreadAdapter(watchedThreadIdentifier, new StickyHeaderUtil());
         popularThreadAdapter.getOnThreadClickedObservable()
-                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle()));
+                .subscribe(scrapedThread -> listener.OnThreadClickedViewPager(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount()));
         popularThreadAdapter.getOnWatchClickedObservable().subscribe(thread
                 -> popularThreadsController.WatchThread(thread.getID()));
         popularThreadAdapter.getOnUnwatchedObservable().subscribe(recent ->

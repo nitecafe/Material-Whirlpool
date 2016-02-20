@@ -17,6 +17,7 @@ import com.android.nitecafe.whirlpoolnews.ui.adapters.WatchedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWatchedFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.StickyHeaderUtil;
+import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
@@ -84,7 +85,7 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
         stickyHeaderAdapter = new WatchedThreadAdapter(mIWatchedThreadService, new StickyHeaderUtil());
 
         stickyHeaderAdapter.getOnThreadClickedObservable().subscribe(watched1 -> {
-            listener.OnWatchedThreadClicked(watched1.getID(), watched1.getTITLE(), watched1.getLASTPAGE(), watched1.getLASTREAD());
+            listener.OnWatchedThreadClicked(watched1.getID(), watched1.getTITLE(), watched1.getLASTPAGE(), watched1.getLASTREAD(), WhirlpoolUtils.getNumberOfPage(watched1.getREPLIES()));
         });
         stickyHeaderAdapter.getOnUnwatchedObservable().subscribe(thread
                 -> _controller.UnwatchThread(thread.getID()));

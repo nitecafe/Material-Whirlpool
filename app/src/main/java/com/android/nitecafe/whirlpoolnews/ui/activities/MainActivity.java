@@ -19,6 +19,7 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.IndividualWhimFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostParentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.SearchResultThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ThreadFragment;
@@ -60,9 +61,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
         String scheme = getIntent().getScheme();
         if (IsFromInternalAppLink(scheme)) {
-            Uri intent_uri = getIntent().getData();
-            int threadId = Integer.parseInt(intent_uri.getQueryParameter("threadid"));
-            OnThreadClicked(threadId, "Thread From Link");
+            parseInternalLink();
         } else if (!mWhirlpoolRestClient.hasApiKeyBeenSet()) {
             drawer.setSelection(apiKeyDrawerItem, false);
             startFragmentWithNoBackStack(FragmentsEnum.API_KEY);
@@ -72,6 +71,18 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         }
 
         whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge());
+    }
+
+    private void parseInternalLink() {
+        Uri intent_uri = getIntent().getData();
+        int threadId = Integer.parseInt(intent_uri.getQueryParameter("threadid"));
+        int page;
+        try {
+            page = Integer.parseInt(intent_uri.getQueryParameter("p"));
+        } catch (NumberFormatException e) {
+            page = 1;
+        }
+        OnThreadClicked(threadId, "Thread From Link");
     }
 
     @Override
@@ -119,16 +130,43 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     }
 
     @Override
+    public void OnThreadClicked(int threadId, String threadTitle, int totalPage) {
+        OnWatchedThreadClicked(threadId, threadTitle, 1, 0, totalPage);
+    }
+
+    /**
+     * No View Pager on post, for opening internal links
+     */
     public void OnThreadClicked(int threadId, String threadTitle) {
-        OnWatchedThreadClicked(threadId, threadTitle, 1, 0);
+        mThreadIdLoaded = threadId;
+        ScrapedPostFragment scrapedPostFragment = ScrapedPostFragment.newInstance(threadId, threadTitle, 1, 0);
+        setUpPostReplyFab(scrapedPostFragment);
+        startFragment(scrapedPostFragment);
     }
 
     @Override
-    public void OnWatchedThreadClicked(int threadId, String threadTitle, int lastPageRead, int lastReadId) {
+    public void OnThreadClickedViewPager(int threadId, String threadTitle, int totalPage) {
+        startPostViewPagerFragment(threadId, threadTitle, totalPage, 1, 0);
+    }
+
+    private void startPostViewPagerFragment(int threadId, String threadTitle, int totalPage, int page, int postLastRead) {
         mThreadIdLoaded = threadId;
-        ScrapedPostFragment scrapedPostFragment = ScrapedPostFragment.newInstance(threadId, threadTitle, lastPageRead, lastReadId);
-        setUpPostReplyFab(scrapedPostFragment);
-        startFragment(scrapedPostFragment);
+        ScrapedPostParentFragment scrapedPostParentFragment = ScrapedPostParentFragment.newInstance(threadId, threadTitle, page, postLastRead, totalPage);
+        scrapedPostParentFragment.OnFragmentDestroySubject.subscribe(aVoid ->
+                fabReplyPost.setVisibility(View.GONE));
+        scrapedPostParentFragment.OnFragmentCreateViewSubject.subscribe(aVoid ->
+                fabReplyPost.setVisibility(View.VISIBLE));
+        startFragment(scrapedPostParentFragment);
+    }
+
+    @Override
+    public void OnWatchedThreadClicked(int threadId, String threadTitle, int lastPageRead, int lastReadId, int totalPage) {
+//        mThreadIdLoaded = threadId;
+//        ScrapedPostFragment scrapedPostFragment = ScrapedPostFragment.newInstance(threadId, threadTitle, lastPageRead, lastReadId);
+//        setUpPostReplyFab(scrapedPostFragment);
+//        startFragment(scrapedPostFragment);
+
+        startPostViewPagerFragment(threadId, threadTitle, totalPage, lastPageRead, lastReadId);
     }
 
     private void setUpPostReplyFab(ScrapedPostFragment scrapedPostFragment) {
@@ -190,7 +228,8 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         startActivity(browserIntent);
     }
 
-    @Override public void onSearchClicked(String query, int forumId, int groupId) {
+    @Override
+    public void onSearchClicked(String query, int forumId, int groupId) {
         final SearchResultThreadFragment searchResultThreadFragment = SearchResultThreadFragment.newInstance(query, forumId, groupId);
         startFragment(searchResultThreadFragment);
     }

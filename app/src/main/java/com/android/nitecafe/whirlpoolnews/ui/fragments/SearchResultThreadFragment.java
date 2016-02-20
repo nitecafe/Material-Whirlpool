@@ -99,7 +99,8 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
         popularThreadAdapter.SetThreads(scrapedThreads);
     }
 
-    @Override public void HideSearchProgressBar() {
+    @Override
+    public void HideSearchProgressBar() {
         progressBar.setVisibility(View.GONE);
     }
 
@@ -117,7 +118,7 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
 
     private void SubscribeToObservables() {
         popularThreadAdapter.getOnThreadClickedObservable()
-                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle()));
+                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount()));
         popularThreadAdapter.getOnWatchClickedObservable().subscribe(thread
                 -> controller.WatchThread(thread.getID()));
         popularThreadAdapter.getOnUnwatchedObservable().subscribe(recent ->
