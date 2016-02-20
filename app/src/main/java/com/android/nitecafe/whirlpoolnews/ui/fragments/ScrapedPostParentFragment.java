@@ -90,7 +90,7 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
         super.onCreate(savedInstanceState);
         mThreadId = getArguments().getInt(THREAD_ID, 0);
         mThreadTotalPage = getArguments().getInt(THREAD_TOTAL_PAGE, 0);
-        mPageToLoad = getArguments().getInt(THREAD_PAGE, 0);
+        mPageToLoad = getArguments().getInt(THREAD_PAGE, 1);
         mPostLastReadId = getArguments().getInt(POST_LAST_READ, 0);
         mThreadTitle = getArguments().getString(THREAD_TITLE, "");
     }
@@ -111,8 +111,20 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
         SetupPageSpinnerDropDown(mThreadTotalPage, 1);
         SetupSpinnerItemEvents();
         setUpToolbarActionButtons();
-        postViewPager.setCurrentItem(mPageToLoad - 1);
+
+        if (mPageToLoad > 0)
+            postViewPager.setCurrentItem(mPageToLoad - 1);
         return inflate;
+    }
+
+    private void updatePageCount(int pageCount) {
+        mThreadTotalPage = pageCount;
+        SetupPageSpinnerDropDown(pageCount, mPageToLoad);
+
+        if (mPageToLoad == -1) {
+            mPageToLoad = mThreadTotalPage;
+            postViewPager.setCurrentItem(mPageToLoad - 1);
+        }
     }
 
     @Override
@@ -253,7 +265,15 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
 
         @Override
         public Fragment getItem(int position) {
-            return ScrapedPostChildFragment.newInstance(mThreadId, mThreadTitle, position + 1, mPostLastReadId);
+            final ScrapedPostChildFragment scrapedPostChildFragment = ScrapedPostChildFragment.newInstance(mThreadId, mThreadTitle, position + 1, mPostLastReadId);
+            scrapedPostChildFragment.OnPageCountUpdateSubject.subscribe(integer -> {
+                if (integer != mTotalPage) {
+                    this.mTotalPage = integer;
+                    notifyDataSetChanged();
+                    updatePageCount(mTotalPage);
+                }
+            });
+            return scrapedPostChildFragment;
         }
 
         @Override

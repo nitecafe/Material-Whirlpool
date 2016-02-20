@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import butterknife.ButterKnife;
 import icepick.Icepick;
 import icepick.State;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
+import rx.subjects.PublishSubject;
 
 public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPostChildFragment {
 
@@ -37,7 +39,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     public static final String THREAD_TITLE = "ThreadTitle";
     public static final String THREAD_PAGE = "ThreadPage";
     public static final String POST_LAST_READ = "PostLastRead";
-
+    public PublishSubject<Integer> OnPageCountUpdateSubject = PublishSubject.create();
     @Inject ScrapedPostChildController _controller;
     @Bind(R.id.post_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.post_progress_loader) MaterialProgressBar mMaterialProgressBar;
@@ -75,6 +77,12 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     }
 
     @Override
+    public void onDestroy() {
+        OnPageCountUpdateSubject.onCompleted();
+        super.onDestroy();
+    }
+
+    @Override
     public void onDestroyView() {
         _controller.attach(null);
         super.onDestroyView();
@@ -98,10 +106,21 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         return inflate;
     }
 
+    /**
+     * Attempt to fix a strange but when a longer toolbar title is displayed after a shorter one.
+     * In that case, the long title gets truncated. Apparently the fix is to set title in
+     * oncreatecontextmenu.
+     */
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        setToolbarTitle(Html.fromHtml(mThreadTitle).toString());
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setToolbarTitle(Html.fromHtml(mThreadTitle).toString());
+//        setToolbarTitle(Html.fromHtml(mThreadTitle).toString());
     }
 
     private void SetupRecycleView() {
@@ -144,6 +163,11 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     @Override
     public void SetTitle(String thread_title) {
         setToolbarTitle(thread_title);
+    }
+
+    @Override
+    public void UpdatePageCount(int pageCount) {
+        OnPageCountUpdateSubject.onNext(pageCount);
     }
 
     private void ScrollToFirstUnreadItem() {

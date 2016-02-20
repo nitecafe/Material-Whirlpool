@@ -12,4 +12,6 @@ public interface IScrapedPostChildFragment extends IThreadActionMessageFragment 
     void DisplayPosts(List<ScrapedPost> posts);
 
     void SetTitle(String thread_title);
+
+    void UpdatePageCount(int pageCount);
 }

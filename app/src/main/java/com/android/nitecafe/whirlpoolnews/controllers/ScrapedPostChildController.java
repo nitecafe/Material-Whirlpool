@@ -20,8 +20,9 @@ public class ScrapedPostChildController extends ThreadBaseController<IScrapedPos
 
     public void GetScrapedPosts(int threadId, int page) {
 
-//        if (page < 1 || threadId < 1)
-//            throw new IllegalArgumentException("Need valid thread id or page number");
+        // -1 is last page
+        if (page < -1 || threadId < 1)
+            throw new IllegalArgumentException("Need valid thread id or page number");
 
         loadScrapedPosts(threadId, page);
     }
@@ -33,6 +34,7 @@ public class ScrapedPostChildController extends ThreadBaseController<IScrapedPos
                         postFragment.DisplayPosts(posts.getScrapedPosts());
                         postFragment.SetTitle(posts.getThread_title());
                         postFragment.HideCenterProgressBar();
+                        postFragment.UpdatePageCount(posts.getPageCount());
                     }
                 }, throwable -> {
                     if (postFragment != null) {

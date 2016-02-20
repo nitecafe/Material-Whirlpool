@@ -82,7 +82,8 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         } catch (NumberFormatException e) {
             page = 1;
         }
-        OnThreadClicked(threadId, "Thread From Link");
+//        OnThreadClicked(threadId, "Thread From Link");
+        OnThreadClicked(threadId, "Thread From Link", page, 0, 1);
     }
 
     @Override
@@ -131,7 +132,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @Override
     public void OnThreadClicked(int threadId, String threadTitle, int totalPage) {
-        OnWatchedThreadClicked(threadId, threadTitle, 1, 0, totalPage);
+        OnThreadClicked(threadId, threadTitle, 1, 0, totalPage);
     }
 
     /**
@@ -160,12 +161,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     }
 
     @Override
-    public void OnWatchedThreadClicked(int threadId, String threadTitle, int lastPageRead, int lastReadId, int totalPage) {
-//        mThreadIdLoaded = threadId;
-//        ScrapedPostFragment scrapedPostFragment = ScrapedPostFragment.newInstance(threadId, threadTitle, lastPageRead, lastReadId);
-//        setUpPostReplyFab(scrapedPostFragment);
-//        startFragment(scrapedPostFragment);
-
+    public void OnThreadClicked(int threadId, String threadTitle, int lastPageRead, int lastReadId, int totalPage) {
         startPostViewPagerFragment(threadId, threadTitle, totalPage, lastPageRead, lastReadId);
     }
 

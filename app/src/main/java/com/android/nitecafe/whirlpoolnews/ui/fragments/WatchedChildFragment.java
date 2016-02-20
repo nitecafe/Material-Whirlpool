@@ -85,7 +85,7 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
         stickyHeaderAdapter = new WatchedThreadAdapter(mIWatchedThreadService, new StickyHeaderUtil());
 
         stickyHeaderAdapter.getOnThreadClickedObservable().subscribe(watched1 -> {
-            listener.OnWatchedThreadClicked(watched1.getID(), watched1.getTITLE(), watched1.getLASTPAGE(), watched1.getLASTREAD(), WhirlpoolUtils.getNumberOfPage(watched1.getREPLIES()));
+            listener.OnThreadClicked(watched1.getID(), watched1.getTITLE(), watched1.getLASTPAGE(), watched1.getLASTREAD(), WhirlpoolUtils.getNumberOfPage(watched1.getREPLIES()));
         });
         stickyHeaderAdapter.getOnUnwatchedObservable().subscribe(thread
                 -> _controller.UnwatchThread(thread.getID()));
