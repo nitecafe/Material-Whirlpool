@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -238,7 +238,7 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
 
     }
 
-    public class PostPagerAdapter extends FragmentPagerAdapter {
+    public class PostPagerAdapter extends FragmentStatePagerAdapter {
         private int mTotalPage;
 
         public PostPagerAdapter(FragmentManager fragmentManager, int totalPage) {
