@@ -19,7 +19,6 @@ import android.widget.Spinner;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.controllers.ScrapedPostParentController;
-import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +44,6 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
     @Bind(R.id.spinner_post_page) Spinner pageNumberSpinner;
     @Bind(R.id.toolbar_post) Toolbar postToolbar;
     @Bind(R.id.viewpager_post) ViewPager postViewPager;
-    @Inject IWatchedThreadService mIWatchedThreadIdentifier;
     @Inject ScrapedPostParentController mController;
     private PostPagerAdapter viewPagerAdapter;
     private int mThreadId;
@@ -84,7 +82,6 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mPageToLoad = postViewPager.getCurrentItem() + 1;
         Icepick.saveInstanceState(this, outState);
     }
 
@@ -148,7 +145,6 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
     private void setupViewPager() {
         viewPagerAdapter = new PostPagerAdapter(getChildFragmentManager(), mThreadTotalPage);
         postViewPager.setAdapter(viewPagerAdapter);
-        postViewPager.setOffscreenPageLimit(0);
         postViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -228,8 +224,8 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
     }
 
     private void updateNavigationButtonVisibility() {
-
-        int currentPage = postViewPager.getCurrentItem() + 1;
+        mPageToLoad = postViewPager.getCurrentItem() + 1;
+        int currentPage = mPageToLoad;
         if (1 == currentPage)
             backItem.setEnabled(false);
         else
