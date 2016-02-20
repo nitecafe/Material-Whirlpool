@@ -18,7 +18,6 @@ import com.android.nitecafe.whirlpoolnews.ui.FragmentsEnum;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.IndividualWhimFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
-import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostParentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.SearchResultThreadFragment;
@@ -82,7 +81,6 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         } catch (NumberFormatException e) {
             page = 1;
         }
-//        OnThreadClicked(threadId, "Thread From Link");
         OnThreadClicked(threadId, "Thread From Link", page, 0, 1);
     }
 
@@ -135,55 +133,51 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         OnThreadClicked(threadId, threadTitle, 1, 0, totalPage);
     }
 
-    /**
-     * No View Pager on post, for opening internal links
-     */
-    public void OnThreadClicked(int threadId, String threadTitle) {
-        mThreadIdLoaded = threadId;
-        ScrapedPostFragment scrapedPostFragment = ScrapedPostFragment.newInstance(threadId, threadTitle, 1, 0);
-        setUpPostReplyFab(scrapedPostFragment);
-        startFragment(scrapedPostFragment);
-    }
-
-    @Override
-    public void OnThreadClickedViewPager(int threadId, String threadTitle, int totalPage) {
-        startPostViewPagerFragment(threadId, threadTitle, totalPage, 1, 0);
-    }
-
-    private void startPostViewPagerFragment(int threadId, String threadTitle, int totalPage, int page, int postLastRead) {
-        mThreadIdLoaded = threadId;
-        ScrapedPostParentFragment scrapedPostParentFragment = ScrapedPostParentFragment.newInstance(threadId, threadTitle, page, postLastRead, totalPage);
-        scrapedPostParentFragment.OnFragmentDestroySubject.subscribe(aVoid ->
-                fabReplyPost.setVisibility(View.GONE));
-        scrapedPostParentFragment.OnFragmentCreateViewSubject.subscribe(aVoid ->
-                fabReplyPost.setVisibility(View.VISIBLE));
-        startFragment(scrapedPostParentFragment);
-    }
-
     @Override
     public void OnThreadClicked(int threadId, String threadTitle, int lastPageRead, int lastReadId, int totalPage) {
         startPostViewPagerFragment(threadId, threadTitle, totalPage, lastPageRead, lastReadId);
     }
 
-    private void setUpPostReplyFab(ScrapedPostFragment scrapedPostFragment) {
-        scrapedPostFragment.OnFragmentDestroySubject.subscribe(aVoid ->
+    private void startPostViewPagerFragment(int threadId, String threadTitle, int totalPage, int page, int postLastRead) {
+        mThreadIdLoaded = threadId;
+        ScrapedPostParentFragment scrapedPostParentFragment = ScrapedPostParentFragment.newInstance(threadId, threadTitle, page, postLastRead, totalPage);
+        setUpPostReplyFab(scrapedPostParentFragment);
+        startFragment(scrapedPostParentFragment);
+    }
+
+    private void setUpPostReplyFab(ScrapedPostParentFragment scrapedPostParentFragment) {
+        scrapedPostParentFragment.OnFragmentDestroySubject.subscribe(aVoid ->
                 fabReplyPost.setVisibility(View.GONE));
-        scrapedPostFragment.OnFragmentCreateViewSubject.subscribe(aVoid ->
-                fabReplyPost.setVisibility(View.VISIBLE));
+        scrapedPostParentFragment.OnFragmentCreateViewSubject.subscribe(aVoid -> {
+            resetFabLocationToBottom(fabReplyPost);
+            fabReplyPost.setVisibility(View.VISIBLE);
+        });
     }
 
     private void setUpWhimReplyFab(IndividualWhimFragment individualWhimFragment) {
         individualWhimFragment.OnFragmentDestroySubject.subscribe(aVoid ->
                 fabReplyWhim.setVisibility(View.GONE));
-        individualWhimFragment.OnFragmentCreateViewSubject.subscribe(aVoid ->
-                fabReplyWhim.setVisibility(View.VISIBLE));
+        individualWhimFragment.OnFragmentCreateViewSubject.subscribe(aVoid -> {
+            resetFabLocationToBottom(fabReplyWhim);
+            fabReplyWhim.setVisibility(View.VISIBLE);
+        });
     }
 
     private void setUpThreadCreateFab(PublishSubject<Void> createStream, PublishSubject<Void> destroyStream) {
         destroyStream.subscribe(aVoid ->
                 fabCreateThread.setVisibility(View.GONE));
-        createStream.subscribe(aVoid ->
-                fabCreateThread.setVisibility(View.VISIBLE));
+        createStream.subscribe(aVoid -> {
+            resetFabLocationToBottom(fabCreateThread);
+            fabCreateThread.setVisibility(View.VISIBLE);
+        });
+    }
+
+    /**
+     * To fix a bug where fab not reverting to original location after it has
+     * been moved up by the snackbar and visibility was set to gone.
+     */
+    private void resetFabLocationToBottom(FloatingActionButton floatingActionButton) {
+        floatingActionButton.setTranslationY(0.0f);
     }
 
     private void startFragment(Fragment fragment) {

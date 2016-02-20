@@ -83,7 +83,7 @@ public class PopularThreadFragment extends BaseFragment implements IPopularFragm
 
         popularThreadAdapter = new PopularScrapedStickyThreadAdapter(watchedThreadIdentifier, new StickyHeaderUtil());
         popularThreadAdapter.getOnThreadClickedObservable()
-                .subscribe(scrapedThread -> listener.OnThreadClickedViewPager(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount()));
+                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount()));
         popularThreadAdapter.getOnWatchClickedObservable().subscribe(thread
                 -> popularThreadsController.WatchThread(thread.getID()));
         popularThreadAdapter.getOnUnwatchedObservable().subscribe(recent ->
@@ -108,16 +108,19 @@ public class PopularThreadFragment extends BaseFragment implements IPopularFragm
         setToolbarTitle(getActivity().getString(R.string.title_popular_threads));
     }
 
-    @Override public void DisplayPopularThreads(ArrayList<ScrapedThread> threadList) {
+    @Override
+    public void DisplayPopularThreads(ArrayList<ScrapedThread> threadList) {
         popularThreadAdapter.SetThreads(threadList);
     }
 
-    @Override public void DisplayErrorMessage() {
+    @Override
+    public void DisplayErrorMessage() {
         Snackbar.make(getView(), R.string.message_generic_error, Snackbar.LENGTH_LONG)
                 .show();
     }
 
-    @Override public void HideCenterProgressBar() {
+    @Override
+    public void HideCenterProgressBar() {
         progressBar.setVisibility(View.GONE);
     }
 }
