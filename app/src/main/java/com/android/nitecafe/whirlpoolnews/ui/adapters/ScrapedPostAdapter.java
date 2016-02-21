@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
+import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ScrapedPostAdapter extends RecyclerView.Adapter<ScrapedPostAdapter.ScrapedPostViewHolder> {
+public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.ScrapedPostViewHolder> {
 
     private List<ScrapedPost> scrapedPosts = new ArrayList<>();
 
@@ -29,7 +30,12 @@ public class ScrapedPostAdapter extends RecyclerView.Adapter<ScrapedPostAdapter.
     }
 
     @Override
-    public ScrapedPostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ScrapedPostViewHolder getViewHolder(View view) {
+        return null;
+    }
+
+    @Override
+    public ScrapedPostViewHolder onCreateViewHolder(ViewGroup parent) {
         final View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
         return new ScrapedPostViewHolder(inflate);
     }
@@ -62,8 +68,23 @@ public class ScrapedPostAdapter extends RecyclerView.Adapter<ScrapedPostAdapter.
     }
 
     @Override
-    public int getItemCount() {
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        return null;
+    }
+
+    @Override
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+    }
+
+    @Override
+    public int getAdapterItemCount() {
         return scrapedPosts.size();
+    }
+
+    @Override
+    public long generateHeaderId(int position) {
+        return 0;
     }
 
     public static class ScrapedPostViewHolder extends RecyclerView.ViewHolder {
