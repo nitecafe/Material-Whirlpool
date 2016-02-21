@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.ui.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import android.view.View;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.ui.FragmentsEnum;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.IndividualWhimFragment;
@@ -28,6 +28,7 @@ import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnWhimClicked;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.WhimsService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
 
 import javax.inject.Inject;
@@ -47,6 +48,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Inject IWatchedThreadService watchedThreadIdentifier;
     @Inject WhimsService whimsService;
     @Inject @Named("whim") PublishSubject<Void> whimSubject;
+    @Inject SharedPreferences mSharedPreferences;
     private int mThreadIdLoaded;
     private int mForumId;
     private int whimId;
@@ -70,6 +72,14 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         }
 
         whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge());
+
+        final String userNameFromPreference = getUserNameFromPreference();
+        if (!userNameFromPreference.isEmpty())
+            updateProfileDetails(userNameFromPreference);
+    }
+
+    private String getUserNameFromPreference() {
+        return mSharedPreferences.getString(StringConstants.USERNAME, "");
     }
 
     private void parseInternalLink() {

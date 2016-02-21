@@ -1,7 +1,7 @@
 package com.android.nitecafe.whirlpoolnews;
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.WatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 
 import junit.framework.Assert;
 

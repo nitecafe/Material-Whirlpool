@@ -40,4 +40,5 @@
     I reused his forum scraper code for Whirlpool which helped made my development faster.
     Below are a list of libraries i used for any developers that are interested.
         From your friendly whirlpoolian, Graham.</string>
+    <string name="message_login_failure">Failed to log in. Please check API key.</string>
 </resources>

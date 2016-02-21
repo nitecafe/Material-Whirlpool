@@ -3,8 +3,6 @@ package com.android.nitecafe.whirlpoolnews.web;
 import android.content.SharedPreferences;
 
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
@@ -12,9 +10,12 @@ import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
+import com.android.nitecafe.whirlpoolnews.models.UserDetailsList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.utilities.IThreadScraper;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolService;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.Request;
 
@@ -32,15 +33,17 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
 
     private IWhirlpoolService whirlpoolService;
     private Retrofit retrofit;
+    private SharedPreferences mSharedPreferences;
     private IThreadScraper threadScraper;
     private boolean hasApiKeyBeenSet;
 
     @Inject
     public WhirlpoolRestClient(Retrofit retrofit, SharedPreferences sharedPreferences, IThreadScraper threadScraper) {
         this.retrofit = retrofit;
+        mSharedPreferences = sharedPreferences;
         this.threadScraper = threadScraper;
 
-        String apiKey = sharedPreferences.getString(StringConstants.API_PREFERENCE_KEY, "");
+        String apiKey = getKeyFromPreference();
         if (!apiKey.isEmpty()) {
             setApiKey(apiKey);
             hasApiKeyBeenSet = true;
@@ -64,6 +67,18 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         });
 
         whirlpoolService = retrofit.create(IWhirlpoolService.class);
+
+        saveKeyToPreference(apikey);
+    }
+
+    private void saveKeyToPreference(String apiKey) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(StringConstants.API_PREFERENCE_KEY, apiKey);
+        editor.commit();
+    }
+
+    private String getKeyFromPreference() {
+        return mSharedPreferences.getString(StringConstants.API_PREFERENCE_KEY, "");
     }
 
     @Override
@@ -95,7 +110,8 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         return getWhirlpoolService().GetWatched(0);
     }
 
-    @Override public Observable<WatchedList> GetAllWatched() {
+    @Override
+    public Observable<WatchedList> GetAllWatched() {
         return getWhirlpoolService().GetWatched(1);
     }
 
@@ -109,7 +125,8 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         return threadScraper.scrapeThreadsFromForumObservable(forumIds, pageCount, groupId);
     }
 
-    @Override public Observable<ScrapedPostList> GetScrapedPosts(int threadId, int page) {
+    @Override
+    public Observable<ScrapedPostList> GetScrapedPosts(int threadId, int page) {
         return threadScraper.scrapePostsFromThreadObservable(threadId, page);
     }
 
@@ -133,7 +150,8 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         return getWhirlpoolService().GetWhims();
     }
 
-    @Override public Observable<Void> MarkWhimAsRead(int whimId) {
+    @Override
+    public Observable<Void> MarkWhimAsRead(int whimId) {
         return getWhirlpoolService().MarkWhimAsRead(whimId);
     }
 
@@ -145,5 +163,17 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     @Override
     public Observable<List<ScrapedThread>> SearchThreads(int forumId, int groupId, String query) {
         return threadScraper.searchThreadsObservable(forumId, groupId, query);
+    }
+
+    @Override
+    public Observable<UserDetailsList> GetUserDetails() {
+        return getWhirlpoolService().GetUserDetails();
+    }
+
+    @Override
+    public void saveUserName(String s) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(StringConstants.USERNAME, s);
+        editor.commit();
     }
 }

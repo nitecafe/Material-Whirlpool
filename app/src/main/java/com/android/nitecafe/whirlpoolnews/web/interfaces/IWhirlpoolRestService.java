@@ -7,6 +7,7 @@ import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
+import com.android.nitecafe.whirlpoolnews.models.UserDetailsList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 
@@ -45,4 +46,6 @@ public interface IWhirlpoolRestService {
     Observable<Void> MarkWhimAsRead(int whimId);
 
     Observable<List<ScrapedThread>> SearchThreads(int forumId, int groupId, String query);
+
+    Observable<UserDetailsList> GetUserDetails();
 }
