@@ -1,15 +1,16 @@
 package com.android.nitecafe.whirlpoolnews;
 
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
 import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
+import com.android.nitecafe.whirlpoolnews.models.UserDetailsList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.utilities.ICachingUtils;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -348,5 +349,18 @@ public class WhirlpoolRestServiceTests {
 
         //assert
         verify(cachingUtilsMock).cacheWhims(whimsList);
+    }
+
+    @Test
+    public void GetUserDetails_WhenCalled_CallRestClient() {
+
+        //arrange
+        when(whirlpoolRestClientMock.GetUserDetails()).thenReturn(Observable.<UserDetailsList>empty());
+
+        //act
+        whirlpoolRestService.GetUserDetails();
+
+        //assert
+        verify(whirlpoolRestClientMock).GetUserDetails();
     }
 }

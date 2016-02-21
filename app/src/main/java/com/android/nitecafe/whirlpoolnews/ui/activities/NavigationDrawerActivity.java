@@ -27,6 +27,7 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class NavigationDrawerActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
@@ -47,11 +48,17 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
     protected PrimaryDrawerItem whimsDrawerItem;
     private PrimaryDrawerItem searchDrawerItem;
     private PrimaryDrawerItem aboutDrawerItem;
+    private AccountHeader headerResult;
+    private ProfileDrawerItem profileDrawerItem;
 
     protected void onCreateDrawer() {
-
-        AccountHeader headerResult = new AccountHeaderBuilder()
-                .withActivity(this).withHeaderBackground(R.color.primary).build();
+        profileDrawerItem = new ProfileDrawerItem().withName("Hello").withEmail("Welcome to " + getResources().getString(R.string.app_name));
+        headerResult = new AccountHeaderBuilder()
+                .withActivity(this).withHeaderBackground(R.color.primary)
+                .addProfiles(profileDrawerItem)
+                .withSelectionListEnabled(false)
+                .withProfileImagesClickable(false)
+                .build();
 
         newsItemDrawerItem = new PrimaryDrawerItem().withName("Industry News");
         newsItemDrawerItem.withIcon(R.drawable.ic_news);
@@ -82,7 +89,11 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
                 .withAccountHeader(headerResult)
                 .withOnDrawerItemClickListener(this)
                 .build();
+    }
 
+    protected void updateProfileDetails(String username) {
+        profileDrawerItem.withName(username);
+        headerResult.updateProfile(profileDrawerItem);
     }
 
     @Override
@@ -184,7 +195,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
                 fragmentToStart = new NewsFragment();
                 break;
             case API_KEY:
-                fragmentToStart = new LoginFragment();
+                final LoginFragment loginFragment = new LoginFragment();
+                loginFragment.UserNameSubject.subscribe(s -> updateProfileDetails(s));
+                fragmentToStart = loginFragment;
                 break;
             case FORUM:
                 fragmentToStart = new ForumFragment();

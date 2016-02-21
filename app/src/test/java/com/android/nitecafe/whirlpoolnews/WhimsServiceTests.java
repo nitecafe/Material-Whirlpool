@@ -1,10 +1,10 @@
 package com.android.nitecafe.whirlpoolnews;
 
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.web.WhimsService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 
 import org.junit.Before;
 import org.junit.Test;

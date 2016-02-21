@@ -2,9 +2,9 @@ package com.android.nitecafe.whirlpoolnews.web;
 
 import android.util.Log;
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 
 import java.util.ArrayList;
 import java.util.List;

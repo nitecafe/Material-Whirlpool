@@ -1,11 +1,9 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
-import android.content.SharedPreferences;
-
-import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.ILoginFragment;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,17 +14,17 @@ public class LoginController {
 
     private ILoginFragment loginFragment;
     private IWhirlpoolRestClient whirlpoolRestClient;
-    private SharedPreferences sharedPreferences;
+    private IWhirlpoolRestService mWhirlpoolRestService;
     private IWatchedThreadService watchedThreadIdentifier;
     private PublishSubject<Void> whimSubject;
 
     @Inject
     public LoginController(IWhirlpoolRestClient whirlpoolRestClient,
-                           SharedPreferences sharedPreferences,
+                           IWhirlpoolRestService whirlpoolRestService,
                            IWatchedThreadService watchedThreadIdentifier,
                            @Named("whim") PublishSubject<Void> whimSubject) {
         this.whirlpoolRestClient = whirlpoolRestClient;
-        this.sharedPreferences = sharedPreferences;
+        mWhirlpoolRestService = whirlpoolRestService;
         this.watchedThreadIdentifier = watchedThreadIdentifier;
         this.whimSubject = whimSubject;
     }
@@ -36,20 +34,37 @@ public class LoginController {
     }
 
     public void login(String apiKey) {
+        if (loginFragment != null) loginFragment.showLoggingInProgressLoader();
         whirlpoolRestClient.setApiKey(apiKey);
-        saveKeyToPreference(apiKey);
-        watchedThreadIdentifier.getWatchedThreads(); // refresh watched threads
-        whimSubject.onNext(null);
-        if (loginFragment != null)
-            loginFragment.showHomeScreen();
+        GetUserDetails();
     }
 
-    private void saveKeyToPreference(String apiKey) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(StringConstants.API_PREFERENCE_KEY, apiKey);
-        editor.commit();
-        if (loginFragment != null)
-            loginFragment.showSavedMessage();
+    private void updateAppWithUserData() {
+        watchedThreadIdentifier.getWatchedThreads(); // refresh watched threads
+        whimSubject.onNext(null);
+    }
+
+    private void GetUserDetails() {
+        mWhirlpoolRestService.GetUserDetails().map(userDetailses ->
+                userDetailses.getUSER().getNAME())
+                .subscribe(
+                        s -> {
+                            if (loginFragment != null) {
+                                whirlpoolRestClient.saveUserName(s);
+                                loginFragment.updateUsername(s);
+                                updateAppWithUserData();
+                                loginFragment.hideProgressLoader();
+                                loginFragment.showLoginSucessMessage(s);
+                                loginFragment.showHomeScreen();
+                            }
+                        },
+                        throwable ->
+                        {
+                            if (loginFragment != null) {
+                                loginFragment.showLoginFailureMessage();
+                                loginFragment.hideProgressLoader();
+                            }
+                        });
     }
 
 }

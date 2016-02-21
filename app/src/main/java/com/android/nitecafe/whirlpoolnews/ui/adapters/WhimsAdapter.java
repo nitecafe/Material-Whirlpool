@@ -10,6 +10,7 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.jakewharton.rxbinding.view.RxView;
+import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 
-public class WhimsAdapter extends RecyclerView.Adapter<WhimsAdapter.WhimViewHolder> {
+public class WhimsAdapter extends UltimateViewAdapter<WhimsAdapter.WhimViewHolder> {
 
     private List<Whim> whims = new ArrayList<>();
     private PublishSubject<Integer> OnWhimClickedSubject = PublishSubject.create();
@@ -32,7 +33,13 @@ public class WhimsAdapter extends RecyclerView.Adapter<WhimsAdapter.WhimViewHold
         notifyDataSetChanged();
     }
 
-    @Override public WhimViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override
+    public WhimViewHolder getViewHolder(View view) {
+        return null;
+    }
+
+    @Override
+    public WhimViewHolder onCreateViewHolder(ViewGroup parent) {
         final View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_whims, parent, false);
         return new WhimViewHolder(inflate);
     }
@@ -53,8 +60,24 @@ public class WhimsAdapter extends RecyclerView.Adapter<WhimsAdapter.WhimViewHold
             holder.itemView.setBackgroundResource(R.color.white);
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        return null;
+    }
+
+    @Override
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+    }
+
+    @Override
+    public int getAdapterItemCount() {
         return whims.size();
+    }
+
+    @Override
+    public long generateHeaderId(int position) {
+        return 0;
     }
 
     public Observable<Whim> getOnWhimClickedSubject() {

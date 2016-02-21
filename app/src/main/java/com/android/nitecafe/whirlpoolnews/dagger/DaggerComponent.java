@@ -6,7 +6,9 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.NewsFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.PopularThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.RecentFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostChildFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostParentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.SearchFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.SearchResultThreadFragment;
@@ -49,4 +51,8 @@ public interface DaggerComponent {
     void inject(SearchFragment searchFragment);
 
     void inject(SearchResultThreadFragment searchResultThreadFragment);
+
+    void inject(ScrapedPostParentFragment scrapedPostParentFragment);
+
+    void inject(ScrapedPostChildFragment scrapedPostChildFragment);
 }

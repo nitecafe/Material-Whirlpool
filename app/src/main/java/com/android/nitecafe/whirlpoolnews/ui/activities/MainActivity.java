@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.ui.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,12 +14,11 @@ import android.view.View;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.ui.FragmentsEnum;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.IndividualWhimFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
-import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedPostParentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.SearchResultThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ThreadFragment;
@@ -28,6 +28,7 @@ import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnWhimClicked;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.WhimsService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
 
 import javax.inject.Inject;
@@ -47,6 +48,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Inject IWatchedThreadService watchedThreadIdentifier;
     @Inject WhimsService whimsService;
     @Inject @Named("whim") PublishSubject<Void> whimSubject;
+    @Inject SharedPreferences mSharedPreferences;
     private int mThreadIdLoaded;
     private int mForumId;
     private int whimId;
@@ -60,9 +62,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
         String scheme = getIntent().getScheme();
         if (IsFromInternalAppLink(scheme)) {
-            Uri intent_uri = getIntent().getData();
-            int threadId = Integer.parseInt(intent_uri.getQueryParameter("threadid"));
-            OnThreadClicked(threadId, "Thread From Link");
+            parseInternalLink();
         } else if (!mWhirlpoolRestClient.hasApiKeyBeenSet()) {
             drawer.setSelection(apiKeyDrawerItem, false);
             startFragmentWithNoBackStack(FragmentsEnum.API_KEY);
@@ -72,6 +72,26 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         }
 
         whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge());
+
+        final String userNameFromPreference = getUserNameFromPreference();
+        if (!userNameFromPreference.isEmpty())
+            updateProfileDetails(userNameFromPreference);
+    }
+
+    private String getUserNameFromPreference() {
+        return mSharedPreferences.getString(StringConstants.USERNAME, "");
+    }
+
+    private void parseInternalLink() {
+        Uri intent_uri = getIntent().getData();
+        int threadId = Integer.parseInt(intent_uri.getQueryParameter("threadid"));
+        int page;
+        try {
+            page = Integer.parseInt(intent_uri.getQueryParameter("p"));
+        } catch (NumberFormatException e) {
+            page = 1;
+        }
+        OnThreadClicked(threadId, "Thread From Link", page, 0, 1);
     }
 
     @Override
@@ -119,37 +139,55 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     }
 
     @Override
-    public void OnThreadClicked(int threadId, String threadTitle) {
-        OnWatchedThreadClicked(threadId, threadTitle, 1, 0);
+    public void OnThreadClicked(int threadId, String threadTitle, int totalPage) {
+        OnThreadClicked(threadId, threadTitle, 1, 0, totalPage);
     }
 
     @Override
-    public void OnWatchedThreadClicked(int threadId, String threadTitle, int lastPageRead, int lastReadId) {
-        mThreadIdLoaded = threadId;
-        ScrapedPostFragment scrapedPostFragment = ScrapedPostFragment.newInstance(threadId, threadTitle, lastPageRead, lastReadId);
-        setUpPostReplyFab(scrapedPostFragment);
-        startFragment(scrapedPostFragment);
+    public void OnThreadClicked(int threadId, String threadTitle, int lastPageRead, int lastReadId, int totalPage) {
+        startPostViewPagerFragment(threadId, threadTitle, totalPage, lastPageRead, lastReadId);
     }
 
-    private void setUpPostReplyFab(ScrapedPostFragment scrapedPostFragment) {
-        scrapedPostFragment.OnFragmentDestroySubject.subscribe(aVoid ->
+    private void startPostViewPagerFragment(int threadId, String threadTitle, int totalPage, int page, int postLastRead) {
+        mThreadIdLoaded = threadId;
+        ScrapedPostParentFragment scrapedPostParentFragment = ScrapedPostParentFragment.newInstance(threadId, threadTitle, page, postLastRead, totalPage);
+        setUpPostReplyFab(scrapedPostParentFragment);
+        startFragment(scrapedPostParentFragment);
+    }
+
+    private void setUpPostReplyFab(ScrapedPostParentFragment scrapedPostParentFragment) {
+        scrapedPostParentFragment.OnFragmentDestroySubject.subscribe(aVoid ->
                 fabReplyPost.setVisibility(View.GONE));
-        scrapedPostFragment.OnFragmentCreateViewSubject.subscribe(aVoid ->
-                fabReplyPost.setVisibility(View.VISIBLE));
+        scrapedPostParentFragment.OnFragmentCreateViewSubject.subscribe(aVoid -> {
+            resetFabLocationToBottom(fabReplyPost);
+            fabReplyPost.setVisibility(View.VISIBLE);
+        });
     }
 
     private void setUpWhimReplyFab(IndividualWhimFragment individualWhimFragment) {
         individualWhimFragment.OnFragmentDestroySubject.subscribe(aVoid ->
                 fabReplyWhim.setVisibility(View.GONE));
-        individualWhimFragment.OnFragmentCreateViewSubject.subscribe(aVoid ->
-                fabReplyWhim.setVisibility(View.VISIBLE));
+        individualWhimFragment.OnFragmentCreateViewSubject.subscribe(aVoid -> {
+            resetFabLocationToBottom(fabReplyWhim);
+            fabReplyWhim.setVisibility(View.VISIBLE);
+        });
     }
 
     private void setUpThreadCreateFab(PublishSubject<Void> createStream, PublishSubject<Void> destroyStream) {
         destroyStream.subscribe(aVoid ->
                 fabCreateThread.setVisibility(View.GONE));
-        createStream.subscribe(aVoid ->
-                fabCreateThread.setVisibility(View.VISIBLE));
+        createStream.subscribe(aVoid -> {
+            resetFabLocationToBottom(fabCreateThread);
+            fabCreateThread.setVisibility(View.VISIBLE);
+        });
+    }
+
+    /**
+     * To fix a bug where fab not reverting to original location after it has
+     * been moved up by the snackbar and visibility was set to gone.
+     */
+    private void resetFabLocationToBottom(FloatingActionButton floatingActionButton) {
+        floatingActionButton.setTranslationY(0.0f);
     }
 
     private void startFragment(Fragment fragment) {
@@ -190,7 +228,8 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         startActivity(browserIntent);
     }
 
-    @Override public void onSearchClicked(String query, int forumId, int groupId) {
+    @Override
+    public void onSearchClicked(String query, int forumId, int groupId) {
         final SearchResultThreadFragment searchResultThreadFragment = SearchResultThreadFragment.newInstance(query, forumId, groupId);
         startFragment(searchResultThreadFragment);
     }

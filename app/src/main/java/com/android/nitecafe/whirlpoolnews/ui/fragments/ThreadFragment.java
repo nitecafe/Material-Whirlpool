@@ -15,8 +15,8 @@ import com.android.nitecafe.whirlpoolnews.controllers.ForumThreadController;
 import com.android.nitecafe.whirlpoolnews.models.ForumThread;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ForumThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 import rx.subjects.PublishSubject;
 
-public class ThreadFragment extends BaseFragment implements IRecycleViewItemClick, IThreadFragment {
+public class ThreadFragment extends BaseFragment implements IThreadFragment {
 
     public static final String FORUM_ID = "ForumId";
     public static final String FORUM_NAME = "ForumTitle";
@@ -116,7 +116,7 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
         forumThreadAdapter = new ForumThreadAdapter<>(mIWatchedThreadService);
 
         forumThreadAdapter.getOnThreadClickedObservable().subscribe(
-                thread -> listener.OnThreadClicked(thread.getID(), thread.getTITLE()));
+                thread -> listener.OnThreadClicked(thread.getID(), thread.getTITLE(), WhirlpoolUtils.getNumberOfPage(thread.getREPLIES())));
         forumThreadAdapter.getOnWatchClickedObservable().subscribe(thread
                 -> _controller.WatchThread(thread.getID()));
         forumThreadAdapter.getOnUnwatchedObservable().subscribe(recent ->
@@ -154,10 +154,5 @@ public class ThreadFragment extends BaseFragment implements IRecycleViewItemClic
     @Override
     public void HideRefreshLoader() {
         mRecycleView.setRefreshing(false);
-    }
-
-    @Override
-    public void OnItemClicked(int itemClicked, String threadTitle) {
-        listener.OnThreadClicked(itemClicked, threadTitle);
     }
 }

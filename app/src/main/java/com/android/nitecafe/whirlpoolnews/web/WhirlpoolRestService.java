@@ -1,6 +1,5 @@
 package com.android.nitecafe.whirlpoolnews.web;
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
@@ -8,10 +7,12 @@ import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
+import com.android.nitecafe.whirlpoolnews.models.UserDetailsList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.utilities.ICachingUtils;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import java.util.ArrayList;
@@ -39,7 +40,8 @@ public class WhirlpoolRestService implements IWhirlpoolRestService {
         this.cachingUtils = cachingUtils;
     }
 
-    @Override public Observable<NewsList> GetNews() {
+    @Override
+    public Observable<NewsList> GetNews() {
         BehaviorSubject<NewsList> publishSubject = BehaviorSubject.create();
         NewsList newsCache = cachingUtils.getNewsCache();
 
@@ -55,7 +57,8 @@ public class WhirlpoolRestService implements IWhirlpoolRestService {
         return publishSubject;
     }
 
-    @Override public Observable<ArrayList<ScrapedThread>> GetPopularThreads() {
+    @Override
+    public Observable<ArrayList<ScrapedThread>> GetPopularThreads() {
         BehaviorSubject<ArrayList<ScrapedThread>> publishSubject = BehaviorSubject.create();
         ArrayList<ScrapedThread> scrapedThreads = cachingUtils.getPopularThreadsCache();
 
@@ -71,7 +74,8 @@ public class WhirlpoolRestService implements IWhirlpoolRestService {
         return publishSubject;
     }
 
-    @Override public Observable<ForumList> GetForum() {
+    @Override
+    public Observable<ForumList> GetForum() {
         BehaviorSubject<ForumList> publishSubject = BehaviorSubject.create();
         ForumList forumList = cachingUtils.getForumCache();
 
@@ -87,7 +91,8 @@ public class WhirlpoolRestService implements IWhirlpoolRestService {
         return publishSubject;
     }
 
-    @Override public Observable<RecentList> GetRecent() {
+    @Override
+    public Observable<RecentList> GetRecent() {
         BehaviorSubject<RecentList> publishSubject = BehaviorSubject.create();
         RecentList recentList = cachingUtils.getRecentThreadsCache();
 
@@ -103,7 +108,8 @@ public class WhirlpoolRestService implements IWhirlpoolRestService {
         return publishSubject;
     }
 
-    @Override public Observable<WatchedList> GetUnreadWatched() {
+    @Override
+    public Observable<WatchedList> GetUnreadWatched() {
         BehaviorSubject<WatchedList> publishSubject = BehaviorSubject.create();
         WatchedList watchedList = cachingUtils.getUnreadWatchedThreadsCache();
 
@@ -119,7 +125,8 @@ public class WhirlpoolRestService implements IWhirlpoolRestService {
         return publishSubject;
     }
 
-    @Override public Observable<WatchedList> GetAllWatched() {
+    @Override
+    public Observable<WatchedList> GetAllWatched() {
         BehaviorSubject<WatchedList> publishSubject = BehaviorSubject.create();
         WatchedList watchedList = cachingUtils.getAllWatchedThreadsCache();
 
@@ -135,7 +142,8 @@ public class WhirlpoolRestService implements IWhirlpoolRestService {
         return publishSubject;
     }
 
-    @Override public Observable<WhimsList> GetWhims() {
+    @Override
+    public Observable<WhimsList> GetWhims() {
         BehaviorSubject<WhimsList> publishSubject = BehaviorSubject.create();
         WhimsList whimsList = cachingUtils.getWhimsCache();
 
@@ -165,7 +173,8 @@ public class WhirlpoolRestService implements IWhirlpoolRestService {
                 .subscribeOn(schedulerManager.GetIoScheduler());
     }
 
-    @Override public Observable<ScrapedPostList> GetScrapedPosts(int threadId, int page) {
+    @Override
+    public Observable<ScrapedPostList> GetScrapedPosts(int threadId, int page) {
         return whirlpoolRestClient.GetScrapedPosts(threadId, page)
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler());
@@ -192,7 +201,8 @@ public class WhirlpoolRestService implements IWhirlpoolRestService {
                 .subscribeOn(schedulerManager.GetIoScheduler());
     }
 
-    @Override public Observable<Void> MarkWhimAsRead(int whimId) {
+    @Override
+    public Observable<Void> MarkWhimAsRead(int whimId) {
         return whirlpoolRestClient.MarkWhimAsRead(whimId)
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler());
@@ -201,6 +211,13 @@ public class WhirlpoolRestService implements IWhirlpoolRestService {
     @Override
     public Observable<List<ScrapedThread>> SearchThreads(int forumId, int groupId, String query) {
         return whirlpoolRestClient.SearchThreads(forumId, groupId, query)
+                .observeOn(schedulerManager.GetMainScheduler())
+                .subscribeOn(schedulerManager.GetIoScheduler());
+    }
+
+    @Override
+    public Observable<UserDetailsList> GetUserDetails() {
+        return whirlpoolRestClient.GetUserDetails()
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler());
     }

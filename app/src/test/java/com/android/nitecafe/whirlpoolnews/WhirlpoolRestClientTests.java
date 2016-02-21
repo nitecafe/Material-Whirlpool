@@ -3,7 +3,6 @@ package com.android.nitecafe.whirlpoolnews;
 import android.content.SharedPreferences;
 
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolService;
 import com.android.nitecafe.whirlpoolnews.models.Forum;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.ForumThread;
@@ -17,6 +16,7 @@ import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.utilities.IThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolService;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,11 +42,15 @@ public class WhirlpoolRestClientTests {
     @Mock IThreadScraper threadScraper;
     TestableWhirlpoolRestClient whirlpoolRestClient;
     private Retrofit retrofit;
+    private SharedPreferences.Editor editorMock;
 
     @Before
     public void setup() {
         retrofit = new Retrofit.Builder().baseUrl("http://www.google.com").build();
+        editorMock = Mockito.mock(SharedPreferences.Editor.class);
         Mockito.when(sharedPreferencesMock.getString(StringConstants.API_PREFERENCE_KEY, "")).thenReturn("111-111");
+        Mockito.when(sharedPreferencesMock.getString(StringConstants.USERNAME, "")).thenReturn("Hello User");
+        Mockito.when(sharedPreferencesMock.edit()).thenReturn(editorMock);
         whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock, threadScraper);
     }
 
@@ -208,6 +212,14 @@ public class WhirlpoolRestClientTests {
         Mockito.verify(threadScraper).ScrapPopularThreadsObservable();
     }
 
+    @Test
+    public void GetUserDetails_WhenCalled_RetrofitServiceCalled() {
+        //act
+        whirlpoolRestClient.GetUserDetails();
+
+        //assert
+        Mockito.verify(whirlpoolRestClient.mWhirlpoolServiceMock).GetUserDetails();
+    }
 }
 
 class TestableWhirlpoolRestClient extends WhirlpoolRestClient {

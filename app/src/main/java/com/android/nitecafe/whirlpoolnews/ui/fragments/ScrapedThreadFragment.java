@@ -161,7 +161,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
 
         forumThreadAdapter = new ScrapedThreadAdapter(mIWatchedThreadService);
         forumThreadAdapter.getOnThreadClickedObservable()
-                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle()));
+                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount()));
         forumThreadAdapter.getOnWatchClickedObservable().subscribe(thread
                 -> _controller.WatchThread(thread.getID()));
         forumThreadAdapter.getOnUnwatchedObservable().subscribe(recent ->

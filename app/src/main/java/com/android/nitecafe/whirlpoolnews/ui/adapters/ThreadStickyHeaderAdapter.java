@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
-import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.IWhirlpoolThread;
 import com.android.nitecafe.whirlpoolnews.utilities.IStickyHeaderUtil;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
+import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
 import java.util.Date;
@@ -61,7 +61,7 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Forum
     }
 
     private int getNumberOfPage(T thread) {
-        return (int) Math.ceil((double) thread.getREPLIES() / StringConstants.POST_PER_PAGE);
+        return WhirlpoolUtils.getNumberOfPage(thread.getREPLIES());
     }
 
     @Override

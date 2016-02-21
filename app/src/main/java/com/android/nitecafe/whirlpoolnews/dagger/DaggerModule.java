@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.android.nitecafe.whirlpoolnews.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.scheduler.SchedulerManager;
 import com.android.nitecafe.whirlpoolnews.utilities.CachingUtils;
@@ -15,6 +14,7 @@ import com.android.nitecafe.whirlpoolnews.web.WatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 import com.squareup.okhttp.OkHttpClient;
 

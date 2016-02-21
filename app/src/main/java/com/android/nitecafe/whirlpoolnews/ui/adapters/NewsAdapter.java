@@ -10,6 +10,7 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.News;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.RecyclerViewAdapterClickListener;
+import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> implements RecyclerViewAdapterClickListener {
+public class NewsAdapter extends UltimateViewAdapter<NewsAdapter.NewsViewHolder> implements RecyclerViewAdapterClickListener {
 
     private List<News> mNews = new ArrayList<>();
     private IRecycleViewItemClick itemClickHandler;
@@ -32,7 +33,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     @Override
-    public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NewsViewHolder getViewHolder(View view) {
+        return null;
+    }
+
+    @Override
+    public NewsViewHolder onCreateViewHolder(ViewGroup parent) {
         final View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_news, parent, false);
         return new NewsViewHolder(inflate, this);
     }
@@ -45,8 +51,23 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     @Override
-    public int getItemCount() {
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        return null;
+    }
+
+    @Override
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+    }
+
+    @Override
+    public int getAdapterItemCount() {
         return mNews.size();
+    }
+
+    @Override
+    public long generateHeaderId(int position) {
+        return 0;
     }
 
     @Override
@@ -56,9 +77,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     public static class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public View mItemView;
         @Bind(R.id.news_title) TextView newsTitle;
         @Bind(R.id.news_blurb) TextView newsBlurb;
-        public View mItemView;
         private RecyclerViewAdapterClickListener mListener;
 
         NewsViewHolder(View itemView, RecyclerViewAdapterClickListener listener) {
@@ -74,5 +95,4 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             mListener.recyclerViewListClicked(v, getAdapterPosition());
         }
     }
-
 }

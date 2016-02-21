@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.controllers.LoginController;
@@ -21,15 +22,20 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.subjects.PublishSubject;
 
 public class LoginFragment extends BaseFragment implements ILoginFragment {
 
+    public PublishSubject<String> UserNameSubject = PublishSubject.create();
     @Bind(R.id.input_apikey) EditText mApiKeyText;
     @Bind(R.id.btn_login) AppCompatButton saveButton;
     @Inject LoginController mLoginController;
     private OnShowHomeScreenListener listener;
+    private MaterialDialog progressLoader;
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View inflate = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, inflate);
@@ -44,6 +50,12 @@ public class LoginFragment extends BaseFragment implements ILoginFragment {
                 saveButton.setEnabled(false);
         });
 
+        progressLoader = new MaterialDialog.Builder(getContext())
+                .title("Logging In")
+                .content("Verifying API Key")
+                .progress(true, 0)
+                .build();
+
         return inflate;
     }
 
@@ -53,7 +65,8 @@ public class LoginFragment extends BaseFragment implements ILoginFragment {
         super.onDestroyView();
     }
 
-    @Override public void onAttach(Context context) {
+    @Override
+    public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnShowHomeScreenListener)
             listener = (OnShowHomeScreenListener) context;
@@ -61,8 +74,10 @@ public class LoginFragment extends BaseFragment implements ILoginFragment {
             throw new ClassCastException("Activity must implement OnShowHomeScreenListener");
     }
 
-    @Override public void onDetach() {
+    @Override
+    public void onDetach() {
         listener = null;
+        UserNameSubject.onCompleted();
         super.onDetach();
     }
 
@@ -71,12 +86,34 @@ public class LoginFragment extends BaseFragment implements ILoginFragment {
         mLoginController.login(mApiKeyText.getText().toString());
     }
 
-    @Override public void showSavedMessage() {
-        Snackbar.make(getView(), R.string.message_api_key_saved, Snackbar.LENGTH_SHORT).show();
+    @Override
+    public void showHomeScreen() {
+        listener.showHomeScreen();
     }
 
-    @Override public void showHomeScreen() {
-        listener.showHomeScreen();
+    @Override
+    public void updateUsername(String s) {
+        UserNameSubject.onNext(s);
+    }
+
+    @Override
+    public void showLoginFailureMessage() {
+        Snackbar.make(getView(), R.string.message_login_failure, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showLoggingInProgressLoader() {
+        progressLoader.show();
+    }
+
+    @Override
+    public void hideProgressLoader() {
+        progressLoader.hide();
+    }
+
+    @Override
+    public void showLoginSucessMessage(String username) {
+        Snackbar.make(getView(), "Welcome " + username + ". You are awesome for using this app.", Snackbar.LENGTH_LONG).show();
     }
 
     public interface OnShowHomeScreenListener {
