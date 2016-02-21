@@ -131,6 +131,8 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
             mPageToLoad = mThreadTotalPage;
             postViewPager.setCurrentItem(mPageToLoad - 1);
         }
+
+        updateNavigationButtonVisibility();
     }
 
     @Override
