@@ -60,6 +60,12 @@ public class LoginFragment extends BaseFragment implements ILoginFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("Login Fragment");
+    }
+
+    @Override
     public void onDestroyView() {
         mLoginController.attachedView(null);
         super.onDestroyView();

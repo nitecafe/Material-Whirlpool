@@ -47,6 +47,12 @@ public class RecentFragment extends BaseFragment implements IRecentFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("Recent Threads Fragment");
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof IOnThreadClicked)

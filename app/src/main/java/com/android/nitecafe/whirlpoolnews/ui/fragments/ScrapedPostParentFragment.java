@@ -73,6 +73,12 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("Scraped post Parent Fragment");
+    }
+
+    @Override
     public void onDetach() {
         OnFragmentCreateViewSubject.onCompleted();
         OnFragmentDestroySubject.onCompleted();
@@ -200,24 +206,31 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
         postToolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menuitem_back_post:
+                    WhirlpoolApp.getInstance().trackEvent("Post Toolbar", "Go Previous Post", "");
                     postViewPager.setCurrentItem(postViewPager.getCurrentItem() - 1);
                     break;
                 case R.id.menuitem_next_post:
+                    WhirlpoolApp.getInstance().trackEvent("Post Toolbar", "Go Next Post", "");
                     postViewPager.setCurrentItem(postViewPager.getCurrentItem() + 1);
                     break;
                 case R.id.menuitem_mark_read:
+                    WhirlpoolApp.getInstance().trackEvent("Post Toolbar", "Mark Read Post", "");
                     mController.MarkThreadAsRead(mThreadId);
                     break;
                 case R.id.menuitem_unwatch_post:
+                    WhirlpoolApp.getInstance().trackEvent("Post Toolbar", "Unwatch Post", "");
                     mController.UnwatchThread(mThreadId);
                     break;
                 case R.id.menuitem_watch_post:
+                    WhirlpoolApp.getInstance().trackEvent("Post Toolbar", "Watch Post", "");
                     mController.WatchThread(mThreadId);
                     break;
                 case R.id.menuitem_go_to_last_page:
+                    WhirlpoolApp.getInstance().trackEvent("Post Toolbar", "Go To Last Post", "");
                     postViewPager.setCurrentItem(mThreadTotalPage - 1);
                     break;
                 case R.id.menuitem_go_to_first_page:
+                    WhirlpoolApp.getInstance().trackEvent("Post Toolbar", "Go To First Post", "");
                     postViewPager.setCurrentItem(0);
                     break;
             }

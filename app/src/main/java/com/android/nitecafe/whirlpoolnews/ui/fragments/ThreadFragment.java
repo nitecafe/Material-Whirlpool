@@ -69,6 +69,12 @@ public class ThreadFragment extends BaseFragment implements IThreadFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("Api Thread Fragment");
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof IOnThreadClicked)

@@ -54,6 +54,12 @@ public class WatchedFragment extends BaseFragment {
         viewPager.setAdapter(adapter);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("Watched Parent Fragment");
+    }
+
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();

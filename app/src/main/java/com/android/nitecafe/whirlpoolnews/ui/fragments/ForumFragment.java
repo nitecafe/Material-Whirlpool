@@ -43,6 +43,12 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("Forum Fragment");
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof IOnForumClicked)

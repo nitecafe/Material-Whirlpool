@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
+import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.models.IThreadBase;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.jakewharton.rxbinding.view.RxMenuItem;
@@ -95,11 +96,17 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
             if (mWatchedThreadIdentifier.isThreadWatched(t.getID())) {
                 MenuItem unwatch = menu.add(R.string.context_menu_unwatch_thread);
                 MenuItem markAsRead = menu.add(R.string.context_menu_mark_read);
-                RxMenuItem.clicks(unwatch).map(aVoid -> getAdapterPosition()).subscribe(OnUnwatchClickedObservable);
-                RxMenuItem.clicks(markAsRead).map(aVoid -> getAdapterPosition()).subscribe(OnMarkAsReadClickedObservable);
+                RxMenuItem.clicks(unwatch).map(aVoid -> getAdapterPosition())
+                        .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent("Thread Context Menu", "Unwatch Thread", ""))
+                        .subscribe(OnUnwatchClickedObservable);
+                RxMenuItem.clicks(markAsRead).map(aVoid -> getAdapterPosition())
+                        .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent("Thread Context Menu", "Mark as Read", ""))
+                        .subscribe(OnMarkAsReadClickedObservable);
             } else {
                 MenuItem watch = menu.add(R.string.context_menu_watch_thread);
-                RxMenuItem.clicks(watch).map(aVoid -> getAdapterPosition()).subscribe(OnWatchClickedObservable);
+                RxMenuItem.clicks(watch).map(aVoid -> getAdapterPosition())
+                        .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent("Thread Context Menu", "Watch Thread", ""))
+                        .subscribe(OnWatchClickedObservable);
             }
         }
     }

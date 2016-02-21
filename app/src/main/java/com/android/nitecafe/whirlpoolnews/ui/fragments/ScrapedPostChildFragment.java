@@ -69,6 +69,11 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         mThreadTitle = getArguments().getString(THREAD_TITLE, "");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("Scraped Post Child Fragment");
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

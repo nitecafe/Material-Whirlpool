@@ -37,13 +37,9 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
     private NewsAdapter newsAdapter;
 
     @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("News Fragment");
     }
 
     @Override
@@ -114,6 +110,7 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
 
     @Override
     public void OnItemClicked(int itemClicked, String title) {
+        WhirlpoolApp.getInstance().trackEvent("RecycleView Click", "View News", "");
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(StringConstants.NEWS_REDIRECT_URL + String.valueOf(itemClicked)));
         startActivity(browserIntent);
     }

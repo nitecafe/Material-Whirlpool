@@ -86,6 +86,12 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("Scraped Thread Fragment");
+    }
+
+    @Override
     public void onDestroyView() {
         _controller.Attach(null);
         OnFragmentDestroySubject.onNext(null);

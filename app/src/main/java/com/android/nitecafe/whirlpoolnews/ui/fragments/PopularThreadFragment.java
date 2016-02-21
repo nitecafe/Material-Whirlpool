@@ -47,6 +47,12 @@ public class PopularThreadFragment extends BaseFragment implements IPopularFragm
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("Popular Threads Fragment");
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof IOnThreadClicked)

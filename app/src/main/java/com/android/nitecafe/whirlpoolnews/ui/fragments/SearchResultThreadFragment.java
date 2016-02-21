@@ -62,6 +62,12 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("Search Results Thread Fragment");
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof IOnThreadClicked)

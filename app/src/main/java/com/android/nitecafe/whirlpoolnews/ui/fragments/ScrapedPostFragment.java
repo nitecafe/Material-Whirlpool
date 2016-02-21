@@ -81,6 +81,11 @@ public class ScrapedPostFragment extends BaseFragment implements IScrapedPostFra
         mThreadTitle = getArguments().getString(THREAD_TITLE, "");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("Scraped Post Fragment");
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

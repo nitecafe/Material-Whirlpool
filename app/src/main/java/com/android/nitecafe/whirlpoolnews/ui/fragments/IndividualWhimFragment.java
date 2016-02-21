@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
+import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -37,6 +38,12 @@ public class IndividualWhimFragment extends BaseFragment {
     public void onDestroyView() {
         OnFragmentDestroySubject.onNext(null);
         super.onDestroyView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("Individual Whim Fragment");
     }
 
     @Override

@@ -101,4 +101,6 @@ dependencies {
     compile('com.mikepenz:aboutlibraries:5.5.2@aar') {
         transitive = true
     }
+
+    compile 'com.google.android.gms:play-services-analytics:8.4.0'
 }

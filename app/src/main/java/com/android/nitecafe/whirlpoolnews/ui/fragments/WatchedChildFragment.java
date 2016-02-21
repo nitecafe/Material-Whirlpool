@@ -41,6 +41,16 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
     private IOnThreadClicked listener;
 
     @Override
+    public void onResume() {
+        super.onResume();
+        startGoogleAnalytic();
+    }
+
+    protected void startGoogleAnalytic() {
+        WhirlpoolApp.getInstance().trackScreenView("Unread Watched Fragment");
+    }
+
+    @Override
     public void onDestroyView() {
         _controller.Attach(null);
         super.onDestroyView();

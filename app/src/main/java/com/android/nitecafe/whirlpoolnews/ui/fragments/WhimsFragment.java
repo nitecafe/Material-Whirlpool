@@ -114,4 +114,10 @@ public class WhimsFragment extends BaseFragment implements IWhimsFragment {
         progressBar.setVisibility(View.GONE);
         recyclerView.setRefreshing(false);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        WhirlpoolApp.getInstance().trackScreenView("Whims Fragment");
+    }
 }
