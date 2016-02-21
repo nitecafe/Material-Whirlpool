@@ -21,6 +21,7 @@ public class WhirlpoolApp extends Application {
 
     private static WhirlpoolApp mInstance;
     private DaggerComponent daggerComponent;
+    private Tracker mTracker;
 
     public static synchronized WhirlpoolApp getInstance() {
         return mInstance;
@@ -41,13 +42,15 @@ public class WhirlpoolApp extends Application {
 
 //        LeakCanary.install(this);  //not working on android 6.0
 
-        AnalyticsTrackers.initialize(this);
-        AnalyticsTrackers.getInstance().get(AnalyticsTrackers.Target.APP);
     }
 
-    public synchronized Tracker getGoogleAnalyticsTracker() {
-        AnalyticsTrackers analyticsTrackers = AnalyticsTrackers.getInstance();
-        return analyticsTrackers.get(AnalyticsTrackers.Target.APP);
+    synchronized public Tracker getGoogleAnalyticsTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+            mTracker = analytics.newTracker(R.xml.global_tracker);
+        }
+        return mTracker;
     }
 
     /***
