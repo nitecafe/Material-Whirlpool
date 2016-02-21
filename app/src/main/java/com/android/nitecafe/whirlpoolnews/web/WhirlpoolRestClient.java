@@ -35,7 +35,6 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     private Retrofit retrofit;
     private SharedPreferences mSharedPreferences;
     private IThreadScraper threadScraper;
-    private boolean hasApiKeyBeenSet;
 
     @Inject
     public WhirlpoolRestClient(Retrofit retrofit, SharedPreferences sharedPreferences, IThreadScraper threadScraper) {
@@ -46,10 +45,8 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         String apiKey = getKeyFromPreference();
         if (!apiKey.isEmpty()) {
             setApiKey(apiKey);
-            hasApiKeyBeenSet = true;
         } else {
             setApiKey("");
-            hasApiKeyBeenSet = false;
         }
     }
 
@@ -83,7 +80,7 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
 
     @Override
     public Boolean hasApiKeyBeenSet() {
-        return hasApiKeyBeenSet;
+        return !getKeyFromPreference().isEmpty();
     }
 
     @Override
