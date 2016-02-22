@@ -59,7 +59,9 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
                     .addQueryParameter("output", "json")
                     .build();
 
-            final Request request = chain.request().newBuilder().url(build).build();
+            final Request request = chain.request().newBuilder().url(build)
+                    .addHeader("User-Agent", StringConstants.USER_AGENT_NAME)
+                    .build();
             return chain.proceed(request);
         });
 
@@ -71,7 +73,7 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     private void saveKeyToPreference(String apiKey) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(StringConstants.API_PREFERENCE_KEY, apiKey);
-        editor.commit();
+        editor.apply();
     }
 
     private String getKeyFromPreference() {
@@ -171,6 +173,6 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     public void saveUserName(String s) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(StringConstants.USERNAME, s);
-        editor.commit();
+        editor.apply();
     }
 }
