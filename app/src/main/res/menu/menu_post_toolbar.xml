@@ -9,18 +9,25 @@
         app:showAsAction="always"
         />
     <item
+        android:id="@+id/menuitem_reply_post"
+        android:icon="@drawable/ic_reply_post"
+        android:orderInCategory="101"
+        android:title="Reply"
+        app:showAsAction="always"
+        />
+    <item
         android:id="@+id/menuitem_back_post"
         android:icon="@drawable/ic_back_arrow"
         android:orderInCategory="200"
         android:title="Previous Page"
-        app:showAsAction="always"
+        app:showAsAction="never"
         />
     <item
         android:id="@+id/menuitem_next_post"
         android:icon="@drawable/ic_forward_arrow"
         android:orderInCategory="300"
         android:title="Next page"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
     <item
         android:id="@+id/menuitem_go_to_first_page"
         android:icon="@drawable/ic_go_to_first_post"
@@ -38,13 +45,13 @@
         android:icon="@drawable/ic_watch_thread"
         android:orderInCategory="400"
         android:title="Watch Thread"
-        app:showAsAction="never"
+        app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/menuitem_unwatch_post"
         android:icon="@drawable/ic_unwatch_thread"
         android:orderInCategory="400"
         android:title="Unwatch Thread"
-        app:showAsAction="never"
+        app:showAsAction="ifRoom"
         />
 </menu>

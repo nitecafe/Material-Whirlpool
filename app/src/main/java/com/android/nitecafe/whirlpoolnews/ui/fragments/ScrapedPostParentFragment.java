@@ -1,6 +1,8 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +20,7 @@ import android.widget.Spinner;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.ScrapedPostParentController;
 
 import java.util.ArrayList;
@@ -235,9 +238,19 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
                     WhirlpoolApp.getInstance().trackEvent("Post Toolbar", "Go To First Post", "");
                     postViewPager.setCurrentItem(0);
                     break;
+                case R.id.menuitem_reply_post:
+                    WhirlpoolApp.getInstance().trackEvent("Post Toolbar", "Reply Post", "");
+                    launchReplyPageInBrowser();
+                    break;
             }
             return true;
         });
+    }
+
+    private void launchReplyPageInBrowser() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadId)));
+        startActivity(browserIntent);
     }
 
     public void SetupPageSpinnerDropDown(int pageCount, int page) {

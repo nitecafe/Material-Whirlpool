@@ -158,7 +158,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     private void startPostViewPagerFragment(int threadId, String threadTitle, int totalPage, int page, int postLastRead) {
         mThreadIdLoaded = threadId;
         ScrapedPostParentFragment scrapedPostParentFragment = ScrapedPostParentFragment.newInstance(threadId, threadTitle, page, postLastRead, totalPage);
-        setUpPostReplyFab(scrapedPostParentFragment);
+//        setUpPostReplyFab(scrapedPostParentFragment);
         startFragment(scrapedPostParentFragment);
     }
 
