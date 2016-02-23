@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -22,6 +23,7 @@
             android:id="@+id/popular_thread_recycle_view"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            app:recyclerviewScrollbars="vertical"
             >
         </com.marshalchen.ultimaterecyclerview.UltimateRecyclerView>
 
