@@ -125,7 +125,6 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        setToolbarTitle(Html.fromHtml(mThreadTitle).toString());
     }
 
     private void SetupRecycleView() {
@@ -133,11 +132,18 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         mRecycleView.setLayoutManager(layoutManager);
 
         scrapedPostAdapter = new ScrapedPostAdapter();
+        scrapedPostAdapter.OnReplyPostClickedObservable.subscribe(scrapedPost -> LaunchReplyPostInBrowser(mThreadId, scrapedPost.getId()));
 
         mRecycleView.setAdapter(scrapedPostAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
 
         mRecycleView.setDefaultOnRefreshListener(this::loadPosts);
+    }
+
+    private void LaunchReplyPostInBrowser(int mThreadId, String replyId) {
+        Uri url = Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadId) + "&r=" + String.valueOf(replyId));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, url);
+        startActivity(browserIntent);
     }
 
     private void loadPosts() {
