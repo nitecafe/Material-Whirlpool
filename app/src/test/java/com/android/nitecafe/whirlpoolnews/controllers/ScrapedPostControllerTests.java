@@ -1,6 +1,5 @@
-package com.android.nitecafe.whirlpoolnews;
+package com.android.nitecafe.whirlpoolnews.controllers;
 
-import com.android.nitecafe.whirlpoolnews.controllers.ScrapedPostController;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostFragment;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;

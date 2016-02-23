@@ -1,6 +1,5 @@
-package com.android.nitecafe.whirlpoolnews;
+package com.android.nitecafe.whirlpoolnews.controllers;
 
-import com.android.nitecafe.whirlpoolnews.controllers.NewsController;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.INewsFragment;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;

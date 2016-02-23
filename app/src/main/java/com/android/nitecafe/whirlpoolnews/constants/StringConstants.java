@@ -6,6 +6,7 @@ public class StringConstants {
     public static final String FORUM_URL = "http://forums.whirlpool.net.au/forum/";
     public static final String THREAD_URL = "http://forums.whirlpool.net.au/forum-replies.cfm?t=";
     public static final String API_PREFERENCE_KEY = "com.android.nitecafe.ApiKey";
+    public static final String FAVOURITE_THREAD_KEY = "com.android.nitecafe.FavouriteThread";
     public static final String USERNAME = "com.android.nitecafe.UserName";
     public static final String REPLY_URL = "https://forums.whirlpool.net.au/forum/index.cfm?action=reply&t=";
     public static final String NEW_THREAD_URL = "https://forums.whirlpool.net.au/forum/index.cfm?action=newthread&f=";

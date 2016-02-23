@@ -1,6 +1,5 @@
-package com.android.nitecafe.whirlpoolnews;
+package com.android.nitecafe.whirlpoolnews.controllers;
 
-import com.android.nitecafe.whirlpoolnews.controllers.PopularThreadsController;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IPopularFragment;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;

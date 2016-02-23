@@ -1,8 +1,7 @@
-package com.android.nitecafe.whirlpoolnews;
+package com.android.nitecafe.whirlpoolnews.controllers;
 
 import android.content.SharedPreferences;
 
-import com.android.nitecafe.whirlpoolnews.controllers.LoginController;
 import com.android.nitecafe.whirlpoolnews.models.UserDetails;
 import com.android.nitecafe.whirlpoolnews.models.UserDetailsList;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.ILoginFragment;

@@ -41,4 +41,8 @@
         To contact me, just send me a whim in Whirlpool or to my email grhamjs@gmail.com.
         Developed by your friendly whirlpoolian, Graham.</string>
     <string name="message_login_failure">Failed to log in. Please check API key.</string>
+    <string name="message_added_thread_to_favourite">Added to favourite list</string>
+    <string name="message_remove_thread_from_favourite">Removed from favourite list</string>
+    <string name="context_menu_thread_remove_favourite">Remove from Favourites</string>
+    <string name="context_menu_thread_add_favourite">Add to Favourites</string>
 </resources>

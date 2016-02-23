@@ -35,6 +35,7 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
     @Inject ForumController _controller;
     private ForumStickyHeaderAdapter stickyHeaderAdapter;
     private IOnForumClicked listener;
+    private StickyRecyclerHeadersDecoration stickyRecyclerHeadersDecoration;
 
     @Override
     public void onDestroyView() {
@@ -90,15 +91,27 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         forumRecycleView.setLayoutManager(layoutManager);
 
-        stickyHeaderAdapter = new ForumStickyHeaderAdapter(this);
+        stickyHeaderAdapter = new ForumStickyHeaderAdapter(this, _controller.favouriteThreadService);
+        stickyHeaderAdapter.getOnAddToFavClickedObservable()
+                .subscribe(forum -> _controller.AddToFavouriteList(forum.getID(), forum.getTITLE()));
+        stickyHeaderAdapter.getOnRemoveFromFavClickedObservable()
+                .subscribe(forum -> _controller.RemoveFromFavouriteList(forum.getID()));
 
         forumRecycleView.setAdapter(stickyHeaderAdapter);
-        forumRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
+        stickyRecyclerHeadersDecoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+        forumRecycleView.addItemDecoration(stickyRecyclerHeadersDecoration);
         forumRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
     }
 
     private void loadForum() {
         _controller.getForum();
+    }
+
+    @Override
+    public void UpdateFavouriteSection() {
+        List<Forum> forums = _controller.getCombinedFavouriteSection();
+        stickyHeaderAdapter.setForum(forums);
+        stickyRecyclerHeadersDecoration.invalidateHeaders();
     }
 
     @Override
@@ -115,6 +128,18 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
     public void DisplayErrorMessage() {
         Snackbar.make(forumRecycleView, R.string.message_check_connection, Snackbar.LENGTH_LONG)
                 .setAction(R.string.action_message_retry, view -> loadForum())
+                .show();
+    }
+
+    @Override
+    public void DisplayAddToFavouriteForumMessage() {
+        Snackbar.make(forumRecycleView, R.string.message_added_thread_to_favourite, Snackbar.LENGTH_SHORT)
+                .show();
+    }
+
+    @Override
+    public void DisplayRemoveFromFavouriteForumMessage() {
+        Snackbar.make(forumRecycleView, R.string.message_remove_thread_from_favourite, Snackbar.LENGTH_SHORT)
                 .show();
     }
 
