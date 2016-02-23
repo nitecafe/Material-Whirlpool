@@ -94,13 +94,17 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
 
         stickyHeaderAdapter = new WatchedThreadAdapter(mIWatchedThreadService, new StickyHeaderUtil());
 
-        stickyHeaderAdapter.getOnThreadClickedObservable().subscribe(watched1 -> {
+        stickyHeaderAdapter.OnThreadClickedObservable.subscribe(watched1 -> {
             listener.OnThreadClicked(watched1.getID(), watched1.getTITLE(), watched1.getLASTPAGE(), watched1.getLASTREAD(), WhirlpoolUtils.getNumberOfPage(watched1.getREPLIES()));
         });
-        stickyHeaderAdapter.getOnUnwatchedObservable().subscribe(thread
+        stickyHeaderAdapter.OnUnwatchClickedObservable.subscribe(thread
                 -> _controller.UnwatchThread(thread.getID()));
-        stickyHeaderAdapter.getOnMarkAsClickedObservable().subscribe(
+        stickyHeaderAdapter.OnMarkAsReadClickedObservable.subscribe(
                 watched -> _controller.MarkThreadAsRead(watched.getID()));
+        stickyHeaderAdapter.OnGoToLastPageClickedObservable.subscribe(watched -> {
+            int lastPage = WhirlpoolUtils.getNumberOfPage(watched.getREPLIES());
+            listener.OnThreadClicked(watched.getID(), watched.getTITLE(), lastPage, 0, lastPage);
+        });
 
         watchedRecycleView.setAdapter(stickyHeaderAdapter);
         watchedRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));

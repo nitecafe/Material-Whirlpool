@@ -121,14 +121,18 @@ public class ThreadFragment extends BaseFragment implements IThreadFragment {
 
         forumThreadAdapter = new ForumThreadAdapter<>(mIWatchedThreadService);
 
-        forumThreadAdapter.getOnThreadClickedObservable().subscribe(
+        forumThreadAdapter.OnThreadClickedObservable.subscribe(
                 thread -> listener.OnThreadClicked(thread.getID(), thread.getTITLE(), WhirlpoolUtils.getNumberOfPage(thread.getREPLIES())));
-        forumThreadAdapter.getOnWatchClickedObservable().subscribe(thread
+        forumThreadAdapter.OnWatchClickedObservable.subscribe(thread
                 -> _controller.WatchThread(thread.getID()));
-        forumThreadAdapter.getOnUnwatchedObservable().subscribe(recent ->
+        forumThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
                 _controller.UnwatchThread(recent.getID()));
-        forumThreadAdapter.getOnMarkAsClickedObservable().subscribe(recent ->
+        forumThreadAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
                 _controller.MarkThreadAsRead(recent.getID()));
+        forumThreadAdapter.OnGoToLastPageClickedObservable.subscribe(forumThread -> {
+            int lastPage = WhirlpoolUtils.getNumberOfPage(forumThread.getREPLIES());
+            listener.OnThreadClicked(forumThread.getID(), forumThread.getTITLE(), lastPage, 0, lastPage);
+        });
 
         mRecycleView.setAdapter(forumThreadAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());

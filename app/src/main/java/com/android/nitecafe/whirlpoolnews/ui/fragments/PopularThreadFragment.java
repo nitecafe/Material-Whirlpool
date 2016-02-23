@@ -88,14 +88,17 @@ public class PopularThreadFragment extends BaseFragment implements IPopularFragm
         recyclerView.setLayoutManager(layoutManager);
 
         popularThreadAdapter = new PopularScrapedStickyThreadAdapter(watchedThreadIdentifier, new StickyHeaderUtil());
-        popularThreadAdapter.getOnThreadClickedObservable()
+        popularThreadAdapter.OnThreadClickedObservable
                 .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount()));
-        popularThreadAdapter.getOnWatchClickedObservable().subscribe(thread
+        popularThreadAdapter.OnWatchClickedObservable.subscribe(thread
                 -> popularThreadsController.WatchThread(thread.getID()));
-        popularThreadAdapter.getOnUnwatchedObservable().subscribe(recent ->
+        popularThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
                 popularThreadsController.UnwatchThread(recent.getID()));
-        popularThreadAdapter.getOnMarkAsClickedObservable().subscribe(recent ->
+        popularThreadAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
                 popularThreadsController.MarkThreadAsRead(recent.getID()));
+        popularThreadAdapter.OnGoToLastPageClickedObservable.subscribe(scrapedThread -> {
+            listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), 0, scrapedThread.getPageCount());
+        });
 
         recyclerView.setAdapter(popularThreadAdapter);
         recyclerView.addItemDecoration(new StickyRecyclerHeadersDecoration(popularThreadAdapter));

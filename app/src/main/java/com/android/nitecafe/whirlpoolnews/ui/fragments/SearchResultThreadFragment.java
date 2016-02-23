@@ -123,14 +123,17 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
     }
 
     private void SubscribeToObservables() {
-        popularThreadAdapter.getOnThreadClickedObservable()
+        popularThreadAdapter.OnThreadClickedObservable
                 .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount()));
-        popularThreadAdapter.getOnWatchClickedObservable().subscribe(thread
+        popularThreadAdapter.OnWatchClickedObservable.subscribe(thread
                 -> controller.WatchThread(thread.getID()));
-        popularThreadAdapter.getOnUnwatchedObservable().subscribe(recent ->
+        popularThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
                 controller.UnwatchThread(recent.getID()));
-        popularThreadAdapter.getOnMarkAsClickedObservable().subscribe(recent ->
+        popularThreadAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
                 controller.MarkThreadAsRead(recent.getID()));
+        popularThreadAdapter.OnGoToLastPageClickedObservable.subscribe(scrapedThread -> {
+            listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), 0, scrapedThread.getPageCount());
+        });
     }
 
     @Override

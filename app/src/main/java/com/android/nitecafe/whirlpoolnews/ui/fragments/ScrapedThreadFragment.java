@@ -166,14 +166,17 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
         mRecycleView.setLayoutManager(layoutManager);
 
         forumThreadAdapter = new ScrapedThreadAdapter(mIWatchedThreadService);
-        forumThreadAdapter.getOnThreadClickedObservable()
+        forumThreadAdapter.OnThreadClickedObservable
                 .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount()));
-        forumThreadAdapter.getOnWatchClickedObservable().subscribe(thread
+        forumThreadAdapter.OnWatchClickedObservable.subscribe(thread
                 -> _controller.WatchThread(thread.getID()));
-        forumThreadAdapter.getOnUnwatchedObservable().subscribe(recent ->
+        forumThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
                 _controller.UnwatchThread(recent.getID()));
-        forumThreadAdapter.getOnMarkAsClickedObservable().subscribe(recent ->
+        forumThreadAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
                 _controller.MarkThreadAsRead(recent.getID()));
+        forumThreadAdapter.OnGoToLastPageClickedObservable.subscribe(scrapedThread -> {
+            listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), 0, scrapedThread.getPageCount());
+        });
 
         mRecycleView.setAdapter(forumThreadAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());

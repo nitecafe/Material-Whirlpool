@@ -96,14 +96,18 @@ public class RecentFragment extends BaseFragment implements IRecentFragment {
 
         stickyHeaderAdapter = new ThreadStickyHeaderAdapter<>(mIWatchedThreadService, new StickyHeaderUtil());
 
-        stickyHeaderAdapter.getOnThreadClickedObservable().subscribe(
+        stickyHeaderAdapter.OnThreadClickedObservable.subscribe(
                 recent -> listener.OnThreadClicked(recent.getID(), recent.getTITLE(), WhirlpoolUtils.getNumberOfPage(recent.getREPLIES())));
-        stickyHeaderAdapter.getOnWatchClickedObservable().subscribe(thread
+        stickyHeaderAdapter.OnWatchClickedObservable.subscribe(thread
                 -> _controller.WatchThread(thread.getID()));
-        stickyHeaderAdapter.getOnUnwatchedObservable().subscribe(recent ->
+        stickyHeaderAdapter.OnUnwatchClickedObservable.subscribe(recent ->
                 _controller.UnwatchThread(recent.getID()));
-        stickyHeaderAdapter.getOnMarkAsClickedObservable().subscribe(recent ->
+        stickyHeaderAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
                 _controller.MarkThreadAsRead(recent.getID()));
+        stickyHeaderAdapter.OnGoToLastPageClickedObservable.subscribe(recent -> {
+            int lastPage = WhirlpoolUtils.getNumberOfPage(recent.getREPLIES());
+            listener.OnThreadClicked(recent.getID(), recent.getTITLE(), lastPage, 0, lastPage);
+        });
 
         recentRecycleView.setAdapter(stickyHeaderAdapter);
         recentRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));

@@ -21,37 +21,20 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
 import rx.subjects.PublishSubject;
 
 public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateViewAdapter<ThreadBaseAdapter.ThreadViewHolder> {
 
+    public PublishSubject<T> OnThreadClickedObservable = PublishSubject.create();
+    public PublishSubject<T> OnWatchClickedObservable = PublishSubject.create();
+    public PublishSubject<T> OnMarkAsReadClickedObservable = PublishSubject.create();
+    public PublishSubject<T> OnUnwatchClickedObservable = PublishSubject.create();
+    public PublishSubject<T> OnGoToLastPageClickedObservable = PublishSubject.create();
     protected List<T> threadsList = new ArrayList<>();
     private IWatchedThreadService mWatchedThreadIdentifier;
 
-    private PublishSubject<Integer> OnThreadClickedObservable = PublishSubject.create();
-    private PublishSubject<Integer> OnWatchClickedObservable = PublishSubject.create();
-    private PublishSubject<Integer> OnMarkAsReadClickedObservable = PublishSubject.create();
-    private PublishSubject<Integer> OnUnwatchClickedObservable = PublishSubject.create();
-
     public ThreadBaseAdapter(IWatchedThreadService watchedThreadIdentifier) {
         this.mWatchedThreadIdentifier = watchedThreadIdentifier;
-    }
-
-    public Observable<T> getOnWatchClickedObservable() {
-        return OnWatchClickedObservable.map(integer -> threadsList.get(integer)).asObservable();
-    }
-
-    public Observable<T> getOnMarkAsClickedObservable() {
-        return OnMarkAsReadClickedObservable.map(integer -> threadsList.get(integer)).asObservable();
-    }
-
-    public Observable<T> getOnUnwatchedObservable() {
-        return OnUnwatchClickedObservable.map(integer -> threadsList.get(integer)).asObservable();
-    }
-
-    public Observable<T> getOnThreadClickedObservable() {
-        return OnThreadClickedObservable.map(integer -> threadsList.get(integer)).asObservable();
     }
 
     public void SetThreads(List<T> threads) {
@@ -84,7 +67,7 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
             super(itemView);
             this.itemView = itemView;
             itemView.setOnCreateContextMenuListener(this);
-            RxView.clicks(itemView).map(aVoid -> getAdapterPosition()).subscribe(OnThreadClickedObservable);
+            RxView.clicks(itemView).map(aVoid -> threadsList.get(getAdapterPosition())).subscribe(OnThreadClickedObservable);
             ButterKnife.bind(this, itemView);
         }
 
@@ -96,18 +79,23 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
             if (mWatchedThreadIdentifier.isThreadWatched(t.getID())) {
                 MenuItem unwatch = menu.add(R.string.context_menu_unwatch_thread);
                 MenuItem markAsRead = menu.add(R.string.context_menu_mark_read);
-                RxMenuItem.clicks(unwatch).map(aVoid -> getAdapterPosition())
+                RxMenuItem.clicks(unwatch).map(aVoid -> t)
                         .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent("Thread Context Menu", "Unwatch Thread", ""))
                         .subscribe(OnUnwatchClickedObservable);
-                RxMenuItem.clicks(markAsRead).map(aVoid -> getAdapterPosition())
+                RxMenuItem.clicks(markAsRead).map(aVoid -> t)
                         .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent("Thread Context Menu", "Mark as Read", ""))
                         .subscribe(OnMarkAsReadClickedObservable);
             } else {
                 MenuItem watch = menu.add(R.string.context_menu_watch_thread);
-                RxMenuItem.clicks(watch).map(aVoid -> getAdapterPosition())
+                RxMenuItem.clicks(watch).map(aVoid -> t)
                         .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent("Thread Context Menu", "Watch Thread", ""))
                         .subscribe(OnWatchClickedObservable);
             }
+
+            MenuItem lastPage = menu.add("Go To Last Page");
+            RxMenuItem.clicks(lastPage).map(aVoid -> t)
+                    .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent("Thread Context Menu", "Go To Last Page", ""))
+                    .subscribe(OnGoToLastPageClickedObservable);
         }
     }
 }
