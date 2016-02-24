@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="App Settings">
+
+        <ListPreference
+            android:defaultValue="@string/title_industry_news"
+            android:dialogTitle="Select a Home Screen"
+            android:entries="@array/entries_list_screens"
+            android:entryValues="@array/entry_values_list_screens"
+            android:key="@string/home_screen_key"
+            android:summary="Select a starting screen"
+            android:title="Home Screen"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Thread Settings">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/go_last_page_key"
+            android:summary="Go to the last page automatically when clicked"
+            android:title="Go To Last Page"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
