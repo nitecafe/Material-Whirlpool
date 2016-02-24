@@ -3,7 +3,6 @@ package com.android.nitecafe.whirlpoolnews.ui.adapters;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -65,7 +64,7 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
         else
             holder.postUserTitle.setText(scrapedPost.getUser().getGroup());
 
-        holder.postContent.setMovementMethod(LinkMovementMethod.getInstance());
+//        holder.postContent.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private Spanned parseHtmlContent(String content) {
@@ -107,6 +106,7 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
             this.itemView = itemView;
             itemView.setOnCreateContextMenuListener(this);
             ButterKnife.bind(this, itemView);
+            WhirlpoolUtils.allowLinksInTextViewToBeClickable(postContent);
         }
 
         @Override public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

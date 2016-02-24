@@ -16,7 +16,7 @@ repositories {
 
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'com.google.gms.google-services'
+
 
 android {
     compileSdkVersion 23
@@ -103,5 +103,7 @@ dependencies {
         transitive = true
     }
 
-    compile 'com.google.android.gms:play-services-analytics:8.3.0'
+    compile 'com.google.android.gms:play-services-analytics:8.4.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

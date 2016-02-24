@@ -1,5 +1,11 @@
 package com.android.nitecafe.whirlpoolnews.utilities;
 
+import android.text.Layout;
+import android.text.Spannable;
+import android.text.style.ClickableSpan;
+import android.view.MotionEvent;
+import android.widget.TextView;
+
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 
 public class WhirlpoolUtils {
@@ -38,5 +44,41 @@ public class WhirlpoolUtils {
         content = content.replace("href=\"forum-replies.cfm?t=", "href=\"" + url_replace);
 
         return content;
+    }
+
+    public static void allowLinksInTextViewToBeClickable(TextView textView){
+        textView.setOnTouchListener((v, event) -> {
+            boolean ret = false;
+            CharSequence text = ((TextView) v).getText();
+            Spannable stext = Spannable.Factory.getInstance().newSpannable(text);
+            TextView widget = (TextView) v;
+            int action = event.getAction();
+
+            if (action == MotionEvent.ACTION_UP ||
+                    action == MotionEvent.ACTION_DOWN) {
+                int x = (int) event.getX();
+                int y = (int) event.getY();
+
+                x -= widget.getTotalPaddingLeft();
+                y -= widget.getTotalPaddingTop();
+
+                x += widget.getScrollX();
+                y += widget.getScrollY();
+
+                Layout layout = widget.getLayout();
+                int line = layout.getLineForVertical(y);
+                int off = layout.getOffsetForHorizontal(line, x);
+
+                ClickableSpan[] link = stext.getSpans(off, off, ClickableSpan.class);
+
+                if (link.length != 0) {
+                    if (action == MotionEvent.ACTION_UP) {
+                        link[0].onClick(widget);
+                    }
+                    ret = true;
+                }
+            }
+            return ret;
+        });
     }
 }
