@@ -45,4 +45,6 @@
     <string name="message_remove_thread_from_favourite">Removed from favourite list</string>
     <string name="context_menu_thread_remove_favourite">Remove from Favourites</string>
     <string name="context_menu_thread_add_favourite">Add to Favourites</string>
+    <string name="home_screen_key">setting_list_default_home_screen</string>
+    <string name="go_last_page_key">setting_checkbox_open_last_page</string>
 </resources>

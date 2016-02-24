@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 
@@ -30,6 +31,7 @@ import com.android.nitecafe.whirlpoolnews.web.WhimsService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -60,6 +62,8 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         ((WhirlpoolApp) getApplication()).getDaggerComponent().inject(this);
         ButterKnife.bind(this);
 
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
         String scheme = getIntent().getScheme();
         if (IsFromInternalAppLink(scheme)) {
             parseInternalLink();
@@ -67,8 +71,17 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             drawer.setSelection(apiKeyDrawerItem, false);
             startFragmentWithNoBackStack(FragmentsEnum.API_KEY);
         } else if (savedInstanceState == null) {
-            drawer.setSelection(newsItemDrawerItem, false);
-            startFragmentWithNoBackStack(FragmentsEnum.NEWS);
+
+            String homeScreen = mSharedPreferences.getString(getString(R.string.home_screen_key), "");
+            if (homeScreen.isEmpty()) {
+                drawer.setSelection(newsItemDrawerItem, false);
+                startFragmentWithNoBackStack(FragmentsEnum.NEWS);
+            } else {
+                PrimaryDrawerItem drawerItemFromString = getDrawerItemFromString(homeScreen);
+                drawer.setSelection(drawerItemFromString, false);
+                FragmentsEnum fragmentEnumromDrawerItem = getFragmentEnumFromDrawerItem(drawerItemFromString);
+                startFragmentWithNoBackStack(fragmentEnumromDrawerItem);
+            }
         }
 
         whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge());
@@ -146,7 +159,14 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @Override
     public void OnThreadClicked(int threadId, String threadTitle, int totalPage) {
-        OnThreadClicked(threadId, threadTitle, 1, 0, totalPage);
+        if (optionTrueToGoLastPage())
+            OnThreadClicked(threadId, threadTitle, totalPage, 0, totalPage);
+        else
+            OnThreadClicked(threadId, threadTitle, 1, 0, totalPage);
+    }
+
+    private boolean optionTrueToGoLastPage() {
+        return mSharedPreferences.getBoolean(getString(R.string.go_last_page_key), false);
     }
 
     @Override

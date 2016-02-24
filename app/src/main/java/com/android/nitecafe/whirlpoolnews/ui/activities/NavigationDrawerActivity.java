@@ -19,6 +19,7 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.RecentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.SearchFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.WatchedFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.WhimsFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.WhirlpoolPreferencesFragment;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -39,13 +40,18 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
     public final int WATCHED_POSITION = 6;
     public final int WHIMS_POSITION = 8;
     public final int SEARCH_POSITION = 10;
-    public final int APIKEY_POSITION = 11;
-    public final int ABOUT_POSITION = 12;
+    public final int SETTING_POSITION = 11;
+    public final int APIKEY_POSITION = 12;
+    public final int ABOUT_POSITION = 13;
     protected Drawer drawer;
     protected Toolbar toolbar;
     protected PrimaryDrawerItem apiKeyDrawerItem;
     protected PrimaryDrawerItem newsItemDrawerItem;
     protected PrimaryDrawerItem whimsDrawerItem;
+    protected PrimaryDrawerItem forumDrawerItems;
+    protected PrimaryDrawerItem popularItems;
+    protected PrimaryDrawerItem recentItems;
+    protected PrimaryDrawerItem watchedItems;
     private PrimaryDrawerItem searchDrawerItem;
     private PrimaryDrawerItem aboutDrawerItem;
     private AccountHeader headerResult;
@@ -62,14 +68,14 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
 
         newsItemDrawerItem = new PrimaryDrawerItem().withName("Industry News");
         newsItemDrawerItem.withIcon(R.drawable.ic_news);
-        PrimaryDrawerItem forum = new PrimaryDrawerItem().withName("Discussion Forum");
-        forum.withIcon(R.drawable.ic_forum);
+        forumDrawerItems = new PrimaryDrawerItem().withName("Discussion Forum");
+        forumDrawerItems.withIcon(R.drawable.ic_forum);
 
-        PrimaryDrawerItem popularItems = new PrimaryDrawerItem().withName("Popular Threads");
+        popularItems = new PrimaryDrawerItem().withName("Popular Threads");
         popularItems.withIcon(R.drawable.ic_popular_threads);
-        PrimaryDrawerItem recentItems = new PrimaryDrawerItem().withName("Recent Threads");
+        recentItems = new PrimaryDrawerItem().withName("Recent Threads");
         recentItems.withIcon(R.drawable.ic_recent_threads);
-        PrimaryDrawerItem watchedItems = new PrimaryDrawerItem().withName("Watched Threads");
+        watchedItems = new PrimaryDrawerItem().withName("Watched Threads");
         watchedItems.withIcon(R.drawable.ic_watched_threads);
 
         whimsDrawerItem = new PrimaryDrawerItem().withName("Private Messages");
@@ -79,16 +85,56 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         searchDrawerItem = new PrimaryDrawerItem().withName("Search");
         searchDrawerItem.withIcon(R.drawable.ic_search_threads);
         aboutDrawerItem = new PrimaryDrawerItem().withName("About").withIcon(R.drawable.ic_about_me);
+        PrimaryDrawerItem settingDrawerItem = new PrimaryDrawerItem().withName("Settings").withIcon(R.drawable.ic_settings);
 
         drawer = new DrawerBuilder().withActivity(this)
                 .addDrawerItems(newsItemDrawerItem,
-                        forum, new DividerDrawerItem(), popularItems, recentItems, watchedItems,
+                        forumDrawerItems, new DividerDrawerItem(), popularItems, recentItems, watchedItems,
                         new DividerDrawerItem(), whimsDrawerItem, new DividerDrawerItem(),
-                        searchDrawerItem, apiKeyDrawerItem, aboutDrawerItem)
+                        searchDrawerItem, settingDrawerItem, apiKeyDrawerItem, aboutDrawerItem)
                 .withActionBarDrawerToggle(false)
                 .withAccountHeader(headerResult)
                 .withOnDrawerItemClickListener(this)
                 .build();
+    }
+
+    protected PrimaryDrawerItem getDrawerItemFromString(String s) {
+
+        String forum = getString(R.string.title_discussion_forum);
+        String popularThreads = getString(R.string.title_popular_threads);
+        String recentThreads = getString(R.string.title_recent_posts);
+        String watchedThreads = getString(R.string.title_watched_threads);
+        String privateMessages = getString(R.string.title_private_messages);
+
+        if (s.equals(forum))
+            return forumDrawerItems;
+        if (s.equals(popularThreads))
+            return popularItems;
+        if (s.equals(recentThreads))
+            return recentItems;
+        if (s.equals(watchedThreads))
+            return watchedItems;
+        if (s.equals(privateMessages))
+            return whimsDrawerItem;
+
+        return newsItemDrawerItem;
+
+    }
+
+    protected FragmentsEnum getFragmentEnumFromDrawerItem(PrimaryDrawerItem item) {
+
+        if (item == forumDrawerItems)
+            return FragmentsEnum.FORUM;
+        if (item == popularItems)
+            return FragmentsEnum.POPULAR_THREAD;
+        if (item == recentItems)
+            return FragmentsEnum.RECENT_THREAD;
+        if (item == watchedItems)
+            return FragmentsEnum.WATCHED_THREAD;
+        if (item == whimsDrawerItem)
+            return FragmentsEnum.WHIMS;
+
+        return FragmentsEnum.NEWS;
     }
 
     protected void updateProfileDetails(String username) {
@@ -149,6 +195,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
                 break;
             case ABOUT_POSITION:
                 fragmentToStart = FragmentsEnum.ABOUT;
+                break;
+            case SETTING_POSITION:
+                fragmentToStart = FragmentsEnum.SETTING;
                 break;
             default:
                 fragmentToStart = FragmentsEnum.NEWS;
@@ -219,6 +268,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
                 break;
             case ABOUT:
                 fragmentToStart = CreateAboutFragment();
+                break;
+            case SETTING:
+                fragmentToStart = new WhirlpoolPreferencesFragment();
                 break;
             default:
                 fragmentToStart = new NewsFragment();
