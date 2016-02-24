@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.android.nitecafe.whirlpoolnews.R;
-import com.android.nitecafe.whirlpoolnews.ui.FragmentsEnum;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.NewsFragment;
@@ -121,20 +120,20 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
 
     }
 
-    protected FragmentsEnum getFragmentEnumFromDrawerItem(PrimaryDrawerItem item) {
+    protected int getPositionFromDrawerItem(PrimaryDrawerItem item) {
 
         if (item == forumDrawerItems)
-            return FragmentsEnum.FORUM;
+            return FORUM_POSITION;
         if (item == popularItems)
-            return FragmentsEnum.POPULAR_THREAD;
+            return POPULAR_POSITION;
         if (item == recentItems)
-            return FragmentsEnum.RECENT_THREAD;
+            return RECENT_POSITION;
         if (item == watchedItems)
-            return FragmentsEnum.WATCHED_THREAD;
+            return WATCHED_POSITION;
         if (item == whimsDrawerItem)
-            return FragmentsEnum.WHIMS;
+            return WHIMS_POSITION;
 
-        return FragmentsEnum.NEWS;
+        return NEWS_POSITION;
     }
 
     protected void updateProfileDetails(String username) {
@@ -167,60 +166,19 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
     @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 
-        FragmentsEnum fragmentToStart;
-        switch (position) {
-            case NEWS_POSITION:
-                fragmentToStart = FragmentsEnum.NEWS;
-                break;
-            case APIKEY_POSITION:
-                fragmentToStart = FragmentsEnum.API_KEY;
-                break;
-            case FORUM_POSITION:
-                fragmentToStart = FragmentsEnum.FORUM;
-                break;
-            case RECENT_POSITION:
-                fragmentToStart = FragmentsEnum.RECENT_THREAD;
-                break;
-            case WATCHED_POSITION:
-                fragmentToStart = FragmentsEnum.WATCHED_THREAD;
-                break;
-            case WHIMS_POSITION:
-                fragmentToStart = FragmentsEnum.WHIMS;
-                break;
-            case POPULAR_POSITION:
-                fragmentToStart = FragmentsEnum.POPULAR_THREAD;
-                break;
-            case SEARCH_POSITION:
-                fragmentToStart = FragmentsEnum.SEARCH;
-                break;
-            case ABOUT_POSITION:
-                fragmentToStart = FragmentsEnum.ABOUT;
-                break;
-            case SETTING_POSITION:
-                fragmentToStart = FragmentsEnum.SETTING;
-                break;
-            default:
-                fragmentToStart = FragmentsEnum.NEWS;
-        }
-
-        startFragment(fragmentToStart);
-
-        return true;
-    }
-
-    protected void startFragmentWithNoBackStack(FragmentsEnum fragmentsEnum) {
-        Fragment fragmentToStart = InstantiateFragment(fragmentsEnum);
-        ReplaceFragment(fragmentToStart, false);
-    }
-
-    protected void startFragment(FragmentsEnum fragment) {
-        Fragment fragmentToStart = InstantiateFragment(fragment);
+        Fragment fragmentToStart = InstantiateFragment(position);
 
         //need a way to set title as i dont own the About Fragment
-        if (fragment == FragmentsEnum.ABOUT)
+        if (position == ABOUT_POSITION)
             getSupportActionBar().setTitle("About");
 
         ReplaceFragment(fragmentToStart, true);
+        return true;
+    }
+
+    protected void startFragmentWithNoBackStack(int position) {
+        Fragment fragmentToStart = InstantiateFragment(position);
+        ReplaceFragment(fragmentToStart, false);
     }
 
     private void ReplaceFragment(Fragment fragmentToStart, Boolean addToBackStack) {
@@ -232,44 +190,43 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
             fragmentTransaction.addToBackStack(null);
 
         fragmentTransaction.commit();
-
         drawer.closeDrawer();
     }
 
     @NonNull
-    private Fragment InstantiateFragment(FragmentsEnum fragment) {
+    private Fragment InstantiateFragment(Integer position) {
         Fragment fragmentToStart;
-        switch (fragment) {
-            case NEWS:
+        switch (position) {
+            case NEWS_POSITION:
                 fragmentToStart = new NewsFragment();
                 break;
-            case API_KEY:
+            case APIKEY_POSITION:
                 final LoginFragment loginFragment = new LoginFragment();
                 loginFragment.UserNameSubject.subscribe(s -> updateProfileDetails(s));
                 fragmentToStart = loginFragment;
                 break;
-            case FORUM:
+            case FORUM_POSITION:
                 fragmentToStart = new ForumFragment();
                 break;
-            case RECENT_THREAD:
+            case RECENT_POSITION:
                 fragmentToStart = new RecentFragment();
                 break;
-            case WATCHED_THREAD:
+            case WATCHED_POSITION:
                 fragmentToStart = new WatchedFragment();
                 break;
-            case WHIMS:
+            case WHIMS_POSITION:
                 fragmentToStart = new WhimsFragment();
                 break;
-            case POPULAR_THREAD:
+            case POPULAR_POSITION:
                 fragmentToStart = new PopularThreadFragment();
                 break;
-            case SEARCH:
+            case SEARCH_POSITION:
                 fragmentToStart = new SearchFragment();
                 break;
-            case ABOUT:
+            case ABOUT_POSITION:
                 fragmentToStart = CreateAboutFragment();
                 break;
-            case SETTING:
+            case SETTING_POSITION:
                 fragmentToStart = new WhirlpoolPreferencesFragment();
                 break;
             default:

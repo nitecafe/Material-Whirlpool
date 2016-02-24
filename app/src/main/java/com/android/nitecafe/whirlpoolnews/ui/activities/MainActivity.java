@@ -15,7 +15,6 @@ import android.view.View;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
-import com.android.nitecafe.whirlpoolnews.ui.FragmentsEnum;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.IndividualWhimFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
@@ -69,18 +68,18 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             parseInternalLink();
         } else if (!mWhirlpoolRestClient.hasApiKeyBeenSet()) {
             drawer.setSelection(apiKeyDrawerItem, false);
-            startFragmentWithNoBackStack(FragmentsEnum.API_KEY);
+            startFragmentWithNoBackStack(APIKEY_POSITION);
         } else if (savedInstanceState == null) {
 
             String homeScreen = mSharedPreferences.getString(getString(R.string.home_screen_key), "");
             if (homeScreen.isEmpty()) {
                 drawer.setSelection(newsItemDrawerItem, false);
-                startFragmentWithNoBackStack(FragmentsEnum.NEWS);
+                startFragmentWithNoBackStack(NEWS_POSITION);
             } else {
                 PrimaryDrawerItem drawerItemFromString = getDrawerItemFromString(homeScreen);
                 drawer.setSelection(drawerItemFromString, false);
-                FragmentsEnum fragmentEnumromDrawerItem = getFragmentEnumFromDrawerItem(drawerItemFromString);
-                startFragmentWithNoBackStack(fragmentEnumromDrawerItem);
+                int position = getPositionFromDrawerItem(drawerItemFromString);
+                startFragmentWithNoBackStack(position);
             }
         }
 
