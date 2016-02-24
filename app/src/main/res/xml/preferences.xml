@@ -2,26 +2,26 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="App Settings">
+        android:title="Application">
 
         <ListPreference
             android:defaultValue="@string/title_industry_news"
-            android:dialogTitle="Select a Home Screen"
+            android:dialogTitle="Select a home screen"
             android:entries="@array/entries_list_screens"
             android:entryValues="@array/entry_values_list_screens"
             android:key="@string/home_screen_key"
-            android:summary="Select a starting screen"
+            android:summary="Screen to show on application startup"
             android:title="Home Screen"/>
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Thread Settings">
+        android:title="Threads">
 
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/go_last_page_key"
-            android:summary="Go to the last page automatically when clicked"
-            android:title="Go To Last Page"/>
+            android:summary="When a thread is opened, show the last page"
+            android:title="Auto last page"/>
 
     </PreferenceCategory>
 
