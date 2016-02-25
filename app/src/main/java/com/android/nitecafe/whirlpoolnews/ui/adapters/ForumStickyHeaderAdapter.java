@@ -14,7 +14,7 @@ import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.models.Forum;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.RecyclerViewAdapterClickListener;
-import com.android.nitecafe.whirlpoolnews.utilities.IFavouriteThreadService;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IFavouriteThreadService;
 import com.jakewharton.rxbinding.view.RxMenuItem;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 

@@ -14,7 +14,7 @@ import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.Watched;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
-import com.android.nitecafe.whirlpoolnews.utilities.IThreadScraper;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolService;
 

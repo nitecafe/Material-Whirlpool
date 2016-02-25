@@ -1,4 +1,4 @@
-package com.android.nitecafe.whirlpoolnews.utilities;
+package com.android.nitecafe.whirlpoolnews.utilities.interfaces;
 
 import java.util.HashMap;
 

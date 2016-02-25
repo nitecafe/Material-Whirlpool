@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.utilities.FavouriteThreadService;
-import com.android.nitecafe.whirlpoolnews.utilities.IObjectSerializer;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IObjectSerializer;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -11,7 +11,7 @@ import com.android.nitecafe.whirlpoolnews.models.UserDetailsList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
-import com.android.nitecafe.whirlpoolnews.utilities.ICachingUtils;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.ICachingUtils;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 

@@ -1,4 +1,4 @@
-package com.android.nitecafe.whirlpoolnews.utilities;
+package com.android.nitecafe.whirlpoolnews.utilities.interfaces;
 
 /**
  * To get values set by users in the setting page

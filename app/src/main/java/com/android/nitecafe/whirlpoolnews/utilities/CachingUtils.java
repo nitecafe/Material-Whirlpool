@@ -9,6 +9,7 @@ import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.ICachingUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

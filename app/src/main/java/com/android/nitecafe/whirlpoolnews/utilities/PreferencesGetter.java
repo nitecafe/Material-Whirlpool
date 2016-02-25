@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.android.nitecafe.whirlpoolnews.R;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 
 public class PreferencesGetter implements IPreferencesGetter {
 

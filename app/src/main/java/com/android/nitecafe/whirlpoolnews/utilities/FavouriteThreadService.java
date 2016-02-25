@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.Forum;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IFavouriteThreadService;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IObjectSerializer;
 
 import java.util.ArrayList;
 import java.util.HashMap;

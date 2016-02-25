@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.IWhirlpoolThread;
-import com.android.nitecafe.whirlpoolnews.utilities.IStickyHeaderUtil;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IStickyHeaderUtil;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;

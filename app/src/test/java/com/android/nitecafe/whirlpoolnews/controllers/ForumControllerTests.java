@@ -3,7 +3,7 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 import com.android.nitecafe.whirlpoolnews.models.Forum;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IForumFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IFavouriteThreadService;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IFavouriteThreadService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import junit.framework.Assert;

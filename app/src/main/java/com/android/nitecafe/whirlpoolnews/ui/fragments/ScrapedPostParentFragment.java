@@ -22,6 +22,7 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.ScrapedPostParentController;
+import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostParentFragment;
 
 import java.util.ArrayList;
 import java.util.List;

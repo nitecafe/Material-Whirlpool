@@ -13,7 +13,7 @@ import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
 import com.android.nitecafe.whirlpoolnews.models.UserDetailsList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
-import com.android.nitecafe.whirlpoolnews.utilities.IThreadScraper;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolService;
 import com.squareup.okhttp.HttpUrl;

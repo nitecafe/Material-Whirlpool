@@ -17,7 +17,7 @@ import com.android.nitecafe.whirlpoolnews.ui.adapters.PopularScrapedStickyThread
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IPopularFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.IPreferencesGetter;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.utilities.StickyHeaderUtil;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;

@@ -6,6 +6,7 @@ import com.android.nitecafe.whirlpoolnews.models.ScrapedPostList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
 import com.android.nitecafe.whirlpoolnews.models.User;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IThreadScraper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

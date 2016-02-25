@@ -1,5 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.utilities;
 
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IStickyHeaderUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 

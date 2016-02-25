@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.Whim;
-import com.android.nitecafe.whirlpoolnews.utilities.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.jakewharton.rxbinding.view.RxView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 

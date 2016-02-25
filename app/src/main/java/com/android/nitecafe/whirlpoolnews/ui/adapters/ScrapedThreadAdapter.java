@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
-import com.android.nitecafe.whirlpoolnews.utilities.IPreferencesGetter;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
 public class ScrapedThreadAdapter extends ThreadBaseAdapter<ScrapedThread> {
