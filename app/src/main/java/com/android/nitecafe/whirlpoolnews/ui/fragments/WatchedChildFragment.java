@@ -31,6 +31,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
+/**
+ * Inherited by AllWatchedChildFragment
+ */
 public class WatchedChildFragment extends BaseFragment implements IWatchedFragment {
 
     @Inject WatchedController _controller;
@@ -44,6 +47,7 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
     public void onResume() {
         super.onResume();
         startGoogleAnalytic();
+        loadWatched();
     }
 
     protected void startGoogleAnalytic() {
@@ -82,8 +86,6 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
         _controller.Attach(this);
 
         SetupRecycleView();
-
-        loadWatched();
 
         return inflate;
     }

@@ -105,7 +105,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         }
 
         WhirlpoolApp.getInstance().trackEvent("Internal Links", "Opening internal links", "");
-        startPostViewPagerFragment(threadId, "Thread From Link", 1, page, 0);
+        startPostViewPagerFragmentNoBackStack(threadId, "Thread From Link", 1, page, 0);
     }
 
     @Override
@@ -181,14 +181,20 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         startFragment(scrapedPostParentFragment);
     }
 
-    private void setUpPostReplyFab(ScrapedPostParentFragment scrapedPostParentFragment) {
-        scrapedPostParentFragment.OnFragmentDestroySubject.subscribe(aVoid ->
-                fabReplyPost.setVisibility(View.GONE));
-        scrapedPostParentFragment.OnFragmentCreateViewSubject.subscribe(aVoid -> {
-            resetFabLocationToBottom(fabReplyPost);
-            fabReplyPost.setVisibility(View.VISIBLE);
-        });
+    private void startPostViewPagerFragmentNoBackStack(int threadId, String threadTitle, int totalPage, int page, int postLastRead) {
+        mThreadIdLoaded = threadId;
+        ScrapedPostParentFragment scrapedPostParentFragment = ScrapedPostParentFragment.newInstance(threadId, threadTitle, page, postLastRead, totalPage);
+        startFragmentNoBackStack(scrapedPostParentFragment);
     }
+
+//    private void setUpPostReplyFab(ScrapedPostParentFragment scrapedPostParentFragment) {
+//        scrapedPostParentFragment.OnFragmentDestroySubject.subscribe(aVoid ->
+//                fabReplyPost.setVisibility(View.GONE));
+//        scrapedPostParentFragment.OnFragmentCreateViewSubject.subscribe(aVoid -> {
+//            resetFabLocationToBottom(fabReplyPost);
+//            fabReplyPost.setVisibility(View.VISIBLE);
+//        });
+//    }
 
     private void setUpWhimReplyFab(IndividualWhimFragment individualWhimFragment) {
         individualWhimFragment.OnFragmentDestroySubject.subscribe(aVoid ->
@@ -220,10 +226,17 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
         fts.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
         FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, fragment);
-
         fragmentTransaction.addToBackStack(null);
-        fts.commit();
+        fragmentTransaction.commit();
     }
+
+    private void startFragmentNoBackStack(Fragment fragment) {
+        FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
+        fts.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+        FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, fragment);
+        fragmentTransaction.commit();
+    }
+
 
     @OnClick(R.id.fab_reply_post)
     public void launchReplyPageInBrowser() {

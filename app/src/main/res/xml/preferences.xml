@@ -11,7 +11,7 @@
             android:entryValues="@array/entry_values_list_screens"
             android:key="@string/home_screen_key"
             android:summary="Screen to show on application startup"
-            android:title="Home Screen"/>
+            android:title="Home screen"/>
     </PreferenceCategory>
 
     <PreferenceCategory
