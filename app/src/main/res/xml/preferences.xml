@@ -26,7 +26,7 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/go_last_page_key"
-            android:summary="When a thread is opened, show the last page"
+            android:summary="When a thread is opened (except for watched threads)"
             android:title="Auto last page"/>
 
     </PreferenceCategory>
