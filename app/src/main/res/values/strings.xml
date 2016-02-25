@@ -47,4 +47,5 @@
     <string name="context_menu_thread_add_favourite">Add to Favourites</string>
     <string name="home_screen_key">setting_list_default_home_screen</string>
     <string name="go_last_page_key">setting_checkbox_open_last_page</string>
+    <string name="dark_theme_key">setting_dark_theme</string>
 </resources>

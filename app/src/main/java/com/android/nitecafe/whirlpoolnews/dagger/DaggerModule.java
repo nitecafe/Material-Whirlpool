@@ -11,8 +11,10 @@ import com.android.nitecafe.whirlpoolnews.utilities.FavouriteThreadService;
 import com.android.nitecafe.whirlpoolnews.utilities.ICachingUtils;
 import com.android.nitecafe.whirlpoolnews.utilities.IFavouriteThreadService;
 import com.android.nitecafe.whirlpoolnews.utilities.IObjectSerializer;
+import com.android.nitecafe.whirlpoolnews.utilities.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.utilities.IThreadScraper;
 import com.android.nitecafe.whirlpoolnews.utilities.ObjectSerializer;
+import com.android.nitecafe.whirlpoolnews.utilities.PreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.WatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
@@ -97,5 +99,10 @@ public class DaggerModule {
     @Provides
     @Singleton IObjectSerializer provideObjectSerializer(ObjectSerializer objectSerializer) {
         return objectSerializer;
+    }
+
+    @Provides
+    @Singleton IPreferencesGetter providesPreferenceGetter(Application application, SharedPreferences sharedPreferences) {
+        return new PreferencesGetter(sharedPreferences, application);
     }
 }

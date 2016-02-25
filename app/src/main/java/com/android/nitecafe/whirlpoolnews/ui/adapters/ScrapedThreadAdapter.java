@@ -7,12 +7,16 @@ import android.view.ViewGroup;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
+import com.android.nitecafe.whirlpoolnews.utilities.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
 public class ScrapedThreadAdapter extends ThreadBaseAdapter<ScrapedThread> {
 
-    public ScrapedThreadAdapter(IWatchedThreadService watchedThreadIdentifier) {
+    private IPreferencesGetter preferencesGetter;
+
+    public ScrapedThreadAdapter(IWatchedThreadService watchedThreadIdentifier, IPreferencesGetter preferencesGetter) {
         super(watchedThreadIdentifier);
+        this.preferencesGetter = preferencesGetter;
     }
 
     @Override
@@ -31,9 +35,12 @@ public class ScrapedThreadAdapter extends ThreadBaseAdapter<ScrapedThread> {
             holder.threadLastPostInfo.setText(forumThread.getLast_poster());
 
         if (forumThread.isSticky())
-            holder.itemView.setBackgroundResource(R.color.primary_light);
+            if (preferencesGetter.isDarkThemeOn())
+                holder.itemView.setBackgroundResource(R.color.primary_dark);
+            else
+                holder.itemView.setBackgroundResource(R.color.primary_light);
         else
-            holder.itemView.setBackgroundResource(R.color.white);
+            holder.itemView.setBackgroundResource(0);
     }
 
     @Override

@@ -16,6 +16,7 @@ import com.android.nitecafe.whirlpoolnews.ui.adapters.PopularScrapedStickyThread
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.ISearchResultFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.utilities.StickyHeaderUtil;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
@@ -36,6 +37,7 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
     private static final String FORUM_ID = "ForumId";
     private static final String GROUP_ID = "GroupId";
     @Inject SearchResultController controller;
+    @Inject IPreferencesGetter preferencesGetter;
     @Inject IWatchedThreadService watchedThreadIdentifier;
     @Bind(R.id.popular_thread_recycle_view) UltimateRecyclerView recyclerView;
     @Bind(R.id.popular_thread_progress_loader) MaterialProgressBar progressBar;
@@ -114,7 +116,7 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        popularThreadAdapter = new PopularScrapedStickyThreadAdapter(watchedThreadIdentifier, new StickyHeaderUtil());
+        popularThreadAdapter = new PopularScrapedStickyThreadAdapter(watchedThreadIdentifier, new StickyHeaderUtil(), preferencesGetter);
         SubscribeToObservables();
 
         recyclerView.setAdapter(popularThreadAdapter);

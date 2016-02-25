@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.Whim;
+import com.android.nitecafe.whirlpoolnews.utilities.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.jakewharton.rxbinding.view.RxView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
@@ -27,6 +28,11 @@ public class WhimsAdapter extends UltimateViewAdapter<WhimsAdapter.WhimViewHolde
 
     private List<Whim> whims = new ArrayList<>();
     private PublishSubject<Integer> OnWhimClickedSubject = PublishSubject.create();
+    private IPreferencesGetter preferencesGetter;
+
+    public WhimsAdapter(IPreferencesGetter preferencesGetter) {
+        this.preferencesGetter = preferencesGetter;
+    }
 
     public void SetWhims(List<Whim> whims) {
         this.whims = whims;
@@ -54,10 +60,13 @@ public class WhimsAdapter extends UltimateViewAdapter<WhimsAdapter.WhimViewHolde
         String blurb = message.substring(0, Math.min(message.length(), 50));
         holder.whimContent.setText(blurb + "...");
 
-        if (whim.getVIEWED() == 0)
-            holder.itemView.setBackgroundResource(R.color.primary_light);
-        else
-            holder.itemView.setBackgroundResource(R.color.white);
+        if (whim.getVIEWED() == 0) {
+            if (preferencesGetter.isDarkThemeOn())
+                holder.itemView.setBackgroundResource(R.color.primary_dark);
+            else
+                holder.itemView.setBackgroundResource(R.color.primary_light);
+        } else
+            holder.itemView.setBackgroundResource(0);
     }
 
     @Override

@@ -25,6 +25,7 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.ThreadFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnSearchClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnWhimClicked;
+import com.android.nitecafe.whirlpoolnews.utilities.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.WhimsService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
@@ -50,18 +51,20 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Inject WhimsService whimsService;
     @Inject @Named("whim") PublishSubject<Void> whimSubject;
     @Inject SharedPreferences mSharedPreferences;
+    @Inject IPreferencesGetter preferencesGetter;
     private int mThreadIdLoaded;
     private int mForumId;
     private int whimId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        ((WhirlpoolApp) getApplication()).getDaggerComponent().inject(this);
+        setThemeBasedOnSettings();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ((WhirlpoolApp) getApplication()).getDaggerComponent().inject(this);
         ButterKnife.bind(this);
-
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         String scheme = getIntent().getScheme();
         if (IsFromInternalAppLink(scheme)) {
@@ -71,7 +74,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             startFragmentWithNoBackStack(APIKEY_POSITION);
         } else if (savedInstanceState == null) {
 
-            String homeScreen = mSharedPreferences.getString(getString(R.string.home_screen_key), "");
+            String homeScreen = preferencesGetter.getHomeScreen();
             if (homeScreen.isEmpty()) {
                 drawer.setSelection(newsItemDrawerItem, false);
                 startFragmentWithNoBackStack(NEWS_POSITION);
@@ -88,6 +91,13 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         final String userNameFromPreference = getUserNameFromPreference();
         if (!userNameFromPreference.isEmpty())
             updateProfileDetails(userNameFromPreference);
+    }
+
+    private void setThemeBasedOnSettings() {
+        if (preferencesGetter.isDarkThemeOn())
+            setTheme(R.style.AppTheme_Dark);
+        else
+            setTheme(R.style.AppTheme);
     }
 
     private String getUserNameFromPreference() {
@@ -158,14 +168,10 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @Override
     public void OnThreadClicked(int threadId, String threadTitle, int totalPage) {
-        if (optionTrueToGoLastPage())
+        if (preferencesGetter.getOpenLastPage())
             OnThreadClicked(threadId, threadTitle, totalPage, 0, totalPage);
         else
             OnThreadClicked(threadId, threadTitle, 1, 0, totalPage);
-    }
-
-    private boolean optionTrueToGoLastPage() {
-        return mSharedPreferences.getBoolean(getString(R.string.go_last_page_key), false);
     }
 
     @Override

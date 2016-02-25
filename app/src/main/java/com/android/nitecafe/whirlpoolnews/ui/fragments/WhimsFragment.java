@@ -16,6 +16,7 @@ import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.WhimsAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnWhimClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWhimsFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.IPreferencesGetter;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -31,6 +32,7 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 public class WhimsFragment extends BaseFragment implements IWhimsFragment {
 
     @Inject WhimsController whimsController;
+    @Inject IPreferencesGetter preferencesGetter;
     @Bind(R.id.whim_progress_loader) MaterialProgressBar progressBar;
     @Bind(R.id.whim_recycle_view) UltimateRecyclerView recyclerView;
     private WhimsAdapter whimAdapter;
@@ -77,7 +79,7 @@ public class WhimsFragment extends BaseFragment implements IWhimsFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        whimAdapter = new WhimsAdapter();
+        whimAdapter = new WhimsAdapter(preferencesGetter);
         whimAdapter.getOnWhimClickedSubject().subscribe(whim ->
                 OpenWhim(whim.getID(), whim.getMESSAGE(), whim.getFROM().getNAME()));
 

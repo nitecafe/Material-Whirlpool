@@ -65,26 +65,28 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
                 .withProfileImagesClickable(false)
                 .build();
 
-        newsItemDrawerItem = new PrimaryDrawerItem().withName("Industry News");
+        newsItemDrawerItem = new PrimaryDrawerItem().withName("Industry News").withIconTintingEnabled(true);
         newsItemDrawerItem.withIcon(R.drawable.ic_news);
-        forumDrawerItems = new PrimaryDrawerItem().withName("Discussion Forum");
+        forumDrawerItems = new PrimaryDrawerItem().withName("Discussion Forum").withIconTintingEnabled(true);
         forumDrawerItems.withIcon(R.drawable.ic_forum);
 
-        popularItems = new PrimaryDrawerItem().withName("Popular Threads");
+        popularItems = new PrimaryDrawerItem().withName("Popular Threads").withIconTintingEnabled(true);
         popularItems.withIcon(R.drawable.ic_popular_threads);
-        recentItems = new PrimaryDrawerItem().withName("Recent Threads");
+        recentItems = new PrimaryDrawerItem().withName("Recent Threads").withIconTintingEnabled(true);
         recentItems.withIcon(R.drawable.ic_recent_threads);
-        watchedItems = new PrimaryDrawerItem().withName("Watched Threads");
+        watchedItems = new PrimaryDrawerItem().withName("Watched Threads").withIconTintingEnabled(true);
         watchedItems.withIcon(R.drawable.ic_watched_threads);
 
-        whimsDrawerItem = new PrimaryDrawerItem().withName("Private Messages");
+        whimsDrawerItem = new PrimaryDrawerItem().withName("Private Messages").withIconTintingEnabled(true);
         whimsDrawerItem.withIcon(R.drawable.ic_whims);
-        apiKeyDrawerItem = new PrimaryDrawerItem().withName("Set API Key");
+        apiKeyDrawerItem = new PrimaryDrawerItem().withName("Set API Key").withIconTintingEnabled(true);
         apiKeyDrawerItem.withIcon(R.drawable.ic_api_key);
-        searchDrawerItem = new PrimaryDrawerItem().withName("Search");
+        searchDrawerItem = new PrimaryDrawerItem().withName("Search").withIconTintingEnabled(true);
         searchDrawerItem.withIcon(R.drawable.ic_search_threads);
-        aboutDrawerItem = new PrimaryDrawerItem().withName("About").withIcon(R.drawable.ic_about_me);
-        PrimaryDrawerItem settingDrawerItem = new PrimaryDrawerItem().withName("Settings").withIcon(R.drawable.ic_settings);
+        aboutDrawerItem = new PrimaryDrawerItem().withName("About").withIcon(R.drawable.ic_about_me).withIconTintingEnabled(true);
+        PrimaryDrawerItem settingDrawerItem = new PrimaryDrawerItem()
+                .withName("Settings").withIconTintingEnabled(true)
+                .withIcon(R.drawable.ic_settings);
 
         drawer = new DrawerBuilder().withActivity(this)
                 .addDrawerItems(newsItemDrawerItem,
