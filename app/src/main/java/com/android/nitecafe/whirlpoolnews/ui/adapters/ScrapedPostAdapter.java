@@ -64,7 +64,11 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
         else
             holder.postUserTitle.setText(scrapedPost.getUser().getGroup());
 
-//        holder.postContent.setMovementMethod(LinkMovementMethod.getInstance());
+        //stop users from replying when post is deleted since post Id does not exists anymore
+        if(scrapedPost.isDeleted())
+            holder.itemView.setLongClickable(false);
+        else
+            holder.itemView.setLongClickable(true);
     }
 
     private Spanned parseHtmlContent(String content) {
