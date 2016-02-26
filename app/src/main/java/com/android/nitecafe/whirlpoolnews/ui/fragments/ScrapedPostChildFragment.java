@@ -51,6 +51,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     private ScrapedPostAdapter scrapedPostAdapter;
     private String mThreadTitle;
     private int mPostLastReadId;
+    private int mTotalPageCount;
 
     public static ScrapedPostChildFragment newInstance(int threadId, String threadTitle, int page, int postLastRead) {
         ScrapedPostChildFragment fragment = new ScrapedPostChildFragment();
@@ -153,6 +154,8 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
                     bookmark.setBookMarkName(input.toString());
                     bookmark.setThreadId(mThreadId);
                     bookmark.setPageLocated(mPageToLoad);
+                    bookmark.setThreadTitle(mThreadTitle);
+                    bookmark.setTotalPage(mTotalPageCount);
                     _controller.addToPostBookmark(bookmark);
                 })
                 .positiveText("Add")
@@ -198,6 +201,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
 
     @Override
     public void UpdatePageCount(int pageCount) {
+        mTotalPageCount = pageCount;
         OnPageCountUpdateSubject.onNext(pageCount);
     }
 

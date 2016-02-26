@@ -7,6 +7,8 @@ public class PostBookmark {
     private int postId;
     private int pageLocated;
     private int positionOnPage;
+    private String threadTitle;
+    private int totalPage;
 
     public PostBookmark(String bookMarkName, int threadId, int postId, int pageLocated, int positionOnPage) {
         this.bookMarkName = bookMarkName;
@@ -53,22 +55,19 @@ public class PostBookmark {
         return positionOnPage;
     }
 
-    @Override
-    public boolean equals(Object b) {
-        if (!(b instanceof PostBookmark)) {
-            return false;
-        }
-        PostBookmark bookmark = (PostBookmark) b;
-        if (!getBookMarkName().equals(bookmark.getBookMarkName()))
-            return false;
-        if (getPageLocated() != bookmark.getPageLocated())
-            return false;
-        if (getPositionOnPage() != bookmark.getPageLocated())
-            return false;
-        if (getPostId() != bookmark.getPostId())
-            return false;
-        if (getThreadId() != bookmark.getThreadId())
-            return false;
-        return true;
+    public String getThreadTitle() {
+        return threadTitle;
+    }
+
+    public void setThreadTitle(String threadTitle) {
+        this.threadTitle = threadTitle;
+    }
+
+    public int getTotalPage() {
+        return totalPage;
+    }
+
+    public void setTotalPage(int totalPage) {
+        this.totalPage = totalPage;
     }
 }

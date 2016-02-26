@@ -6,6 +6,7 @@
         <item>@string/title_popular_threads</item>
         <item>@string/title_recent_posts</item>
         <item>@string/title_watched_threads</item>
+        <item>@string/title_post_bookmark</item>
         <item>@string/title_private_messages</item>
     </string-array>
     <string-array name="entry_values_list_screens">
@@ -14,6 +15,7 @@
         <item>@string/title_popular_threads</item>
         <item>@string/title_recent_posts</item>
         <item>@string/title_watched_threads</item>
+        <item>@string/title_post_bookmark</item>
         <item>@string/title_private_messages</item>
     </string-array>
 </resources>

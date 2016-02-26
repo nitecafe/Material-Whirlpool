@@ -36,7 +36,7 @@ public class PostBookmarkService implements IPostBookmarkService {
 
     @Override
     public void addPostBookmark(PostBookmark bookmark) {
-        if (mPostBookmarks.contains(bookmark))
+        if (isABookmark(bookmark.getPostId()))
             throw new IllegalArgumentException("Post bookmark already exists");
 
         mPostBookmarks.add(bookmark);

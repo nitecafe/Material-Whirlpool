@@ -79,7 +79,7 @@ public class PostBookmarkServiceTests {
 
         //arrange
         PostBookmark bookmark = new PostBookmark("Name", 1, 1, 1, 1);
-        PostBookmark bookmark2 = new PostBookmark("Name", 2, 1, 1, 1);
+        PostBookmark bookmark2 = new PostBookmark("Name", 2, 2, 1, 1);
         String contentToSave = "SOMETHING";
         when(objectSerializerMock.serializeObject(any())).thenReturn(contentToSave);
 
