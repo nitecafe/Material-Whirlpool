@@ -74,17 +74,35 @@ public class PostBookmarkServiceTests {
         assertBookmarkSame(bookmark, _service.getPostBookmarks().get(0));
     }
 
+    @Test
+    public void getPostBookmarks_WhenTwoAdded_ShouldHaveTwo() {
+
+        //arrange
+        PostBookmark bookmark = new PostBookmark("Name", 1, 1, 1, 1);
+        PostBookmark bookmark2 = new PostBookmark("Name", 2, 1, 1, 1);
+        String contentToSave = "SOMETHING";
+        when(objectSerializerMock.serializeObject(any())).thenReturn(contentToSave);
+
+        //act
+        _service.addPostBookmark(bookmark);
+        _service.addPostBookmark(bookmark2);
+
+        //assert
+        Assert.assertEquals(2, _service.getPostBookmarks().size());
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void addBookmark_WhenDuplicateAdded_ThrowIllegalArgumentException() {
 
         //arrange
         PostBookmark bookmark = new PostBookmark("Name", 1, 1, 1, 1);
+        PostBookmark bookmark2 = new PostBookmark("Name", 1, 1, 1, 1);
         String contentToSave = "SOMETHING";
         when(objectSerializerMock.serializeObject(any())).thenReturn(contentToSave);
         _service.addPostBookmark(bookmark);
 
         //act
-        _service.addPostBookmark(bookmark);
+        _service.addPostBookmark(bookmark2);
         Assert.assertEquals(1, _service.getPostBookmarks().size());
     }
 
@@ -93,12 +111,13 @@ public class PostBookmarkServiceTests {
 
         //arrange
         PostBookmark bookmark = new PostBookmark("Name", 1, 1, 1, 1);
+        PostBookmark bookmark2 = new PostBookmark("Name", 1, 1, 1, 1);
         String contentToSave = "SOMETHING";
         when(objectSerializerMock.serializeObject(any())).thenReturn(contentToSave);
         _service.addPostBookmark(bookmark);
 
         //act
-        _service.removePostBookmark(bookmark);
+        _service.removePostBookmark(bookmark2);
 
         //assert
         verify(mEditorMock, times(2)).putString(StringConstants.POST_BOOKMARK_PREFERENCE_KEY, contentToSave);
@@ -115,6 +134,34 @@ public class PostBookmarkServiceTests {
 
         //act
         _service.removePostBookmark(bookmark);
+    }
+
+    @Test
+    public void isABookmark_WhenNot_ReturnFalse() {
+
+        //arrange
+        PostBookmark bookmark = new PostBookmark("Name", 1, 1, 1, 1);
+
+        //act
+        final boolean aBookmark = _service.isABookmark(bookmark);
+
+        //assert
+        Assert.assertFalse(aBookmark);
+    }
+
+    @Test
+    public void isABookmark_WhenYes_ReturnFalse() {
+
+        //arrange
+        PostBookmark bookmark = new PostBookmark("Name", 1, 1, 1, 1);
+        PostBookmark bookmark2 = new PostBookmark("Name", 1, 1, 1, 1);
+        _service.addPostBookmark(bookmark);
+
+        //act
+        final boolean aBookmark = _service.isABookmark(bookmark2);
+
+        //assert
+        Assert.assertTrue(aBookmark);
     }
 
     private void assertBookmarkSame(PostBookmark a, PostBookmark b) {

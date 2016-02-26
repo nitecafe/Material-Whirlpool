@@ -1,5 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
+import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
+import com.android.nitecafe.whirlpoolnews.services.IPostBookmarkService;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostChildFragment;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
@@ -9,13 +11,16 @@ import javax.inject.Inject;
 public class ScrapedPostChildController extends ThreadBaseController<IScrapedPostChildFragment> {
 
     private IWhirlpoolRestService whirlpoolRestClient;
+    private IPostBookmarkService mPostBookmarkService;
     private IScrapedPostChildFragment postFragment;
 
     @Inject
     public ScrapedPostChildController(IWhirlpoolRestService whirlpoolRestClient,
-                                      IWatchedThreadService watchedThreadIdentifier) {
+                                      IWatchedThreadService watchedThreadIdentifier,
+                                      IPostBookmarkService postBookmarkService) {
         super(whirlpoolRestClient, watchedThreadIdentifier);
         this.whirlpoolRestClient = whirlpoolRestClient;
+        mPostBookmarkService = postBookmarkService;
     }
 
     public void GetScrapedPosts(int threadId, int page) {
@@ -47,5 +52,11 @@ public class ScrapedPostChildController extends ThreadBaseController<IScrapedPos
     public void attach(IScrapedPostChildFragment postFragment) {
         super.Attach(postFragment);
         this.postFragment = postFragment;
+    }
+
+    public void addToPostBookmark(PostBookmark bookmark) {
+        mPostBookmarkService.addPostBookmark(bookmark);
+        if (postFragment != null)
+            postFragment.showAddedToBookmarkMessage();
     }
 }

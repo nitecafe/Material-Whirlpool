@@ -63,4 +63,12 @@ public class PostBookmarkService implements IPostBookmarkService {
     public List<PostBookmark> getPostBookmarks() {
         return mPostBookmarks;
     }
+
+    @Override
+    public boolean isABookmark(PostBookmark bookmark) {
+        if (mPostBookmarks.contains(bookmark))
+            return true;
+        else
+            return false;
+    }
 }

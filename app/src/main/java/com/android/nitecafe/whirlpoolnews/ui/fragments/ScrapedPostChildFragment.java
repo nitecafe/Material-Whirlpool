@@ -7,15 +7,18 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
+import android.text.InputType;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.ScrapedPostChildController;
+import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedPostAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostChildFragment;
@@ -133,11 +136,27 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
 
         scrapedPostAdapter = new ScrapedPostAdapter();
         scrapedPostAdapter.OnReplyPostClickedObservable.subscribe(scrapedPost -> LaunchReplyPostInBrowser(mThreadId, scrapedPost.getId()));
+        scrapedPostAdapter.OnAddToBookmarkClickedObservable.subscribe(bookmark -> addBookMark(bookmark));
 
         mRecycleView.setAdapter(scrapedPostAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
 
         mRecycleView.setDefaultOnRefreshListener(this::loadPosts);
+    }
+
+    private void addBookMark(PostBookmark bookmark) {
+        new MaterialDialog.Builder(getActivity())
+                .title("Bookmark Name:")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input("Bookmark 1", "", false, (dialog, input) -> {
+                    bookmark.setBookMarkName(input.toString());
+                    bookmark.setThreadId(mThreadId);
+                    bookmark.setPageLocated(mPageToLoad);
+                    _controller.addToPostBookmark(bookmark);
+                })
+                .positiveText("Add")
+                .negativeText("Cancel")
+                .build().show();
     }
 
     private void LaunchReplyPostInBrowser(int mThreadId, String replyId) {
@@ -179,6 +198,12 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     @Override
     public void UpdatePageCount(int pageCount) {
         OnPageCountUpdateSubject.onNext(pageCount);
+    }
+
+    @Override
+    public void showAddedToBookmarkMessage() {
+        Snackbar.make(mRecycleView, "Post added to bookmark", Snackbar.LENGTH_SHORT)
+                .show();
     }
 
     private void ScrollToFirstUnreadItem() {

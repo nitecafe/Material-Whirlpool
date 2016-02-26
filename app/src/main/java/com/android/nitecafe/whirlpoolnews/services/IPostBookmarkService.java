@@ -10,4 +10,6 @@ public interface IPostBookmarkService {
     void removePostBookmark(PostBookmark bookmark);
 
     List<PostBookmark> getPostBookmarks();
+
+    boolean isABookmark(PostBookmark bookmark);
 }
