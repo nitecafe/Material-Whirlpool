@@ -213,6 +213,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
 
     private void ScrollToFirstUnreadItem() {
         if (mPostLastReadId > 0) {
+            //calculate number of post before and take away the answer
             int position = mPostLastReadId - ((mPageToLoad - 1) * StringConstants.POST_PER_PAGE);
             mRecycleView.scrollVerticallyToPosition(position - 1);
             mPostLastReadId = 0;

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.PostBookmarkController;
 import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.PostBookmarksAdapter;
@@ -97,9 +98,16 @@ public class PostBookmarkFragment extends BaseFragment implements IPostBookmarkF
     }
 
     private void openBookmark(PostBookmark postBookmark) {
+        int i = calculatePostNoInThread(postBookmark);
         listener.OnThreadClicked(postBookmark.getThreadId(),
                 postBookmark.getThreadTitle(), postBookmark.getPageLocated()
-                , postBookmark.getPositionOnPage(), postBookmark.getTotalPage());
+                , i, postBookmark.getTotalPage());
+    }
+
+    private int calculatePostNoInThread(PostBookmark postBookmark) {
+        int positionSinceFirstPage = postBookmark.getPositionOnPage()
+                + (postBookmark.getPageLocated() - 1) * StringConstants.POST_PER_PAGE;
+        return positionSinceFirstPage;
     }
 
     private void loadPostBookmarks() {
