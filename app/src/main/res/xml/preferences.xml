@@ -16,7 +16,7 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/dark_theme_key"
-            android:summary="Restart app to take effect"
+            android:summary="App will restart to take effect"
             android:title="Dark Theme"/>
     </PreferenceCategory>
 
