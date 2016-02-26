@@ -33,7 +33,7 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
     public void GetScrapedThreads(int forumId, int groupId) {
 
         if (forumId < 1)
-            throw new IllegalArgumentException("Need valid thread id or groupId");
+            throw new IllegalArgumentException("Need valid thread id");
 
         GetScrapedThreads(forumId, currentPage, groupId);
     }

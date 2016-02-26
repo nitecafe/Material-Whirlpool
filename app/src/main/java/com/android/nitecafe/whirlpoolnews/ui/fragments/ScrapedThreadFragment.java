@@ -271,7 +271,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
 
                 if (mGroupId != selectedGroupId) {
                     mRecycleView.setRefreshing(true);
-                    _controller.GetScrapedThreads(mForumId, mThreadGroups.get(item));
+                    _controller.GetScrapedThreads(mForumId, selectedGroupId);
                 }
             }
 
