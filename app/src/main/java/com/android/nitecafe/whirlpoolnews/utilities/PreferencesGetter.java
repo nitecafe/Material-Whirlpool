@@ -27,4 +27,9 @@ public class PreferencesGetter implements IPreferencesGetter {
     @Override public boolean getOpenLastPage() {
         return sharedPreferences.getBoolean(context.getString(R.string.go_last_page_key), false);
     }
+
+    @Override
+    public boolean isAutoMarkAsReadLastPage() {
+        return sharedPreferences.getBoolean(context.getString(R.string.auto_mark_read_key), false);
+    }
 }

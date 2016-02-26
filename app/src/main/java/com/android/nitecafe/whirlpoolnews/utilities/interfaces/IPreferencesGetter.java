@@ -9,4 +9,6 @@ public interface IPreferencesGetter {
     String getHomeScreen();
 
     boolean getOpenLastPage();
+
+    boolean isAutoMarkAsReadLastPage();
 }
