@@ -7,9 +7,9 @@ import java.util.List;
 public interface IPostBookmarkService {
     void addPostBookmark(PostBookmark bookmark);
 
-    void removePostBookmark(PostBookmark bookmark);
+    void removePostBookmark(int postId);
 
     List<PostBookmark> getPostBookmarks();
 
-    boolean isABookmark(PostBookmark bookmark);
+    boolean isABookmark(int postId);
 }

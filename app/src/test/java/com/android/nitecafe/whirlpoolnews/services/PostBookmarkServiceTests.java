@@ -111,13 +111,12 @@ public class PostBookmarkServiceTests {
 
         //arrange
         PostBookmark bookmark = new PostBookmark("Name", 1, 1, 1, 1);
-        PostBookmark bookmark2 = new PostBookmark("Name", 1, 1, 1, 1);
         String contentToSave = "SOMETHING";
         when(objectSerializerMock.serializeObject(any())).thenReturn(contentToSave);
         _service.addPostBookmark(bookmark);
 
         //act
-        _service.removePostBookmark(bookmark2);
+        _service.removePostBookmark(1);
 
         //assert
         verify(mEditorMock, times(2)).putString(StringConstants.POST_BOOKMARK_PREFERENCE_KEY, contentToSave);
@@ -128,22 +127,18 @@ public class PostBookmarkServiceTests {
     public void removeBookmark_WhenDoesNotExist_ThrowIllegalArgumentException() {
 
         //arrange
-        PostBookmark bookmark = new PostBookmark("Name", 1, 1, 1, 1);
         String contentToSave = "SOMETHING";
         when(objectSerializerMock.serializeObject(any())).thenReturn(contentToSave);
 
         //act
-        _service.removePostBookmark(bookmark);
+        _service.removePostBookmark(1);
     }
 
     @Test
     public void isABookmark_WhenNot_ReturnFalse() {
 
-        //arrange
-        PostBookmark bookmark = new PostBookmark("Name", 1, 1, 1, 1);
-
         //act
-        final boolean aBookmark = _service.isABookmark(bookmark);
+        final boolean aBookmark = _service.isABookmark(1);
 
         //assert
         Assert.assertFalse(aBookmark);
@@ -154,11 +149,10 @@ public class PostBookmarkServiceTests {
 
         //arrange
         PostBookmark bookmark = new PostBookmark("Name", 1, 1, 1, 1);
-        PostBookmark bookmark2 = new PostBookmark("Name", 1, 1, 1, 1);
         _service.addPostBookmark(bookmark);
 
         //act
-        final boolean aBookmark = _service.isABookmark(bookmark2);
+        final boolean aBookmark = _service.isABookmark(1);
 
         //assert
         Assert.assertTrue(aBookmark);

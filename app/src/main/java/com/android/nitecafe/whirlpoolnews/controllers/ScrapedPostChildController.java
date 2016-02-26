@@ -59,4 +59,12 @@ public class ScrapedPostChildController extends ThreadBaseController<IScrapedPos
         if (postFragment != null)
             postFragment.showAddedToBookmarkMessage();
     }
+
+    public boolean isABookmark(int postId) {
+        return mPostBookmarkService.isABookmark(postId);
+    }
+
+    public void removeFromBookmark(int postId) {
+        mPostBookmarkService.removePostBookmark(postId);
+    }
 }

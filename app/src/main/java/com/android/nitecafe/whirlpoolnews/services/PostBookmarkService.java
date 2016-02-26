@@ -24,10 +24,10 @@ public class PostBookmarkService implements IPostBookmarkService {
         mSharedPreferences = sharedPreferences;
         mObjectSerializerMock = objectSerializerMock;
 
-        deserializePostBookmarks();
+        loadExistingPostBookmarks();
     }
 
-    private void deserializePostBookmarks() {
+    private void loadExistingPostBookmarks() {
         final String bookmarkList = mSharedPreferences.getString(StringConstants.POST_BOOKMARK_PREFERENCE_KEY, "");
         if (!bookmarkList.isEmpty())
             mPostBookmarks = mObjectSerializerMock.deserializePostBookmarkList(bookmarkList);
@@ -51,11 +51,11 @@ public class PostBookmarkService implements IPostBookmarkService {
     }
 
     @Override
-    public void removePostBookmark(PostBookmark bookmark) {
-        if (!mPostBookmarks.contains(bookmark))
+    public void removePostBookmark(int postId) {
+        if (!isABookmark(postId))
             throw new IllegalArgumentException("Post bookmark does not exists");
 
-        mPostBookmarks.remove(bookmark);
+        removeBookmark(postId);
         saveBookmarksToPreference();
     }
 
@@ -65,10 +65,20 @@ public class PostBookmarkService implements IPostBookmarkService {
     }
 
     @Override
-    public boolean isABookmark(PostBookmark bookmark) {
-        if (mPostBookmarks.contains(bookmark))
-            return true;
-        else
-            return false;
+    public boolean isABookmark(int postId) {
+        for (PostBookmark p : mPostBookmarks) {
+            if (p.getPostId() == postId)
+                return true;
+        }
+        return false;
+    }
+
+    private void removeBookmark(int postId) {
+        for (PostBookmark p : mPostBookmarks) {
+            if (p.getPostId() == postId) {
+                mPostBookmarks.remove(p);
+                return;
+            }
+        }
     }
 }

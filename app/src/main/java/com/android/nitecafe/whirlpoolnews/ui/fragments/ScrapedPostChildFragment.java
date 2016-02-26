@@ -134,9 +134,10 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecycleView.setLayoutManager(layoutManager);
 
-        scrapedPostAdapter = new ScrapedPostAdapter();
+        scrapedPostAdapter = new ScrapedPostAdapter(_controller);
         scrapedPostAdapter.OnReplyPostClickedObservable.subscribe(scrapedPost -> LaunchReplyPostInBrowser(mThreadId, scrapedPost.getId()));
         scrapedPostAdapter.OnAddToBookmarkClickedObservable.subscribe(bookmark -> addBookMark(bookmark));
+        scrapedPostAdapter.OnRemoveFromBookmarkClickedObservable.subscribe(integer -> _controller.removeFromBookmark(integer));
 
         mRecycleView.setAdapter(scrapedPostAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
