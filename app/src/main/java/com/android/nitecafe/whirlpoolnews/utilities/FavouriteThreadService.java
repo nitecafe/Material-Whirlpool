@@ -18,6 +18,7 @@ import javax.inject.Singleton;
 @Singleton
 public class FavouriteThreadService implements IFavouriteThreadService {
 
+    //stores forumId and forumName
     Map<Integer, String> favouriteForums = new HashMap<>();
     private SharedPreferences sharedPreferences;
     private IObjectSerializer objectSerializer;

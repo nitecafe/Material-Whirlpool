@@ -1,12 +1,14 @@
 package com.android.nitecafe.whirlpoolnews.utilities.interfaces;
 
-import java.util.HashMap;
+import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 
-/**
- * Created by grahamgoh on 23/02/16.
- */
+import java.util.HashMap;
+import java.util.List;
+
 public interface IObjectSerializer {
     String serializeObject(Object o);
 
     HashMap<Integer, String> deserializeHashMap(String content);
+
+    List<PostBookmark> deserializePostBookmarkList(String bookmarkList);
 }
