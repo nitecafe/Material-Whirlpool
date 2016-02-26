@@ -14,6 +14,7 @@ import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.NewsFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.PopularThreadFragment;
+import com.android.nitecafe.whirlpoolnews.ui.fragments.PostBookmarkFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.RecentFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.SearchFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.WatchedFragment;
@@ -37,11 +38,12 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
     public final int POPULAR_POSITION = 4;
     public final int RECENT_POSITION = 5;
     public final int WATCHED_POSITION = 6;
-    public final int WHIMS_POSITION = 8;
-    public final int SEARCH_POSITION = 10;
-    public final int SETTING_POSITION = 11;
-    public final int APIKEY_POSITION = 12;
-    public final int ABOUT_POSITION = 13;
+    public final int POST_BOOKMARK_POSITION = 8;
+    public final int WHIMS_POSITION = 9;
+    public final int SEARCH_POSITION = 11;
+    public final int SETTING_POSITION = 12;
+    public final int APIKEY_POSITION = 13;
+    public final int ABOUT_POSITION = 14;
     protected Drawer drawer;
     protected Toolbar toolbar;
     protected PrimaryDrawerItem apiKeyDrawerItem;
@@ -55,6 +57,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
     private PrimaryDrawerItem aboutDrawerItem;
     private AccountHeader headerResult;
     private ProfileDrawerItem profileDrawerItem;
+    private PrimaryDrawerItem postBookmarkItem;
 
     protected void onCreateDrawer() {
         profileDrawerItem = new ProfileDrawerItem().withName("Hello").withEmail("Welcome to " + getResources().getString(R.string.app_name));
@@ -76,6 +79,8 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         recentItems.withIcon(R.drawable.ic_recent_threads);
         watchedItems = new PrimaryDrawerItem().withName("Watched Threads").withIconTintingEnabled(true);
         watchedItems.withIcon(R.drawable.ic_watched_threads);
+        postBookmarkItem = new PrimaryDrawerItem().withName("Post Bookmarks").withIcon(R.drawable.ic_bookmark_post)
+                .withIconTintingEnabled(true);
 
         whimsDrawerItem = new PrimaryDrawerItem().withName("Private Messages").withIconTintingEnabled(true);
         whimsDrawerItem.withIcon(R.drawable.ic_whims);
@@ -91,7 +96,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         drawer = new DrawerBuilder().withActivity(this)
                 .addDrawerItems(newsItemDrawerItem,
                         forumDrawerItems, new DividerDrawerItem(), popularItems, recentItems, watchedItems,
-                        new DividerDrawerItem(), whimsDrawerItem, new DividerDrawerItem(),
+                        new DividerDrawerItem(), postBookmarkItem, whimsDrawerItem, new DividerDrawerItem(),
                         searchDrawerItem, settingDrawerItem, apiKeyDrawerItem, aboutDrawerItem)
                 .withActionBarDrawerToggle(false)
                 .withAccountHeader(headerResult)
@@ -106,6 +111,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         String recentThreads = getString(R.string.title_recent_posts);
         String watchedThreads = getString(R.string.title_watched_threads);
         String privateMessages = getString(R.string.title_private_messages);
+        String postBookmark = getString(R.string.title_post_bookmark);
 
         if (s.equals(forum))
             return forumDrawerItems;
@@ -117,6 +123,8 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
             return watchedItems;
         if (s.equals(privateMessages))
             return whimsDrawerItem;
+        if (s.equals(postBookmark))
+            return postBookmarkItem;
 
         return newsItemDrawerItem;
 
@@ -134,6 +142,8 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
             return WATCHED_POSITION;
         if (item == whimsDrawerItem)
             return WHIMS_POSITION;
+        if (item == postBookmarkItem)
+            return POST_BOOKMARK_POSITION;
 
         return NEWS_POSITION;
     }
@@ -230,6 +240,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
                 break;
             case SETTING_POSITION:
                 fragmentToStart = new WhirlpoolPreferencesFragment();
+                break;
+            case POST_BOOKMARK_POSITION:
+                fragmentToStart = new PostBookmarkFragment();
                 break;
             default:
                 fragmentToStart = new NewsFragment();

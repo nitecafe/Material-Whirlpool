@@ -6,6 +6,7 @@ public class StringConstants {
     public static final String FORUM_URL = "http://forums.whirlpool.net.au/forum/";
     public static final String THREAD_URL = "http://forums.whirlpool.net.au/forum-replies.cfm?t=";
     public static final String API_PREFERENCE_KEY = "com.android.nitecafe.ApiKey";
+    public static final String POST_BOOKMARK_PREFERENCE_KEY = "com.android.nitecafe.postbookmarkKey";
     public static final String FAVOURITE_THREAD_KEY = "com.android.nitecafe.FavouriteThread";
     public static final String USERNAME = "com.android.nitecafe.UserName";
     public static final String REPLY_URL = "https://forums.whirlpool.net.au/forum/index.cfm?action=reply&t=";
@@ -15,4 +16,5 @@ public class StringConstants {
     public static final int POST_PER_PAGE = 20;
     public static final int DEFAULT_THREAD_COUNT = 30;
     public static final String USER_AGENT_NAME = "MaterialWhirlpool";
+
 }

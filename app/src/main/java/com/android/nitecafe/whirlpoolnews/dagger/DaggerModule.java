@@ -6,16 +6,18 @@ import android.preference.PreferenceManager;
 
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.scheduler.SchedulerManager;
+import com.android.nitecafe.whirlpoolnews.services.IPostBookmarkService;
+import com.android.nitecafe.whirlpoolnews.services.PostBookmarkService;
 import com.android.nitecafe.whirlpoolnews.utilities.CachingUtils;
 import com.android.nitecafe.whirlpoolnews.utilities.FavouriteThreadService;
+import com.android.nitecafe.whirlpoolnews.utilities.ObjectSerializer;
+import com.android.nitecafe.whirlpoolnews.utilities.PreferencesGetter;
+import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.ICachingUtils;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IFavouriteThreadService;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IObjectSerializer;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IThreadScraper;
-import com.android.nitecafe.whirlpoolnews.utilities.ObjectSerializer;
-import com.android.nitecafe.whirlpoolnews.utilities.PreferencesGetter;
-import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.WatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestService;
@@ -42,12 +44,14 @@ public class DaggerModule {
     }
 
     @Provides
-    @Singleton OkHttpClient provideOkHttpClient() {
+    @Singleton
+    OkHttpClient provideOkHttpClient() {
         return new OkHttpClient();
     }
 
     @Provides
-    @Singleton Retrofit provideRetrofit(OkHttpClient client) {
+    @Singleton
+    Retrofit provideRetrofit(OkHttpClient client) {
         return new Retrofit.Builder()
                 .baseUrl(mBaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -57,52 +61,68 @@ public class DaggerModule {
     }
 
     @Provides
-    @Singleton SharedPreferences providesSharedPreferences(Application application) {
+    @Singleton
+    SharedPreferences providesSharedPreferences(Application application) {
         return PreferenceManager.getDefaultSharedPreferences(application);
     }
 
     @Provides
-    @Singleton IWhirlpoolRestClient providesWhirlpoolRestClient(WhirlpoolRestClient restClient) {
+    @Singleton
+    IWhirlpoolRestClient providesWhirlpoolRestClient(WhirlpoolRestClient restClient) {
         return restClient;
     }
 
     @Provides
-    @Singleton IWatchedThreadService providesWatchedThreadIdentifier(WatchedThreadService watchedThreadService) {
+    @Singleton
+    IWatchedThreadService providesWatchedThreadIdentifier(WatchedThreadService watchedThreadService) {
         return watchedThreadService;
     }
 
     @Provides
-    @Singleton ISchedulerManager provideSchedulerManager() {
+    @Singleton
+    ISchedulerManager provideSchedulerManager() {
         return new SchedulerManager();
     }
 
     @Provides
-    @Singleton IThreadScraper provideThreadScraper() {
+    @Singleton
+    IThreadScraper provideThreadScraper() {
         return new ThreadScraper();
     }
 
     @Provides
-    @Singleton ICachingUtils provideCacheUtils(CachingUtils cachingUtils) {
+    @Singleton
+    ICachingUtils provideCacheUtils(CachingUtils cachingUtils) {
         return cachingUtils;
     }
 
     @Provides
-    @Singleton IWhirlpoolRestService provideWhirlpoolRestService(WhirlpoolRestService whirlpoolRestService) {
+    @Singleton
+    IWhirlpoolRestService provideWhirlpoolRestService(WhirlpoolRestService whirlpoolRestService) {
         return whirlpoolRestService;
     }
 
     @Provides
-    @Singleton IFavouriteThreadService provideFavouriteThreadService(FavouriteThreadService favouriteThreadService) {
+    @Singleton
+    IFavouriteThreadService provideFavouriteThreadService(FavouriteThreadService favouriteThreadService) {
         return favouriteThreadService;
     }
 
     @Provides
-    @Singleton IObjectSerializer provideObjectSerializer(ObjectSerializer objectSerializer) {
+    @Singleton
+    IObjectSerializer provideObjectSerializer(ObjectSerializer objectSerializer) {
         return objectSerializer;
     }
 
     @Provides
-    @Singleton IPreferencesGetter providesPreferenceGetter(Application application, SharedPreferences sharedPreferences) {
+    @Singleton
+    IPreferencesGetter providesPreferenceGetter(Application application, SharedPreferences sharedPreferences) {
         return new PreferencesGetter(sharedPreferences, application);
+    }
+
+    @Provides
+    @Singleton
+    IPostBookmarkService providesPostBookmarkService(PostBookmarkService postBookmarkService) {
+        return postBookmarkService;
     }
 }

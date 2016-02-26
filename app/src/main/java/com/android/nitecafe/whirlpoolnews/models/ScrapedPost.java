@@ -50,4 +50,8 @@ public class ScrapedPost {
     public String getId() {
         return id;
     }
+
+    public int getIdInteger() {
+        return Integer.parseInt(id);
+    }
 }
