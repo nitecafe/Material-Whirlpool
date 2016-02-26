@@ -29,6 +29,12 @@
             android:summary="When a thread is opened (except for watched threads)"
             android:title="Auto last page"/>
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/auto_mark_read_key"
+            android:summary="When last page of a watched thread is displayed"
+            android:title="Auto mark as read"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

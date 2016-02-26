@@ -196,6 +196,9 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
                 if (postViewPager.getCurrentItem() != position) {
                     postViewPager.setCurrentItem(position);
                 }
+
+                if (mController.shouldMarkThreadAsRead(mThreadId) && position + 1 == mThreadTotalPage)
+                    mController.MarkThreadAsReadNoNotification(mThreadId);
             }
 
             @Override

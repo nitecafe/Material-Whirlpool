@@ -42,6 +42,15 @@ public abstract class ThreadBaseController<T extends IThreadActionMessageFragmen
                 );
     }
 
+    public void MarkThreadAsReadNoNotification(int threadId) {
+        whirlpoolRestService.MarkThreadAsRead(threadId)
+                .subscribe(aVoid -> {
+                        },
+                        throwable ->
+                                onMarkThreadAsReadFailure()
+                );
+    }
+
     public void WatchThread(int threadId) {
         whirlpoolRestService.SetThreadAsWatch(threadId)
                 .subscribe(aVoid -> {
