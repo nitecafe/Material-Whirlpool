@@ -73,8 +73,8 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
         //for showing pushbot messages
         if (bundleExtra != null) {
-            final String message = bundleExtra.getString(StringConstants.PUSHBOT_TITLE_KEY);
-            final String title = bundleExtra.getString(StringConstants.PUSHBOT_FULLMESSAGE_KEY);
+            final String title = bundleExtra.getString(StringConstants.PUSHBOT_TITLE_KEY);
+            final String message = bundleExtra.getString(StringConstants.PUSHBOT_FULLMESSAGE_KEY);
             if (message != null && title != null) {
                 new MaterialDialog.Builder(this)
                         .title(title)
