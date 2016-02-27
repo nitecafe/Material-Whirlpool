@@ -66,5 +66,8 @@ public class ScrapedPostChildController extends ThreadBaseController<IScrapedPos
 
     public void removeFromBookmark(int postId) {
         mPostBookmarkService.removePostBookmark(postId);
+
+        if (postFragment != null)
+            postFragment.showRemoveFromBookmarkMessage();
     }
 }
