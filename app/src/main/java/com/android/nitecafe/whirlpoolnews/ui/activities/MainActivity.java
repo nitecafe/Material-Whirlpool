@@ -12,6 +12,7 @@ import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
@@ -32,6 +33,7 @@ import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.pushbots.push.Pushbots;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -63,8 +65,26 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         setThemeBasedOnSettings();
 
         super.onCreate(savedInstanceState);
+        Pushbots.sharedInstance().init(this); //pushbot
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        final Bundle bundleExtra = getIntent().getExtras();
+
+        //for showing pushbot messages
+        if (bundleExtra != null) {
+            final String message = bundleExtra.getString(StringConstants.PUSHBOT_TITLE_KEY);
+            final String title = bundleExtra.getString(StringConstants.PUSHBOT_FULLMESSAGE_KEY);
+            if (message != null && title != null) {
+                new MaterialDialog.Builder(this)
+                        .title(title)
+                        .content(message)
+                        .positiveText("OK")
+                        .show();
+                getIntent().removeExtra(StringConstants.PUSHBOT_FULLMESSAGE_KEY);
+                getIntent().removeExtra(StringConstants.PUSHBOT_TITLE_KEY);
+            }
+        }
 
         String scheme = getIntent().getScheme();
         if (IsFromInternalAppLink(scheme)) {
