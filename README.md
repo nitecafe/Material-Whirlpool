@@ -21,6 +21,7 @@ Changelog 2.0
 - Able to select to reply to individual post (long lick menu)
 - Dark Theme ( very cool, please check it out!)
 - Post Bookmark Feature (bookmark a post and come back to it later)
+- Settings page to change Home Screen, Auto Mark as Read etc...
 - Speed improvements and bug fixes
 
 Changelog 1.0
