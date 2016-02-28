@@ -16,4 +16,6 @@ public interface IScrapedPostChildFragment extends IThreadActionMessageFragment 
     void UpdatePageCount(int pageCount);
 
     void showAddedToBookmarkMessage();
+
+    void showRemoveFromBookmarkMessage();
 }

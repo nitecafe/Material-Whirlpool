@@ -20,6 +20,10 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
+    <style name="BigTextSize">
+        <item name="android:textSize">@dimen/bigger_font_size</item>
+    </style>
+
     <style name="AppTheme.Custom.Dark" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

@@ -34,7 +34,7 @@
     <string name="aboutLibraries_description_showVersion">true</string>
     <string name="aboutLibraries_description_text">This app was created in my spare time to learn about Android development. So please
         be patient since this is the first android app that i made. Whirlpool is a great community and has taught me a lot of
-    things over the years, so this app will of cause be free of ads forever, just to give back to the community.
+    things over the years, so this app will be have no ads and free for the community to enjoy.
     Shout out to the author of WhirlDroid, Greg Smith for creating that amazing app! I use it all the time too.
     I reused his forum scraper code for Whirlpool which helped made my development faster.
     Below are a list of libraries i used for any developers that are interested.
@@ -50,4 +50,5 @@
     <string name="dark_theme_key">setting_dark_theme_key</string>
     <string name="title_post_bookmark">Post Bookmarks</string>
     <string name="auto_mark_read_key">setting_mark_read_key</string>
+    <string name="bigger_font_size_key">setting_bigger_font_size_key</string>
 </resources>

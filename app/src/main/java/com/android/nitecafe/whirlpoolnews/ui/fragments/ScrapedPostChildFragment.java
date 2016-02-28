@@ -211,6 +211,12 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
                 .show();
     }
 
+    @Override
+    public void showRemoveFromBookmarkMessage() {
+        Snackbar.make(mRecycleView, "Post removed from bookmark", Snackbar.LENGTH_SHORT)
+                .show();
+    }
+
     private void ScrollToFirstUnreadItem() {
         if (mPostLastReadId > 0) {
             //calculate number of post before and take away the answer

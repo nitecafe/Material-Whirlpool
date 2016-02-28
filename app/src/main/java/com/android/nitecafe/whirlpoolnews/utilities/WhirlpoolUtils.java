@@ -14,9 +14,11 @@ public class WhirlpoolUtils {
         return (int) Math.ceil((double) numberOfReplies / StringConstants.POST_PER_PAGE);
     }
 
-    public static String replaceAllWhirlpoolLinksWithInternalAppLinks(String content) {
+    public static String replaceAllWhirlpoolLinksWithInternalAppLinks(String content, boolean darktheme) {
         //        String content = scrapedPost.getContent().replace("\n", "").replace("\r", "");
         String user_quote_colour = "#4455aa";
+        if (darktheme)
+            user_quote_colour = "#aabbff";
 
         // user quote name
         content = content.replaceAll("<p class=\"reference\">(.*?)</p>", "<p><font color='" + user_quote_colour + "'><b>$1</b></font></p>");
@@ -46,7 +48,7 @@ public class WhirlpoolUtils {
         return content;
     }
 
-    public static void allowLinksInTextViewToBeClickable(TextView textView){
+    public static void allowLinksInTextViewToBeClickable(TextView textView) {
         textView.setOnTouchListener((v, event) -> {
             boolean ret = false;
             CharSequence text = ((TextView) v).getText();

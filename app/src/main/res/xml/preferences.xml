@@ -37,4 +37,14 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Posts">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/bigger_font_size_key"
+            android:summary="App will restart to take effect"
+            android:title="Bigger font size"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

@@ -107,6 +107,8 @@ dependencies {
     compile 'com.android.support:preference-v7:23.1.1'
     compile 'com.android.support:preference-v14:23.1.1'
     compile 'com.android.support:cardview-v7:23.1.1'
+
+    compile 'com.pushbots:pushbots-lib:2.0.13@aar'
 }
 
 apply plugin: 'com.google.gms.google-services'

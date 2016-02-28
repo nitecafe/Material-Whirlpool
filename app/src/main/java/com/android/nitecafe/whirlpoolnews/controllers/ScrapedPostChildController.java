@@ -3,6 +3,7 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 import com.android.nitecafe.whirlpoolnews.services.IPostBookmarkService;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostChildFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
@@ -12,15 +13,17 @@ public class ScrapedPostChildController extends ThreadBaseController<IScrapedPos
 
     private IWhirlpoolRestService whirlpoolRestClient;
     private IPostBookmarkService mPostBookmarkService;
+    private IPreferencesGetter preferencesGetter;
     private IScrapedPostChildFragment postFragment;
 
     @Inject
     public ScrapedPostChildController(IWhirlpoolRestService whirlpoolRestClient,
                                       IWatchedThreadService watchedThreadIdentifier,
-                                      IPostBookmarkService postBookmarkService) {
+                                      IPostBookmarkService postBookmarkService, IPreferencesGetter preferencesGetter) {
         super(whirlpoolRestClient, watchedThreadIdentifier);
         this.whirlpoolRestClient = whirlpoolRestClient;
         mPostBookmarkService = postBookmarkService;
+        this.preferencesGetter = preferencesGetter;
     }
 
     public void GetScrapedPosts(int threadId, int page) {
@@ -66,5 +69,12 @@ public class ScrapedPostChildController extends ThreadBaseController<IScrapedPos
 
     public void removeFromBookmark(int postId) {
         mPostBookmarkService.removePostBookmark(postId);
+
+        if (postFragment != null)
+            postFragment.showRemoveFromBookmarkMessage();
+    }
+
+    public boolean isDarkTheme() {
+        return preferencesGetter.isDarkThemeOn();
     }
 }
