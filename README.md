@@ -13,6 +13,10 @@ Major Features:
 
 I will try my best to continously improve and add new features to this project.
 
+Changelog 2.1
+- Lighter quote color in posts (dark theme)
+- Option to select bigger font size for posts.
+ 
 Changelog 2.0
 - User Agent is now "MaterialWhirlpool"
 - Favourite forum feature (long click a forum to add and it will appear on the top list)
