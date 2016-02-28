@@ -81,7 +81,8 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
     }
 
     private Spanned parseHtmlContent(String content) {
-        final String parsedContent = WhirlpoolUtils.replaceAllWhirlpoolLinksWithInternalAppLinks(content);
+        final String parsedContent = WhirlpoolUtils.replaceAllWhirlpoolLinksWithInternalAppLinks(content,
+                scrapedPostChildController.isDarkTheme());
         return Html.fromHtml(parsedContent);
     }
 
