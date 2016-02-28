@@ -63,7 +63,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         ((WhirlpoolApp) getApplication()).getDaggerComponent().inject(this);
         setThemeBasedOnSettings();
-
+        setFontSizeBasedOnSettings();
         super.onCreate(savedInstanceState);
         Pushbots.sharedInstance().init(this); //pushbot
         setContentView(R.layout.activity_main);
@@ -118,6 +118,11 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             setTheme(R.style.AppTheme_Dark);
         else
             setTheme(R.style.AppTheme);
+    }
+
+    private void setFontSizeBasedOnSettings() {
+        if (preferencesGetter.isBiggerFontSize())
+            getTheme().applyStyle(R.style.BigTextSize, true);
     }
 
     private String getUserNameFromPreference() {

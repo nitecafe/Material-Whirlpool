@@ -32,4 +32,9 @@ public class PreferencesGetter implements IPreferencesGetter {
     public boolean isAutoMarkAsReadLastPage() {
         return sharedPreferences.getBoolean(context.getString(R.string.auto_mark_read_key), false);
     }
+
+    @Override
+    public boolean isBiggerFontSize() {
+        return sharedPreferences.getBoolean(context.getString(R.string.bigger_font_size_key), false);
+    }
 }

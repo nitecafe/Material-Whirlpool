@@ -21,10 +21,16 @@ public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
             restartApplication();
             return true;
         });
+
+        Preference biggerFontSizePreference = getPreferenceManager().findPreference(getString(R.string.bigger_font_size_key));
+        biggerFontSizePreference.setOnPreferenceChangeListener((preference, o) -> {
+            restartApplication();
+            return true;
+        });
     }
 
     /**
-     *  Restart application to apply theme
+     * Restart application to apply theme
      */
     private void restartApplication() {
         startActivity(IntentCompat.makeRestartActivityTask(getActivity().getComponentName()));

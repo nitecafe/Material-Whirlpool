@@ -11,4 +11,6 @@ public interface IPreferencesGetter {
     boolean getOpenLastPage();
 
     boolean isAutoMarkAsReadLastPage();
+
+    boolean isBiggerFontSize();
 }
