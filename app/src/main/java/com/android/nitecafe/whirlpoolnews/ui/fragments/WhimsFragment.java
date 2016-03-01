@@ -84,7 +84,7 @@ public class WhimsFragment extends BaseFragment implements IWhimsFragment {
                 OpenWhim(whim.getID(), whim.getMESSAGE(), whim.getFROM().getNAME()));
 
         recyclerView.setAdapter(whimAdapter);
-        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
         recyclerView.setDefaultOnRefreshListener(() -> loadWhims());
     }
 

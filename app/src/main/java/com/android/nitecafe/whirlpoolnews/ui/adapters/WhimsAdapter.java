@@ -57,7 +57,7 @@ public class WhimsAdapter extends UltimateViewAdapter<WhimsAdapter.WhimViewHolde
         String sentDate = new SimpleDateFormat("yyyy-MM-dd hh:mm aa", Locale.getDefault()).format(localDateFromString);
         holder.whimSentTime.setText(sentDate);
         String message = whim.getMESSAGE();
-        String blurb = message.substring(0, Math.min(message.length(), 50));
+        String blurb = message.substring(0, Math.min(message.length(), 100));
         holder.whimContent.setText(blurb + "...");
 
         if (whim.getVIEWED() == 0) {
