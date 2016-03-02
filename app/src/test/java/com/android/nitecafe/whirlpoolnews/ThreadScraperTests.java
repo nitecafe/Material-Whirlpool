@@ -7,6 +7,7 @@ import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 import junit.framework.Assert;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -15,6 +16,7 @@ import java.io.IOException;
 
 import rx.observers.TestSubscriber;
 
+@Ignore //need internet connection to run
 @RunWith(MockitoJUnitRunner.class)
 public class ThreadScraperTests {
 
