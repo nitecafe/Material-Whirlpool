@@ -1,3 +1,7 @@
+
+**Material Whirlpool - Modern Whirlpool Android App Experience** [![Build Status](https://travis-ci.org/nitecafe/WhirlpoolNews.svg?branch=master)](https://travis-ci.org/nitecafe/WhirlpoolNews)
+========================
+
 A android app for the popular Australia forum https://whirlpool.net.au/
 The goal of this app to allow user to browse the Whirlpoool forum with the best user experience possible and in addition adding any cool features on top.
 
