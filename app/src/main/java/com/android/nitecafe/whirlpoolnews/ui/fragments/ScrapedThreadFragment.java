@@ -33,6 +33,7 @@ import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDivi
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -225,7 +226,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
     @Override
     public void SetupPageSpinnerDropDown(int pageCount, int page) {
         pageToLoad = page;
-        mButtonSelectPage.setText(String.format("%d / %d", page, pageCount));
+        mButtonSelectPage.setText(String.format(Locale.ENGLISH, "%d / %d", page, pageCount));
         updateNavigationButtonVisibility();
     }
 

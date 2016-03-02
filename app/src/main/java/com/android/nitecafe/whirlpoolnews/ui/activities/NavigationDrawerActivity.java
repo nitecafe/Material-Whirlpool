@@ -1,6 +1,5 @@
 package com.android.nitecafe.whirlpoolnews.ui.activities;
 
-import android.annotation.SuppressLint;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -32,8 +31,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-@SuppressLint("Registered")
-public class NavigationDrawerActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
+public abstract class NavigationDrawerActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
 
     public final int NEWS_POSITION = 1;
     public final int FORUM_POSITION = 2;

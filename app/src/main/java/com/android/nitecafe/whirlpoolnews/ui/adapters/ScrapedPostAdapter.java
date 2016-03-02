@@ -69,7 +69,7 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
         holder.postContent.setText(parseHtmlContent(scrapedPost.getContent()));
 
         if (scrapedPost.isOp())
-            holder.postUserTitle.setText("OP / " + scrapedPost.getUser().getGroup());
+            holder.postUserTitle.setText(String.format("OP / %s", scrapedPost.getUser().getGroup()));
         else
             holder.postUserTitle.setText(scrapedPost.getUser().getGroup());
 

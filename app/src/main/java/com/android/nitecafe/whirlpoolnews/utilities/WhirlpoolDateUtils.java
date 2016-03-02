@@ -2,6 +2,7 @@ package com.android.nitecafe.whirlpoolnews.utilities;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -12,19 +13,19 @@ public class WhirlpoolDateUtils {
     /**
      * Calculates the date from a timestamp string
      * From http://stackoverflow.com/questions/8735214
+     *
      * @param long_date_time Datetime string
      * @return Local date representation
      */
     public static Date getLocalDateFromString(String long_date_time) {
         // date format for the Whirlpool API
-        SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS");
+        SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS", Locale.US);
 
         long when = 0;
         try {
             // time, adjusting for AEST (Whirlpool default timezone)
-            when = date_format.parse(long_date_time).getTime() - 10*60*60*1000;
-        }
-        catch (Exception e) {
+            when = date_format.parse(long_date_time).getTime() - 10 * 60 * 60 * 1000;
+        } catch (Exception e) {
             return null;
         }
 
@@ -34,6 +35,7 @@ public class WhirlpoolDateUtils {
 
     /**
      * Gets the time difference between now and a timestamp in seconds
+     *
      * @param seconds Timestamp to get difference of
      * @return Difference, formatted in minutes, hours, days, etc.
      */
@@ -67,6 +69,7 @@ public class WhirlpoolDateUtils {
 
     /**
      * Gets the time difference between now and a Date object
+     *
      * @param date
      * @return Time difference
      */
