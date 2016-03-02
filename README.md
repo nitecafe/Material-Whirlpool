@@ -3,6 +3,8 @@ The goal of this app to allow user to browse the Whirlpoool forum with the best 
 
 This project was created to get myself involved in Android Developement, so this is my first Android app that i developed. 
 
+Forum Link: https://forums.whirlpool.net.au/forum-replies.cfm?t=2503715
+
 Major Features:
 - Read news, forums, threads and posts
 - Check watched threads
