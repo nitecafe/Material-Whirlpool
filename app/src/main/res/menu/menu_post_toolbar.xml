@@ -33,7 +33,7 @@
         android:icon="@drawable/ic_go_to_first_post"
         android:orderInCategory="301"
         android:title="Go To First Page"
-        app:showAsAction="never"/>t
+        app:showAsAction="never"/>
     <item
         android:id="@+id/menuitem_go_to_last_page"
         android:icon="@drawable/ic_go_to_last_post"

@@ -142,8 +142,7 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
                 RxMenuItem.clicks(bookmark).map(aVoid -> {
                     final ScrapedPost scrapedPost = scrapedPosts.get(getAdapterPosition());
                     final int i = Integer.parseInt(scrapedPost.getId());
-                    final PostBookmark bookmark1 = new PostBookmark(i, getAdapterPosition() + 1);
-                    return bookmark1;
+                    return new PostBookmark(i, getAdapterPosition() + 1);
                 }).doOnNext(postBookmark -> WhirlpoolApp.getInstance().trackEvent("Post Context Menu", "Add to Bookmark", ""))
                         .subscribe(OnAddToBookmarkClickedObservable);
             }

@@ -29,9 +29,7 @@ public class WhirlpoolDateUtils {
         }
 
         // adjust for daylight savings time (this sure looks confusing)
-        Date local_date = new Date(when + TimeZone.getDefault().getRawOffset() + (TimeZone.getDefault().inDaylightTime(new Date()) ? TimeZone.getDefault().getDSTSavings() : 0));
-
-        return local_date;
+        return new Date(when + TimeZone.getDefault().getRawOffset() + (TimeZone.getDefault().inDaylightTime(new Date()) ? TimeZone.getDefault().getDSTSavings() : 0));
     }
 
     /**

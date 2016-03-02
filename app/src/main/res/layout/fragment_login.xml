@@ -53,7 +53,7 @@
             android:layout_marginBottom="24dp"
             android:gravity="center"
             android:text="No API key? Find it in Account settings"
-            android:textSize="16dip"/>
+            android:textSize="16sp"/>
 
     </LinearLayout>
 </ScrollView>

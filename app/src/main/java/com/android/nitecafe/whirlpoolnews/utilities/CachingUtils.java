@@ -58,7 +58,7 @@ public class CachingUtils implements ICachingUtils {
         String s = gson.toJson(object);
         SharedPreferences.Editor edit = sharedPreferences.edit();
         edit.putString(cacheKey, s);
-        edit.commit();
+        edit.apply();
     }
 
     @Override public void cacheNews(NewsList newsList) {

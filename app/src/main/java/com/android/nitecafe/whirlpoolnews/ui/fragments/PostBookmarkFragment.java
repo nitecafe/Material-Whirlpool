@@ -105,9 +105,8 @@ public class PostBookmarkFragment extends BaseFragment implements IPostBookmarkF
     }
 
     private int calculatePostNoInThread(PostBookmark postBookmark) {
-        int positionSinceFirstPage = postBookmark.getPositionOnPage()
+        return postBookmark.getPositionOnPage()
                 + (postBookmark.getPageLocated() - 1) * StringConstants.POST_PER_PAGE;
-        return positionSinceFirstPage;
     }
 
     private void loadPostBookmarks() {

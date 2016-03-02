@@ -256,16 +256,16 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     private void startFragment(Fragment fragment) {
         FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
         fts.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-        FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        fts.replace(R.id.fragment_placeholder, fragment);
+        fts.addToBackStack(null);
+        fts.commit();
     }
 
     private void startFragmentNoBackStack(Fragment fragment) {
         FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
         fts.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-        FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, fragment);
-        fragmentTransaction.commit();
+        fts.replace(R.id.fragment_placeholder, fragment);
+        fts.commit();
     }
 
 

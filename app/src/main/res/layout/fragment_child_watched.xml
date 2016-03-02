@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <me.zhanghai.android.materialprogressbar.MaterialProgressBar
             android:id="@+id/watched_progress_loader"
@@ -25,5 +21,4 @@
             app:recyclerviewScrollbars="vertical"
             >
         </com.marshalchen.ultimaterecyclerview.UltimateRecyclerView>
-    </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

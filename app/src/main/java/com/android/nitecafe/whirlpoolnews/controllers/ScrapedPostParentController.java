@@ -48,8 +48,6 @@ public class ScrapedPostParentController extends ThreadBaseController<IScrapedPo
     }
 
     public boolean shouldMarkThreadAsRead(int threadId) {
-        if (IsThreadWatched(threadId) && preferencesGetter.isAutoMarkAsReadLastPage())
-            return true;
-        return false;
+        return IsThreadWatched(threadId) && preferencesGetter.isAutoMarkAsReadLastPage();
     }
 }

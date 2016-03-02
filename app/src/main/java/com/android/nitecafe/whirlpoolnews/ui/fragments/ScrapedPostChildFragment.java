@@ -126,11 +126,6 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
     private void SetupRecycleView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecycleView.setLayoutManager(layoutManager);

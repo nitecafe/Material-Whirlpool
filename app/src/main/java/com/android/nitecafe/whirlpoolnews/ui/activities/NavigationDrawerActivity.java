@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.ui.activities;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+@SuppressLint("Registered")
 public class NavigationDrawerActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
 
     public final int NEWS_POSITION = 1;
@@ -53,8 +55,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
     protected PrimaryDrawerItem popularItems;
     protected PrimaryDrawerItem recentItems;
     protected PrimaryDrawerItem watchedItems;
-    private PrimaryDrawerItem searchDrawerItem;
-    private PrimaryDrawerItem aboutDrawerItem;
     private AccountHeader headerResult;
     private ProfileDrawerItem profileDrawerItem;
     private PrimaryDrawerItem postBookmarkItem;
@@ -86,9 +86,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
         whimsDrawerItem.withIcon(R.drawable.ic_whims);
         apiKeyDrawerItem = new PrimaryDrawerItem().withName("Set API Key").withIconTintingEnabled(true);
         apiKeyDrawerItem.withIcon(R.drawable.ic_api_key);
-        searchDrawerItem = new PrimaryDrawerItem().withName("Search").withIconTintingEnabled(true);
+        PrimaryDrawerItem searchDrawerItem = new PrimaryDrawerItem().withName("Search").withIconTintingEnabled(true);
         searchDrawerItem.withIcon(R.drawable.ic_search_threads);
-        aboutDrawerItem = new PrimaryDrawerItem().withName("About").withIcon(R.drawable.ic_about_me).withIconTintingEnabled(true);
+        PrimaryDrawerItem aboutDrawerItem = new PrimaryDrawerItem().withName("About").withIcon(R.drawable.ic_about_me).withIconTintingEnabled(true);
         PrimaryDrawerItem settingDrawerItem = new PrimaryDrawerItem()
                 .withName("Settings").withIconTintingEnabled(true)
                 .withIcon(R.drawable.ic_settings);
@@ -169,7 +169,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
                 this, drawer.getDrawerLayout(), toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-        drawer.getDrawerLayout().setDrawerListener(mDrawerToggle);
+        drawer.getDrawerLayout().addDrawerListener(mDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerToggle.syncState();
@@ -196,12 +196,12 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Drawe
     private void ReplaceFragment(Fragment fragmentToStart, Boolean addToBackStack) {
         FragmentTransaction fts = getSupportFragmentManager().beginTransaction();
         fts.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-        FragmentTransaction fragmentTransaction = fts.replace(R.id.fragment_placeholder, fragmentToStart);
+        fts.replace(R.id.fragment_placeholder, fragmentToStart);
 
         if (addToBackStack)
-            fragmentTransaction.addToBackStack(null);
+            fts.addToBackStack(null);
 
-        fragmentTransaction.commit();
+        fts.commit();
         drawer.closeDrawer();
     }
 

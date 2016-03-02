@@ -49,7 +49,6 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
     @Bind(R.id.toolbar_post) Toolbar postToolbar;
     @Bind(R.id.viewpager_post) ViewPager postViewPager;
     @Inject ScrapedPostParentController mController;
-    private PostPagerAdapter viewPagerAdapter;
     private int mThreadId;
     private int mPostLastReadId;
     private String mThreadTitle;
@@ -167,7 +166,7 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
     }
 
     private void setupViewPager() {
-        viewPagerAdapter = new PostPagerAdapter(getChildFragmentManager(), mThreadTotalPage);
+        PostPagerAdapter viewPagerAdapter = new PostPagerAdapter(getChildFragmentManager(), mThreadTotalPage);
         postViewPager.setAdapter(viewPagerAdapter);
         postViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
