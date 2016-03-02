@@ -1,4 +1,4 @@
-package com.android.nitecafe.whirlpoolnews;
+package com.android.nitecafe.whirlpoolnews.services;
 
 import android.content.SharedPreferences;
 

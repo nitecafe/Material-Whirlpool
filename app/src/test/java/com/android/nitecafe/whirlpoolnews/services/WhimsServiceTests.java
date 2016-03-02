@@ -1,6 +1,7 @@
-package com.android.nitecafe.whirlpoolnews;
+package com.android.nitecafe.whirlpoolnews.services;
 
 
+import com.android.nitecafe.whirlpoolnews.TestSchedulerManager;
 import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.web.WhimsService;
