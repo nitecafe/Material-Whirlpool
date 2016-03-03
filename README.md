@@ -1,6 +1,5 @@
 
-**Material Whirlpool - Modern Whirlpool Android App Experience** [![Build Status](https://travis-ci.org/nitecafe/WhirlpoolNews.svg?branch=master)](https://travis-ci.org/nitecafe/WhirlpoolNews)
-========================
+#**Material Whirlpool - Modern Whirlpool Android App Experience**[![Build Status](https://travis-ci.org/nitecafe/Material-Whirlpool.svg?branch=master)](https://travis-ci.org/nitecafe/Material-Whirlpool)
 
 A android app for the popular Australia forum https://whirlpool.net.au/
 The goal of this app to allow user to browse the Whirlpoool forum with the best user experience possible and in addition adding any cool features on top.
@@ -9,21 +8,22 @@ This project was created to get myself involved in Android Developement, so this
 
 Forum Link: https://forums.whirlpool.net.au/forum-replies.cfm?t=2503715
 
-Major Features:
+##Major Features:
 - Read news, forums, threads and posts
 - Check watched threads
 - Google Material Design
 - Swipe between post pages to change pages.
 - A favourite list to add threads
+- Bookmark individual posts to come back later
 - Dark Theme
 
 I will try my best to continously improve and add new features to this project.
 
-Changelog 2.1
+######Changelog 2.1
 - Lighter quote color in posts (dark theme)
 - Option to select bigger font size for posts.
  
-Changelog 2.0
+######Changelog 2.0
 - User Agent is now "MaterialWhirlpool"
 - Favourite forum feature (long click a forum to add and it will appear on the top list)
 - Tweak Toolbar UI on Post pages (toolbar has been moved to the bottom, navigation buttons hidden, please use swipe instead)
@@ -34,5 +34,5 @@ Changelog 2.0
 - Settings page to change Home Screen, Auto Mark as Read etc...
 - Speed improvements and bug fixes
 
-Changelog 1.0
+######Changelog 1.0
 - Initial Release
