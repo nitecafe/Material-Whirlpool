@@ -14,5 +14,4 @@ public interface IWatchedFragment extends IThreadActionMessageFragment {
     void DisplayErrorMessage();
 
     void HideRefreshLoader();
-
 }

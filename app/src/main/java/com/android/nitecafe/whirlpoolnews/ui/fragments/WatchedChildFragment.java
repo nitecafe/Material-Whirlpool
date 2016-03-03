@@ -42,6 +42,7 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
     @Bind(R.id.watched_progress_loader) MaterialProgressBar mMaterialProgressBar;
     private WatchedThreadAdapter stickyHeaderAdapter;
     private IOnThreadClicked listener;
+    private StickyRecyclerHeadersDecoration stickyRecyclerHeadersDecoration;
 
     @Override
     public void onResume() {
@@ -109,7 +110,8 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
         });
 
         watchedRecycleView.setAdapter(stickyHeaderAdapter);
-        watchedRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));
+        stickyRecyclerHeadersDecoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+        watchedRecycleView.addItemDecoration(stickyRecyclerHeadersDecoration);
         watchedRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
 
         watchedRecycleView.setDefaultOnRefreshListener(this::loadWatched);
@@ -127,6 +129,7 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
     @Override
     public void DisplayWatched(List<Watched> watcheds) {
         stickyHeaderAdapter.SetThreads(watcheds);
+        updateHeader();
     }
 
     @Override
@@ -139,6 +142,10 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
         Snackbar.make(watchedRecycleView, R.string.message_check_connection, Snackbar.LENGTH_LONG)
                 .setAction(R.string.action_message_retry, view -> loadWatched())
                 .show();
+    }
+
+    private void updateHeader() {
+        stickyRecyclerHeadersDecoration.invalidateHeaders();
     }
 
     @Override
