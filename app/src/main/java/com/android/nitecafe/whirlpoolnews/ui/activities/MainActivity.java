@@ -126,6 +126,8 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             getTheme().applyStyle(R.style.LargeTextSize, true);
         else if (fontSize.equals(getString(R.string.font_size_very_large)))
             getTheme().applyStyle(R.style.VeryLargeTextSize, true);
+        else if (fontSize.equals(getString(R.string.font_size_super_large)))
+            getTheme().applyStyle(R.style.SuperLargeTextSize, true);
     }
 
     private String getUserNameFromPreference() {

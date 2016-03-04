@@ -22,6 +22,7 @@
         <item>@string/font_size_normal</item>
         <item>@string/font_size_large</item>
         <item>@string/font_size_very_large</item>
+        <item>@string/font_size_super_large</item>
     </string-array>
 
 </resources>
