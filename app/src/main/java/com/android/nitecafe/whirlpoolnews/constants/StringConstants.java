@@ -18,4 +18,5 @@ public class StringConstants {
     public static final String USER_AGENT_NAME = "MaterialWhirlpool";
     public static final String PUSHBOT_TITLE_KEY = "title";
     public static final String PUSHBOT_FULLMESSAGE_KEY = "fullmessage";
+    public static final String PUSHBOT_DOWNLOAD_LINK_KEY = "downloadlink";
 }

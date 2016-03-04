@@ -2,6 +2,8 @@ package com.android.nitecafe.whirlpoolnews.ui.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -66,6 +68,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         setFontSizeBasedOnSettings();
         super.onCreate(savedInstanceState);
         Pushbots.sharedInstance().init(this); //pushbot
+        Pushbots.sharedInstance().setAlias(getVersionName());
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -75,14 +78,18 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         if (bundleExtra != null) {
             final String title = bundleExtra.getString(StringConstants.PUSHBOT_TITLE_KEY);
             final String message = bundleExtra.getString(StringConstants.PUSHBOT_FULLMESSAGE_KEY);
+            final String downloadLink = bundleExtra.getString(StringConstants.PUSHBOT_DOWNLOAD_LINK_KEY);
             if (message != null && title != null) {
                 new MaterialDialog.Builder(this)
                         .title(title)
                         .content(message)
-                        .positiveText("OK")
+                        .positiveText("Download")
+                        .negativeText("Later")
+                        .onPositive((dialog, which) -> launchLinkInBrowser(downloadLink))
                         .show();
                 getIntent().removeExtra(StringConstants.PUSHBOT_FULLMESSAGE_KEY);
                 getIntent().removeExtra(StringConstants.PUSHBOT_TITLE_KEY);
+                getIntent().removeExtra(StringConstants.PUSHBOT_DOWNLOAD_LINK_KEY);
             }
         }
 
@@ -302,5 +309,24 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         WhirlpoolApp.getInstance().trackEvent("Search", "Search", "");
         final SearchResultThreadFragment searchResultThreadFragment = SearchResultThreadFragment.newInstance(query, forumId, groupId);
         startFragment(searchResultThreadFragment);
+    }
+
+
+    private void launchLinkInBrowser(String link) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(link));
+        startActivity(browserIntent);
+    }
+
+
+    private String getVersionName() {
+        PackageInfo pInfo;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return "";
+        }
+        return pInfo.versionName;
     }
 }
