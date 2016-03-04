@@ -22,6 +22,7 @@
     <fields>;
 }
 
+#icepick
 -dontwarn icepick.**
 -keep class icepick.** { *; }
 -keep class **$$Icepick { *; }
@@ -29,3 +30,37 @@
     @icepick.* <fields>;
 }
 
+#butterknife
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
+#retrofit
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+# OkHttp
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+
+-dontobfuscate
+
+-dontwarn retrofit.**
+-dontwarn com.marshalchen.ultimaterecyclerview.**
+-dontwarn com.pushbots.**
+-dontwarn okio.**
+-dontwarn rx.internal.util.unsafe.**
+-dontwarn com.squareup.leakcanary.**
