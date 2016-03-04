@@ -18,4 +18,6 @@ public interface IScrapedPostChildFragment extends IThreadActionMessageFragment 
     void showAddedToBookmarkMessage();
 
     void showRemoveFromBookmarkMessage();
+
+    void LaunchThreadInBrowser();
 }

@@ -3,6 +3,7 @@ package com.android.nitecafe.whirlpoolnews.controllers;
 import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 import com.android.nitecafe.whirlpoolnews.services.IPostBookmarkService;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostChildFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolExceptionHandler;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
@@ -46,7 +47,11 @@ public class ScrapedPostChildController extends ThreadBaseController<IScrapedPos
                     }
                 }, throwable -> {
                     if (postFragment != null) {
-                        postFragment.DisplayErrorMessage();
+                        if (WhirlpoolExceptionHandler.isPrivateForumException(throwable))
+                            postFragment.LaunchThreadInBrowser();
+                        else {
+                            postFragment.DisplayErrorMessage();
+                        }
                         postFragment.HideCenterProgressBar();
                     }
                 });

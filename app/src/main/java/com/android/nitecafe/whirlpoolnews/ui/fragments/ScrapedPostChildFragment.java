@@ -178,9 +178,6 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         Snackbar.make(mRecycleView, "Can't load. Please check connection.", Snackbar.LENGTH_LONG)
                 .setAction("Retry", view -> loadPosts())
                 .show();
-
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(StringConstants.THREAD_URL + String.valueOf(mThreadId)));
-        startActivity(browserIntent);
     }
 
     @Override
@@ -210,6 +207,13 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     public void showRemoveFromBookmarkMessage() {
         Snackbar.make(mRecycleView, "Post removed from bookmark", Snackbar.LENGTH_SHORT)
                 .show();
+    }
+
+    @Override public void LaunchThreadInBrowser() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(StringConstants.THREAD_URL + String.valueOf(mThreadId) + "&p=" +
+                        String.valueOf(mPageToLoad) + "&#r" + String.valueOf(mPostLastReadId)));
+        startActivity(browserIntent);
     }
 
     private void ScrollToFirstUnreadItem() {
