@@ -50,5 +50,9 @@
     <string name="dark_theme_key">setting_dark_theme_key</string>
     <string name="title_post_bookmark">Post Bookmarks</string>
     <string name="auto_mark_read_key">setting_mark_read_key</string>
-    <string name="bigger_font_size_key">setting_bigger_font_size_key</string>
+    <string name="font_size_key">setting_font_size_key</string>
+
+    <string name="font_size_normal">Normal</string>
+    <string name="font_size_large">Large</string>
+    <string name="font_size_very_large">Very Large</string>
 </resources>

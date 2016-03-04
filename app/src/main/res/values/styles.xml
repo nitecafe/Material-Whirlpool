@@ -20,8 +20,12 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
-    <style name="BigTextSize">
-        <item name="android:textSize">@dimen/bigger_font_size</item>
+    <style name="LargeTextSize">
+        <item name="android:textSize">@dimen/large_font_size</item>
+    </style>
+
+    <style name="VeryLargeTextSize">
+        <item name="android:textSize">@dimen/very_large_font_size</item>
     </style>
 
     <style name="AppTheme.Custom.Dark" parent="Theme.AppCompat.NoActionBar">

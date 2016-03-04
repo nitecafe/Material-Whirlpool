@@ -34,7 +34,7 @@ public class PreferencesGetter implements IPreferencesGetter {
     }
 
     @Override
-    public boolean isBiggerFontSize() {
-        return sharedPreferences.getBoolean(context.getString(R.string.bigger_font_size_key), false);
+    public String getFontSize() {
+        return sharedPreferences.getString(context.getString(R.string.font_size_key), "");
     }
 }

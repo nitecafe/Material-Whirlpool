@@ -12,5 +12,5 @@ public interface IPreferencesGetter {
 
     boolean isAutoMarkAsReadLastPage();
 
-    boolean isBiggerFontSize();
+    String getFontSize();
 }

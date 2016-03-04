@@ -18,4 +18,10 @@
         <item>@string/title_post_bookmark</item>
         <item>@string/title_private_messages</item>
     </string-array>
+    <string-array name="entry_values_font_sizes">
+        <item>@string/font_size_normal</item>
+        <item>@string/font_size_large</item>
+        <item>@string/font_size_very_large</item>
+    </string-array>
+
 </resources>

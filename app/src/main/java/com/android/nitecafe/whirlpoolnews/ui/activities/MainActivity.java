@@ -121,8 +121,11 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     }
 
     private void setFontSizeBasedOnSettings() {
-        if (preferencesGetter.isBiggerFontSize())
-            getTheme().applyStyle(R.style.BigTextSize, true);
+        String fontSize = preferencesGetter.getFontSize();
+        if (fontSize.equals(getString(R.string.font_size_large)))
+            getTheme().applyStyle(R.style.LargeTextSize, true);
+        else if (fontSize.equals(getString(R.string.font_size_very_large)))
+            getTheme().applyStyle(R.style.VeryLargeTextSize, true);
     }
 
     private String getUserNameFromPreference() {
