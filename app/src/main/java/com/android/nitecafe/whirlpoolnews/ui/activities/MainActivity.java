@@ -211,7 +211,6 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     private void startPostViewPagerFragment(int threadId, String threadTitle, int totalPage, int page, int postLastRead) {
         mThreadIdLoaded = threadId;
         ScrapedPostParentFragment scrapedPostParentFragment = ScrapedPostParentFragment.newInstance(threadId, threadTitle, page, postLastRead, totalPage);
-//        setUpPostReplyFab(scrapedPostParentFragment);
         startFragment(scrapedPostParentFragment);
     }
 
@@ -220,15 +219,6 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         ScrapedPostParentFragment scrapedPostParentFragment = ScrapedPostParentFragment.newInstance(threadId, threadTitle, page, postLastRead, totalPage);
         startFragmentNoBackStack(scrapedPostParentFragment);
     }
-
-//    private void setUpPostReplyFab(ScrapedPostParentFragment scrapedPostParentFragment) {
-//        scrapedPostParentFragment.OnFragmentDestroySubject.subscribe(aVoid ->
-//                fabReplyPost.setVisibility(View.GONE));
-//        scrapedPostParentFragment.OnFragmentCreateViewSubject.subscribe(aVoid -> {
-//            resetFabLocationToBottom(fabReplyPost);
-//            fabReplyPost.setVisibility(View.VISIBLE);
-//        });
-//    }
 
     private void setUpWhimReplyFab(IndividualWhimFragment individualWhimFragment) {
         individualWhimFragment.OnFragmentDestroySubject.subscribe(aVoid ->
