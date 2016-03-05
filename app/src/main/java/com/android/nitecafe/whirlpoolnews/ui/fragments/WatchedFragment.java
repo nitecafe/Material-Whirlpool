@@ -3,7 +3,6 @@ package com.android.nitecafe.whirlpoolnews.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -51,6 +50,23 @@ public class WatchedFragment extends BaseFragment {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(new WatchedChildFragment(), getActivity().getString(R.string.title_watched_unread));
         adapter.addFragment(new AllWatchedChildFragment(), getActivity().getString(R.string.title_watched_all));
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                final WatchedChildFragment item = adapter.getItem(position);
+                item.loadWatched();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         viewPager.setAdapter(adapter);
     }
 
@@ -61,7 +77,7 @@ public class WatchedFragment extends BaseFragment {
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<WatchedChildFragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
@@ -69,7 +85,7 @@ public class WatchedFragment extends BaseFragment {
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public WatchedChildFragment getItem(int position) {
             return mFragmentList.get(position);
         }
 
@@ -78,7 +94,7 @@ public class WatchedFragment extends BaseFragment {
             return mFragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title) {
+        public void addFragment(WatchedChildFragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }

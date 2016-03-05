@@ -4,7 +4,8 @@ import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 
 public class AllWatchedChildFragment extends WatchedChildFragment {
 
-    @Override protected void loadWatchedCustom() {
+    @Override
+    public void loadWatched() {
         _controller.GetAllWatched();
     }
 

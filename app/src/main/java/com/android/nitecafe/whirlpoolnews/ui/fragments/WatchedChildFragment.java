@@ -119,10 +119,6 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
 
     @Override
     public void loadWatched() {
-        loadWatchedCustom();
-    }
-
-    protected void loadWatchedCustom() {
         _controller.GetUnreadWatched();
     }
 
