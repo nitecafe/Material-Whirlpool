@@ -50,23 +50,6 @@ public class WatchedFragment extends BaseFragment {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(new WatchedChildFragment(), getActivity().getString(R.string.title_watched_unread));
         adapter.addFragment(new AllWatchedChildFragment(), getActivity().getString(R.string.title_watched_all));
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                final WatchedChildFragment item = adapter.getItem(position);
-                item.loadWatched();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
         viewPager.setAdapter(adapter);
     }
 
