@@ -1,7 +1,5 @@
 package com.android.nitecafe.whirlpoolnews.models;
 
-import android.text.Html;
-
 import java.util.Date;
 
 public class ScrapedThread implements IThreadBase {

@@ -1,8 +1,6 @@
 
 package com.android.nitecafe.whirlpoolnews.models;
 
-import android.text.Html;
-
 import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Generated;

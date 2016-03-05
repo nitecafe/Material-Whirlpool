@@ -119,7 +119,7 @@ public class ThreadScraper implements IThreadScraper {
         // get the groups in this forum
         Map<String, Integer> groups = null;
         try {
-            groups = new LinkedHashMap<String, Integer>();
+            groups = new LinkedHashMap<>();
 
             Elements group_options = doc.select("select[name=g] option");
 
@@ -315,11 +315,11 @@ public class ThreadScraper implements IThreadScraper {
         Elements replies = doc.select("#replylist > div");
 
         for (Element reply : replies) {
-            String id = "";
-            String user_id = "";
-            String user_name = "";
+            String id;
+            String user_id;
+            String user_name;
             String posted_time = "";
-            String content = "";
+            String content;
             boolean edited = false;
             boolean op = false;
             boolean deleted = false;

@@ -21,7 +21,7 @@ public class WhirlpoolDateUtils {
         // date format for the Whirlpool API
         SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS", Locale.US);
 
-        long when = 0;
+        long when;
         try {
             // time, adjusting for AEST (Whirlpool default timezone)
             when = date_format.parse(long_date_time).getTime() - 10 * 60 * 60 * 1000;
@@ -70,7 +70,6 @@ public class WhirlpoolDateUtils {
     /**
      * Gets the time difference between now and a Date object
      *
-     * @param date
      * @return Time difference
      */
     public static String getTimeSince(Date date) {

@@ -1,7 +1,5 @@
 package com.android.nitecafe.whirlpoolnews.models;
 
-import android.text.Html;
-
 import java.util.HashMap;
 import java.util.Map;
 

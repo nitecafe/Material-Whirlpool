@@ -3,7 +3,6 @@ package com.android.nitecafe.whirlpoolnews;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 
 import rx.Scheduler;
-import rx.schedulers.Schedulers;
 import rx.schedulers.TestScheduler;
 
 public class TestSchedulerManager implements ISchedulerManager {
