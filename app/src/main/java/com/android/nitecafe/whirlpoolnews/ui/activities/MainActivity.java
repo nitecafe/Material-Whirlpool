@@ -68,7 +68,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         setFontSizeBasedOnSettings();
         super.onCreate(savedInstanceState);
         Pushbots.sharedInstance().init(this); //pushbot
-        Pushbots.sharedInstance().setAlias(getVersionName());
+        Pushbots.sharedInstance().tag(getVersionName());
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -116,8 +116,10 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge());
 
         final String userNameFromPreference = getUserNameFromPreference();
-        if (!userNameFromPreference.isEmpty())
+        if (!userNameFromPreference.isEmpty()) {
             updateProfileDetails(userNameFromPreference);
+            Pushbots.sharedInstance().setAlias(userNameFromPreference);
+        }
     }
 
     private void setThemeBasedOnSettings() {
