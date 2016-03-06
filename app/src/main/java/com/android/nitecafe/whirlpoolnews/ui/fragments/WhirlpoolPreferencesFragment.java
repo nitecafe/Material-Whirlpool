@@ -27,6 +27,16 @@ public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
             restartApplication();
             return true;
         });
+
+        Preference watchedNotifications = getPreferenceManager().findPreference(getString(R.string.watched_notifications_key));
+        watchedNotifications.setOnPreferenceChangeListener((preference, o) -> {
+            Boolean isChecked = Boolean.valueOf(o.toString());
+
+            String frequency = getPreferenceManager().getSharedPreferences().getString(getString(R.string.watched_notifications_frequency_key)
+                    , "");
+
+            return true;
+        });
     }
 
     /**
