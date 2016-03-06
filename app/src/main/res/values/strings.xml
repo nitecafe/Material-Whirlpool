@@ -5,7 +5,7 @@
     <string name="edited">Edited</string>
 
     <string name="message_marked_read">Marked as read</string>
-    <string name="message_thread_watched">Thread is now being watched</string>
+    <string name="message_thread_watched">Thread is now watched</string>
     <string name="message_thread_unwatched">Thread is now unwatched</string>
     <string name="message_generic_error">Something went wrong. Try again</string>
     <string name="message_api_key_saved">API Key saved successfully</string>

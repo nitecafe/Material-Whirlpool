@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.dagger;
 
+import com.android.nitecafe.whirlpoolnews.BackgroundServices.WatchedThreads.WatchedThreadsIntentService;
 import com.android.nitecafe.whirlpoolnews.ui.activities.MainActivity;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
@@ -55,4 +56,6 @@ public interface DaggerComponent {
     void inject(ScrapedPostChildFragment scrapedPostChildFragment);
 
     void inject(PostBookmarkFragment postBookmarkFragment);
+
+    void inject(WatchedThreadsIntentService watchedThreadsIntentService);
 }
