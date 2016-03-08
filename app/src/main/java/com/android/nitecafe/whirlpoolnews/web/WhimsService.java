@@ -1,7 +1,11 @@
 package com.android.nitecafe.whirlpoolnews.web;
 
+import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
+import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -33,5 +37,15 @@ public class WhimsService {
                 .map(whim -> whim.getVIEWED())
                 .filter(integer -> integer == 0)
                 .count();
+    }
+
+    public Observable<List<Whim>> GetUnreadWhimsInInterval(long interval) {
+        return whirlpoolRestClient.GetWhims()
+                .map(whimsList1 -> whimsList1.getWHIMS())
+                .flatMap(whims -> Observable.from(whims))
+                .filter(whim -> whim.getVIEWED() == 0)
+                .filter(whim1 -> WhirlpoolDateUtils.isTimeWithinDuration(whim1.getDATE(), interval))
+                .toList();
+
     }
 }

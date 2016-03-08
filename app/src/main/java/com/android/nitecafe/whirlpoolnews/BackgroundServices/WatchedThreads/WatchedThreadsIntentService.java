@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.WakefulBroadcastReceiver;
@@ -52,10 +53,18 @@ public class WatchedThreadsIntentService extends IntentService {
     }
 
     private void createNotificationContent(List<Watched> watcheds) {
-        notifyNewUnreadThreads("New Replies", "You have " + watcheds.size() + " threads with new replies");
+        notifyNewUnreadThreads("New Replies", "You have " + watcheds.size() + " thread(s) with new replies");
     }
 
     private void notifyNewUnreadThreads(String title, String content) {
+        NotificationCompat.Builder mBuilder = buildNotification(title, content);
+
+        int mNotificationId = 1000;
+        NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+    }
+
+    @NonNull private NotificationCompat.Builder buildNotification(String title, String content) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.white_notification_icon)
@@ -71,9 +80,6 @@ public class WatchedThreadsIntentService extends IntentService {
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(resultPendingIntent);
-
-        int mNotificationId = 1000;
-        NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+        return mBuilder;
     }
 }

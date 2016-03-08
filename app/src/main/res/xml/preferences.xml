@@ -74,5 +74,26 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="Whims">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/whims_notifications_key"
+            android:summary="For new unread private messages"
+            android:title="Notifications"/>
+
+        <ListPreference
+            android:defaultValue="@string/watched_thread_notification_frequency_30"
+            android:dependency="@string/whims_notifications_key"
+            android:dialogTitle="Frequency"
+            android:entries="@array/entry_values_notification_frequency"
+            android:entryValues="@array/entry_values_notification_frequency"
+            android:key="@string/whims_notifications_frequency_key"
+            android:title="Frequency"
+            app:summary="%s"/>
+
+    </PreferenceCategory>
+
 
 </PreferenceScreen>
