@@ -13,6 +13,7 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.android.nitecafe.whirlpoolnews.BackgroundServices.WatchedThreads.WatchedThreadAlarmReceiver;
 import com.android.nitecafe.whirlpoolnews.R;
+import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
 
 public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
 
@@ -33,25 +34,19 @@ public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
             return true;
         });
 
+        Preference watchedNotificationsFrequency = getPreferenceManager().findPreference(getString(R.string.watched_notifications_frequency_key));
+        watchedNotificationsFrequency.setOnPreferenceChangeListener((preference1, o1) -> {
+            updateWatchedThreadAlarm(o1.toString());
+            return true;
+        });
+
         Preference watchedNotifications = getPreferenceManager().findPreference(getString(R.string.watched_notifications_key));
         watchedNotifications.setOnPreferenceChangeListener((preference, o) -> {
             Boolean isChecked = Boolean.valueOf(o.toString());
 
             if (isChecked) {
                 String frequency = getPreferenceManager().getSharedPreferences().getString(getString(R.string.watched_notifications_frequency_key), "");
-
-                if (frequency.equals(getString(R.string.watched_thread_notification_frequency_15)))
-                    scheduleWatchedThreadAlarm(AlarmManager.INTERVAL_FIFTEEN_MINUTES);
-                else if (frequency.equals(getString(R.string.watched_thread_notification_frequency_30)))
-                    scheduleWatchedThreadAlarm(AlarmManager.INTERVAL_HALF_HOUR);
-                else if (frequency.equals(getString(R.string.watched_thread_notification_frequency_60)))
-                    scheduleWatchedThreadAlarm(AlarmManager.INTERVAL_HOUR);
-                else if (frequency.equals(getString(R.string.watched_thread_notification_frequency_4_hours)))
-                    scheduleWatchedThreadAlarm(AlarmManager.INTERVAL_HOUR * 4);
-                else if (frequency.equals(getString(R.string.watched_thread_notification_frequency_half_day)))
-                    scheduleWatchedThreadAlarm(AlarmManager.INTERVAL_HALF_DAY);
-                else
-                    scheduleWatchedThreadAlarm(AlarmManager.INTERVAL_DAY);
+                updateWatchedThreadAlarm(frequency);
             } else
                 cancelWatchedThreadAlarm();
 
@@ -59,6 +54,12 @@ public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
         });
 
     }
+
+    private void updateWatchedThreadAlarm(String frequency) {
+        long interval = WhirlpoolUtils.convertFrequencyStringIntoLong(frequency, getContext());
+        scheduleWatchedThreadAlarm(interval);
+    }
+
 
     /**
      * Restart application to apply theme
@@ -71,9 +72,8 @@ public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         ActionBar supportActionBar = activity.getSupportActionBar();
         if (supportActionBar != null)
-            supportActionBar.setTitle("Settings");
+            supportActionBar.setTitle(getString(R.string.title_settings));
     }
-
 
     private void scheduleWatchedThreadAlarm(long interval) {
         final PendingIntent watchedThreadsPendingIntent = getWatchedThreadsPendingIntent();

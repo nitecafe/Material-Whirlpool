@@ -77,4 +77,9 @@ public class WhirlpoolDateUtils {
         return getTimeSince(time);
     }
 
+    public static boolean isTimeWithinDuration(String date, long duration) {
+        Date localDateFromString = getLocalDateFromString(date);
+        return (System.currentTimeMillis() - localDateFromString.getTime()) < duration;
+    }
+
 }

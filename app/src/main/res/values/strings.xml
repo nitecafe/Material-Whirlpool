@@ -65,4 +65,5 @@
     <string name="watched_thread_notification_frequency_4_hours">Every 4 hours</string>
     <string name="watched_thread_notification_frequency_half_day">Every 12 hours</string>
     <string name="watched_thread_notification_frequency_day">Every 24 hours</string>
+    <string name="title_settings">Settings</string>
 </resources>

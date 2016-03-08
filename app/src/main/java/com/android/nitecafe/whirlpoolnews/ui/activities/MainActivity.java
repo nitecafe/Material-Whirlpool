@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -67,14 +68,53 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         setThemeBasedOnSettings();
         setFontSizeBasedOnSettings();
         super.onCreate(savedInstanceState);
-        Pushbots.sharedInstance().init(this); //pushbot
+        Pushbots.sharedInstance().init(this);
         Pushbots.sharedInstance().tag(getVersionName());
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        showPushBotMessage();
+        launchStartingScreen(savedInstanceState);
+
+        whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge());
+
+        final String userNameFromPreference = getUserNameFromPreference();
+        if (!userNameFromPreference.isEmpty()) {
+            updateProfileDetails(userNameFromPreference);
+            Pushbots.sharedInstance().setAlias(userNameFromPreference);
+        }
+    }
+
+    private void launchStartingScreen(Bundle savedInstanceState) {
         final Bundle bundleExtra = getIntent().getExtras();
 
-        //for showing pushbot messages
+        String scheme = getIntent().getScheme();
+        if (bundleExtra != null && StringConstants.NOTIFICATION_INTENT_WATCHED_SCREEN_KEY.equals(bundleExtra.getString(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY))) {
+            drawer.setSelection(watchedItems, false);
+            startFragmentWithNoBackStack(WATCHED_POSITION);
+            getIntent().removeExtra(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY);
+        } else if (IsFromInternalAppLink(scheme)) {
+            parseInternalLink();
+        } else if (!mWhirlpoolRestClient.hasApiKeyBeenSet()) {
+            drawer.setSelection(apiKeyDrawerItem, false);
+            startFragmentWithNoBackStack(APIKEY_POSITION);
+        } else if (savedInstanceState == null) {
+            String homeScreen = preferencesGetter.getHomeScreen();
+            if (homeScreen.isEmpty()) {
+                drawer.setSelection(newsItemDrawerItem, false);
+                startFragmentWithNoBackStack(NEWS_POSITION);
+            } else {
+                PrimaryDrawerItem drawerItemFromString = getDrawerItemFromString(homeScreen);
+                drawer.setSelection(drawerItemFromString, false);
+                int position = getPositionFromDrawerItem(drawerItemFromString);
+                startFragmentWithNoBackStack(position);
+            }
+        }
+    }
+
+    @Nullable private void showPushBotMessage() {
+        final Bundle bundleExtra = getIntent().getExtras();
+
         if (bundleExtra != null) {
             final String title = bundleExtra.getString(StringConstants.PUSHBOT_TITLE_KEY);
             final String message = bundleExtra.getString(StringConstants.PUSHBOT_FULLMESSAGE_KEY);
@@ -91,34 +131,6 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
                 getIntent().removeExtra(StringConstants.PUSHBOT_TITLE_KEY);
                 getIntent().removeExtra(StringConstants.PUSHBOT_DOWNLOAD_LINK_KEY);
             }
-        }
-
-        String scheme = getIntent().getScheme();
-        if (IsFromInternalAppLink(scheme)) {
-            parseInternalLink();
-        } else if (!mWhirlpoolRestClient.hasApiKeyBeenSet()) {
-            drawer.setSelection(apiKeyDrawerItem, false);
-            startFragmentWithNoBackStack(APIKEY_POSITION);
-        } else if (savedInstanceState == null) {
-
-            String homeScreen = preferencesGetter.getHomeScreen();
-            if (homeScreen.isEmpty()) {
-                drawer.setSelection(newsItemDrawerItem, false);
-                startFragmentWithNoBackStack(NEWS_POSITION);
-            } else {
-                PrimaryDrawerItem drawerItemFromString = getDrawerItemFromString(homeScreen);
-                drawer.setSelection(drawerItemFromString, false);
-                int position = getPositionFromDrawerItem(drawerItemFromString);
-                startFragmentWithNoBackStack(position);
-            }
-        }
-
-        whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge());
-
-        final String userNameFromPreference = getUserNameFromPreference();
-        if (!userNameFromPreference.isEmpty()) {
-            updateProfileDetails(userNameFromPreference);
-            Pushbots.sharedInstance().setAlias(userNameFromPreference);
         }
     }
 
