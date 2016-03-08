@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.android.nitecafe.whirlpoolnews.R;
@@ -38,6 +39,8 @@ public class WatchedThreadsIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
+        WakefulBroadcastReceiver.completeWakefulIntent(intent);
 
         String frequency = sharedPreferences.getString(getString(R.string.watched_notifications_frequency_key), "");
         mIWatchedThreadService.getUnreadWatchedThreadsInInterval(WhirlpoolUtils.convertFrequencyStringIntoLong(frequency, getApplicationContext()))

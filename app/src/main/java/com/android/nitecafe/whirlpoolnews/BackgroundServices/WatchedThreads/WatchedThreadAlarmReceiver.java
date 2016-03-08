@@ -7,7 +7,6 @@ import android.content.Intent;
 public class WatchedThreadAlarmReceiver extends BroadcastReceiver {
 
     public static final int REQUEST_CODE = 1000;
-    public static final String ACTION = "com.android.nitecafe.whirlpoolnews.BackgroundServices.WatchedThreads";
 
     @Override
     public void onReceive(Context context, Intent intent) {
