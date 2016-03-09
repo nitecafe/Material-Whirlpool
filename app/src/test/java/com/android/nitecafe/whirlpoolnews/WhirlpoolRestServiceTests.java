@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews;
 
 
+import com.android.nitecafe.whirlpoolnews.models.ContactList;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
 import com.android.nitecafe.whirlpoolnews.models.RecentList;
@@ -362,5 +363,18 @@ public class WhirlpoolRestServiceTests {
 
         //assert
         verify(whirlpoolRestClientMock).GetUserDetails();
+    }
+
+    @Test
+    public void GetContacts_WhenCalled_CallRestClient() {
+
+        //arrange
+        when(whirlpoolRestClientMock.GetContacts()).thenReturn(Observable.<ContactList>empty());
+
+        //act
+        whirlpoolRestService.GetContacts();
+
+        //assert
+        verify(whirlpoolRestClientMock).GetContacts();
     }
 }

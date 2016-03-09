@@ -3,6 +3,7 @@ package com.android.nitecafe.whirlpoolnews.web;
 import android.content.SharedPreferences;
 
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
+import com.android.nitecafe.whirlpoolnews.models.ContactList;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
@@ -174,5 +175,9 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(StringConstants.USERNAME, s);
         editor.apply();
+    }
+
+    @Override public Observable<ContactList> GetContacts() {
+        return getWhirlpoolService().GetContacts();
     }
 }
