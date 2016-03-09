@@ -4,6 +4,7 @@ package com.android.nitecafe.whirlpoolnews.services;
 import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.web.WhimsService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import org.junit.Before;
@@ -22,11 +23,12 @@ import rx.observers.TestObserver;
 public class WhimsServiceTests {
 
     @Mock IWhirlpoolRestService whirlpoolRestService;
+    @Mock IWhirlpoolRestClient whirlpoolRestClientMock;
     private WhimsService _service;
 
     @Before
     public void setUp() {
-        _service = new WhimsService(whirlpoolRestService);
+        _service = new WhimsService(whirlpoolRestService, whirlpoolRestClientMock);
     }
 
     @Test
@@ -100,6 +102,32 @@ public class WhimsServiceTests {
 
         //assert
         testObserver.assertReceivedOnNext(Arrays.asList(2));
+    }
+
+    @Test
+    public void GetUnreadWhimsInInterval_WhenWithinInterval_ReturnWhim() {
+
+        //arrange
+//        long interval = 60 * 1000;
+//        TestObserver<List<Whim>> testObserver = new TestObserver<>();
+//        WhimsList whimsList = new WhimsList();
+//        Whim whim1 = new Whim();
+//        whim1.setVIEWED(0);
+//
+//        SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS", Locale.US);
+//        Calendar instance = Calendar.getInstance();
+//        String format = date_format.format(instance.getTime());
+//        Date localDateFromString = WhirlpoolDateUtils.getLocalDateFromString(format);
+//        whim1.setDATE(date_format.format(localDateFromString));
+//        whimsList.setWHIMS(Arrays.asList(whim1));
+//        Mockito.when(whirlpoolRestClientMock.GetWhims()).thenReturn(Observable.just(whimsList));
+//
+//        //act
+//        _service.GetUnreadWhimsInInterval(interval).subscribe(testObserver);
+//
+//        //assert
+//        List<List<Whim>> onNextEvents = testObserver.getOnNextEvents();
+//        Assert.assertEquals(whim1, onNextEvents.get(0).get(0));
     }
 
 }

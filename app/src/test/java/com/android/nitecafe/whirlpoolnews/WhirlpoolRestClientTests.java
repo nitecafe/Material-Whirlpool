@@ -3,17 +3,22 @@ package com.android.nitecafe.whirlpoolnews;
 import android.content.SharedPreferences;
 
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
+import com.android.nitecafe.whirlpoolnews.models.Contact;
+import com.android.nitecafe.whirlpoolnews.models.ContactList;
 import com.android.nitecafe.whirlpoolnews.models.Forum;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.ForumThread;
 import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
 import com.android.nitecafe.whirlpoolnews.models.News;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
+import com.android.nitecafe.whirlpoolnews.models.Poster;
 import com.android.nitecafe.whirlpoolnews.models.Recent;
 import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.Watched;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
+import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolService;
@@ -26,11 +31,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit.Retrofit;
 import rx.Observable;
 import rx.observers.TestObserver;
+import rx.observers.TestSubscriber;
+
+import static org.mockito.Mockito.when;
 
 /**
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
@@ -40,6 +49,7 @@ public class WhirlpoolRestClientTests {
 
     @Mock SharedPreferences sharedPreferencesMock;
     @Mock IThreadScraper threadScraper;
+    @Mock IPreferencesGetter preferencesGetterMock;
     TestableWhirlpoolRestClient whirlpoolRestClient;
     private Retrofit retrofit;
     private SharedPreferences.Editor editorMock;
@@ -51,7 +61,7 @@ public class WhirlpoolRestClientTests {
         Mockito.when(sharedPreferencesMock.getString(StringConstants.API_PREFERENCE_KEY, "")).thenReturn("111-111");
         Mockito.when(sharedPreferencesMock.getString(StringConstants.USERNAME, "")).thenReturn("Hello User");
         Mockito.when(sharedPreferencesMock.edit()).thenReturn(editorMock);
-        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock, threadScraper);
+        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock, threadScraper, preferencesGetterMock);
     }
 
     @Test
@@ -117,7 +127,7 @@ public class WhirlpoolRestClientTests {
         Mockito.when(sharedPreferencesMock.getString(StringConstants.API_PREFERENCE_KEY, "")).thenReturn("");
 
         //act
-        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock, threadScraper);
+        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock, threadScraper, preferencesGetterMock);
 
         //assert
         Assert.assertFalse(whirlpoolRestClient.hasApiKeyBeenSet());
@@ -130,7 +140,7 @@ public class WhirlpoolRestClientTests {
         Mockito.when(sharedPreferencesMock.getString(StringConstants.API_PREFERENCE_KEY, "")).thenReturn("1111-1111");
 
         //act
-        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock, threadScraper);
+        whirlpoolRestClient = new TestableWhirlpoolRestClient(retrofit, sharedPreferencesMock, threadScraper, preferencesGetterMock);
 
         //assert
         Assert.assertTrue(whirlpoolRestClient.hasApiKeyBeenSet());
@@ -177,15 +187,17 @@ public class WhirlpoolRestClientTests {
     public void GetWhims_WhenCalled_ReturnResponse() {
 
         //arrange
-        final TestObserver<WhimsList> testObserver = new TestObserver<>();
+        TestSubscriber<WhimsList> testSubscriber = new TestSubscriber<>();
         WhimsList whimsList = new WhimsList();
-        Mockito.when(whirlpoolRestClient.mWhirlpoolServiceMock.GetWhims()).thenReturn(Observable.just(whimsList));
+        whimsList.setWHIMS(Arrays.asList(new Whim()));
+        when(whirlpoolRestClient.mWhirlpoolServiceMock.GetWhims()).thenReturn(Observable.just(whimsList));
+        when(preferencesGetterMock.isHideMessageFromIgnoredContactsOn()).thenReturn(false);
 
         //act
-        whirlpoolRestClient.GetWhims().subscribe(testObserver);
+        whirlpoolRestClient.GetWhims().subscribe(testSubscriber);
 
         //assert
-        List<WhimsList> onNextEvents = testObserver.getOnNextEvents();
+        List<WhimsList> onNextEvents = testSubscriber.getOnNextEvents();
         Assert.assertEquals(whimsList, onNextEvents.get(0));
     }
 
@@ -220,14 +232,94 @@ public class WhirlpoolRestClientTests {
         //assert
         Mockito.verify(whirlpoolRestClient.mWhirlpoolServiceMock).GetUserDetails();
     }
+
+    @Test
+    public void GetWhims_WhenFilterIsOff_ReturnAllWhims() {
+
+        //arrange
+        TestSubscriber<WhimsList> testSubscriber = new TestSubscriber<>();
+        WhimsList whimsList = new WhimsList();
+        Whim whim1 = new Whim();
+        Poster allowedPoster = new Poster();
+        allowedPoster.setID(1);
+        allowedPoster.setNAME("Allowed");
+        whim1.setFROM(allowedPoster);
+        Whim whim2 = new Whim();
+        Poster ignoredPoster = new Poster();
+        ignoredPoster.setID(2);
+        ignoredPoster.setNAME("Ignored");
+        whim2.setFROM(ignoredPoster);
+        whimsList.setWHIMS(Arrays.asList(whim1, whim2));
+        ContactList contactLists = createContactLists();
+
+        when(whirlpoolRestClient.mWhirlpoolServiceMock.GetWhims()).thenReturn(Observable.just(whimsList));
+        when(preferencesGetterMock.isHideMessageFromIgnoredContactsOn()).thenReturn(false);
+        when(whirlpoolRestClient.mWhirlpoolServiceMock.GetContacts()).thenReturn(Observable.just(contactLists));
+
+        //act
+        whirlpoolRestClient.GetWhims().subscribe(testSubscriber);
+
+        //assert
+        List<WhimsList> onNextEvents = testSubscriber.getOnNextEvents();
+        Assert.assertEquals(2, onNextEvents.get(0).getWHIMS().size());
+        Assert.assertEquals(whim1, onNextEvents.get(0).getWHIMS().get(0));
+        Assert.assertEquals(whim2, onNextEvents.get(0).getWHIMS().get(1));
+    }
+
+
+    @Test
+    public void GetWhims_WhenFilterIsOn_ReturnANonIgnoredMessages() {
+
+        //arrange
+        TestSubscriber<WhimsList> testSubscriber = new TestSubscriber<>();
+        WhimsList whimsList = new WhimsList();
+        Whim whim1 = new Whim();
+        Poster allowedPoster = new Poster();
+        allowedPoster.setID(1);
+        allowedPoster.setNAME("Allowed");
+        whim1.setFROM(allowedPoster);
+        Whim whim2 = new Whim();
+        Poster ignoredPoster = new Poster();
+        ignoredPoster.setID(2);
+        ignoredPoster.setNAME("Ignored");
+        whim2.setFROM(ignoredPoster);
+        whimsList.setWHIMS(Arrays.asList(whim1, whim2));
+        ContactList contactLists = createContactLists();
+
+        when(whirlpoolRestClient.mWhirlpoolServiceMock.GetWhims()).thenReturn(Observable.just(whimsList));
+        when(preferencesGetterMock.isHideMessageFromIgnoredContactsOn()).thenReturn(true);
+        when(whirlpoolRestClient.mWhirlpoolServiceMock.GetContacts()).thenReturn(Observable.just(contactLists));
+
+        //act
+        whirlpoolRestClient.GetWhims().subscribe(testSubscriber);
+
+        //assert
+        List<WhimsList> onNextEvents = testSubscriber.getOnNextEvents();
+        Assert.assertEquals(1, onNextEvents.get(0).getWHIMS().size());
+        Assert.assertEquals(whim1, onNextEvents.get(0).getWHIMS().get(0));
+    }
+
+    private ContactList createContactLists() {
+        ContactList contactList = new ContactList();
+        Contact contact1 = new Contact();
+        contact1.setID(1);
+        contact1.setBLOCKED(0);
+        Contact contact2 = new Contact();
+        contact2.setID(2);
+        contact2.setBLOCKED(1);
+        contactList.setCONTACTS(Arrays.asList(contact1, contact2));
+
+        return contactList;
+    }
+
 }
 
 class TestableWhirlpoolRestClient extends WhirlpoolRestClient {
 
     public IWhirlpoolService mWhirlpoolServiceMock;
 
-    public TestableWhirlpoolRestClient(Retrofit retrofit, SharedPreferences sharedPreferences, IThreadScraper threadScraper) {
-        super(retrofit, sharedPreferences, threadScraper);
+    public TestableWhirlpoolRestClient(Retrofit retrofit, SharedPreferences sharedPreferences, IThreadScraper threadScraper, IPreferencesGetter preferencesGetter) {
+        super(retrofit, sharedPreferences, threadScraper, preferencesGetter);
 
         mWhirlpoolServiceMock = Mockito.mock(IWhirlpoolService.class);
     }

@@ -1,8 +1,5 @@
 package com.android.nitecafe.whirlpoolnews.web;
 
-import android.support.annotation.NonNull;
-
-import com.android.nitecafe.whirlpoolnews.models.Contact;
 import com.android.nitecafe.whirlpoolnews.models.ContactList;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
@@ -13,11 +10,9 @@ import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
 import com.android.nitecafe.whirlpoolnews.models.UserDetailsList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
-import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.ICachingUtils;
-import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
@@ -35,18 +30,15 @@ public class WhirlpoolRestService implements IWhirlpoolRestService {
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
     private ICachingUtils cachingUtils;
-    private IPreferencesGetter preferencesGetter;
 
     @Inject
     @Singleton
     public WhirlpoolRestService(IWhirlpoolRestClient whirlpoolRestClient,
                                 ISchedulerManager schedulerManager,
-                                ICachingUtils cachingUtils,
-                                IPreferencesGetter preferencesGetter) {
+                                ICachingUtils cachingUtils) {
         this.whirlpoolRestClient = whirlpoolRestClient;
         this.schedulerManager = schedulerManager;
         this.cachingUtils = cachingUtils;
-        this.preferencesGetter = preferencesGetter;
     }
 
     @Override
@@ -159,42 +151,13 @@ public class WhirlpoolRestService implements IWhirlpoolRestService {
         if (whimsList != null)
             publishSubject.onNext(whimsList);
 
-        if (preferencesGetter.isHideMessageFromIgnoredContactsOn()) {
-            Observable.combineLatest(whirlpoolRestClient.GetWhims(), whirlpoolRestClient.GetContacts(),
-                    (whimsList1, contactList) -> filterIgnoredMessages(whimsList1, contactList))
-                    .observeOn(schedulerManager.GetMainScheduler())
-                    .subscribeOn(schedulerManager.GetIoScheduler())
-                    .doOnNext(whim -> cachingUtils.cacheWhims(whim))
-                    .subscribe(publishSubject);
-            ;
-        } else {
-            whirlpoolRestClient.GetWhims()
-                    .observeOn(schedulerManager.GetMainScheduler())
-                    .subscribeOn(schedulerManager.GetIoScheduler())
-                    .doOnNext(whim -> cachingUtils.cacheWhims(whim))
-                    .subscribe(publishSubject);
-        }
+        whirlpoolRestClient.GetWhims()
+                .observeOn(schedulerManager.GetMainScheduler())
+                .subscribeOn(schedulerManager.GetIoScheduler())
+                .doOnNext(whim -> cachingUtils.cacheWhims(whim))
+                .subscribe(publishSubject);
 
         return publishSubject;
-    }
-
-    @NonNull private WhimsList filterIgnoredMessages(WhimsList whimsList1, ContactList contactList) {
-        List<Integer> nonBlockedContacts = new ArrayList<>();
-        for (Contact c : contactList.getCONTACTS()) {
-            if (c.getBLOCKED() == 0)
-                nonBlockedContacts.add(c.getID());
-        }
-
-        List<Whim> filteredWhimList = new ArrayList<>();
-
-        for (Whim w : whimsList1.getWHIMS()) {
-            if (nonBlockedContacts.contains(w.getFROM().getID()))
-                filteredWhimList.add(w);
-        }
-
-        WhimsList whimList = new WhimsList();
-        whimList.setWHIMS(filteredWhimList);
-        return whimList;
     }
 
     @Override

@@ -1,8 +1,10 @@
 package com.android.nitecafe.whirlpoolnews.web;
 
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
+import com.android.nitecafe.whirlpoolnews.models.Contact;
 import com.android.nitecafe.whirlpoolnews.models.ContactList;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
@@ -13,7 +15,9 @@ import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
 import com.android.nitecafe.whirlpoolnews.models.UserDetailsList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
+import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolService;
@@ -36,12 +40,15 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     private Retrofit retrofit;
     private SharedPreferences mSharedPreferences;
     private IThreadScraper threadScraper;
+    private IPreferencesGetter preferencesGetter;
+
 
     @Inject
-    public WhirlpoolRestClient(Retrofit retrofit, SharedPreferences sharedPreferences, IThreadScraper threadScraper) {
+    public WhirlpoolRestClient(Retrofit retrofit, SharedPreferences sharedPreferences, IThreadScraper threadScraper, IPreferencesGetter preferencesGetter) {
         this.retrofit = retrofit;
         mSharedPreferences = sharedPreferences;
         this.threadScraper = threadScraper;
+        this.preferencesGetter = preferencesGetter;
 
         String apiKey = getKeyFromPreference();
         if (!apiKey.isEmpty()) {
@@ -147,7 +154,31 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
 
     @Override
     public Observable<WhimsList> GetWhims() {
-        return getWhirlpoolService().GetWhims();
+        if (preferencesGetter.isHideMessageFromIgnoredContactsOn()) {
+            return Observable.combineLatest(getWhirlpoolService().GetWhims(), getWhirlpoolService().GetContacts(),
+                    (whimsList1, contactList) -> filterIgnoredMessages(whimsList1, contactList));
+        } else {
+            return getWhirlpoolService().GetWhims();
+        }
+    }
+
+    @NonNull private WhimsList filterIgnoredMessages(WhimsList whimsList1, ContactList contactList) {
+        List<Integer> nonBlockedContacts = new ArrayList<>();
+        for (Contact c : contactList.getCONTACTS()) {
+            if (c.getBLOCKED() == 0)
+                nonBlockedContacts.add(c.getID());
+        }
+
+        List<Whim> filteredWhimList = new ArrayList<>();
+
+        for (Whim w : whimsList1.getWHIMS()) {
+            if (nonBlockedContacts.contains(w.getFROM().getID()))
+                filteredWhimList.add(w);
+        }
+
+        WhimsList whimList = new WhimsList();
+        whimList.setWHIMS(filteredWhimList);
+        return whimList;
     }
 
     @Override
