@@ -22,6 +22,20 @@
             android:title="Dark theme"/>
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Posts">
+
+        <ListPreference
+            android:defaultValue="@string/font_size_normal"
+            android:dialogTitle="Font Size"
+            android:entries="@array/entry_values_font_sizes"
+            android:entryValues="@array/entry_values_font_sizes"
+            android:key="@string/font_size_key"
+            android:summary="App will restart to take effect"
+            android:title="Select a font size"
+            app:summary="%s"/>
+
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:title="Threads">
 
@@ -36,20 +50,6 @@
             android:key="@string/auto_mark_read_key"
             android:summary="When last page of a watched thread is displayed"
             android:title="Auto mark as read"/>
-
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="Posts">
-
-        <ListPreference
-            android:defaultValue="@string/font_size_normal"
-            android:dialogTitle="Font Size"
-            android:entries="@array/entry_values_font_sizes"
-            android:entryValues="@array/entry_values_font_sizes"
-            android:key="@string/font_size_key"
-            android:summary="App will restart to take effect"
-            android:title="Select a font size"
-            app:summary="%s"/>
 
     </PreferenceCategory>
 
@@ -75,7 +75,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Whims">
+        android:title="Private Messages">
 
         <CheckBoxPreference
             android:defaultValue="false"
