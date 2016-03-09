@@ -55,6 +55,7 @@
     <string name="watched_notifications_frequency_key">setting_watched_notifications_frequency</string>
     <string name="whims_notifications_key">setting_whims_notifications</string>
     <string name="whims_notifications_frequency_key">setting_whims_notifications_frequency</string>
+    <string name="whims_hide_ignored_key">setting_whims_hide_ignored</string>
 
     <string name="font_size_normal">Normal</string>
     <string name="font_size_large">Large</string>

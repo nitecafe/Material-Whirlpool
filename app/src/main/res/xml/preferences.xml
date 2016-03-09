@@ -93,6 +93,12 @@
             android:title="Frequency"
             app:summary="%s"/>
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/whims_hide_ignored_key"
+            android:summary="Hide messages from ignored contacts"
+            android:title="Filter message"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

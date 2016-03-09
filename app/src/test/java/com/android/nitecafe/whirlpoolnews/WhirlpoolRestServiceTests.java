@@ -1,17 +1,23 @@
 package com.android.nitecafe.whirlpoolnews;
 
 
+import com.android.nitecafe.whirlpoolnews.models.Contact;
 import com.android.nitecafe.whirlpoolnews.models.ContactList;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
+import com.android.nitecafe.whirlpoolnews.models.Poster;
 import com.android.nitecafe.whirlpoolnews.models.RecentList;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.models.UserDetailsList;
 import com.android.nitecafe.whirlpoolnews.models.WatchedList;
+import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.models.WhimsList;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.ICachingUtils;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,13 +39,14 @@ public class WhirlpoolRestServiceTests {
 
     @Mock IWhirlpoolRestClient whirlpoolRestClientMock;
     @Mock ICachingUtils cachingUtilsMock;
+    @Mock IPreferencesGetter preferencesGetterMock;
     private WhirlpoolRestService whirlpoolRestService;
     private TestSchedulerManager testSchedulerManager;
 
     @Before
     public void Setup() {
         testSchedulerManager = new TestSchedulerManager();
-        whirlpoolRestService = new WhirlpoolRestService(whirlpoolRestClientMock, testSchedulerManager, cachingUtilsMock);
+        whirlpoolRestService = new WhirlpoolRestService(whirlpoolRestClientMock, testSchedulerManager, cachingUtilsMock, preferencesGetterMock);
     }
 
     @Test
@@ -350,6 +357,90 @@ public class WhirlpoolRestServiceTests {
 
         //assert
         verify(cachingUtilsMock).cacheWhims(whimsList);
+    }
+
+    @Test
+    public void GetWhims_WhenFilterIsOff_ReturnAllWhims() {
+
+        //arrange
+        WhimsList whimsList = new WhimsList();
+        Whim whim1 = new Whim();
+        Poster allowedPoster = new Poster();
+        allowedPoster.setID(1);
+        allowedPoster.setNAME("Allowed");
+        whim1.setFROM(allowedPoster);
+        Whim whim2 = new Whim();
+        Poster ignoredPoster = new Poster();
+        ignoredPoster.setID(2);
+        ignoredPoster.setNAME("Ignored");
+        whim2.setFROM(ignoredPoster);
+        whimsList.setWHIMS(Arrays.asList(whim1, whim2));
+        ContactList contactLists = createContactLists();
+
+        when(cachingUtilsMock.getWhimsCache()).thenReturn(null);
+        when(whirlpoolRestClientMock.GetWhims()).thenReturn(Observable.just(whimsList));
+        when(preferencesGetterMock.isHideMessageFromIgnoredContactsOn()).thenReturn(false);
+        when(whirlpoolRestClientMock.GetContacts()).thenReturn(Observable.just(contactLists));
+
+        //act
+        Observable<WhimsList> whimsListObservable = whirlpoolRestService.GetWhims();
+
+        //assert
+        whimsListObservable.subscribe(whimsList1 -> {
+
+            Assert.assertEquals(2, whimsList1.getWHIMS().size());
+            Assert.assertEquals(whim1, whimsList1.getWHIMS().get(0));
+            Assert.assertEquals(whim2, whimsList1.getWHIMS().get(1));
+        });
+        testSchedulerManager.testScheduler.triggerActions();
+    }
+
+
+    @Test
+    public void GetWhims_WhenFilterIsOn_ReturnANonIgnoredMessages() {
+
+        //arrange
+        WhimsList whimsList = new WhimsList();
+        Whim whim1 = new Whim();
+        Poster allowedPoster = new Poster();
+        allowedPoster.setID(1);
+        allowedPoster.setNAME("Allowed");
+        whim1.setFROM(allowedPoster);
+        Whim whim2 = new Whim();
+        Poster ignoredPoster = new Poster();
+        ignoredPoster.setID(2);
+        ignoredPoster.setNAME("Ignored");
+        whim2.setFROM(ignoredPoster);
+        whimsList.setWHIMS(Arrays.asList(whim1, whim2));
+        ContactList contactLists = createContactLists();
+
+        when(cachingUtilsMock.getWhimsCache()).thenReturn(null);
+        when(whirlpoolRestClientMock.GetWhims()).thenReturn(Observable.just(whimsList));
+        when(preferencesGetterMock.isHideMessageFromIgnoredContactsOn()).thenReturn(true);
+        when(whirlpoolRestClientMock.GetContacts()).thenReturn(Observable.just(contactLists));
+
+        //act
+        Observable<WhimsList> whimsListObservable = whirlpoolRestService.GetWhims();
+
+        //assert
+        whimsListObservable.subscribe(whimsList1 -> {
+            Assert.assertEquals(1, whimsList1.getWHIMS().size());
+            Assert.assertEquals(whim1, whimsList1.getWHIMS().get(0));
+        });
+        testSchedulerManager.testScheduler.triggerActions();
+    }
+
+    private ContactList createContactLists() {
+        ContactList contactList = new ContactList();
+        Contact contact1 = new Contact();
+        contact1.setID(1);
+        contact1.setBLOCKED(0);
+        Contact contact2 = new Contact();
+        contact2.setID(2);
+        contact2.setBLOCKED(1);
+        contactList.setCONTACTS(Arrays.asList(contact1, contact2));
+
+        return contactList;
     }
 
     @Test

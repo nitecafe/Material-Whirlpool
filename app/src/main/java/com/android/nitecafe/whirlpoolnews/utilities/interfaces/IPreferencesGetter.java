@@ -13,4 +13,6 @@ public interface IPreferencesGetter {
     boolean isAutoMarkAsReadLastPage();
 
     String getFontSize();
+
+    boolean isHideMessageFromIgnoredContactsOn();
 }

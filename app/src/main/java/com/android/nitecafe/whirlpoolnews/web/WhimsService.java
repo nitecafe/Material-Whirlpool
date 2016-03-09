@@ -1,9 +1,8 @@
 package com.android.nitecafe.whirlpoolnews.web;
 
 import com.android.nitecafe.whirlpoolnews.models.Whim;
-import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
-import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
 import java.util.List;
 
@@ -19,19 +18,15 @@ import rx.Observable;
 @Singleton
 public class WhimsService implements IWhimsService {
 
-    private IWhirlpoolRestClient whirlpoolRestClient;
-    private ISchedulerManager schedulerManager;
+    private IWhirlpoolRestService whirlpoolRestService;
 
     @Inject
-    public WhimsService(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
-        this.whirlpoolRestClient = whirlpoolRestClient;
-        this.schedulerManager = schedulerManager;
+    public WhimsService(IWhirlpoolRestService whirlpoolRestService) {
+        this.whirlpoolRestService = whirlpoolRestService;
     }
 
     @Override public Observable<Integer> GetNumberOfUnreadWhims() {
-        return whirlpoolRestClient.GetWhims()
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
+        return whirlpoolRestService.GetWhims()
                 .map(whimsList -> whimsList.getWHIMS())
                 .flatMap(whims -> Observable.from(whims))
                 .filter(whim -> whim.getVIEWED() == 0)
@@ -39,7 +34,7 @@ public class WhimsService implements IWhimsService {
     }
 
     @Override public Observable<List<Whim>> GetUnreadWhimsInInterval(long interval) {
-        return whirlpoolRestClient.GetWhims()
+        return whirlpoolRestService.GetWhims()
                 .map(whimsList1 -> whimsList1.getWHIMS())
                 .flatMap(whims -> Observable.from(whims))
                 .filter(whim -> whim.getVIEWED() == 0)
