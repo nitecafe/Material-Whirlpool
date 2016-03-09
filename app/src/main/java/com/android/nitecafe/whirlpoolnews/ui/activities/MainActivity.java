@@ -89,10 +89,17 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         final Bundle bundleExtra = getIntent().getExtras();
 
         String scheme = getIntent().getScheme();
-        if (bundleExtra != null && StringConstants.NOTIFICATION_INTENT_WATCHED_SCREEN_KEY.equals(bundleExtra.getString(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY))) {
-            drawer.setSelection(watchedItems, false);
-            startFragmentWithNoBackStack(WATCHED_POSITION);
-            getIntent().removeExtra(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY);
+        if (bundleExtra != null) {
+            String string = bundleExtra.getString(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY);
+            if (StringConstants.NOTIFICATION_INTENT_WATCHED_SCREEN_KEY.equals(string)) {
+                drawer.setSelection(watchedItems, false);
+                startFragmentWithNoBackStack(WATCHED_POSITION);
+                getIntent().removeExtra(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY);
+            } else if (StringConstants.NOTIFICATION_INTENT_WHIMS_SCREEN_KEY.equals(string)) {
+                drawer.setSelection(whimsDrawerItem, false);
+                startFragmentWithNoBackStack(WHIMS_POSITION);
+                getIntent().removeExtra(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY);
+            }
         } else if (IsFromInternalAppLink(scheme)) {
             parseInternalLink();
         } else if (!mWhirlpoolRestClient.hasApiKeyBeenSet()) {

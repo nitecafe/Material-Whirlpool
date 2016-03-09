@@ -39,6 +39,20 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Posts">
+
+        <ListPreference
+            android:defaultValue="@string/font_size_normal"
+            android:dialogTitle="Font Size"
+            android:entries="@array/entry_values_font_sizes"
+            android:entryValues="@array/entry_values_font_sizes"
+            android:key="@string/font_size_key"
+            android:summary="App will restart to take effect"
+            android:title="Select a font size"
+            app:summary="%s"/>
+
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:title="Watched Threads">
 
@@ -56,20 +70,6 @@
             android:entryValues="@array/entry_values_notification_frequency"
             android:key="@string/watched_notifications_frequency_key"
             android:title="Frequency"
-            app:summary="%s"/>
-
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="Posts">
-
-        <ListPreference
-            android:defaultValue="@string/font_size_normal"
-            android:dialogTitle="Font Size"
-            android:entries="@array/entry_values_font_sizes"
-            android:entryValues="@array/entry_values_font_sizes"
-            android:key="@string/font_size_key"
-            android:summary="App will restart to take effect"
-            android:title="Select a font size"
             app:summary="%s"/>
 
     </PreferenceCategory>
@@ -94,6 +94,5 @@
             app:summary="%s"/>
 
     </PreferenceCategory>
-
 
 </PreferenceScreen>

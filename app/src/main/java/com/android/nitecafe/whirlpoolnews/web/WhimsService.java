@@ -17,7 +17,7 @@ import rx.Observable;
  * and display it as a badge on the navigation drawer.
  */
 @Singleton
-public class WhimsService {
+public class WhimsService implements IWhimsService {
 
     private IWhirlpoolRestClient whirlpoolRestClient;
     private ISchedulerManager schedulerManager;
@@ -28,18 +28,17 @@ public class WhimsService {
         this.schedulerManager = schedulerManager;
     }
 
-    public Observable<Integer> GetNumberOfUnreadWhims() {
+    @Override public Observable<Integer> GetNumberOfUnreadWhims() {
         return whirlpoolRestClient.GetWhims()
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler())
                 .map(whimsList -> whimsList.getWHIMS())
                 .flatMap(whims -> Observable.from(whims))
-                .map(whim -> whim.getVIEWED())
-                .filter(integer -> integer == 0)
+                .filter(whim -> whim.getVIEWED() == 0)
                 .count();
     }
 
-    public Observable<List<Whim>> GetUnreadWhimsInInterval(long interval) {
+    @Override public Observable<List<Whim>> GetUnreadWhimsInInterval(long interval) {
         return whirlpoolRestClient.GetWhims()
                 .map(whimsList1 -> whimsList1.getWHIMS())
                 .flatMap(whims -> Observable.from(whims))

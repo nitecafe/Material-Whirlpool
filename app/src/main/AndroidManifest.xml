@@ -87,7 +87,22 @@
             android:name=".BackgroundServices.WatchedThreads.WatchedThreadsIntentService"
             android:exported="false"/>
 
-        <receiver android:name=".BackgroundServices.WatchedThreads.BootBroadcastReceiver">
+        <receiver
+            android:name=".BackgroundServices.Whims.WhimsAlarmReceiver"
+            android:process=":remote">
+        </receiver>
+
+        <service
+            android:name=".BackgroundServices.Whims.WhimsIntentService"
+            android:exported="false"/>
+
+        <receiver android:name=".BackgroundServices.WatchedThreads.WatchedThreadsBootBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".BackgroundServices.Whims.WhimsBootBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>

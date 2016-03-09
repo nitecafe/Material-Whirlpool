@@ -13,8 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
-import com.android.nitecafe.whirlpoolnews.BackgroundServices.WatchedThreads.BootBroadcastReceiver;
 import com.android.nitecafe.whirlpoolnews.BackgroundServices.WatchedThreads.WatchedThreadAlarmReceiver;
+import com.android.nitecafe.whirlpoolnews.BackgroundServices.WatchedThreads.WatchedThreadsBootBroadcastReceiver;
+import com.android.nitecafe.whirlpoolnews.BackgroundServices.Whims.WhimsAlarmReceiver;
+import com.android.nitecafe.whirlpoolnews.BackgroundServices.Whims.WhimsBootBroadcastReceiver;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
 
@@ -50,10 +52,32 @@ public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
             if (isChecked) {
                 String frequency = getPreferenceManager().getSharedPreferences().getString(getString(R.string.watched_notifications_frequency_key), "");
                 updateWatchedThreadAlarm(frequency);
-                enableBootReceiver();
+                enableWatchedThreadBootReceiver();
             } else {
                 cancelWatchedThreadAlarm();
-                disableBootReceiver();
+                disableWatchedThreadBootReceiver();
+            }
+
+            return true;
+        });
+
+        Preference whimFrequency = getPreferenceManager().findPreference(getString(R.string.whims_notifications_frequency_key));
+        whimFrequency.setOnPreferenceChangeListener((preference1, o1) -> {
+            updateWhimsAlarm(o1.toString());
+            return true;
+        });
+
+        Preference whimsNotifications = getPreferenceManager().findPreference(getString(R.string.whims_notifications_key));
+        whimsNotifications.setOnPreferenceChangeListener((preference, o) -> {
+            Boolean isChecked = Boolean.valueOf(o.toString());
+
+            if (isChecked) {
+                String frequency = getPreferenceManager().getSharedPreferences().getString(getString(R.string.whims_notifications_frequency_key), "");
+                updateWhimsAlarm(frequency);
+                enableWhimsBootReceiver();
+            } else {
+                cancelWhimsAlarm();
+                disableWhimsBootReceiver();
             }
 
             return true;
@@ -64,6 +88,11 @@ public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
     private void updateWatchedThreadAlarm(String frequency) {
         long interval = WhirlpoolUtils.convertFrequencyStringIntoLong(frequency, getContext());
         scheduleWatchedThreadAlarm(interval);
+    }
+
+    private void updateWhimsAlarm(String frequency) {
+        long interval = WhirlpoolUtils.convertFrequencyStringIntoLong(frequency, getContext());
+        scheduleWhimsAlarm(interval);
     }
 
 
@@ -81,17 +110,35 @@ public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
             supportActionBar.setTitle(getString(R.string.title_settings));
     }
 
-    private void scheduleWatchedThreadAlarm(long interval) {
-        final PendingIntent watchedThreadsPendingIntent = getWatchedThreadsPendingIntent();
+    private void scheduleAlarm(long interval, PendingIntent intent) {
         AlarmManager alarm = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarm.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, interval,
-                interval, watchedThreadsPendingIntent);
+                interval, intent);
+    }
+
+    private void cancelAlarm(PendingIntent intent) {
+        AlarmManager alarm = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarm.cancel(intent);
+    }
+
+    private void scheduleWatchedThreadAlarm(long interval) {
+        final PendingIntent watchedThreadsPendingIntent = getWatchedThreadsPendingIntent();
+        scheduleAlarm(interval, watchedThreadsPendingIntent);
     }
 
     private void cancelWatchedThreadAlarm() {
         final PendingIntent watchedThreadsPendingIntent = getWatchedThreadsPendingIntent();
-        AlarmManager alarm = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarm.cancel(watchedThreadsPendingIntent);
+        cancelAlarm(watchedThreadsPendingIntent);
+    }
+
+    private void scheduleWhimsAlarm(long interval) {
+        final PendingIntent whimsPendingIntent = getWhimsPendingIntent();
+        scheduleAlarm(interval, whimsPendingIntent);
+    }
+
+    private void cancelWhimsAlarm() {
+        final PendingIntent whimsPendingIntent = getWhimsPendingIntent();
+        cancelAlarm(whimsPendingIntent);
     }
 
     private PendingIntent getWatchedThreadsPendingIntent() {
@@ -100,8 +147,14 @@ public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void enableBootReceiver() {
-        ComponentName receiver = new ComponentName(getContext(), BootBroadcastReceiver.class);
+    private PendingIntent getWhimsPendingIntent() {
+        Intent intent = new Intent(getActivity().getApplicationContext(), WhimsAlarmReceiver.class);
+        return PendingIntent.getBroadcast(getContext(), WhimsAlarmReceiver.REQUEST_CODE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private void enableBootReceiver(Class cls) {
+        ComponentName receiver = new ComponentName(getContext(), cls);
         PackageManager pm = getContext().getPackageManager();
 
         pm.setComponentEnabledSetting(receiver,
@@ -109,12 +162,28 @@ public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
                 PackageManager.DONT_KILL_APP);
     }
 
-    private void disableBootReceiver() {
-        ComponentName receiver = new ComponentName(getContext(), BootBroadcastReceiver.class);
+    private void disableBootReceiver(Class cls) {
+        ComponentName receiver = new ComponentName(getContext(), cls);
         PackageManager pm = getContext().getPackageManager();
 
         pm.setComponentEnabledSetting(receiver,
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
+    }
+
+    private void enableWatchedThreadBootReceiver() {
+        enableBootReceiver(WatchedThreadsBootBroadcastReceiver.class);
+    }
+
+    private void disableWatchedThreadBootReceiver() {
+        disableBootReceiver(WatchedThreadsBootBroadcastReceiver.class);
+    }
+
+    private void enableWhimsBootReceiver() {
+        enableBootReceiver(WhimsBootBroadcastReceiver.class);
+    }
+
+    private void disableWhimsBootReceiver() {
+        disableBootReceiver(WhimsBootBroadcastReceiver.class);
     }
 }
