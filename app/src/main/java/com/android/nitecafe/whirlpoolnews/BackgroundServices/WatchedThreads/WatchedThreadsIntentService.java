@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.BackgroundServices.WatchedThreads;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -69,6 +70,7 @@ public class WatchedThreadsIntentService extends IntentService {
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.white_notification_icon)
                         .setAutoCancel(true)
+                        .setDefaults(Notification.DEFAULT_ALL)
                         .setContentTitle(title)
                         .setContentText(content);
 
