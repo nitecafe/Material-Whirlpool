@@ -95,12 +95,16 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
                 drawer.setSelection(watchedItems, false);
                 startFragmentWithNoBackStack(WATCHED_POSITION);
                 getIntent().removeExtra(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY);
+                return;
             } else if (StringConstants.NOTIFICATION_INTENT_WHIMS_SCREEN_KEY.equals(string)) {
                 drawer.setSelection(whimsDrawerItem, false);
                 startFragmentWithNoBackStack(WHIMS_POSITION);
                 getIntent().removeExtra(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY);
+                return;
             }
-        } else if (IsFromInternalAppLink(scheme)) {
+        }
+
+        if (IsFromInternalAppLink(scheme)) {
             parseInternalLink();
         } else if (!mWhirlpoolRestClient.hasApiKeyBeenSet()) {
             drawer.setSelection(apiKeyDrawerItem, false);
