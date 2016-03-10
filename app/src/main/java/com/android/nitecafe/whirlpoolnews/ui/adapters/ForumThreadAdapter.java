@@ -10,7 +10,7 @@ import com.android.nitecafe.whirlpoolnews.models.IWhirlpoolThread;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
-import java.util.Date;
+import org.joda.time.DateTime;
 
 public class ForumThreadAdapter<T extends IWhirlpoolThread> extends ThreadBaseAdapter<T> {
 
@@ -35,7 +35,7 @@ public class ForumThreadAdapter<T extends IWhirlpoolThread> extends ThreadBaseAd
         final int pages = getNumberOfPage(forumThread);
         holder.threadTotalPage.setText(String.valueOf(pages));
 
-        final Date localDateFromString = WhirlpoolDateUtils.getLocalDateFromString(forumThread.getLASTDATE());
+        final DateTime localDateFromString = WhirlpoolDateUtils.getLocalDateFromString(forumThread.getLASTDATE());
         holder.threadLastPostInfo.setText(String.format("%s ago by %s",
                 WhirlpoolDateUtils.getTimeSince(localDateFromString), forumThread.getLAST().getNAME()));
     }
