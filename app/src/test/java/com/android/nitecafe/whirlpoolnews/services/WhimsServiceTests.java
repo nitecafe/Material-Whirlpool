@@ -7,6 +7,9 @@ import com.android.nitecafe.whirlpoolnews.web.WhimsService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
 
 import rx.Observable;
 import rx.observers.TestObserver;
@@ -108,26 +112,60 @@ public class WhimsServiceTests {
     public void GetUnreadWhimsInInterval_WhenWithinInterval_ReturnWhim() {
 
         //arrange
-//        long interval = 60 * 1000;
-//        TestObserver<List<Whim>> testObserver = new TestObserver<>();
-//        WhimsList whimsList = new WhimsList();
-//        Whim whim1 = new Whim();
-//        whim1.setVIEWED(0);
-//
-//        SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS", Locale.US);
-//        Calendar instance = Calendar.getInstance();
-//        String format = date_format.format(instance.getTime());
-//        Date localDateFromString = WhirlpoolDateUtils.getLocalDateFromString(format);
-//        whim1.setDATE(date_format.format(localDateFromString));
-//        whimsList.setWHIMS(Arrays.asList(whim1));
-//        Mockito.when(whirlpoolRestClientMock.GetWhims()).thenReturn(Observable.just(whimsList));
-//
-//        //act
-//        _service.GetUnreadWhimsInInterval(interval).subscribe(testObserver);
-//
-//        //assert
-//        List<List<Whim>> onNextEvents = testObserver.getOnNextEvents();
-//        Assert.assertEquals(whim1, onNextEvents.get(0).get(0));
+        long interval = 60 * 1000;
+        TestObserver<List<Whim>> testObserver = new TestObserver<>();
+        WhimsList whimsList = new WhimsList();
+        Whim whim1 = new Whim();
+        whim1.setVIEWED(0);
+        String currentTimeInAEST = getCurrentTimeInAEST();
+        whim1.setDATE(currentTimeInAEST);
+        whimsList.setWHIMS(Arrays.asList(whim1));
+        Mockito.when(whirlpoolRestClientMock.GetWhims()).thenReturn(Observable.just(whimsList));
+
+        //act
+        _service.GetUnreadWhimsInInterval(interval).subscribe(testObserver);
+
+        //assert
+        List<List<Whim>> onNextEvents = testObserver.getOnNextEvents();
+        Assert.assertEquals(whim1, onNextEvents.get(0).get(0));
     }
 
+    @Test
+    public void GetUnreadWhimsInInterval_WhenNotWithinInterval_ReturnWhim() {
+
+        //arrange
+        long interval = 60 * 1000;
+        TestObserver<List<Whim>> testObserver = new TestObserver<>();
+        WhimsList whimsList = new WhimsList();
+        Whim whim1 = new Whim();
+        whim1.setVIEWED(0);
+        String currentTimeInAEST = getCurrentTimeInAESTMinus2Hour();
+        whim1.setDATE(currentTimeInAEST);
+        whimsList.setWHIMS(Arrays.asList(whim1));
+        Mockito.when(whirlpoolRestClientMock.GetWhims()).thenReturn(Observable.just(whimsList));
+
+        //act
+        _service.GetUnreadWhimsInInterval(interval).subscribe(testObserver);
+
+        //assert
+        List<List<Whim>> onNextEvents = testObserver.getOnNextEvents();
+        Assert.assertEquals(0, onNextEvents.get(0).size());
+    }
+
+    private String getCurrentTimeInAEST() {
+        //Queensland uses AEST all year
+        DateTimeZone dateTimeZone = DateTimeZone.forID("Australia/Queensland");
+        DateTime dateTime = new DateTime(dateTimeZone);
+        String s = dateTime.toString("yyyy-MM-dd'T'HH:mm:ssZ");
+        return s;
+    }
+
+    private String getCurrentTimeInAESTMinus2Hour() {
+        //Queensland uses AEST all year
+        DateTimeZone dateTimeZone = DateTimeZone.forID("Australia/Queensland");
+        DateTime dateTime = new DateTime(dateTimeZone);
+        DateTime dateTime1 = dateTime.minusHours(2);
+        String s = dateTime1.toString("yyyy-MM-dd'T'HH:mm:ssZ");
+        return s;
+    }
 }

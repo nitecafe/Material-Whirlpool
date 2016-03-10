@@ -1,5 +1,8 @@
 package com.android.nitecafe.whirlpoolnews.utilities;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -9,6 +12,11 @@ import java.util.TimeZone;
  * Credit to WhirlDroid for calculating time methods
  */
 public class WhirlpoolDateUtils {
+
+    public static DateTime getLocalDateFromStringJoda(String long_date_time) {
+        DateTime parse = DateTime.parse(long_date_time);
+        return parse.withZone( DateTimeZone.getDefault());
+    }
 
     /**
      * Calculates the date from a timestamp string
@@ -80,6 +88,13 @@ public class WhirlpoolDateUtils {
     public static boolean isTimeWithinDuration(String date, long duration) {
         Date localDateFromString = getLocalDateFromString(date);
         long l = System.currentTimeMillis() - localDateFromString.getTime();
+        return l < duration;
+    }
+
+    public static boolean isTimeWithinDurationJoda(String date, long duration) {
+        DateTime localDateFromString = getLocalDateFromStringJoda(date);
+        DateTime dateTime = new DateTime();
+        long l = dateTime.getMillis() - localDateFromString.getMillis();
         return l < duration;
     }
 
