@@ -85,6 +85,12 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="@string/whims_hide_ignored_key"
+            android:summary="Hide messages from ignored contacts"
+            android:title="Filter message"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="@string/whims_notifications_key"
             android:summary="For new unread private messages"
             android:title="Notifications"/>
@@ -104,12 +110,6 @@
             android:dependency="@string/whims_notifications_key"
             android:key="@string/whims_notifications_vibrate_key"
             android:title="Vibrate"/>
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="@string/whims_hide_ignored_key"
-            android:summary="Hide messages from ignored contacts"
-            android:title="Filter message"/>
 
     </PreferenceCategory>
 
