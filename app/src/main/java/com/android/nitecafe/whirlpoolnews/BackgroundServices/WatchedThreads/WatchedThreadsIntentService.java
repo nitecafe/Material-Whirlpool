@@ -66,11 +66,14 @@ public class WatchedThreadsIntentService extends IntentService {
 
     private void createNotificationContent(List<Watched> watcheds) {
 
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+
         List<String> titleList = new ArrayList<>();
         for (Watched w : watcheds) {
             titleList.add(w.getTITLE());
+            inboxStyle.addLine(w.getTITLE());
         }
-        String content = TextUtils.join(", ", titleList);
+        String content = TextUtils.join(" | ", titleList);
 
         String title;
         if (watcheds.size() > 1)
@@ -78,11 +81,12 @@ public class WatchedThreadsIntentService extends IntentService {
         else
             title = watcheds.size() + " thread with new replies";
 
-        notifyNewUnreadThreads(title, content, content);
+
+        notifyNewUnreadThreads(title, content, inboxStyle);
     }
 
-    private void notifyNewUnreadThreads(String title, String content, String bigContent) {
-        NotificationCompat.Builder mBuilder = buildNotification(title, content, bigContent);
+    private void notifyNewUnreadThreads(String title, String content, NotificationCompat.InboxStyle inboxStyle) {
+        NotificationCompat.Builder mBuilder = buildNotification(title, content, inboxStyle);
 
         int mNotificationId = 1000;
         NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -90,7 +94,7 @@ public class WatchedThreadsIntentService extends IntentService {
     }
 
     @NonNull
-    private NotificationCompat.Builder buildNotification(String title, String content, String bigContent) {
+    private NotificationCompat.Builder buildNotification(String title, String content, NotificationCompat.InboxStyle inboxStyle) {
 
         boolean vibrate = sharedPreferences.getBoolean(getString(R.string.watched_notifications_vibrate_key), false);
 
@@ -100,8 +104,7 @@ public class WatchedThreadsIntentService extends IntentService {
                         .setAutoCancel(true)
                         .setContentTitle(title)
                         .setContentText(content)
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(bigContent));
+                        .setStyle(inboxStyle);
 
         if (vibrate)
             mBuilder.setDefaults(Notification.DEFAULT_ALL);

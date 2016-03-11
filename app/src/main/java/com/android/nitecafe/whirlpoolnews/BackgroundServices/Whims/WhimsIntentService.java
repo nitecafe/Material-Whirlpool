@@ -10,7 +10,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.StyleSpan;
 import android.util.Log;
 
 import com.android.nitecafe.whirlpoolnews.R;
@@ -65,9 +68,15 @@ public class WhimsIntentService extends IntentService {
 
     private void createNotificationContent(List<Whim> whims) {
 
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+
         List<String> names = new ArrayList<>();
         for (Whim w : whims) {
-            names.add(w.getFROM().getNAME());
+            String sender = w.getFROM().getNAME();
+            names.add(sender);
+            Spannable sb = new SpannableString(sender + " " + w.getMESSAGE());
+            sb.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sender.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            inboxStyle.addLine(sb);
         }
         String content = TextUtils.join(", ", names);
 
@@ -77,11 +86,11 @@ public class WhimsIntentService extends IntentService {
         else
             title = whims.size() + " new private message";
 
-        notifyNewUnreadWhims(title, content, content);
+        notifyNewUnreadWhims(title, content, inboxStyle);
     }
 
-    private void notifyNewUnreadWhims(String title, String content, String bigContent) {
-        NotificationCompat.Builder mBuilder = buildNotification(title, content, bigContent);
+    private void notifyNewUnreadWhims(String title, String content, NotificationCompat.InboxStyle inboxStyle) {
+        NotificationCompat.Builder mBuilder = buildNotification(title, content, inboxStyle);
 
         int mNotificationId = 2000;
         NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -89,7 +98,7 @@ public class WhimsIntentService extends IntentService {
     }
 
     @NonNull
-    private NotificationCompat.Builder buildNotification(String title, String content, String bigContent) {
+    private NotificationCompat.Builder buildNotification(String title, String content, NotificationCompat.InboxStyle inboxStyle) {
 
         boolean vibrate = sharedPreferences.getBoolean(getString(R.string.whims_notifications_vibrate_key), false);
 
@@ -99,8 +108,7 @@ public class WhimsIntentService extends IntentService {
                         .setAutoCancel(true)
                         .setContentTitle(title)
                         .setContentText(content)
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(bigContent));
+                        .setStyle(inboxStyle);
 
         if (vibrate)
             mBuilder.setDefaults(Notification.DEFAULT_ALL);
