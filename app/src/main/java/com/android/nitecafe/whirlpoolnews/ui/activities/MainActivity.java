@@ -123,7 +123,8 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         }
     }
 
-    @Nullable private void showPushBotMessage() {
+    @Nullable
+    private void showPushBotMessage() {
         final Bundle bundleExtra = getIntent().getExtras();
 
         if (bundleExtra != null) {
@@ -131,13 +132,20 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             final String message = bundleExtra.getString(StringConstants.PUSHBOT_FULLMESSAGE_KEY);
             final String downloadLink = bundleExtra.getString(StringConstants.PUSHBOT_DOWNLOAD_LINK_KEY);
             if (message != null && title != null) {
-                new MaterialDialog.Builder(this)
+                MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
                         .title(title)
-                        .content(message)
-                        .positiveText("Download")
-                        .negativeText("Later")
-                        .onPositive((dialog, which) -> launchLinkInBrowser(downloadLink))
-                        .show();
+                        .content(message);
+
+                if (downloadLink == null) {
+                    builder.negativeText("OK");
+                } else {
+                    builder.positiveText("Download")
+                            .negativeText("Later")
+                            .onPositive((dialog, which) -> launchLinkInBrowser(downloadLink));
+                }
+
+                builder.show();
+
                 getIntent().removeExtra(StringConstants.PUSHBOT_FULLMESSAGE_KEY);
                 getIntent().removeExtra(StringConstants.PUSHBOT_TITLE_KEY);
                 getIntent().removeExtra(StringConstants.PUSHBOT_DOWNLOAD_LINK_KEY);
