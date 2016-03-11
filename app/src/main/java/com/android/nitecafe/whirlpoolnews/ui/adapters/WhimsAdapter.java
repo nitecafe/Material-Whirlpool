@@ -98,7 +98,9 @@ public class WhimsAdapter extends UltimateViewAdapter<WhimsAdapter.WhimViewHolde
 
         public WhimViewHolder(View itemView) {
             super(itemView);
-            RxView.clicks(itemView).map(aVoid -> getAdapterPosition()).subscribe(OnWhimClickedSubject);
+            RxView.clicks(itemView).map(aVoid -> getAdapterPosition())
+                    .onErrorResumeNext(Observable.empty())
+                    .subscribe(OnWhimClickedSubject);
             ButterKnife.bind(this, itemView);
         }
     }

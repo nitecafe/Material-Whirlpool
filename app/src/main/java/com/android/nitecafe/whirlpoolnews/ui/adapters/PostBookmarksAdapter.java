@@ -21,6 +21,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.subjects.PublishSubject;
 
 public class PostBookmarksAdapter extends UltimateViewAdapter<PostBookmarksAdapter.PostBookmarkViewHolder> {
@@ -77,6 +78,7 @@ public class PostBookmarksAdapter extends UltimateViewAdapter<PostBookmarksAdapt
             super(itemView);
             itemView.setOnCreateContextMenuListener(this);
             RxView.clicks(itemView).map(aVoid -> postBookmarks.get(getAdapterPosition()))
+                    .onErrorResumeNext(Observable.empty())
                     .doOnNext(postBookmark -> WhirlpoolApp.getInstance().trackEvent("RecycleView Click", "Open Post bookmark", ""))
                     .subscribe(OnBookmarkClickedSubject);
             ButterKnife.bind(this, itemView);
