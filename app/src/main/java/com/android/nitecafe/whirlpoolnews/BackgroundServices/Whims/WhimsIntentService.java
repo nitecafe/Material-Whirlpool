@@ -83,15 +83,22 @@ public class WhimsIntentService extends IntentService {
 
     @NonNull
     private NotificationCompat.Builder buildNotification(String title, String content, String bigContent) {
+
+        boolean vibrate = sharedPreferences.getBoolean(getString(R.string.whims_notifications_vibrate_key), false);
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.white_notification_icon)
                         .setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_ALL)
                         .setContentTitle(title)
                         .setContentText(content)
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(bigContent));
+
+        if (vibrate)
+            mBuilder.setDefaults(Notification.DEFAULT_ALL);
+        else
+            mBuilder.setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND);
 
         Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.putExtra(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY, StringConstants.NOTIFICATION_INTENT_WHIMS_SCREEN_KEY);

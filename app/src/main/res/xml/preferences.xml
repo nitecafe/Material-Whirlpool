@@ -72,6 +72,12 @@
             android:title="Frequency"
             app:summary="%s"/>
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="@string/watched_notifications_key"
+            android:key="@string/watched_notifications_vibrate_key"
+            android:title="Vibrate"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -92,6 +98,12 @@
             android:key="@string/whims_notifications_frequency_key"
             android:title="Frequency"
             app:summary="%s"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="@string/whims_notifications_key"
+            android:key="@string/whims_notifications_vibrate_key"
+            android:title="Vibrate"/>
 
         <CheckBoxPreference
             android:defaultValue="false"
