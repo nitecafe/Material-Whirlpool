@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.nitecafe.whirlpoolnews.R;
@@ -20,6 +21,7 @@ import com.android.nitecafe.whirlpoolnews.ui.activities.MainActivity;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
 import com.android.nitecafe.whirlpoolnews.web.IWhimsService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -55,25 +57,41 @@ public class WhimsIntentService extends IntentService {
     }
 
     private void createNotificationContent(List<Whim> whims) {
-        notifyNewUnreadWhims("New Private Messages", "You have " + whims.size() + " new message(s)");
+
+        List<String> names = new ArrayList<>();
+        for (Whim w : whims) {
+            names.add(w.getFROM().getNAME());
+        }
+        String content = TextUtils.join(", ", names);
+
+        String title;
+        if (whims.size() > 1)
+            title = whims.size() + " new private messages";
+        else
+            title = whims.size() + " new private message";
+
+        notifyNewUnreadWhims(title, content, content);
     }
 
-    private void notifyNewUnreadWhims(String title, String content) {
-        NotificationCompat.Builder mBuilder = buildNotification(title, content);
+    private void notifyNewUnreadWhims(String title, String content, String bigContent) {
+        NotificationCompat.Builder mBuilder = buildNotification(title, content, bigContent);
 
         int mNotificationId = 2000;
         NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
-    @NonNull private NotificationCompat.Builder buildNotification(String title, String content) {
+    @NonNull
+    private NotificationCompat.Builder buildNotification(String title, String content, String bigContent) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.white_notification_icon)
                         .setAutoCancel(true)
                         .setDefaults(Notification.DEFAULT_ALL)
                         .setContentTitle(title)
-                        .setContentText(content);
+                        .setContentText(content)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(bigContent));
 
         Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.putExtra(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY, StringConstants.NOTIFICATION_INTENT_WHIMS_SCREEN_KEY);

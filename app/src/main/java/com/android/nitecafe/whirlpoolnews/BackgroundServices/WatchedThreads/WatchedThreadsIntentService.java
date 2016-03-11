@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.nitecafe.whirlpoolnews.R;
@@ -20,6 +21,7 @@ import com.android.nitecafe.whirlpoolnews.ui.activities.MainActivity;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -54,25 +56,41 @@ public class WatchedThreadsIntentService extends IntentService {
     }
 
     private void createNotificationContent(List<Watched> watcheds) {
-        notifyNewUnreadThreads("New Replies", "You have " + watcheds.size() + " thread(s) with new replies");
+
+        List<String> titleList = new ArrayList<>();
+        for (Watched w : watcheds) {
+            titleList.add(w.getTITLE());
+        }
+        String content = TextUtils.join(", ", titleList);
+
+        String title;
+        if (watcheds.size() > 1)
+            title = watcheds.size() + " threads with new replies";
+        else
+            title = watcheds.size() + " thread with new replies";
+
+        notifyNewUnreadThreads(title, content, content);
     }
 
-    private void notifyNewUnreadThreads(String title, String content) {
-        NotificationCompat.Builder mBuilder = buildNotification(title, content);
+    private void notifyNewUnreadThreads(String title, String content, String bigContent) {
+        NotificationCompat.Builder mBuilder = buildNotification(title, content, bigContent);
 
         int mNotificationId = 1000;
         NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
-    @NonNull private NotificationCompat.Builder buildNotification(String title, String content) {
+    @NonNull
+    private NotificationCompat.Builder buildNotification(String title, String content, String bigContent) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.white_notification_icon)
                         .setAutoCancel(true)
                         .setDefaults(Notification.DEFAULT_ALL)
                         .setContentTitle(title)
-                        .setContentText(content);
+                        .setContentText(content)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(bigContent));
 
         Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.putExtra(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY, StringConstants.NOTIFICATION_INTENT_WATCHED_SCREEN_KEY);
