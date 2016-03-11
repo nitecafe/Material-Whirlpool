@@ -52,4 +52,13 @@ public class WhimsService implements IWhimsService {
                 .toList();
 
     }
+
+    @Override
+    public Observable<List<Whim>> GetUnreadWhims() {
+        return whirlpoolRestClient.GetWhims()
+                .map(whimsList1 -> whimsList1.getWHIMS())
+                .flatMap(whims -> Observable.from(whims))
+                .filter(whim -> whim.getVIEWED() == 0)
+                .toList();
+    }
 }

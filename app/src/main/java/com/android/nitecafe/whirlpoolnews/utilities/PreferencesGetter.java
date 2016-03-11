@@ -42,4 +42,14 @@ public class PreferencesGetter implements IPreferencesGetter {
     public boolean isHideMessageFromIgnoredContactsOn() {
         return sharedPreferences.getBoolean(context.getResources().getString(R.string.whims_hide_ignored_key), false);
     }
+
+    @Override
+    public String getWatchedThreadsNotificationFrequency() {
+        return sharedPreferences.getString(context.getResources().getString(R.string.watched_notifications_frequency_key), "");
+    }
+
+    @Override
+    public String getWhimsNotificationFrequency() {
+        return sharedPreferences.getString(context.getResources().getString(R.string.whims_notifications_frequency_key), "");
+    }
 }

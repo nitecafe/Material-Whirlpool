@@ -18,6 +18,7 @@ import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.ui.activities.MainActivity;
+import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
 import com.android.nitecafe.whirlpoolnews.web.IWhimsService;
 
@@ -25,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import rx.Observable;
 
 public class WhimsIntentService extends IntentService {
 
@@ -43,15 +46,19 @@ public class WhimsIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
         WakefulBroadcastReceiver.completeWakefulIntent(intent);
 
         String frequency = sharedPreferences.getString(getString(R.string.whims_notifications_frequency_key), "");
-        whimsService.GetUnreadWhimsInInterval(WhirlpoolUtils.convertFrequencyStringIntoLong(frequency, getApplicationContext()))
-                .subscribe(whims -> {
-                    if (whims.size() > 0)
-                        createNotificationContent(whims);
-                });
+        long l = WhirlpoolUtils.convertFrequencyStringIntoLong(frequency, getApplicationContext());
+        Observable<List<Whim>> unreadWhims = whimsService.GetUnreadWhims();
+        unreadWhims.subscribe(whims -> {
+            for (Whim w : whims) {
+                if (WhirlpoolDateUtils.isTimeWithinDuration(w.getDATE(), l)) {
+                    createNotificationContent(whims);
+                    break;
+                }
+            }
+        });
 
         Log.i("WhimsIntentService", "Service running");
     }

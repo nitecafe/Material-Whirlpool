@@ -17,18 +17,22 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.Watched;
+import com.android.nitecafe.whirlpoolnews.models.WatchedList;
 import com.android.nitecafe.whirlpoolnews.ui.activities.MainActivity;
+import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
-import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import rx.Observable;
+
 public class WatchedThreadsIntentService extends IntentService {
 
-    @Inject IWatchedThreadService mIWatchedThreadService;
+    @Inject IWhirlpoolRestClient whirlpoolRestClient;
     @Inject SharedPreferences sharedPreferences;
 
     public WatchedThreadsIntentService() {
@@ -43,15 +47,20 @@ public class WatchedThreadsIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
         WakefulBroadcastReceiver.completeWakefulIntent(intent);
 
         String frequency = sharedPreferences.getString(getString(R.string.watched_notifications_frequency_key), "");
-        mIWatchedThreadService.getUnreadWatchedThreadsInInterval(WhirlpoolUtils.convertFrequencyStringIntoLong(frequency, getApplicationContext()))
-                .subscribe(watcheds -> {
-                    if (watcheds.size() > 0)
-                        createNotificationContent(watcheds);
-                });
+        Observable<WatchedList> unreadWatchedThreads = whirlpoolRestClient.GetUnreadWatched();
+        long l = WhirlpoolUtils.convertFrequencyStringIntoLong(frequency, getApplicationContext());
+        unreadWatchedThreads.subscribe(watchedList -> {
+            for (Watched w : watchedList.getWATCHED()) {
+                if (WhirlpoolDateUtils.isTimeWithinDuration(w.getLASTDATE(), l)) {
+                    createNotificationContent(watchedList.getWATCHED());
+                    break;
+                }
+            }
+        });
+
         Log.i("WatchedIntentService", "Service running");
     }
 

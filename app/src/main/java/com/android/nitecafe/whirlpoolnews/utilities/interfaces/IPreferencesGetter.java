@@ -15,4 +15,8 @@ public interface IPreferencesGetter {
     String getFontSize();
 
     boolean isHideMessageFromIgnoredContactsOn();
+
+    String getWatchedThreadsNotificationFrequency();
+
+    String getWhimsNotificationFrequency();
 }
