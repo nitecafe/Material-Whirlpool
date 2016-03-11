@@ -56,7 +56,7 @@ public class WatchedThreadsIntentService extends IntentService {
                     break;
                 }
             }
-        });
+        }, throwable -> Log.e("WatchedIntentService", throwable.getMessage()));
 
         Log.i("WatchedIntentService", "Service running");
     }

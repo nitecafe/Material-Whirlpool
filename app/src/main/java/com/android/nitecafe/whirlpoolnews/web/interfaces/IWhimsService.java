@@ -1,4 +1,4 @@
-package com.android.nitecafe.whirlpoolnews.web;
+package com.android.nitecafe.whirlpoolnews.web.interfaces;
 
 import com.android.nitecafe.whirlpoolnews.models.Whim;
 

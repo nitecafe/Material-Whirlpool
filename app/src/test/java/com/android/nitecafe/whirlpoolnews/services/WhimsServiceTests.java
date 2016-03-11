@@ -131,7 +131,7 @@ public class WhimsServiceTests {
     }
 
     @Test
-    public void GetUnreadWhimsInInterval_WhenNotWithinInterval_ReturnWhim() {
+    public void GetUnreadWhimsInInterval_WhenNotWithinInterval_ReturnEmpty() {
 
         //arrange
         long interval = 60 * 1000;
@@ -150,6 +150,45 @@ public class WhimsServiceTests {
         //assert
         List<List<Whim>> onNextEvents = testObserver.getOnNextEvents();
         Assert.assertEquals(0, onNextEvents.get(0).size());
+    }
+
+    @Test
+    public void GetUnreadWhims_WhenNoUnreads_ReturnEmtpyList() {
+
+        //arrange
+        TestObserver<List<Whim>> testObserver = new TestObserver<>();
+        WhimsList whimsList = new WhimsList();
+        Whim whim1 = new Whim();
+        whim1.setVIEWED(1);
+        whimsList.setWHIMS(Arrays.asList(whim1));
+        Mockito.when(whirlpoolRestClientMock.GetWhims()).thenReturn(Observable.just(whimsList));
+
+        //act
+        _service.GetUnreadWhims().subscribe(testObserver);
+
+        //assert
+        List<List<Whim>> onNextEvents = testObserver.getOnNextEvents();
+        Assert.assertEquals(0, onNextEvents.get(0).size());
+    }
+
+    @Test
+    public void GetUnreadWhims_WhenGotUnread_ReturnUnreadWhim() {
+
+        //arrange
+        TestObserver<List<Whim>> testObserver = new TestObserver<>();
+        WhimsList whimsList = new WhimsList();
+        Whim whim1 = new Whim();
+        whim1.setVIEWED(0);
+        whimsList.setWHIMS(Arrays.asList(whim1));
+        Mockito.when(whirlpoolRestClientMock.GetWhims()).thenReturn(Observable.just(whimsList));
+
+        //act
+        _service.GetUnreadWhims().subscribe(testObserver);
+
+        //assert
+        List<List<Whim>> onNextEvents = testObserver.getOnNextEvents();
+        Assert.assertEquals(1, onNextEvents.get(0).size());
+        Assert.assertEquals(whim1, onNextEvents.get(0).get(0));
     }
 
     private String getCurrentTimeInAEST() {

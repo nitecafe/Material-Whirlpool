@@ -22,7 +22,7 @@ import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.ui.activities.MainActivity;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
-import com.android.nitecafe.whirlpoolnews.web.IWhimsService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhimsService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class WhimsIntentService extends IntentService {
                     break;
                 }
             }
-        });
+        }, throwable -> Log.e("WhimsIntentService", throwable.getMessage()));
 
         Log.i("WhimsIntentService", "Service running");
     }

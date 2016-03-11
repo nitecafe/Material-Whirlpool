@@ -2,6 +2,7 @@ package com.android.nitecafe.whirlpoolnews.web;
 
 import com.android.nitecafe.whirlpoolnews.models.Whim;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhimsService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 
