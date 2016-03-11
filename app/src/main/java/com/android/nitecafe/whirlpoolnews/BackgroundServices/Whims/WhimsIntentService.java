@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.WakefulBroadcastReceiver;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -49,8 +48,6 @@ public class WhimsIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        WakefulBroadcastReceiver.completeWakefulIntent(intent);
-
         String frequency = sharedPreferences.getString(getString(R.string.whims_notifications_frequency_key), "");
         long l = WhirlpoolUtils.convertFrequencyStringIntoLong(frequency, getApplicationContext());
         Observable<List<Whim>> unreadWhims = whimsService.GetUnreadWhims();
