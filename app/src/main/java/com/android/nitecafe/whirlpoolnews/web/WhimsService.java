@@ -1,7 +1,12 @@
 package com.android.nitecafe.whirlpoolnews.web;
 
-import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
+import com.android.nitecafe.whirlpoolnews.models.Whim;
+import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhimsService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -13,25 +18,48 @@ import rx.Observable;
  * and display it as a badge on the navigation drawer.
  */
 @Singleton
-public class WhimsService {
+public class WhimsService implements IWhimsService {
 
+    private IWhirlpoolRestService whirlpoolRestService;
     private IWhirlpoolRestClient whirlpoolRestClient;
-    private ISchedulerManager schedulerManager;
+
 
     @Inject
-    public WhimsService(IWhirlpoolRestClient whirlpoolRestClient, ISchedulerManager schedulerManager) {
+    public WhimsService(IWhirlpoolRestService whirlpoolRestService, IWhirlpoolRestClient whirlpoolRestClient) {
+        this.whirlpoolRestService = whirlpoolRestService;
         this.whirlpoolRestClient = whirlpoolRestClient;
-        this.schedulerManager = schedulerManager;
     }
 
-    public Observable<Integer> GetNumberOfUnreadWhims() {
-        return whirlpoolRestClient.GetWhims()
-                .observeOn(schedulerManager.GetMainScheduler())
-                .subscribeOn(schedulerManager.GetIoScheduler())
+    /**
+     * Runs in app
+     */
+    @Override public Observable<Integer> GetNumberOfUnreadWhims() {
+        return whirlpoolRestService.GetWhims()
                 .map(whimsList -> whimsList.getWHIMS())
                 .flatMap(whims -> Observable.from(whims))
-                .map(whim -> whim.getVIEWED())
-                .filter(integer -> integer == 0)
+                .filter(whim -> whim.getVIEWED() == 0)
                 .count();
+    }
+
+    /**
+     * Runs in background service
+     */
+    @Override public Observable<List<Whim>> GetUnreadWhimsInInterval(long interval) {
+        return whirlpoolRestClient.GetWhims()
+                .map(whimsList1 -> whimsList1.getWHIMS())
+                .flatMap(whims -> Observable.from(whims))
+                .filter(whim -> whim.getVIEWED() == 0)
+                .filter(whim1 -> WhirlpoolDateUtils.isTimeWithinDuration(whim1.getDATE(), interval))
+                .toList();
+
+    }
+
+    @Override
+    public Observable<List<Whim>> GetUnreadWhims() {
+        return whirlpoolRestClient.GetWhims()
+                .map(whimsList1 -> whimsList1.getWHIMS())
+                .flatMap(whims -> Observable.from(whims))
+                .filter(whim -> whim.getVIEWED() == 0)
+                .toList();
     }
 }

@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.web.interfaces;
 
+import com.android.nitecafe.whirlpoolnews.models.ContactList;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
@@ -54,4 +55,6 @@ public interface IWhirlpoolRestClient {
     Observable<UserDetailsList> GetUserDetails();
 
     void saveUserName(String s);
+
+    Observable<ContactList> GetContacts();
 }

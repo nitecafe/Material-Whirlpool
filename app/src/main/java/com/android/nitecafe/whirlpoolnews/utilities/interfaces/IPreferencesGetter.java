@@ -13,4 +13,10 @@ public interface IPreferencesGetter {
     boolean isAutoMarkAsReadLastPage();
 
     String getFontSize();
+
+    boolean isHideMessageFromIgnoredContactsOn();
+
+    String getWatchedThreadsNotificationFrequency();
+
+    String getWhimsNotificationFrequency();
 }

@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.web;
 
+import com.android.nitecafe.whirlpoolnews.models.ContactList;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
@@ -218,6 +219,12 @@ public class WhirlpoolRestService implements IWhirlpoolRestService {
     @Override
     public Observable<UserDetailsList> GetUserDetails() {
         return whirlpoolRestClient.GetUserDetails()
+                .observeOn(schedulerManager.GetMainScheduler())
+                .subscribeOn(schedulerManager.GetIoScheduler());
+    }
+
+    @Override public Observable<ContactList> GetContacts() {
+        return whirlpoolRestClient.GetContacts()
                 .observeOn(schedulerManager.GetMainScheduler())
                 .subscribeOn(schedulerManager.GetIoScheduler());
     }

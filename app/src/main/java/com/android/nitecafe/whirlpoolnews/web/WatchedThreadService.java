@@ -2,7 +2,9 @@ package com.android.nitecafe.whirlpoolnews.web;
 
 import android.util.Log;
 
+import com.android.nitecafe.whirlpoolnews.models.Watched;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
+import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 
@@ -64,5 +66,14 @@ public class WatchedThreadService implements IWatchedThreadService {
                 .subscribe(integer -> watchedThreads.add(integer), throwable -> {
                     Log.e("WatchedThreadService", "failed to get watched threads");
                 });
+    }
+
+    @Override
+    public Observable<List<Watched>> getUnreadWatchedThreadsInInterval(long interval) {
+        return whirlpoolRestClient.GetUnreadWatched()
+                .map(watchedList -> watchedList.getWATCHED())
+                .flatMap(watcheds -> Observable.from(watcheds))
+                .filter(watched -> WhirlpoolDateUtils.isTimeWithinDuration(watched.getLASTDATE(), interval))
+                .toList();
     }
 }

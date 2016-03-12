@@ -19,9 +19,11 @@ import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IObjectSerializer
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.WatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.WhimsService;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.WhirlpoolRestService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhimsService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 import com.squareup.okhttp.OkHttpClient;
@@ -111,5 +113,10 @@ public class DaggerModule {
     @Provides
     @Singleton IPostBookmarkService providesPostBookmarkService(PostBookmarkService postBookmarkService) {
         return postBookmarkService;
+    }
+
+    @Provides
+    @Singleton IWhimsService providesWhimsService(WhimsService whimsService) {
+        return whimsService;
     }
 }

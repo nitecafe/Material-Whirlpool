@@ -21,6 +21,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.subjects.PublishSubject;
 
 public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateViewAdapter<ThreadBaseAdapter.ThreadViewHolder> {
@@ -67,7 +68,9 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
             super(itemView);
             this.itemView = itemView;
             itemView.setOnCreateContextMenuListener(this);
-            RxView.clicks(itemView).map(aVoid -> threadsList.get(getAdapterPosition())).subscribe(OnThreadClickedObservable);
+            RxView.clicks(itemView).map(aVoid -> threadsList.get(getAdapterPosition()))
+                    .onErrorResumeNext(Observable.<T>empty()) //ignore when getAdapterPosition is -1 http://stackoverflow.com/questions/29684154/recyclerview-viewholder-getlayoutposition-vs-getadapterposition
+                    .subscribe(OnThreadClickedObservable);
             ButterKnife.bind(this, itemView);
         }
 

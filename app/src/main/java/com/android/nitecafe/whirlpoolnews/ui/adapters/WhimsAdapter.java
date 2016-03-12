@@ -13,11 +13,10 @@ import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGette
 import com.jakewharton.rxbinding.view.RxView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 
-import java.text.SimpleDateFormat;
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,9 +52,8 @@ public class WhimsAdapter extends UltimateViewAdapter<WhimsAdapter.WhimViewHolde
     @Override public void onBindViewHolder(WhimViewHolder holder, int position) {
         Whim whim = whims.get(position);
         holder.whimFrom.setText(whim.getFROM().getNAME());
-        final Date localDateFromString = WhirlpoolDateUtils.getLocalDateFromString(whim.getDATE());
-        String sentDate = new SimpleDateFormat("yyyy-MM-dd hh:mm aa", Locale.getDefault()).format(localDateFromString);
-        holder.whimSentTime.setText(sentDate);
+        final DateTime localDateFromString = WhirlpoolDateUtils.getLocalDateFromString(whim.getDATE());
+        holder.whimSentTime.setText(localDateFromString.toString("yyyy-MM-dd hh:mm aa"));
         String message = whim.getMESSAGE();
         holder.whimContent.setText(message);
 
@@ -100,7 +98,9 @@ public class WhimsAdapter extends UltimateViewAdapter<WhimsAdapter.WhimViewHolde
 
         public WhimViewHolder(View itemView) {
             super(itemView);
-            RxView.clicks(itemView).map(aVoid -> getAdapterPosition()).subscribe(OnWhimClickedSubject);
+            RxView.clicks(itemView).map(aVoid -> getAdapterPosition())
+                    .onErrorResumeNext(Observable.empty())
+                    .subscribe(OnWhimClickedSubject);
             ButterKnife.bind(this, itemView);
         }
     }

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -67,40 +68,48 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         setThemeBasedOnSettings();
         setFontSizeBasedOnSettings();
         super.onCreate(savedInstanceState);
-        Pushbots.sharedInstance().init(this); //pushbot
+        Pushbots.sharedInstance().init(this);
         Pushbots.sharedInstance().tag(getVersionName());
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        showPushBotMessage();
+        launchStartingScreen(savedInstanceState);
+
+        whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge());
+
+        final String userNameFromPreference = getUserNameFromPreference();
+        if (!userNameFromPreference.isEmpty()) {
+            updateProfileDetails(userNameFromPreference);
+            Pushbots.sharedInstance().setAlias(userNameFromPreference);
+        }
+    }
+
+    private void launchStartingScreen(Bundle savedInstanceState) {
         final Bundle bundleExtra = getIntent().getExtras();
 
-        //for showing pushbot messages
+        String scheme = getIntent().getScheme();
         if (bundleExtra != null) {
-            final String title = bundleExtra.getString(StringConstants.PUSHBOT_TITLE_KEY);
-            final String message = bundleExtra.getString(StringConstants.PUSHBOT_FULLMESSAGE_KEY);
-            final String downloadLink = bundleExtra.getString(StringConstants.PUSHBOT_DOWNLOAD_LINK_KEY);
-            if (message != null && title != null) {
-                new MaterialDialog.Builder(this)
-                        .title(title)
-                        .content(message)
-                        .positiveText("Download")
-                        .negativeText("Later")
-                        .onPositive((dialog, which) -> launchLinkInBrowser(downloadLink))
-                        .show();
-                getIntent().removeExtra(StringConstants.PUSHBOT_FULLMESSAGE_KEY);
-                getIntent().removeExtra(StringConstants.PUSHBOT_TITLE_KEY);
-                getIntent().removeExtra(StringConstants.PUSHBOT_DOWNLOAD_LINK_KEY);
+            String string = bundleExtra.getString(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY);
+            if (StringConstants.NOTIFICATION_INTENT_WATCHED_SCREEN_KEY.equals(string)) {
+                drawer.setSelection(watchedItems, false);
+                startFragmentWithNoBackStack(WATCHED_POSITION);
+                getIntent().removeExtra(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY);
+                return;
+            } else if (StringConstants.NOTIFICATION_INTENT_WHIMS_SCREEN_KEY.equals(string)) {
+                drawer.setSelection(whimsDrawerItem, false);
+                startFragmentWithNoBackStack(WHIMS_POSITION);
+                getIntent().removeExtra(StringConstants.NOTIFICATION_INTENT_SCREEN_KEY);
+                return;
             }
         }
 
-        String scheme = getIntent().getScheme();
         if (IsFromInternalAppLink(scheme)) {
             parseInternalLink();
         } else if (!mWhirlpoolRestClient.hasApiKeyBeenSet()) {
             drawer.setSelection(apiKeyDrawerItem, false);
             startFragmentWithNoBackStack(APIKEY_POSITION);
         } else if (savedInstanceState == null) {
-
             String homeScreen = preferencesGetter.getHomeScreen();
             if (homeScreen.isEmpty()) {
                 drawer.setSelection(newsItemDrawerItem, false);
@@ -112,13 +121,35 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
                 startFragmentWithNoBackStack(position);
             }
         }
+    }
 
-        whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge());
+    @Nullable
+    private void showPushBotMessage() {
+        final Bundle bundleExtra = getIntent().getExtras();
 
-        final String userNameFromPreference = getUserNameFromPreference();
-        if (!userNameFromPreference.isEmpty()) {
-            updateProfileDetails(userNameFromPreference);
-            Pushbots.sharedInstance().setAlias(userNameFromPreference);
+        if (bundleExtra != null) {
+            final String title = bundleExtra.getString(StringConstants.PUSHBOT_TITLE_KEY);
+            final String message = bundleExtra.getString(StringConstants.PUSHBOT_FULLMESSAGE_KEY);
+            final String downloadLink = bundleExtra.getString(StringConstants.PUSHBOT_DOWNLOAD_LINK_KEY);
+            if (message != null && title != null) {
+                MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                        .title(title)
+                        .content(message);
+
+                if (downloadLink == null) {
+                    builder.negativeText("OK");
+                } else {
+                    builder.positiveText("Download")
+                            .negativeText("Later")
+                            .onPositive((dialog, which) -> launchLinkInBrowser(downloadLink));
+                }
+
+                builder.show();
+
+                getIntent().removeExtra(StringConstants.PUSHBOT_FULLMESSAGE_KEY);
+                getIntent().removeExtra(StringConstants.PUSHBOT_TITLE_KEY);
+                getIntent().removeExtra(StringConstants.PUSHBOT_DOWNLOAD_LINK_KEY);
+            }
         }
     }
 

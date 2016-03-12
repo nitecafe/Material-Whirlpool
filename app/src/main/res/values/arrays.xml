@@ -24,5 +24,13 @@
         <item>@string/font_size_very_large</item>
         <item>@string/font_size_super_large</item>
     </string-array>
+    <string-array name="entry_values_notification_frequency">
+        <item>@string/watched_thread_notification_frequency_15</item>
+        <item>@string/watched_thread_notification_frequency_30</item>
+        <item>@string/watched_thread_notification_frequency_60</item>
+        <item>@string/watched_thread_notification_frequency_4_hours</item>
+        <item>@string/watched_thread_notification_frequency_half_day</item>
+        <item>@string/watched_thread_notification_frequency_day</item>
+    </string-array>
 
 </resources>

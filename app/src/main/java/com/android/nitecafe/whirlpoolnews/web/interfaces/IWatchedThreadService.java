@@ -1,6 +1,10 @@
 package com.android.nitecafe.whirlpoolnews.web.interfaces;
 
+import com.android.nitecafe.whirlpoolnews.models.Watched;
+
 import java.util.List;
+
+import rx.Observable;
 
 public interface IWatchedThreadService {
     boolean isThreadWatched(int threadId);
@@ -12,4 +16,6 @@ public interface IWatchedThreadService {
     void setWatchedThreads(List<Integer> watchedThreads);
 
     void getWatchedThreads();
+
+    Observable<List<Watched>> getUnreadWatchedThreadsInInterval(long interval);
 }

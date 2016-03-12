@@ -1,36 +1,14 @@
 package com.android.nitecafe.whirlpoolnews.utilities;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Seconds;
 
-/**
- * Credit to WhirlDroid for calculating time methods
- */
 public class WhirlpoolDateUtils {
 
-    /**
-     * Calculates the date from a timestamp string
-     * From http://stackoverflow.com/questions/8735214
-     *
-     * @param long_date_time Datetime string
-     * @return Local date representation
-     */
-    public static Date getLocalDateFromString(String long_date_time) {
-        // date format for the Whirlpool API
-        SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS", Locale.US);
-
-        long when;
-        try {
-            // time, adjusting for AEST (Whirlpool default timezone)
-            when = date_format.parse(long_date_time).getTime() - 10 * 60 * 60 * 1000;
-        } catch (Exception e) {
-            return null;
-        }
-
-        // adjust for daylight savings time (this sure looks confusing)
-        return new Date(when + TimeZone.getDefault().getRawOffset() + (TimeZone.getDefault().inDaylightTime(new Date()) ? TimeZone.getDefault().getDSTSavings() : 0));
+    public static DateTime getLocalDateFromString(String long_date_time) {
+        DateTime parse = DateTime.parse(long_date_time);
+        return parse.withZone(DateTimeZone.getDefault());
     }
 
     /**
@@ -39,7 +17,7 @@ public class WhirlpoolDateUtils {
      * @param seconds Timestamp to get difference of
      * @return Difference, formatted in minutes, hours, days, etc.
      */
-    public static String getTimeSince(long seconds) {
+    private static String getTimeSinceWithSeconds(long seconds) {
         long time = seconds;
         String time_text = "second";
 
@@ -67,14 +45,16 @@ public class WhirlpoolDateUtils {
         return time + " " + time_text;
     }
 
-    /**
-     * Gets the time difference between now and a Date object
-     *
-     * @return Time difference
-     */
-    public static String getTimeSince(Date date) {
-        long time = (System.currentTimeMillis() - date.getTime()) / 1000;
-        return getTimeSince(time);
+    public static String getTimeSince(DateTime date) {
+        DateTime now = new DateTime();
+        long time = Seconds.secondsBetween(date, now).getSeconds();
+        return getTimeSinceWithSeconds(time);
     }
 
+    public static boolean isTimeWithinDuration(String date, long duration) {
+        DateTime localDateFromString = getLocalDateFromString(date);
+        DateTime dateTime = new DateTime();
+        long l = dateTime.getMillis() - localDateFromString.getMillis();
+        return l < duration;
+    }
 }

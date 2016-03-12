@@ -1,11 +1,14 @@
 package com.android.nitecafe.whirlpoolnews.utilities;
 
+import android.app.AlarmManager;
+import android.content.Context;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.style.ClickableSpan;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
+import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 
 public class WhirlpoolUtils {
@@ -82,5 +85,20 @@ public class WhirlpoolUtils {
             }
             return ret;
         });
+    }
+
+    public static long convertFrequencyStringIntoLong(String frequency, Context context) {
+        if (frequency.equals(context.getString(R.string.watched_thread_notification_frequency_15)))
+            return AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+        else if (frequency.equals(context.getString(R.string.watched_thread_notification_frequency_30)))
+            return AlarmManager.INTERVAL_HALF_HOUR;
+        else if (frequency.equals(context.getString(R.string.watched_thread_notification_frequency_60)))
+            return AlarmManager.INTERVAL_HOUR;
+        else if (frequency.equals(context.getString(R.string.watched_thread_notification_frequency_4_hours)))
+            return AlarmManager.INTERVAL_HOUR * 4;
+        else if (frequency.equals(context.getString(R.string.watched_thread_notification_frequency_half_day)))
+            return AlarmManager.INTERVAL_HALF_DAY;
+        else
+            return AlarmManager.INTERVAL_DAY;
     }
 }

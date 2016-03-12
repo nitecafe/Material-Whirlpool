@@ -1,5 +1,6 @@
-package com.android.nitecafe.whirlpoolnews;
+package com.android.nitecafe.whirlpoolnews.services;
 
+import com.android.nitecafe.whirlpoolnews.TestSchedulerManager;
 import com.android.nitecafe.whirlpoolnews.web.WatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
-public class WatchedThreadIdentifierTests {
+public class WatchedThreadServiceTests {
 
     @Mock IWhirlpoolRestClient whirlpoolRestClient;
     private WatchedThreadService _classToTest;

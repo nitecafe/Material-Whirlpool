@@ -9,19 +9,15 @@ import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.models.IWhirlpoolThread;
-import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IStickyHeaderUtil;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IStickyHeaderUtil;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import org.joda.time.DateTime;
 
 public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends ForumThreadAdapter<T> {
 
-    private Map<String, Integer> headerMap = new HashMap<>();
-    private int headerId = 0;
     private IStickyHeaderUtil mStickyHeaderUtil;
 
     public ThreadStickyHeaderAdapter(IWatchedThreadService watchedThreadIdentifier, IStickyHeaderUtil stickyHeaderUtil) {
@@ -48,7 +44,7 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Forum
         final int pages = getNumberOfPage(thread);
         holder.threadTotalPage.setText(String.valueOf(pages));
 
-        final Date localDateFromString = WhirlpoolDateUtils.getLocalDateFromString(thread.getLASTDATE());
+        final DateTime localDateFromString = WhirlpoolDateUtils.getLocalDateFromString(thread.getLASTDATE());
         holder.threadLastPostInfo.setText(String.format("%s ago by %s",
                 WhirlpoolDateUtils.getTimeSince(localDateFromString), thread.getLAST().getNAME()));
     }

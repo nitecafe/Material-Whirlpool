@@ -5,7 +5,7 @@
     <string name="edited">Edited</string>
 
     <string name="message_marked_read">Marked as read</string>
-    <string name="message_thread_watched">Thread is now being watched</string>
+    <string name="message_thread_watched">Thread is now watched</string>
     <string name="message_thread_unwatched">Thread is now unwatched</string>
     <string name="message_generic_error">Something went wrong. Try again</string>
     <string name="message_api_key_saved">API Key saved successfully</string>
@@ -51,9 +51,24 @@
     <string name="title_post_bookmark">Post Bookmarks</string>
     <string name="auto_mark_read_key">setting_mark_read_key</string>
     <string name="font_size_key">setting_font_size_key</string>
+    <string name="watched_notifications_key">setting_watched_notifications</string>
+    <string name="watched_notifications_frequency_key">setting_watched_notifications_frequency</string>
+    <string name="watched_notifications_vibrate_key">setting_watched_notifications_vibrate</string>
+    <string name="whims_notifications_key">setting_whims_notifications</string>
+    <string name="whims_notifications_frequency_key">setting_whims_notifications_frequency</string>
+    <string name="whims_notifications_vibrate_key">setting_whims_notifications_vibrate</string>
+    <string name="whims_hide_ignored_key">setting_whims_hide_ignored</string>
 
     <string name="font_size_normal">Normal</string>
     <string name="font_size_large">Large</string>
     <string name="font_size_very_large">Very Large</string>
     <string name="font_size_super_large">Super Large</string>
+
+    <string name="watched_thread_notification_frequency_15">Every 15 minutes</string>
+    <string name="watched_thread_notification_frequency_30">Every 30 minutes</string>
+    <string name="watched_thread_notification_frequency_60">Every 60 minutes</string>
+    <string name="watched_thread_notification_frequency_4_hours">Every 4 hours</string>
+    <string name="watched_thread_notification_frequency_half_day">Every 12 hours</string>
+    <string name="watched_thread_notification_frequency_day">Every 24 hours</string>
+    <string name="title_settings">Settings</string>
 </resources>

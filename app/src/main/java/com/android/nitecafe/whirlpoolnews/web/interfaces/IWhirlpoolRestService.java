@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.web.interfaces;
 
+import com.android.nitecafe.whirlpoolnews.models.ContactList;
 import com.android.nitecafe.whirlpoolnews.models.ForumList;
 import com.android.nitecafe.whirlpoolnews.models.ForumThreadList;
 import com.android.nitecafe.whirlpoolnews.models.NewsList;
@@ -48,4 +49,6 @@ public interface IWhirlpoolRestService {
     Observable<List<ScrapedThread>> SearchThreads(int forumId, int groupId, String query);
 
     Observable<UserDetailsList> GetUserDetails();
+
+    Observable<ContactList> GetContacts();
 }
