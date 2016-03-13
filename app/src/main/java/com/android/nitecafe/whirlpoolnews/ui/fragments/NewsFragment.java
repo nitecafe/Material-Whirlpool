@@ -1,6 +1,5 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +17,7 @@ import com.android.nitecafe.whirlpoolnews.models.News;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.NewsAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.INewsFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
+import com.android.nitecafe.whirlpoolnews.utilities.customTabs.CustomTabsActivityHelper;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -33,6 +33,7 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
 
     @Bind(R.id.news_recycle_view) UltimateRecyclerView newsRecycleView;
     @Bind(R.id.news_progress_loader) MaterialProgressBar mMaterialProgressBar;
+    @Inject CustomTabsActivityHelper customActivityTabsHelper;
     @Inject NewsController _controller;
     private NewsAdapter newsAdapter;
 
@@ -111,8 +112,8 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
     @Override
     public void OnItemClicked(int itemClicked, String title) {
         WhirlpoolApp.getInstance().trackEvent("RecycleView Click", "View News", "");
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(StringConstants.NEWS_REDIRECT_URL + String.valueOf(itemClicked)));
-        startActivity(browserIntent);
+        final Uri parse = Uri.parse(StringConstants.NEWS_REDIRECT_URL + String.valueOf(itemClicked));
+        customActivityTabsHelper.openCustomTabStandard(getActivity(), parse);
     }
 }
 

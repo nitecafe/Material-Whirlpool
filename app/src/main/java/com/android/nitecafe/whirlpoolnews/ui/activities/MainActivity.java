@@ -30,6 +30,7 @@ import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnSearchClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnWhimClicked;
 import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
+import com.android.nitecafe.whirlpoolnews.utilities.customTabs.CustomTabsActivityHelper;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.web.WhimsService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
@@ -57,6 +58,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Inject @Named("whim") PublishSubject<Void> whimSubject;
     @Inject SharedPreferences mSharedPreferences;
     @Inject IPreferencesGetter preferencesGetter;
+    @Inject CustomTabsActivityHelper mCustomTabsActivityHelper;
     private int mThreadIdLoaded;
     private int mForumId;
     private int whimId;
@@ -361,5 +363,18 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             return "";
         }
         return pInfo.versionName;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mCustomTabsActivityHelper.bindCustomTabsService(this);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mCustomTabsActivityHelper.unbindCustomTabsService(this);
     }
 }

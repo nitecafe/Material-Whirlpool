@@ -22,6 +22,7 @@ import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedPostAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostChildFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.customTabs.CustomTabsActivityHelper;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -44,6 +45,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     public static final String POST_LAST_READ = "PostLastRead";
     public PublishSubject<Integer> OnPageCountUpdateSubject = PublishSubject.create();
     @Inject ScrapedPostChildController _controller;
+    @Inject CustomTabsActivityHelper mCustomTabsActivityHelper;
     @Bind(R.id.post_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.post_progress_loader) MaterialProgressBar mMaterialProgressBar;
     @State int mPageToLoad;
@@ -160,8 +162,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
 
     private void LaunchReplyPostInBrowser(int mThreadId, String replyId) {
         Uri url = Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadId) + "&r=" + String.valueOf(replyId));
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, url);
-        startActivity(browserIntent);
+        mCustomTabsActivityHelper.openCustomTabStandard(getActivity(), url);
     }
 
     private void loadPosts() {
