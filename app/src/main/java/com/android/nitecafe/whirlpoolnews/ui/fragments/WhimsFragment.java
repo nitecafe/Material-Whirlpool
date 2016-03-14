@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
@@ -35,6 +36,7 @@ public class WhimsFragment extends BaseFragment implements IWhimsFragment {
     @Inject IPreferencesGetter preferencesGetter;
     @Bind(R.id.whim_progress_loader) MaterialProgressBar progressBar;
     @Bind(R.id.whim_recycle_view) UltimateRecyclerView recyclerView;
+    @Bind(R.id.emptyview) TextView emptyView;
     private WhimsAdapter whimAdapter;
     private IOnWhimClicked listener;
 
@@ -109,6 +111,10 @@ public class WhimsFragment extends BaseFragment implements IWhimsFragment {
     }
 
     @Override public void DisplayWhims(List<Whim> whims) {
+        if (whims.size() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+        } else
+            emptyView.setVisibility(View.GONE);
         whimAdapter.SetWhims(whims);
     }
 
