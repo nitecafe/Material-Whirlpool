@@ -1,6 +1,5 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -210,11 +209,11 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
                 .show();
     }
 
-    @Override public void LaunchThreadInBrowser() {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse(StringConstants.THREAD_URL + String.valueOf(mThreadId) + "&p=" +
-                        String.valueOf(mPageToLoad) + "&#r" + String.valueOf(mPostLastReadId)));
-        startActivity(browserIntent);
+    @Override
+    public void LaunchThreadInBrowser() {
+        final Uri parse = Uri.parse(StringConstants.THREAD_URL + String.valueOf(mThreadId) + "&p=" +
+                String.valueOf(mPageToLoad) + "&#r" + String.valueOf(mPostLastReadId));
+        mCustomTabsActivityHelper.openCustomTabStandard(getActivity(), parse);
     }
 
     private void ScrollToFirstUnreadItem() {
