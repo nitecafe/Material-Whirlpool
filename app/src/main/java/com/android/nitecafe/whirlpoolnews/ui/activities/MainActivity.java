@@ -90,7 +90,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             Pushbots.sharedInstance().setAlias(userNameFromPreference);
         }
 
-        decodeBitmap(R.drawable.ic_custom_tab_back);
+        decodeBitmap(R.drawable.ic_arrow_back_sample);
     }
 
     private void launchStartingScreen(Bundle savedInstanceState) {
@@ -412,7 +412,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
                     @Override
                     public void onNext(Bitmap bitmap) {
-                        if (resource == R.drawable.ic_custom_tab_back) {
+                        if (resource == R.drawable.ic_arrow_back_sample) {
                             mCustomTabsActivityHelper.setCloseBitmap(bitmap);
                         }
                     }

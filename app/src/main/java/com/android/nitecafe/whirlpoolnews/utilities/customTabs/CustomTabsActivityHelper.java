@@ -92,9 +92,9 @@ public class CustomTabsActivityHelper implements ServiceConnectionCallback {
                         android.R.anim.slide_in_left,
                         android.R.anim.slide_out_right);
 
-        if (closeBitmap != null)
-            customTabsIntentBuilder.setCloseButtonIcon(BitmapFactory.decodeResource(
-                    activity.getResources(), R.drawable.ic_custom_tab_back));
+        if (closeBitmap != null) {
+            customTabsIntentBuilder = customTabsIntentBuilder.setCloseButtonIcon(closeBitmap);
+        }
 
         CustomTabsActivityHelper.openCustomTab(activity, customTabsIntentBuilder.build(), parse, new DefaultBrowserFallback());
     }

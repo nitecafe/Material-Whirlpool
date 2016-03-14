@@ -1,6 +1,5 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
@@ -254,9 +253,8 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
     }
 
     private void launchReplyPageInBrowser() {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadId)));
-        startActivity(browserIntent);
+        Uri parse = Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadId));
+        customTabsActivityHelper.openCustomTabStandard(getActivity(), parse);
     }
 
     private void prefetchReplyPage() {
