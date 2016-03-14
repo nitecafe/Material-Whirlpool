@@ -3,6 +3,7 @@ package com.android.nitecafe.whirlpoolnews.ui.fragments;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsService;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
@@ -25,6 +26,7 @@ import com.android.nitecafe.whirlpoolnews.utilities.customTabs.CustomTabsActivit
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -42,6 +44,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     public static final String THREAD_TITLE = "ThreadTitle";
     public static final String THREAD_PAGE = "ThreadPage";
     public static final String POST_LAST_READ = "PostLastRead";
+    private final int maxNumberOfPostReplyPrefetch = 2;
     public PublishSubject<Integer> OnPageCountUpdateSubject = PublishSubject.create();
     @Inject ScrapedPostChildController _controller;
     @Inject CustomTabsActivityHelper mCustomTabsActivityHelper;
@@ -184,6 +187,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     public void DisplayPosts(List<ScrapedPost> posts) {
         scrapedPostAdapter.SetPosts(posts);
         ScrollToFirstUnreadItem();
+        prefetchSomeReplyUri(mThreadId, posts);
     }
 
     @Override
@@ -224,5 +228,24 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
             mPostLastReadId = 0;
         } else
             mRecycleView.scrollVerticallyToPosition(0);
+    }
+
+    private void prefetchSomeReplyUri(int threadId, List<ScrapedPost> scrapedPosts) {
+        int length = scrapedPosts.size();
+        int maxLinks;
+        if (length > maxNumberOfPostReplyPrefetch)
+            maxLinks = maxNumberOfPostReplyPrefetch;
+        else
+            maxLinks = length;
+
+        List<Bundle> bundles = new ArrayList<>(maxLinks);
+        //preload the last $maxLinks post
+        for (int i = 0; i < maxLinks; i++) {
+            Uri url = Uri.parse(StringConstants.REPLY_URL + String.valueOf(threadId) + "&r=" + String.valueOf(scrapedPosts.get(length - 1 - i)));
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(CustomTabsService.KEY_URL, url);
+            bundles.add(bundle);
+        }
+        mCustomTabsActivityHelper.mayLaunchUrl(null, null, bundles);
     }
 }

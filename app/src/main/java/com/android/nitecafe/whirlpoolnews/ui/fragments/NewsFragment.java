@@ -3,6 +3,7 @@ package com.android.nitecafe.whirlpoolnews.ui.fragments;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsService;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.android.nitecafe.whirlpoolnews.utilities.customTabs.CustomTabsActivit
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,6 +33,7 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 public class NewsFragment extends BaseFragment implements INewsFragment, IRecycleViewItemClick {
 
+    private final int numberOfPrefetchNews = 4;
     @Bind(R.id.news_recycle_view) UltimateRecyclerView newsRecycleView;
     @Bind(R.id.news_progress_loader) MaterialProgressBar mMaterialProgressBar;
     @Inject CustomTabsActivityHelper customActivityTabsHelper;
@@ -90,6 +93,7 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
     @Override
     public void DisplayNews(List<News> news) {
         newsAdapter.SetNews(news);
+        prefetchTopNewsWebPage(news);
     }
 
     @Override
@@ -110,10 +114,28 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
     }
 
     @Override
-    public void OnItemClicked(int itemClicked, String title) {
+    public void OnItemClicked(int newsId, String title) {
         WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_RECYCLEVIEW_CLICK, "View News", "");
-        final Uri parse = Uri.parse(StringConstants.NEWS_REDIRECT_URL + String.valueOf(itemClicked));
+        final Uri parse = Uri.parse(StringConstants.NEWS_REDIRECT_URL + String.valueOf(newsId));
         customActivityTabsHelper.openCustomTabStandard(getActivity(), parse);
+    }
+
+    private void prefetchTopNewsWebPage(List<News> news) {
+
+        int maxLinks;
+        if (news.size() > numberOfPrefetchNews)
+            maxLinks = numberOfPrefetchNews;
+        else
+            maxLinks = news.size();
+
+        List<Bundle> bundles = new ArrayList<>(maxLinks);
+        for (int i = 0; i < maxLinks; i++) {
+            final Uri link = Uri.parse(StringConstants.NEWS_REDIRECT_URL + String.valueOf(news.get(i).getID()));
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(CustomTabsService.KEY_URL, link);
+            bundles.add(bundle);
+        }
+        customActivityTabsHelper.mayLaunchUrl(null, null, bundles);
     }
 }
 

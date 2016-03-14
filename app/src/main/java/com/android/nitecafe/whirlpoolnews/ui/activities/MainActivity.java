@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
+import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.IndividualWhimFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.LoginFragment;
@@ -45,12 +47,13 @@ import javax.inject.Named;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Subscriber;
 import rx.subjects.PublishSubject;
+import rx.subscriptions.CompositeSubscription;
 
 public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener, ForumFragment.IOnForumClicked, IOnThreadClicked, IOnWhimClicked, IOnSearchClicked {
 
     @Inject IWhirlpoolRestClient mWhirlpoolRestClient;
-    @Bind(R.id.fab_reply_post) FloatingActionButton fabReplyPost;
     @Bind(R.id.fab_create_thread) FloatingActionButton fabCreateThread;
     @Bind(R.id.fab_reply_whim) FloatingActionButton fabReplyWhim;
     @Inject IWatchedThreadService watchedThreadIdentifier;
@@ -59,9 +62,10 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Inject SharedPreferences mSharedPreferences;
     @Inject IPreferencesGetter preferencesGetter;
     @Inject CustomTabsActivityHelper mCustomTabsActivityHelper;
-    private int mThreadIdLoaded;
+    @Inject ISchedulerManager schedulerManager;
     private int mForumId;
     private int whimId;
+    private CompositeSubscription mSubscriptions = new CompositeSubscription();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,8 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             updateProfileDetails(userNameFromPreference);
             Pushbots.sharedInstance().setAlias(userNameFromPreference);
         }
+
+        decodeBitmap(R.drawable.ic_custom_tab_back);
     }
 
     private void launchStartingScreen(Bundle savedInstanceState) {
@@ -236,6 +242,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             setUpThreadCreateFab(threadFragment.OnFragmentCreateViewSubject, threadFragment.OnFragmentDestroySubject);
             startFragment(threadFragment);
         }
+        prefetchCreateThreadPage();
     }
 
     @Override
@@ -255,18 +262,20 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         else {
             final Uri parse = Uri.parse(StringConstants.THREAD_URL + String.valueOf(threadId) + "&p=" +
                     String.valueOf(lastPageRead) + "&#r" + String.valueOf(lastReadId));
-            mCustomTabsActivityHelper.openCustomTabStandard(this, parse);
+            launchCustomTab(parse);
         }
     }
 
+    private void launchCustomTab(Uri uri) {
+        mCustomTabsActivityHelper.openCustomTabStandard(this, uri);
+    }
+
     private void startPostViewPagerFragment(int threadId, String threadTitle, int totalPage, int page, int postLastRead) {
-        mThreadIdLoaded = threadId;
         ScrapedPostParentFragment scrapedPostParentFragment = ScrapedPostParentFragment.newInstance(threadId, threadTitle, page, postLastRead, totalPage);
         startFragment(scrapedPostParentFragment);
     }
 
     private void startPostViewPagerFragmentNoBackStack(int threadId, String threadTitle, int totalPage, int page, int postLastRead) {
-        mThreadIdLoaded = threadId;
         ScrapedPostParentFragment scrapedPostParentFragment = ScrapedPostParentFragment.newInstance(threadId, threadTitle, page, postLastRead, totalPage);
         startFragmentNoBackStack(scrapedPostParentFragment);
     }
@@ -312,38 +321,38 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         fts.commit();
     }
 
-
-    @OnClick(R.id.fab_reply_post)
-    public void launchReplyPageInBrowser() {
-        WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_FAB, "Reply Post", "");
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadIdLoaded)));
-        startActivity(browserIntent);
-    }
-
     @OnClick(R.id.fab_create_thread)
     public void launchCreateThreadInBrowser() {
         WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_FAB, "Create Thread", "");
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse(StringConstants.NEW_THREAD_URL + String.valueOf(mForumId)));
-        startActivity(browserIntent);
+        Uri parse = Uri.parse(StringConstants.NEW_THREAD_URL + String.valueOf(mForumId));
+        launchCustomTab(parse);
     }
 
     @Override
     public void OnWhimClicked(int id, String message, String sender) {
         WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_RECYCLEVIEW_CLICK, "View Individual Whims", "");
         whimId = id;
+        prefetchWhimReplyPage();
         IndividualWhimFragment individualWhimFragment = IndividualWhimFragment.newInstance(message, sender);
         setUpWhimReplyFab(individualWhimFragment);
         startFragment(individualWhimFragment);
     }
 
+    private void prefetchCreateThreadPage() {
+        Uri parse = Uri.parse(StringConstants.NEW_THREAD_URL + String.valueOf(mForumId));
+        mCustomTabsActivityHelper.mayLaunchUrl(parse);
+    }
+
+    private void prefetchWhimReplyPage() {
+        Uri parse = Uri.parse(StringConstants.WHIM_REPLY_URL + String.valueOf(whimId));
+        mCustomTabsActivityHelper.mayLaunchUrl(parse);
+    }
+
     @OnClick(R.id.fab_reply_whim)
     public void launchReplyWhimInBrowser() {
         WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_FAB, "Reply Whim", "");
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse(StringConstants.WHIM_REPLY_URL + String.valueOf(whimId)));
-        startActivity(browserIntent);
+        Uri parse = Uri.parse(StringConstants.WHIM_REPLY_URL + String.valueOf(whimId));
+        launchCustomTab(parse);
     }
 
     @Override
@@ -353,13 +362,11 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         startFragment(searchResultThreadFragment);
     }
 
-
     private void launchLinkInBrowser(String link) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse(link));
         startActivity(browserIntent);
     }
-
 
     private String getVersionName() {
         PackageInfo pInfo;
@@ -376,12 +383,39 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     protected void onStart() {
         super.onStart();
         mCustomTabsActivityHelper.bindCustomTabsService(this);
-
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mCustomTabsActivityHelper.unbindCustomTabsService(this);
+    }
+
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        mSubscriptions.unsubscribe();
+    }
+
+    private void decodeBitmap(final int resource) {
+        mSubscriptions.add(CustomTabsActivityHelper.decodeBitmap(this, resource)
+                .observeOn(schedulerManager.GetMainScheduler())
+                .subscribeOn(schedulerManager.GetIoScheduler())
+                .subscribe(new Subscriber<Bitmap>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("decodeBitmap", "There was a problem decoding the bitmap " + e);
+                    }
+
+                    @Override
+                    public void onNext(Bitmap bitmap) {
+                        if (resource == R.drawable.ic_custom_tab_back) {
+                            mCustomTabsActivityHelper.setCloseBitmap(bitmap);
+                        }
+                    }
+                }));
     }
 }

@@ -1,6 +1,9 @@
 package com.android.nitecafe.whirlpoolnews.utilities.customTabs;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsClient;
@@ -16,6 +19,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import rx.Observable;
+import rx.Subscriber;
+
 /**
  * This is a helper class to manage the connection to the Custom Tabs Service.
  */
@@ -25,12 +31,28 @@ public class CustomTabsActivityHelper implements ServiceConnectionCallback {
     private CustomTabsClient mClient;
     private CustomTabsServiceConnection mConnection;
     private ConnectionCallback mConnectionCallback;
+    private Bitmap closeBitmap;
 
     /**
      * Do not remove this, required for dagger 2 to work
      */
     @Inject
     public CustomTabsActivityHelper() {
+    }
+
+    public static Observable<Bitmap> decodeBitmap(final Context context, final int resource) {
+        return Observable.create(new Observable.OnSubscribe<Bitmap>() {
+            @Override
+            public void call(Subscriber<? super Bitmap> subscriber) {
+                Bitmap icon = BitmapFactory.decodeResource(context.getResources(), resource);
+                if (icon != null) {
+                    subscriber.onNext(icon);
+                } else {
+                    subscriber.onError(new NullPointerException());
+                }
+                subscriber.onCompleted();
+            }
+        });
     }
 
     /**
@@ -60,7 +82,7 @@ public class CustomTabsActivityHelper implements ServiceConnectionCallback {
     }
 
     public void openCustomTabStandard(Activity activity, Uri parse) {
-        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(mCustomTabsSession)
+        CustomTabsIntent.Builder customTabsIntentBuilder = new CustomTabsIntent.Builder(mCustomTabsSession)
                 .setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
                 .setShowTitle(true)
                 .setStartAnimations(activity,
@@ -68,10 +90,13 @@ public class CustomTabsActivityHelper implements ServiceConnectionCallback {
                         R.anim.exit)
                 .setExitAnimations(activity,
                         android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right)
-                .build();
+                        android.R.anim.slide_out_right);
 
-        CustomTabsActivityHelper.openCustomTab(activity, customTabsIntent, parse, new DefaultBrowserFallback());
+        if (closeBitmap != null)
+            customTabsIntentBuilder.setCloseButtonIcon(BitmapFactory.decodeResource(
+                    activity.getResources(), R.drawable.ic_custom_tab_back));
+
+        CustomTabsActivityHelper.openCustomTab(activity, customTabsIntentBuilder.build(), parse, new DefaultBrowserFallback());
     }
 
     /**
@@ -138,6 +163,10 @@ public class CustomTabsActivityHelper implements ServiceConnectionCallback {
         return session.mayLaunchUrl(uri, extras, otherLikelyBundles);
     }
 
+    public boolean mayLaunchUrl(Uri uri) {
+        return mayLaunchUrl(uri, null, null);
+    }
+
     @Override
     public void onServiceConnected(CustomTabsClient client) {
         mClient = client;
@@ -150,6 +179,10 @@ public class CustomTabsActivityHelper implements ServiceConnectionCallback {
         mClient = null;
         mCustomTabsSession = null;
         if (mConnectionCallback != null) mConnectionCallback.onCustomTabsDisconnected();
+    }
+
+    public void setCloseBitmap(Bitmap closeBitmap) {
+        this.closeBitmap = closeBitmap;
     }
 
     /**
