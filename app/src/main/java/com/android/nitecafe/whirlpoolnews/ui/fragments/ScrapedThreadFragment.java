@@ -170,7 +170,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
 
         forumThreadAdapter = new ScrapedThreadAdapter(mIWatchedThreadService, preferencesGetter);
         forumThreadAdapter.OnThreadClickedObservable
-                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount()));
+                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), scrapedThread.getFORUMID()));
         forumThreadAdapter.OnWatchClickedObservable.subscribe(thread
                 -> _controller.WatchThread(thread.getID()));
         forumThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
@@ -178,7 +178,7 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
         forumThreadAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
                 _controller.MarkThreadAsRead(recent.getID()));
         forumThreadAdapter.OnGoToLastPageClickedObservable.subscribe(scrapedThread -> {
-            listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), 0, scrapedThread.getPageCount());
+            listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), 0, scrapedThread.getPageCount(), scrapedThread.getFORUMID());
         });
 
         mRecycleView.setAdapter(forumThreadAdapter);

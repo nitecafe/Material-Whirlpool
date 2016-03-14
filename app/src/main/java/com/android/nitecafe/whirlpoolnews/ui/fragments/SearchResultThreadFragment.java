@@ -16,8 +16,8 @@ import com.android.nitecafe.whirlpoolnews.ui.adapters.PopularScrapedStickyThread
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.ISearchResultFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.utilities.StickyHeaderUtil;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
@@ -126,7 +126,7 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
 
     private void SubscribeToObservables() {
         popularThreadAdapter.OnThreadClickedObservable
-                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount()));
+                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), scrapedThread.getFORUMID()));
         popularThreadAdapter.OnWatchClickedObservable.subscribe(thread
                 -> controller.WatchThread(thread.getID()));
         popularThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
@@ -134,7 +134,7 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
         popularThreadAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
                 controller.MarkThreadAsRead(recent.getID()));
         popularThreadAdapter.OnGoToLastPageClickedObservable.subscribe(scrapedThread -> {
-            listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), 0, scrapedThread.getPageCount());
+            listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), 0, scrapedThread.getPageCount(), scrapedThread.getFORUMID());
         });
     }
 

@@ -42,7 +42,7 @@ public class ScrapedThread implements IThreadBase {
         return forum;
     }
 
-    public int getForum_id() {
+    public Integer getFORUMID() {
         return forum_id;
     }
 

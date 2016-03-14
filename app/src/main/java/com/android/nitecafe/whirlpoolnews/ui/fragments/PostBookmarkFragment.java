@@ -17,6 +17,7 @@ import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.PostBookmarksAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IPostBookmarkFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 
 import java.util.List;
@@ -101,7 +102,7 @@ public class PostBookmarkFragment extends BaseFragment implements IPostBookmarkF
         int i = calculatePostNoInThread(postBookmark);
         listener.OnThreadClicked(postBookmark.getThreadId(),
                 postBookmark.getThreadTitle(), postBookmark.getPageLocated()
-                , i, postBookmark.getTotalPage());
+                , i, postBookmark.getTotalPage(), ThreadScraper.PUBLIC_FORUM_ID);
     }
 
     private int calculatePostNoInThread(PostBookmark postBookmark) {
@@ -130,7 +131,8 @@ public class PostBookmarkFragment extends BaseFragment implements IPostBookmarkF
                 .show();
     }
 
-    @Override public void DisplayPostBookmarkRemovedMessage() {
+    @Override
+    public void DisplayPostBookmarkRemovedMessage() {
         Snackbar.make(postBookmarkRecycleView, "Bookmark has been removed", Snackbar.LENGTH_LONG)
                 .show();
     }

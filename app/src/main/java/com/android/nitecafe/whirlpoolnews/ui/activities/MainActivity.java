@@ -239,17 +239,24 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     }
 
     @Override
-    public void OnThreadClicked(int threadId, String threadTitle, int totalPage) {
+    public void OnThreadClicked(int threadId, String threadTitle, int totalPage, int forumId) {
         if (preferencesGetter.getOpenLastPage())
-            OnThreadClicked(threadId, threadTitle, totalPage, 0, totalPage);
+            OnThreadClicked(threadId, threadTitle, totalPage, 0, totalPage, forumId);
         else
-            OnThreadClicked(threadId, threadTitle, 1, 0, totalPage);
+            OnThreadClicked(threadId, threadTitle, 1, 0, totalPage, forumId);
     }
 
     @Override
-    public void OnThreadClicked(int threadId, String threadTitle, int lastPageRead, int lastReadId, int totalPage) {
+    public void OnThreadClicked(int threadId, String threadTitle, int lastPageRead, int lastReadId, int totalPage, int forumId) {
         WhirlpoolApp.getInstance().trackEvent("RecycleView Click", "View Thread", "Opening thread to view posts");
-        startPostViewPagerFragment(threadId, threadTitle, totalPage, lastPageRead, lastReadId);
+
+        if (ThreadScraper.isPublicForum(forumId))
+            startPostViewPagerFragment(threadId, threadTitle, totalPage, lastPageRead, lastReadId);
+        else {
+            final Uri parse = Uri.parse(StringConstants.THREAD_URL + String.valueOf(threadId) + "&p=" +
+                    String.valueOf(lastPageRead) + "&#r" + String.valueOf(lastReadId));
+            mCustomTabsActivityHelper.openCustomTabStandard(this, parse);
+        }
     }
 
     private void startPostViewPagerFragment(int threadId, String threadTitle, int totalPage, int page, int postLastRead) {

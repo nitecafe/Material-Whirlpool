@@ -17,8 +17,8 @@ import com.android.nitecafe.whirlpoolnews.ui.adapters.PopularScrapedStickyThread
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedThreadAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnThreadClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IPopularFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.utilities.StickyHeaderUtil;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
@@ -91,7 +91,7 @@ public class PopularThreadFragment extends BaseFragment implements IPopularFragm
 
         popularThreadAdapter = new PopularScrapedStickyThreadAdapter(watchedThreadIdentifier, new StickyHeaderUtil(), preferencesGetter);
         popularThreadAdapter.OnThreadClickedObservable
-                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount()));
+                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), scrapedThread.getFORUMID()));
         popularThreadAdapter.OnWatchClickedObservable.subscribe(thread
                 -> popularThreadsController.WatchThread(thread.getID()));
         popularThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
@@ -99,7 +99,7 @@ public class PopularThreadFragment extends BaseFragment implements IPopularFragm
         popularThreadAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
                 popularThreadsController.MarkThreadAsRead(recent.getID()));
         popularThreadAdapter.OnGoToLastPageClickedObservable.subscribe(scrapedThread -> {
-            listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), 0, scrapedThread.getPageCount());
+            listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), 0, scrapedThread.getPageCount(), scrapedThread.getFORUMID());
         });
 
         recyclerView.setAdapter(popularThreadAdapter);

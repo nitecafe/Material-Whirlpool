@@ -122,7 +122,7 @@ public class ThreadFragment extends BaseFragment implements IThreadFragment {
         forumThreadAdapter = new ForumThreadAdapter<>(mIWatchedThreadService);
 
         forumThreadAdapter.OnThreadClickedObservable.subscribe(
-                thread -> listener.OnThreadClicked(thread.getID(), thread.getTITLE(), WhirlpoolUtils.getNumberOfPage(thread.getREPLIES())));
+                thread -> listener.OnThreadClicked(thread.getID(), thread.getTITLE(), WhirlpoolUtils.getNumberOfPage(thread.getREPLIES()), thread.getFORUMID()));
         forumThreadAdapter.OnWatchClickedObservable.subscribe(thread
                 -> _controller.WatchThread(thread.getID()));
         forumThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
@@ -131,7 +131,7 @@ public class ThreadFragment extends BaseFragment implements IThreadFragment {
                 _controller.MarkThreadAsRead(recent.getID()));
         forumThreadAdapter.OnGoToLastPageClickedObservable.subscribe(forumThread -> {
             int lastPage = WhirlpoolUtils.getNumberOfPage(forumThread.getREPLIES());
-            listener.OnThreadClicked(forumThread.getID(), forumThread.getTITLE(), lastPage, 0, lastPage);
+            listener.OnThreadClicked(forumThread.getID(), forumThread.getTITLE(), lastPage, 0, lastPage, forumThread.getFORUMID());
         });
 
         mRecycleView.setAdapter(forumThreadAdapter);

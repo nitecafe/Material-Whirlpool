@@ -28,6 +28,9 @@ import rx.Observable;
 
 public class ThreadScraper implements IThreadScraper {
 
+    // -99 for backwards compatibility of Post Bookmarks, for launching in app instead of custom tabs
+    // treat any thread with this code as Public Thread regardless
+    public static int PUBLIC_FORUM_ID = -99;
 
     // these forum IDs are public, and we can scrape the data from them
     private static int[] PUBLIC_FORUMS = {92, 100, 142, 82, 9, 107, 135, 80, 136, 125, 116, 63,
@@ -43,7 +46,7 @@ public class ThreadScraper implements IThreadScraper {
      */
     public static boolean isPublicForum(int forum_id) {
         for (int PUBLIC_FORUM : PUBLIC_FORUMS) {
-            if (PUBLIC_FORUM == forum_id) {
+            if (PUBLIC_FORUM == forum_id || forum_id == PUBLIC_FORUM_ID) {
                 return true;
             }
         }
