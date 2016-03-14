@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.ScrapedPostChildController;
 import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
@@ -126,24 +127,24 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             menu.setHeaderTitle(R.string.context_menu_title);
-            MenuItem reply = menu.add("Reply in Browser");
+            MenuItem reply = menu.add(R.string.context_menu_reply_browser);
             RxMenuItem.clicks(reply).map(aVoid -> scrapedPosts.get(getAdapterPosition()))
-                    .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent("Post Context Menu", "Reply", ""))
+                    .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "Reply", ""))
                     .subscribe(OnReplyPostClickedObservable);
 
 
             if (scrapedPostChildController.isABookmark(scrapedPosts.get(getAdapterPosition()).getIdInteger())) {
-                MenuItem removeBookmark = menu.add("Remove from Bookmark");
+                MenuItem removeBookmark = menu.add(R.string.context_menu_remove_bookmarks);
                 RxMenuItem.clicks(removeBookmark).map(aVoid -> scrapedPosts.get(getAdapterPosition()).getIdInteger()
-                ).doOnNext(postId -> WhirlpoolApp.getInstance().trackEvent("Post Context Menu", "Remove from Bookmark", ""))
+                ).doOnNext(postId -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "Remove from Bookmark", ""))
                         .subscribe(OnRemoveFromBookmarkClickedObservable);
             } else {
-                MenuItem bookmark = menu.add("Add to Bookmark");
+                MenuItem bookmark = menu.add(R.string.context_menu_add_bookmark);
                 RxMenuItem.clicks(bookmark).map(aVoid -> {
                     final ScrapedPost scrapedPost = scrapedPosts.get(getAdapterPosition());
                     final int i = Integer.parseInt(scrapedPost.getId());
                     return new PostBookmark(i, getAdapterPosition() + 1);
-                }).doOnNext(postBookmark -> WhirlpoolApp.getInstance().trackEvent("Post Context Menu", "Add to Bookmark", ""))
+                }).doOnNext(postBookmark -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "Add to Bookmark", ""))
                         .subscribe(OnAddToBookmarkClickedObservable);
             }
 

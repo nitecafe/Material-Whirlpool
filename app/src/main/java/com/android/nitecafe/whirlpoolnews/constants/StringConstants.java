@@ -22,4 +22,14 @@ public class StringConstants {
     public static final String NOTIFICATION_INTENT_SCREEN_KEY = "startscreen";
     public static final String NOTIFICATION_INTENT_WATCHED_SCREEN_KEY = "watched";
     public static final String NOTIFICATION_INTENT_WHIMS_SCREEN_KEY = "whims";
+
+    //google analytic
+    public static final String ANALYTIC_RECYCLEVIEW_CLICK = "RecycleView Click";
+    public static final String ANALYTIC_FAB = "FAB";
+    public static final String ANALYTIC_SEARCH = "Search";
+    public static final String ANALYTIC_FORUM_CONTEXT_MENU = "Forum Context Menu";
+    public static final String ANALYTIC_POST_BOOKMARK_CONTEXT_MENU = "Post Bookmarks Context Menu";
+    public static final String ANALYTIC_POST_CONTEXT_MENU = "Post Context Menu";
+    public static final String ANALYTIC_THREAD_CONTEXT_MENU = "Thread Context Menu";
+    public static final String ANALYTIC_POST_TOOLBAR = "Post Toolbar";
 }

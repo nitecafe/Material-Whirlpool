@@ -3,6 +3,7 @@
     <string name="navigation_drawer_open">Open Drawer</string>
     <string name="navigation_drawer_close">Close Drawer</string>
     <string name="edited">Edited</string>
+    <string name="empty_view_text">Nothing here to see :(</string>
 
     <string name="message_marked_read">Marked as read</string>
     <string name="message_thread_watched">Thread is now watched</string>
@@ -13,6 +14,12 @@
     <string name="message_thread_deleted">This thread has been deleted</string>
     <string name="message_thread_closed">This thread has been closed</string>
     <string name="message_check_connection">Can\'t load. Please check connection</string>
+    <string name="message_bookmark_removed">Bookmark has been removed</string>
+    <string name="message_post_added_bookmark">Post added to bookmark</string>
+    <string name="message_post_removed_bookmark">Post removed from bookmark</string>
+    <string name="message_login_failure">Failed to log in. Please check API key.</string>
+    <string name="message_added_thread_to_favourite">Added to favourite list</string>
+    <string name="message_remove_thread_from_favourite">Removed from favourite list</string>
 
     <string name="title_discussion_forum">Discussion Forum</string>
     <string name="title_industry_news">Industry News</string>
@@ -23,11 +30,19 @@
     <string name="title_search">Search</string>
     <string name="title_watched_unread">Unread</string>
     <string name="title_watched_all">All</string>
+    <string name="title_settings">Settings</string>
 
     <string name="context_menu_title">Select an Action</string>
     <string name="context_menu_unwatch_thread">Unwatch Thread</string>
     <string name="context_menu_mark_read">Mark as Read</string>
     <string name="context_menu_watch_thread">Watch Thread</string>
+    <string name="context_menu_remove_bookmarks">Remove from Bookmarks</string>
+    <string name="context_menu_reply_browser">Reply in Browser</string>
+    <string name="context_menu_add_bookmark">Add to Bookmark</string>
+    <string name="context_menu_go_last_page">Go To Last Page</string>
+    <string name="context_menu_thread_remove_favourite">Remove from Favourites</string>
+    <string name="context_menu_thread_add_favourite">Add to Favourites</string>
+
     <string name="action_message_retry">Retry</string>
 
     <string name="aboutLibraries_description_showIcon">true</string>
@@ -40,11 +55,7 @@
     Below are a list of libraries i used for any developers that are interested.
         To contact me, just send me a whim in Whirlpool or to my email grhamjs@gmail.com.
         Developed by your friendly whirlpoolian, Graham.</string>
-    <string name="message_login_failure">Failed to log in. Please check API key.</string>
-    <string name="message_added_thread_to_favourite">Added to favourite list</string>
-    <string name="message_remove_thread_from_favourite">Removed from favourite list</string>
-    <string name="context_menu_thread_remove_favourite">Remove from Favourites</string>
-    <string name="context_menu_thread_add_favourite">Add to Favourites</string>
+
     <string name="home_screen_key">setting_list_default_home_screen</string>
     <string name="go_last_page_key">setting_checkbox_open_last_page</string>
     <string name="dark_theme_key">setting_dark_theme_key</string>
@@ -70,6 +81,17 @@
     <string name="watched_thread_notification_frequency_4_hours">Every 4 hours</string>
     <string name="watched_thread_notification_frequency_half_day">Every 12 hours</string>
     <string name="watched_thread_notification_frequency_day">Every 24 hours</string>
-    <string name="title_settings">Settings</string>
-    <string name="empty_view_text">Nothing here to see :(</string>
+
+    <string name="drawer_item_industry_news">Industry News</string>
+    <string name="drawer_item_discussion_forum">Discussion Forum</string>
+    <string name="drawer_item_popular_threads">Popular Threads</string>
+    <string name="drawer_item_recent_threads">Recent Threads</string>
+    <string name="drawer_item_watched_threads">Watched Threads</string>
+    <string name="drawer_item_post_bookmarks">Post Bookmarks</string>
+    <string name="drawer_item_private_messages">Private Messages</string>
+    <string name="drawer_item_api_key">Set API Key</string>
+    <string name="drawer_item_search">Search</string>
+    <string name="drawer_item_about">About</string>
+    <string name="drawer_item_settings">Settings</string>
+
 </resources>

@@ -199,13 +199,13 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
 
     @Override
     public void showAddedToBookmarkMessage() {
-        Snackbar.make(mRecycleView, "Post added to bookmark", Snackbar.LENGTH_SHORT)
+        Snackbar.make(mRecycleView, R.string.message_post_added_bookmark, Snackbar.LENGTH_SHORT)
                 .show();
     }
 
     @Override
     public void showRemoveFromBookmarkMessage() {
-        Snackbar.make(mRecycleView, "Post removed from bookmark", Snackbar.LENGTH_SHORT)
+        Snackbar.make(mRecycleView, R.string.message_post_removed_bookmark, Snackbar.LENGTH_SHORT)
                 .show();
     }
 

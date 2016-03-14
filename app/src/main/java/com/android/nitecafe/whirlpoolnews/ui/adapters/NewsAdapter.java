@@ -47,7 +47,7 @@ public class NewsAdapter extends UltimateViewAdapter<NewsAdapter.NewsViewHolder>
     public void onBindViewHolder(NewsViewHolder holder, int position) {
         holder.newsBlurb.setText(mNews.get(position).getBLURB());
         holder.newsTitle.setText(mNews.get(position).getTITLE());
-        holder.mItemView.setTag(mNews.get(position).getID());
+        holder.itemView.setTag(mNews.get(position).getID());
     }
 
     @Override
@@ -77,14 +77,12 @@ public class NewsAdapter extends UltimateViewAdapter<NewsAdapter.NewsViewHolder>
     }
 
     public static class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public View mItemView;
         @Bind(R.id.news_title) TextView newsTitle;
         @Bind(R.id.news_blurb) TextView newsBlurb;
         private RecyclerViewAdapterClickListener mListener;
 
         NewsViewHolder(View itemView, RecyclerViewAdapterClickListener listener) {
             super(itemView);
-            mItemView = itemView;
             mListener = listener;
             itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.Forum;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.RecyclerViewAdapterClickListener;
@@ -136,12 +137,12 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
             if (favouriteThreadService.isAFavouriteThread(forum.getID())) {
                 MenuItem removeFav = menu.add(R.string.context_menu_thread_remove_favourite);
                 RxMenuItem.clicks(removeFav).map(aVoid -> forum)
-                        .doOnNext(forum1 -> WhirlpoolApp.getInstance().trackEvent("Forum Context Menu", "Add to Favourite", ""))
+                        .doOnNext(forum1 -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_FORUM_CONTEXT_MENU, "Add to Favourite", ""))
                         .subscribe(OnRemoveFromFavClickedObservable);
             } else {
                 MenuItem addFav = menu.add(R.string.context_menu_thread_add_favourite);
                 RxMenuItem.clicks(addFav).map(aVoid -> forum)
-                        .doOnNext(forum1 -> WhirlpoolApp.getInstance().trackEvent("Forum Context Menu", "Remove from Favourite", ""))
+                        .doOnNext(forum1 -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_FORUM_CONTEXT_MENU, "Remove from Favourite", ""))
                         .subscribe(OnAddToFavClickedObservable);
             }
         }

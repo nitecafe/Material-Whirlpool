@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.IThreadBase;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.jakewharton.rxbinding.view.RxMenuItem;
@@ -83,21 +84,21 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
                 MenuItem unwatch = menu.add(R.string.context_menu_unwatch_thread);
                 MenuItem markAsRead = menu.add(R.string.context_menu_mark_read);
                 RxMenuItem.clicks(unwatch).map(aVoid -> t)
-                        .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent("Thread Context Menu", "Unwatch Thread", ""))
+                        .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_THREAD_CONTEXT_MENU, "Unwatch Thread", ""))
                         .subscribe(OnUnwatchClickedObservable);
                 RxMenuItem.clicks(markAsRead).map(aVoid -> t)
-                        .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent("Thread Context Menu", "Mark as Read", ""))
+                        .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_THREAD_CONTEXT_MENU, "Mark as Read", ""))
                         .subscribe(OnMarkAsReadClickedObservable);
             } else {
                 MenuItem watch = menu.add(R.string.context_menu_watch_thread);
                 RxMenuItem.clicks(watch).map(aVoid -> t)
-                        .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent("Thread Context Menu", "Watch Thread", ""))
+                        .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_THREAD_CONTEXT_MENU, "Watch Thread", ""))
                         .subscribe(OnWatchClickedObservable);
             }
 
-            MenuItem lastPage = menu.add("Go To Last Page");
+            MenuItem lastPage = menu.add(R.string.context_menu_go_last_page);
             RxMenuItem.clicks(lastPage).map(aVoid -> t)
-                    .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent("Thread Context Menu", "Go To Last Page", ""))
+                    .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_THREAD_CONTEXT_MENU, "Go To Last Page", ""))
                     .subscribe(OnGoToLastPageClickedObservable);
         }
     }

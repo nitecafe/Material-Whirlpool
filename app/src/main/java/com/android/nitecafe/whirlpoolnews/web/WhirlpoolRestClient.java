@@ -42,7 +42,6 @@ public class WhirlpoolRestClient implements IWhirlpoolRestClient {
     private IThreadScraper threadScraper;
     private IPreferencesGetter preferencesGetter;
 
-
     @Inject
     public WhirlpoolRestClient(Retrofit retrofit, SharedPreferences sharedPreferences, IThreadScraper threadScraper, IPreferencesGetter preferencesGetter) {
         this.retrofit = retrofit;

@@ -23,7 +23,6 @@ public class WhimsService implements IWhimsService {
     private IWhirlpoolRestService whirlpoolRestService;
     private IWhirlpoolRestClient whirlpoolRestClient;
 
-
     @Inject
     public WhimsService(IWhirlpoolRestService whirlpoolRestService, IWhirlpoolRestClient whirlpoolRestClient) {
         this.whirlpoolRestService = whirlpoolRestService;

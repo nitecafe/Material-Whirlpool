@@ -66,29 +66,29 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity impleme
                 .withProfileImagesClickable(false)
                 .build();
 
-        newsItemDrawerItem = new PrimaryDrawerItem().withName("Industry News").withIconTintingEnabled(true);
+        newsItemDrawerItem = new PrimaryDrawerItem().withName(R.string.drawer_item_industry_news).withIconTintingEnabled(true);
         newsItemDrawerItem.withIcon(R.drawable.ic_news);
-        forumDrawerItems = new PrimaryDrawerItem().withName("Discussion Forum").withIconTintingEnabled(true);
+        forumDrawerItems = new PrimaryDrawerItem().withName(R.string.drawer_item_discussion_forum).withIconTintingEnabled(true);
         forumDrawerItems.withIcon(R.drawable.ic_forum);
 
-        popularItems = new PrimaryDrawerItem().withName("Popular Threads").withIconTintingEnabled(true);
+        popularItems = new PrimaryDrawerItem().withName(R.string.drawer_item_popular_threads).withIconTintingEnabled(true);
         popularItems.withIcon(R.drawable.ic_popular_threads);
-        recentItems = new PrimaryDrawerItem().withName("Recent Threads").withIconTintingEnabled(true);
+        recentItems = new PrimaryDrawerItem().withName(R.string.drawer_item_recent_threads).withIconTintingEnabled(true);
         recentItems.withIcon(R.drawable.ic_recent_threads);
-        watchedItems = new PrimaryDrawerItem().withName("Watched Threads").withIconTintingEnabled(true);
+        watchedItems = new PrimaryDrawerItem().withName(R.string.drawer_item_watched_threads).withIconTintingEnabled(true);
         watchedItems.withIcon(R.drawable.ic_watched_threads);
-        postBookmarkItem = new PrimaryDrawerItem().withName("Post Bookmarks").withIcon(R.drawable.ic_bookmark_post)
+        postBookmarkItem = new PrimaryDrawerItem().withName(R.string.drawer_item_post_bookmarks).withIcon(R.drawable.ic_bookmark_post)
                 .withIconTintingEnabled(true);
 
-        whimsDrawerItem = new PrimaryDrawerItem().withName("Private Messages").withIconTintingEnabled(true);
+        whimsDrawerItem = new PrimaryDrawerItem().withName(R.string.drawer_item_private_messages).withIconTintingEnabled(true);
         whimsDrawerItem.withIcon(R.drawable.ic_whims);
-        apiKeyDrawerItem = new PrimaryDrawerItem().withName("Set API Key").withIconTintingEnabled(true);
+        apiKeyDrawerItem = new PrimaryDrawerItem().withName(R.string.drawer_item_api_key).withIconTintingEnabled(true);
         apiKeyDrawerItem.withIcon(R.drawable.ic_api_key);
-        PrimaryDrawerItem searchDrawerItem = new PrimaryDrawerItem().withName("Search").withIconTintingEnabled(true);
+        PrimaryDrawerItem searchDrawerItem = new PrimaryDrawerItem().withName(R.string.drawer_item_search).withIconTintingEnabled(true);
         searchDrawerItem.withIcon(R.drawable.ic_search_threads);
-        PrimaryDrawerItem aboutDrawerItem = new PrimaryDrawerItem().withName("About").withIcon(R.drawable.ic_about_me).withIconTintingEnabled(true);
+        PrimaryDrawerItem aboutDrawerItem = new PrimaryDrawerItem().withName(R.string.drawer_item_about).withIcon(R.drawable.ic_about_me).withIconTintingEnabled(true);
         PrimaryDrawerItem settingDrawerItem = new PrimaryDrawerItem()
-                .withName("Settings").withIconTintingEnabled(true)
+                .withName(R.string.drawer_item_settings).withIconTintingEnabled(true)
                 .withIcon(R.drawable.ic_settings);
 
         drawer = new DrawerBuilder().withActivity(this)
@@ -180,7 +180,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity impleme
 
         //need a way to set title as i dont own the About Fragment
         if (position == ABOUT_POSITION)
-            getSupportActionBar().setTitle("About");
+            getSupportActionBar().setTitle(getString(R.string.drawer_item_about));
 
         ReplaceFragment(fragmentToStart, true);
         return true;

@@ -224,7 +224,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @Override
     public void onForumClicked(int forumId, String forumTitle) {
-        WhirlpoolApp.getInstance().trackEvent("RecycleView Click", "View Forum", "Opening Forum to view threads");
+        WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_RECYCLEVIEW_CLICK, "View Forum", "Opening Forum to view threads");
         mForumId = forumId;
 
         if (ThreadScraper.isPublicForum(forumId)) {
@@ -248,7 +248,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @Override
     public void OnThreadClicked(int threadId, String threadTitle, int lastPageRead, int lastReadId, int totalPage, int forumId) {
-        WhirlpoolApp.getInstance().trackEvent("RecycleView Click", "View Thread", "Opening thread to view posts");
+        WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_RECYCLEVIEW_CLICK, "View Thread", "Opening thread to view posts");
 
         if (ThreadScraper.isPublicForum(forumId))
             startPostViewPagerFragment(threadId, threadTitle, totalPage, lastPageRead, lastReadId);
@@ -315,7 +315,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @OnClick(R.id.fab_reply_post)
     public void launchReplyPageInBrowser() {
-        WhirlpoolApp.getInstance().trackEvent("FAB", "Reply Post", "");
+        WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_FAB, "Reply Post", "");
         Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadIdLoaded)));
         startActivity(browserIntent);
@@ -323,7 +323,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @OnClick(R.id.fab_create_thread)
     public void launchCreateThreadInBrowser() {
-        WhirlpoolApp.getInstance().trackEvent("FAB", "Create Thread", "");
+        WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_FAB, "Create Thread", "");
         Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse(StringConstants.NEW_THREAD_URL + String.valueOf(mForumId)));
         startActivity(browserIntent);
@@ -331,7 +331,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @Override
     public void OnWhimClicked(int id, String message, String sender) {
-        WhirlpoolApp.getInstance().trackEvent("RecycleView Click", "View Individual Whims", "");
+        WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_RECYCLEVIEW_CLICK, "View Individual Whims", "");
         whimId = id;
         IndividualWhimFragment individualWhimFragment = IndividualWhimFragment.newInstance(message, sender);
         setUpWhimReplyFab(individualWhimFragment);
@@ -340,7 +340,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @OnClick(R.id.fab_reply_whim)
     public void launchReplyWhimInBrowser() {
-        WhirlpoolApp.getInstance().trackEvent("FAB", "Reply Whim", "");
+        WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_FAB, "Reply Whim", "");
         Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse(StringConstants.WHIM_REPLY_URL + String.valueOf(whimId)));
         startActivity(browserIntent);
@@ -348,7 +348,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @Override
     public void onSearchClicked(String query, int forumId, int groupId) {
-        WhirlpoolApp.getInstance().trackEvent("Search", "Search", "");
+        WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_SEARCH, "Search", "");
         final SearchResultThreadFragment searchResultThreadFragment = SearchResultThreadFragment.newInstance(query, forumId, groupId);
         startFragment(searchResultThreadFragment);
     }

@@ -134,7 +134,7 @@ public class PostBookmarkFragment extends BaseFragment implements IPostBookmarkF
 
     @Override
     public void DisplayPostBookmarkRemovedMessage() {
-        Snackbar.make(postBookmarkRecycleView, "Bookmark has been removed", Snackbar.LENGTH_LONG)
+        Snackbar.make(postBookmarkRecycleView, R.string.message_bookmark_removed, Snackbar.LENGTH_LONG)
                 .show();
     }
 }

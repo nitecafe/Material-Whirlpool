@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 import com.jakewharton.rxbinding.view.RxMenuItem;
 import com.jakewharton.rxbinding.view.RxView;
@@ -79,16 +80,16 @@ public class PostBookmarksAdapter extends UltimateViewAdapter<PostBookmarksAdapt
             itemView.setOnCreateContextMenuListener(this);
             RxView.clicks(itemView).map(aVoid -> postBookmarks.get(getAdapterPosition()))
                     .onErrorResumeNext(Observable.empty())
-                    .doOnNext(postBookmark -> WhirlpoolApp.getInstance().trackEvent("RecycleView Click", "Open Post bookmark", ""))
+                    .doOnNext(postBookmark -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_RECYCLEVIEW_CLICK, "Open Post bookmark", ""))
                     .subscribe(OnBookmarkClickedSubject);
             ButterKnife.bind(this, itemView);
         }
 
         @Override public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.setHeaderTitle("Select an Action");
-            MenuItem removeBookmark = menu.add("Remove from Bookmarks");
+            menu.setHeaderTitle(R.string.context_menu_title);
+            MenuItem removeBookmark = menu.add(R.string.context_menu_remove_bookmarks);
             RxMenuItem.clicks(removeBookmark).map(aVoid -> postBookmarks.get(getAdapterPosition()).getPostId())
-                    .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent("Post Bookmarks Context Menu", "Remove from Bookmark", ""))
+                    .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_BOOKMARK_CONTEXT_MENU, "Remove from Bookmark", ""))
                     .subscribe(OnRemoveFromBookmarkClickedSubject);
         }
     }

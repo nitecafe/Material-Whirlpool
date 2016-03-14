@@ -111,7 +111,7 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
 
     @Override
     public void OnItemClicked(int itemClicked, String title) {
-        WhirlpoolApp.getInstance().trackEvent("RecycleView Click", "View News", "");
+        WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_RECYCLEVIEW_CLICK, "View News", "");
         final Uri parse = Uri.parse(StringConstants.NEWS_REDIRECT_URL + String.valueOf(itemClicked));
         customActivityTabsHelper.openCustomTabStandard(getActivity(), parse);
     }

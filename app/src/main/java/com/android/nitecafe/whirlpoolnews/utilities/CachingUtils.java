@@ -78,7 +78,6 @@ public class CachingUtils implements ICachingUtils {
     }
 
     @Override public ArrayList<ScrapedThread> getPopularThreadsCache() {
-
         Type listType = new TypeToken<ArrayList<ScrapedThread>>() {
         }.getType();
 
