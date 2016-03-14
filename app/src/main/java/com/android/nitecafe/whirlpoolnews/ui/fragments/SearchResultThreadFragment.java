@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
@@ -41,6 +42,7 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
     @Inject IWatchedThreadService watchedThreadIdentifier;
     @Bind(R.id.popular_thread_recycle_view) UltimateRecyclerView recyclerView;
     @Bind(R.id.popular_thread_progress_loader) MaterialProgressBar progressBar;
+    @Bind(R.id.emptyview) TextView emptyTextView;
     private ScrapedThreadAdapter popularThreadAdapter;
     private IOnThreadClicked listener;
     private int forumId;
@@ -104,6 +106,10 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
     }
 
     public void DisplaySearchResults(List<ScrapedThread> scrapedThreads) {
+        if (scrapedThreads.size() == 0)
+            emptyTextView.setVisibility(View.VISIBLE);
+        else
+            emptyTextView.setVisibility(View.GONE);
         popularThreadAdapter.SetThreads(scrapedThreads);
     }
 

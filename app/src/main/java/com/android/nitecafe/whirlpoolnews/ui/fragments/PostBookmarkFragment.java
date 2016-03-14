@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
@@ -32,6 +33,7 @@ public class PostBookmarkFragment extends BaseFragment implements IPostBookmarkF
 
     @Bind(R.id.post_bookmark_recycle_view) UltimateRecyclerView postBookmarkRecycleView;
     @Bind(R.id.post_bookmark_progress_loader) MaterialProgressBar mMaterialProgressBar;
+    @Bind(R.id.emptyview) TextView emptyView;
     @Inject PostBookmarkController _controller;
     private PostBookmarksAdapter bookmarkAdapter;
     private IOnThreadClicked listener;
@@ -59,8 +61,7 @@ public class PostBookmarkFragment extends BaseFragment implements IPostBookmarkF
         _controller.Attach(this);
 
         SetupRecycleView();
-
-        loadPostBookmarks();
+        _controller.GetPostBookmarks();
 
         return inflate;
     }
@@ -80,7 +81,7 @@ public class PostBookmarkFragment extends BaseFragment implements IPostBookmarkF
         bookmarkAdapter.OnBookmarkClickedSubject.subscribe(postBookmark -> openBookmark(postBookmark));
         postBookmarkRecycleView.setAdapter(bookmarkAdapter);
 
-        postBookmarkRecycleView.setDefaultOnRefreshListener(this::loadPostBookmarks);
+        postBookmarkRecycleView.setDefaultOnRefreshListener(() -> _controller.GetPostBookmarks());
     }
 
     @Override
@@ -110,12 +111,12 @@ public class PostBookmarkFragment extends BaseFragment implements IPostBookmarkF
                 + (postBookmark.getPageLocated() - 1) * StringConstants.POST_PER_PAGE;
     }
 
-    private void loadPostBookmarks() {
-        _controller.GetPostBookmarks();
-    }
-
     @Override
     public void DisplayPostBookmarks(List<PostBookmark> postBookmarks) {
+        if (postBookmarks.size() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+        } else
+            emptyView.setVisibility(View.GONE);
         bookmarkAdapter.setPostBookmarks(postBookmarks);
     }
 
@@ -127,7 +128,7 @@ public class PostBookmarkFragment extends BaseFragment implements IPostBookmarkF
     @Override
     public void DisplayErrorMessage() {
         Snackbar.make(postBookmarkRecycleView, R.string.message_check_connection, Snackbar.LENGTH_LONG)
-                .setAction(R.string.action_message_retry, view -> loadPostBookmarks())
+                .setAction(R.string.action_message_retry, view -> _controller.GetPostBookmarks())
                 .show();
     }
 
