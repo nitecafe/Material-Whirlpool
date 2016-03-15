@@ -60,14 +60,12 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
     }
 
     public class ThreadViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
-        public View itemView;
         @Bind(R.id.thread_title) TextView threadTitle;
         @Bind(R.id.thread_total_page) TextView threadTotalPage;
         @Bind(R.id.thread_last_post_info) TextView threadLastPostInfo;
 
         ThreadViewHolder(View itemView) {
             super(itemView);
-            this.itemView = itemView;
             itemView.setOnCreateContextMenuListener(this);
             RxView.clicks(itemView).map(aVoid -> threadsList.get(getAdapterPosition()))
                     .onErrorResumeNext(Observable.<T>empty()) //ignore when getAdapterPosition is -1 http://stackoverflow.com/questions/29684154/recyclerview-viewholder-getlayoutposition-vs-getadapterposition

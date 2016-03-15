@@ -39,10 +39,10 @@ public class ForumController {
                 });
     }
 
-
     public List<Forum> getCombinedFavouriteSection() {
-        List<Forum> totalList = new ArrayList<>();
-        totalList.addAll(getFavouriteSection());
+        List<Forum> favouriteSection = getFavouriteSection();
+        List<Forum> totalList = new ArrayList<>(favouriteSection.size() + originalForums.size());
+        totalList.addAll(favouriteSection);
         totalList.addAll(originalForums);
         return totalList;
     }

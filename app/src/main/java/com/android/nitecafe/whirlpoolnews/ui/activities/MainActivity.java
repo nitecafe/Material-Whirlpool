@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -133,7 +132,6 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         }
     }
 
-    @Nullable
     private void showPushBotMessage() {
         final Bundle bundleExtra = getIntent().getExtras();
 

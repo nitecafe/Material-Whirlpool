@@ -13,33 +13,30 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.Forum;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.RecyclerViewAdapterClickListener;
+import com.android.nitecafe.whirlpoolnews.utilities.StickyHeaderUtil;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IFavouriteThreadService;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IStickyHeaderUtil;
 import com.jakewharton.rxbinding.view.RxMenuItem;
+import com.jakewharton.rxbinding.view.RxView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.subjects.PublishSubject;
 
-public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHeaderAdapter.ForumViewHolder> implements RecyclerViewAdapterClickListener {
+public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHeaderAdapter.ForumViewHolder> {
 
     private List<Forum> forums = new ArrayList<>();
-    private Map<String, Integer> headerMap = new HashMap<>();
-    private int headerId = 0;
-    private IRecycleViewItemClick itemClickHandler;
     private IFavouriteThreadService favouriteThreadService;
     private PublishSubject<Forum> OnAddToFavClickedObservable = PublishSubject.create();
     private PublishSubject<Forum> OnRemoveFromFavClickedObservable = PublishSubject.create();
+    private PublishSubject<Forum> OnForumClickedObservable = PublishSubject.create();
+    private IStickyHeaderUtil headerUtil = new StickyHeaderUtil();
 
-    public ForumStickyHeaderAdapter(IRecycleViewItemClick itemClickHandler, IFavouriteThreadService favouriteThreadService) {
-        this.itemClickHandler = itemClickHandler;
+    public ForumStickyHeaderAdapter(IFavouriteThreadService favouriteThreadService) {
         this.favouriteThreadService = favouriteThreadService;
     }
 
@@ -51,10 +48,13 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
         return OnRemoveFromFavClickedObservable;
     }
 
+    public PublishSubject<Forum> getOnForumClickedObservable() {
+        return OnForumClickedObservable;
+    }
+
     public void setForum(List<Forum> forums) {
         this.forums = forums;
-        headerMap.clear();
-        headerId = 0;
+        headerUtil.resetHeader();
         notifyDataSetChanged();
     }
 
@@ -66,7 +66,7 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
     @Override
     public ForumViewHolder onCreateViewHolder(ViewGroup parent) {
         final View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_forum, parent, false);
-        return new ForumViewHolder(inflate, this);
+        return new ForumViewHolder(inflate);
     }
 
     @Override
@@ -77,12 +77,7 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
     @Override
     public long generateHeaderId(int position) {
         String section = forums.get(position).getSECTION();
-        if (headerMap.containsKey(section))
-            return headerMap.get(section);
-        else {
-            headerMap.put(section, ++headerId);
-            return headerId;
-        }
+        return headerUtil.generateHeaderId(section);
     }
 
     @Override
@@ -104,30 +99,14 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
         textView.setText(forums.get(position).getSECTION());
     }
 
-    @Override
-    public void recyclerViewListClicked(View v, int position) {
-        final Forum forum = forums.get(position);
-        itemClickHandler.OnItemClicked(forum.getID(), forum.getTITLE());
-    }
-
-
-    public class ForumViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
-        public View itemView;
+    public class ForumViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         @Bind(R.id.forum_title) TextView forumTitle;
-        private RecyclerViewAdapterClickListener mListener;
 
-        ForumViewHolder(View itemView, RecyclerViewAdapterClickListener listener) {
+        ForumViewHolder(View itemView) {
             super(itemView);
-            this.itemView = itemView;
             itemView.setOnCreateContextMenuListener(this);
-            mListener = listener;
-            itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);
-        }
-
-        @Override
-        public void onClick(View v) {
-            mListener.recyclerViewListClicked(v, getAdapterPosition());
+            RxView.clicks(itemView).map(aVoid1 -> forums.get(getAdapterPosition())).subscribe(OnForumClickedObservable);
         }
 
         @Override public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

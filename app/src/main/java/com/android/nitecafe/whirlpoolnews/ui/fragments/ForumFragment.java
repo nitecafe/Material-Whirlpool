@@ -15,7 +15,6 @@ import com.android.nitecafe.whirlpoolnews.controllers.ForumController;
 import com.android.nitecafe.whirlpoolnews.models.Forum;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ForumStickyHeaderAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IForumFragment;
-import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
@@ -28,18 +27,18 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class ForumFragment extends BaseFragment implements IForumFragment, IRecycleViewItemClick {
+public class ForumFragment extends BaseFragment implements IForumFragment {
 
     @Bind(R.id.forum_recycle_view) UltimateRecyclerView forumRecycleView;
     @Bind(R.id.forum_progress_loader) MaterialProgressBar mMaterialProgressBar;
-    @Inject ForumController _controller;
+    @Inject ForumController controller;
     private ForumStickyHeaderAdapter stickyHeaderAdapter;
     private IOnForumClicked listener;
     private StickyRecyclerHeadersDecoration stickyRecyclerHeadersDecoration;
 
     @Override
     public void onDestroyView() {
-        _controller.attach(null);
+        controller.attach(null);
         super.onDestroyView();
     }
 
@@ -72,7 +71,7 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
 
         ButterKnife.bind(this, inflate);
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
-        _controller.attach(this);
+        controller.attach(this);
 
         SetupRecycleView();
 
@@ -91,11 +90,13 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         forumRecycleView.setLayoutManager(layoutManager);
 
-        stickyHeaderAdapter = new ForumStickyHeaderAdapter(this, _controller.favouriteThreadService);
+        stickyHeaderAdapter = new ForumStickyHeaderAdapter(controller.favouriteThreadService);
+        stickyHeaderAdapter.getOnForumClickedObservable()
+                .subscribe(forum1 -> listener.onForumClicked(forum1.getID(), forum1.getTITLE()));
         stickyHeaderAdapter.getOnAddToFavClickedObservable()
-                .subscribe(forum -> _controller.AddToFavouriteList(forum.getID(), forum.getTITLE()));
+                .subscribe(forum -> controller.AddToFavouriteList(forum.getID(), forum.getTITLE()));
         stickyHeaderAdapter.getOnRemoveFromFavClickedObservable()
-                .subscribe(forum -> _controller.RemoveFromFavouriteList(forum.getID()));
+                .subscribe(forum -> controller.RemoveFromFavouriteList(forum.getID()));
 
         forumRecycleView.setAdapter(stickyHeaderAdapter);
         stickyRecyclerHeadersDecoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
@@ -104,12 +105,12 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
     }
 
     private void loadForum() {
-        _controller.getForum();
+        controller.getForum();
     }
 
     @Override
     public void UpdateFavouriteSection() {
-        List<Forum> forums = _controller.getCombinedFavouriteSection();
+        List<Forum> forums = controller.getCombinedFavouriteSection();
         stickyHeaderAdapter.setForum(forums);
         stickyRecyclerHeadersDecoration.invalidateHeaders();
     }
@@ -146,11 +147,6 @@ public class ForumFragment extends BaseFragment implements IForumFragment, IRecy
     @Override
     public void HideRefreshLoader() {
         forumRecycleView.setRefreshing(false);
-    }
-
-    @Override
-    public void OnItemClicked(int itemClicked, String title) {
-        listener.onForumClicked(itemClicked, title);
     }
 
     public interface IOnForumClicked {
