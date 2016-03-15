@@ -53,6 +53,7 @@ import rx.subscriptions.CompositeSubscription;
 
 public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener, ForumFragment.IOnForumClicked, IOnThreadClicked, IOnWhimClicked, IOnSearchClicked {
 
+    private final String previousVersion = "2.2";
     @Inject IWhirlpoolRestClient mWhirlpoolRestClient;
     @Bind(R.id.fab_create_thread) FloatingActionButton fabCreateThread;
     @Bind(R.id.fab_reply_whim) FloatingActionButton fabReplyWhim;
@@ -75,6 +76,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         setFontSizeBasedOnSettings();
         super.onCreate(savedInstanceState);
         Pushbots.sharedInstance().init(this);
+        Pushbots.sharedInstance().untag(previousVersion);
         Pushbots.sharedInstance().tag(getVersionName());
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
