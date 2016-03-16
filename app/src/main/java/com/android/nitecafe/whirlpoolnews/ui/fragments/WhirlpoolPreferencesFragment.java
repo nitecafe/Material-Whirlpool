@@ -112,7 +112,7 @@ public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
 
     private void scheduleAlarm(long interval, PendingIntent intent) {
         AlarmManager alarm = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarm.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, interval,
+        alarm.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 1000,
                 interval, intent);
     }
 

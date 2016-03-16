@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.BackgroundServices.Whims;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -53,7 +54,7 @@ public class WhimsIntentService extends IntentService {
         Observable<List<Whim>> unreadWhims = whimsService.GetUnreadWhims();
         unreadWhims.subscribe(whims -> {
             for (Whim w : whims) {
-                if (WhirlpoolDateUtils.isTimeWithinDuration(w.getDATE(), l)) {
+                if (WhirlpoolDateUtils.isTimeWithinDuration(w.getDATE(), l + AlarmManager.INTERVAL_HALF_HOUR)) {
                     createNotificationContent(whims);
                     break;
                 }

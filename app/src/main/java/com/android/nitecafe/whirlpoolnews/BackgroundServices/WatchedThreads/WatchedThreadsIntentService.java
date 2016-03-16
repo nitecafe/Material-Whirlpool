@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.BackgroundServices.WatchedThreads;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -51,7 +52,7 @@ public class WatchedThreadsIntentService extends IntentService {
         long l = WhirlpoolUtils.convertFrequencyStringIntoLong(frequency, getApplicationContext());
         unreadWatchedThreads.subscribe(watchedList -> {
             for (Watched w : watchedList.getWATCHED()) {
-                if (WhirlpoolDateUtils.isTimeWithinDuration(w.getLASTDATE(), l)) {
+                if (WhirlpoolDateUtils.isTimeWithinDuration(w.getLASTDATE(), l + AlarmManager.INTERVAL_HALF_HOUR)) {
                     createNotificationContent(watchedList.getWATCHED());
                     break;
                 }

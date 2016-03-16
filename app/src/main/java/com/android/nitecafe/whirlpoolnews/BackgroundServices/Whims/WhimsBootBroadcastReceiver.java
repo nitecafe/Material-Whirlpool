@@ -31,7 +31,7 @@ public class WhimsBootBroadcastReceiver extends BroadcastReceiver {
     private void scheduleAlarm(Context context, long interval) {
         final PendingIntent whimsPendingIntent = getWhimsPendingIntent(context);
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarm.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, interval,
+        alarm.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 1000,
                 interval, whimsPendingIntent);
     }
 }
