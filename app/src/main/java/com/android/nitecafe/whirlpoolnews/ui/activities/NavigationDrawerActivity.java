@@ -254,5 +254,12 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity impleme
                         "AboutLibraries")
                 .supportFragment();
     }
+
+    @Override public void onBackPressed() {
+        if (drawer != null && drawer.isDrawerOpen())
+            drawer.closeDrawer();
+        else
+            super.onBackPressed();
+    }
 }
 
