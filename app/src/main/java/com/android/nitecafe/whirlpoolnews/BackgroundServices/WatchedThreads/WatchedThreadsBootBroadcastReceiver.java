@@ -16,9 +16,12 @@ public class WatchedThreadsBootBroadcastReceiver extends BroadcastReceiver {
     @Override public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            String frequency = defaultSharedPreferences.getString(context.getString(R.string.watched_notifications_frequency_key), "");
-            long interval = WhirlpoolUtils.convertFrequencyStringIntoLong(frequency, context);
-            scheduleAlarm(context, interval);
+            boolean notificationOn = defaultSharedPreferences.getBoolean(context.getString(R.string.watched_notifications_key), false);
+            if (notificationOn) {
+                String frequency = defaultSharedPreferences.getString(context.getString(R.string.watched_notifications_frequency_key), "");
+                long interval = WhirlpoolUtils.convertFrequencyStringIntoLong(frequency, context);
+                scheduleAlarm(context, interval);
+            }
         }
     }
 

@@ -41,7 +41,8 @@ public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
 
         Preference watchedNotificationsFrequency = getPreferenceManager().findPreference(getString(R.string.watched_notifications_frequency_key));
         watchedNotificationsFrequency.setOnPreferenceChangeListener((preference1, o1) -> {
-            updateWatchedThreadAlarm(o1.toString());
+            if (getPreferenceManager().getSharedPreferences().getBoolean(getString(R.string.watched_notifications_key), false))
+                updateWatchedThreadAlarm(o1.toString());
             return true;
         });
 
@@ -63,7 +64,8 @@ public class WhirlpoolPreferencesFragment extends PreferenceFragmentCompat {
 
         Preference whimFrequency = getPreferenceManager().findPreference(getString(R.string.whims_notifications_frequency_key));
         whimFrequency.setOnPreferenceChangeListener((preference1, o1) -> {
-            updateWhimsAlarm(o1.toString());
+            if (getPreferenceManager().getSharedPreferences().getBoolean(getString(R.string.whims_notifications_key), false))
+                updateWhimsAlarm(o1.toString());
             return true;
         });
 
