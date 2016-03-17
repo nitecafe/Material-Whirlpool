@@ -16,6 +16,25 @@
         app:showAsAction="always"
         />
     <item
+        android:id="@+id/menuitem_watch_post"
+        android:icon="@drawable/ic_watch_thread"
+        android:orderInCategory="200"
+        android:title="Watch Thread"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/menuitem_unwatch_post"
+        android:icon="@drawable/ic_unwatch_thread"
+        android:orderInCategory="200"
+        android:title="Unwatch Thread"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/menuitem_refresh"
+        android:orderInCategory="300"
+        android:title="Refresh"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/menuitem_go_to_first_page"
         android:icon="@drawable/ic_go_to_first_post"
         android:orderInCategory="301"
@@ -27,18 +46,5 @@
         android:orderInCategory="302"
         android:title="Go To Last Page"
         app:showAsAction="never"/>
-    <item
-        android:id="@+id/menuitem_watch_post"
-        android:icon="@drawable/ic_watch_thread"
-        android:orderInCategory="400"
-        android:title="Watch Thread"
-        app:showAsAction="ifRoom"
-        />
-    <item
-        android:id="@+id/menuitem_unwatch_post"
-        android:icon="@drawable/ic_unwatch_thread"
-        android:orderInCategory="400"
-        android:title="Unwatch Thread"
-        app:showAsAction="ifRoom"
-        />
+
 </menu>

@@ -44,6 +44,7 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
     public static final String POST_LAST_READ = "PostLastRead";
     public PublishSubject<Void> OnFragmentDestroySubject = PublishSubject.create();
     public PublishSubject<Void> OnFragmentCreateViewSubject = PublishSubject.create();
+    public PublishSubject<Void> OnRefreshClickedSubject = PublishSubject.create();
     @State int mPageToLoad;
     @Bind(R.id.spinner_post_page) Spinner pageNumberSpinner;
     @Bind(R.id.toolbar_post) Toolbar postToolbar;
@@ -84,6 +85,7 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
     public void onDetach() {
         OnFragmentCreateViewSubject.onCompleted();
         OnFragmentDestroySubject.onCompleted();
+        OnRefreshClickedSubject.onCompleted();
         super.onDetach();
     }
 
@@ -235,6 +237,10 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
                     WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_TOOLBAR, "Reply Post", "");
                     launchReplyPageInBrowser();
                     break;
+                case R.id.menuitem_refresh:
+                    WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_TOOLBAR, "Refresh Post", "");
+                    OnRefreshClickedSubject.onNext(null);
+                    break;
             }
             return true;
         });
@@ -287,6 +293,7 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
                     updatePageCount(mTotalPage);
                 }
             });
+            scrapedPostChildFragment.attachRefreshSubject(OnRefreshClickedSubject);
             return scrapedPostChildFragment;
         }
 

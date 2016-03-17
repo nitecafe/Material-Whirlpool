@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
 import android.text.InputType;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -247,5 +248,10 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
             bundles.add(bundle);
         }
         mCustomTabsActivityHelper.mayLaunchUrl(null, null, bundles);
+    }
+
+    public void attachRefreshSubject(PublishSubject<Void> onRefreshClickedSubject) {
+        onRefreshClickedSubject.subscribe(aVoid -> loadPosts(),
+                throwable -> Log.e("ScrappedPostChildFragment", "Failed to refresh"));
     }
 }
