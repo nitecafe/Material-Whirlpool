@@ -54,8 +54,6 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
     private int mPostLastReadId;
     private String mThreadTitle;
     private int mThreadTotalPage;
-    private MenuItem backItem;
-    private MenuItem nextItem;
 
     public static ScrapedPostParentFragment newInstance(int threadId, String threadTitle, int page, int postLastRead, int totalPage) {
         ScrapedPostParentFragment fragment = new ScrapedPostParentFragment();
@@ -137,7 +135,7 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
             postViewPager.setCurrentItem(mPageToLoad - 1);
         }
 
-        updateNavigationButtonVisibility();
+        updatePageToLoad();
     }
 
     @Override
@@ -179,7 +177,7 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
             @Override
             public void onPageSelected(int position) {
                 pageNumberSpinner.setSelection(position);
-                updateNavigationButtonVisibility();
+                updatePageToLoad();
             }
 
             @Override
@@ -211,18 +209,8 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
 
     private void SetupToolbar() {
         postToolbar.inflateMenu(R.menu.menu_post_toolbar);
-        backItem = postToolbar.getMenu().findItem(R.id.menuitem_back_post);
-        nextItem = postToolbar.getMenu().findItem(R.id.menuitem_next_post);
         postToolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
-                case R.id.menuitem_back_post:
-                    WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_TOOLBAR, "Go Previous Post", "");
-                    postViewPager.setCurrentItem(postViewPager.getCurrentItem() - 1);
-                    break;
-                case R.id.menuitem_next_post:
-                    WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_TOOLBAR, "Go Next Post", "");
-                    postViewPager.setCurrentItem(postViewPager.getCurrentItem() + 1);
-                    break;
                 case R.id.menuitem_mark_read:
                     WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_TOOLBAR, "Mark Read Post", "");
                     mController.MarkThreadAsRead(mThreadId);
@@ -272,19 +260,8 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
         pageNumberSpinner.setSelection(page - 1);
     }
 
-    private void updateNavigationButtonVisibility() {
+    private void updatePageToLoad() {
         mPageToLoad = postViewPager.getCurrentItem() + 1;
-        int currentPage = mPageToLoad;
-        if (1 == currentPage)
-            backItem.setEnabled(false);
-        else
-            backItem.setEnabled(true);
-
-        if (mThreadTotalPage == currentPage)
-            nextItem.setEnabled(false);
-        else
-            nextItem.setEnabled(true);
-
     }
 
     public class PostPagerAdapter extends FragmentStatePagerAdapter {

@@ -16,19 +16,6 @@
         app:showAsAction="always"
         />
     <item
-        android:id="@+id/menuitem_back_post"
-        android:icon="@drawable/ic_back_arrow"
-        android:orderInCategory="200"
-        android:title="Previous Page"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/menuitem_next_post"
-        android:icon="@drawable/ic_forward_arrow"
-        android:orderInCategory="300"
-        android:title="Next page"
-        app:showAsAction="never"/>
-    <item
         android:id="@+id/menuitem_go_to_first_page"
         android:icon="@drawable/ic_go_to_first_post"
         android:orderInCategory="301"
