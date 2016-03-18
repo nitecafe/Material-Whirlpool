@@ -46,7 +46,7 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Forum
 
         final DateTime localDateFromString = WhirlpoolDateUtils.getLocalDateFromString(thread.getLASTDATE());
         holder.threadLastPostInfo.setText(String.format("%s ago by %s",
-                WhirlpoolDateUtils.getTimeSince(localDateFromString), thread.getLAST().getNAME()));
+                WhirlpoolDateUtils.getTimeSince(localDateFromString), Html.fromHtml(thread.getLAST().getNAME())));
     }
 
     /**
