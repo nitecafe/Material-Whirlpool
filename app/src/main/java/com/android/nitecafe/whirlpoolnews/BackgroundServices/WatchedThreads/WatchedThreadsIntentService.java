@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -68,8 +69,9 @@ public class WatchedThreadsIntentService extends IntentService {
 
         List<String> titleList = new ArrayList<>();
         for (Watched w : watcheds) {
-            titleList.add(w.getTITLE());
-            inboxStyle.addLine(w.getTITLE());
+            String spanned = Html.fromHtml(w.getTITLE()).toString();
+            titleList.add(spanned);
+            inboxStyle.addLine(spanned);
         }
         String content = TextUtils.join(" | ", titleList);
 

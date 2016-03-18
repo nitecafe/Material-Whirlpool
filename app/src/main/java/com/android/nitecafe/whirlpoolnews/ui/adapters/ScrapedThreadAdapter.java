@@ -32,7 +32,7 @@ public class ScrapedThreadAdapter extends ThreadBaseAdapter<ScrapedThread> {
         else if (forumThread.isClosed())
             holder.threadLastPostInfo.setText(R.string.message_thread_closed);
         else
-            holder.threadLastPostInfo.setText(forumThread.getLast_poster());
+            holder.threadLastPostInfo.setText(Html.fromHtml(forumThread.getLast_poster()));
 
         if (forumThread.isSticky())
             if (preferencesGetter.isDarkThemeOn())
