@@ -23,7 +23,6 @@ import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedPostAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostChildFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.customTabs.CustomTabsActivityHelper;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -31,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -48,7 +48,8 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     private final int maxNumberOfPostReplyPrefetch = 2;
     public PublishSubject<Integer> OnPageCountUpdateSubject = PublishSubject.create();
     @Inject ScrapedPostChildController _controller;
-    @Inject CustomTabsActivityHelper mCustomTabsActivityHelper;
+    @Inject @Named("browser") PublishSubject<Uri> launchBrowserSubject;
+    @Inject @Named("prefetchBundle") PublishSubject<List<Bundle>> prefetchBundleSubject;
     @Bind(R.id.post_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.post_progress_loader) MaterialProgressBar mMaterialProgressBar;
     @State int mPageToLoad;
@@ -165,7 +166,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
 
     private void LaunchReplyPostInBrowser(int mThreadId, String replyId) {
         Uri url = Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadId) + "&r=" + String.valueOf(replyId));
-        mCustomTabsActivityHelper.openCustomTabStandard(getActivity(), url);
+        launchBrowserSubject.onNext(url);
     }
 
     private void loadPosts() {
@@ -218,7 +219,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     public void LaunchThreadInBrowser() {
         final Uri parse = Uri.parse(StringConstants.THREAD_URL + String.valueOf(mThreadId) + "&p=" +
                 String.valueOf(mPageToLoad) + "&#r" + String.valueOf(mPostLastReadId));
-        mCustomTabsActivityHelper.openCustomTabStandard(getActivity(), parse);
+        launchBrowserSubject.onNext(parse);
     }
 
     private void ScrollToFirstUnreadItem() {
@@ -247,7 +248,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
             bundle.putParcelable(CustomTabsService.KEY_URL, url);
             bundles.add(bundle);
         }
-        mCustomTabsActivityHelper.mayLaunchUrl(null, null, bundles);
+        prefetchBundleSubject.onNext(bundles);
     }
 
     public void attachRefreshSubject(PublishSubject<Void> onRefreshClickedSubject) {

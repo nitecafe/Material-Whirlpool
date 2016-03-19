@@ -17,7 +17,6 @@ import com.android.nitecafe.whirlpoolnews.R;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -25,7 +24,6 @@ import rx.Subscriber;
 /**
  * This is a helper class to manage the connection to the Custom Tabs Service.
  */
-@Singleton
 public class CustomTabsActivityHelper implements ServiceConnectionCallback {
     private CustomTabsSession mCustomTabsSession;
     private CustomTabsClient mClient;

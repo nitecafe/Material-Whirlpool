@@ -22,12 +22,12 @@ import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.ScrapedPostParentController;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostParentFragment;
-import com.android.nitecafe.whirlpoolnews.utilities.customTabs.CustomTabsActivityHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,7 +50,8 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
     @Bind(R.id.toolbar_post) Toolbar postToolbar;
     @Bind(R.id.viewpager_post) ViewPager postViewPager;
     @Inject ScrapedPostParentController mController;
-    @Inject CustomTabsActivityHelper customTabsActivityHelper;
+    @Inject @Named("browser") PublishSubject<Uri> launchBrowserSubject;
+    @Inject @Named("prefetch") PublishSubject<Uri> prefetchSubject;
     private int mThreadId;
     private int mPostLastReadId;
     private String mThreadTitle;
@@ -248,12 +249,12 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
 
     private void launchReplyPageInBrowser() {
         Uri parse = Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadId));
-        customTabsActivityHelper.openCustomTabStandard(getActivity(), parse);
+        launchBrowserSubject.onNext(parse);
     }
 
     private void prefetchReplyPage() {
         Uri parse = Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadId));
-        customTabsActivityHelper.mayLaunchUrl(parse);
+        prefetchSubject.onNext(parse);
     }
 
     public void SetupPageSpinnerDropDown(int pageCount, int page) {

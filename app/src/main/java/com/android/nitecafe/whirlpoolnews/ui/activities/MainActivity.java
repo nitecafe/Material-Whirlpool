@@ -40,6 +40,8 @@ import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.pushbots.push.Pushbots;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -59,6 +61,9 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Inject IWatchedThreadService watchedThreadIdentifier;
     @Inject WhimsService whimsService;
     @Inject @Named("whim") PublishSubject<Void> whimSubject;
+    @Inject @Named("browser") PublishSubject<Uri> launchBrowserSubject;
+    @Inject @Named("prefetch") PublishSubject<Uri> prefetchSubject;
+    @Inject @Named("prefetchBundle") PublishSubject<List<Bundle>> prefetchBundleSubject;
     @Inject SharedPreferences mSharedPreferences;
     @Inject IPreferencesGetter preferencesGetter;
     @Inject CustomTabsActivityHelper mCustomTabsActivityHelper;
@@ -83,7 +88,10 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         showPushBotMessage();
         launchStartingScreen(savedInstanceState);
 
-        whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge());
+        mSubscriptions.add(whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge()));
+        mSubscriptions.add(launchBrowserSubject.subscribe(uri -> launchCustomTab(uri)));
+        mSubscriptions.add(prefetchSubject.subscribe(uri -> prefetchUrl(uri)));
+        mSubscriptions.add(prefetchBundleSubject.subscribe(bundles -> prefetchBundle(bundles)));
 
         final String userNameFromPreference = getUserNameFromPreference();
         if (!userNameFromPreference.isEmpty()) {
@@ -340,12 +348,20 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     private void prefetchCreateThreadPage() {
         Uri parse = Uri.parse(StringConstants.NEW_THREAD_URL + String.valueOf(mForumId));
-        mCustomTabsActivityHelper.mayLaunchUrl(parse);
+        prefetchUrl(parse);
     }
 
     private void prefetchWhimReplyPage() {
         Uri parse = Uri.parse(StringConstants.WHIM_REPLY_URL + String.valueOf(whimId));
-        mCustomTabsActivityHelper.mayLaunchUrl(parse);
+        prefetchUrl(parse);
+    }
+
+    private void prefetchUrl(Uri uri) {
+        mCustomTabsActivityHelper.mayLaunchUrl(uri);
+    }
+
+    private void prefetchBundle(List<Bundle> bundle) {
+        mCustomTabsActivityHelper.mayLaunchUrl(null, null, bundle);
     }
 
     @OnClick(R.id.fab_reply_whim)
@@ -391,7 +407,8 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         mCustomTabsActivityHelper.unbindCustomTabsService(this);
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         mSubscriptions.unsubscribe();
     }

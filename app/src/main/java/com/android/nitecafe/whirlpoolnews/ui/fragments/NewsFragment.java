@@ -18,7 +18,6 @@ import com.android.nitecafe.whirlpoolnews.models.News;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.NewsAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.INewsFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
-import com.android.nitecafe.whirlpoolnews.utilities.customTabs.CustomTabsActivityHelper;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -26,17 +25,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
+import rx.subjects.PublishSubject;
 
 public class NewsFragment extends BaseFragment implements INewsFragment, IRecycleViewItemClick {
 
     private final int numberOfPrefetchNews = 4;
     @Bind(R.id.news_recycle_view) UltimateRecyclerView newsRecycleView;
     @Bind(R.id.news_progress_loader) MaterialProgressBar mMaterialProgressBar;
-    @Inject CustomTabsActivityHelper customActivityTabsHelper;
+    @Inject @Named("browser") PublishSubject<Uri> launchBrowserSubject;
+    @Inject @Named("prefetchBundle") PublishSubject<List<Bundle>> prefetchBundleSubject;
     @Inject NewsController _controller;
     private NewsAdapter newsAdapter;
 
@@ -117,7 +119,7 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
     public void OnItemClicked(int newsId, String title) {
         WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_RECYCLEVIEW_CLICK, "View News", "");
         final Uri parse = Uri.parse(StringConstants.NEWS_REDIRECT_URL + String.valueOf(newsId));
-        customActivityTabsHelper.openCustomTabStandard(getActivity(), parse);
+        launchBrowserSubject.onNext(parse);
     }
 
     private void prefetchTopNewsWebPage(List<News> news) {
@@ -135,7 +137,7 @@ public class NewsFragment extends BaseFragment implements INewsFragment, IRecycl
             bundle.putParcelable(CustomTabsService.KEY_URL, link);
             bundles.add(bundle);
         }
-        customActivityTabsHelper.mayLaunchUrl(null, null, bundles);
+        prefetchBundleSubject.onNext(bundles);
     }
 }
 
