@@ -1,5 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.ui.activities;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -58,7 +60,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity impleme
     private PrimaryDrawerItem postBookmarkItem;
 
     protected void onCreateDrawer() {
-        profileDrawerItem = new ProfileDrawerItem().withName("Hello").withEmail("Welcome to " + getResources().getString(R.string.app_name));
+        profileDrawerItem = new ProfileDrawerItem().withName("Hello").withEmail(getResources().getString(R.string.app_name) + " v" + getVersionName());
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this).withHeaderBackground(R.color.primary)
                 .addProfiles(profileDrawerItem)
@@ -263,5 +265,18 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity impleme
         else
             super.onBackPressed();
     }
+
+
+    protected String getVersionName() {
+        PackageInfo pInfo;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return "";
+        }
+        return pInfo.versionName;
+    }
+
 }
 

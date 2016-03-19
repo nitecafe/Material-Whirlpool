@@ -2,8 +2,6 @@ package com.android.nitecafe.whirlpoolnews.ui.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -382,17 +380,6 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse(link));
         startActivity(browserIntent);
-    }
-
-    private String getVersionName() {
-        PackageInfo pInfo;
-        try {
-            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return "";
-        }
-        return pInfo.versionName;
     }
 
     @Override
