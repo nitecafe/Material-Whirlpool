@@ -63,6 +63,8 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity impleme
                 .withActivity(this).withHeaderBackground(R.color.primary)
                 .addProfiles(profileDrawerItem)
                 .withSelectionListEnabled(false)
+                .withProfileImagesVisible(false)
+                .withCompactStyle(true)
                 .withProfileImagesClickable(false)
                 .build();
 
