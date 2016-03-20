@@ -19,4 +19,4 @@ Forum Link: https://forums.whirlpool.net.au/forum-replies.cfm?t=2503715
 
 I will try my best to continously improve and add new features to this project.
 
-Check Release page for informationms about Changelog.
+Check Release page for informations about Changelog.
