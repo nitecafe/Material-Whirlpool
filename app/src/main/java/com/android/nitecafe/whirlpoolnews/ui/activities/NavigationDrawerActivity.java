@@ -33,6 +33,8 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import rx.subscriptions.CompositeSubscription;
+
 public abstract class NavigationDrawerActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
 
     public final int NEWS_POSITION = 1;
@@ -55,6 +57,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity impleme
     protected PrimaryDrawerItem popularItems;
     protected PrimaryDrawerItem recentItems;
     protected PrimaryDrawerItem watchedItems;
+    protected CompositeSubscription mSubscriptions = new CompositeSubscription();
     private AccountHeader headerResult;
     private ProfileDrawerItem profileDrawerItem;
     private PrimaryDrawerItem postBookmarkItem;
@@ -104,6 +107,11 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity impleme
                 .withAccountHeader(headerResult)
                 .withOnDrawerItemClickListener(this)
                 .build();
+    }
+
+    @Override protected void onDestroy() {
+        mSubscriptions.unsubscribe();
+        super.onDestroy();
     }
 
     protected PrimaryDrawerItem getDrawerItemFromString(String s) {
@@ -216,7 +224,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity impleme
                 break;
             case APIKEY_POSITION:
                 final LoginFragment loginFragment = new LoginFragment();
-                loginFragment.UserNameSubject.subscribe(s -> updateProfileDetails(s));
+                mSubscriptions.add(loginFragment.UserNameSubject.subscribe(s -> updateProfileDetails(s)));
                 fragmentToStart = loginFragment;
                 break;
             case FORUM_POSITION:

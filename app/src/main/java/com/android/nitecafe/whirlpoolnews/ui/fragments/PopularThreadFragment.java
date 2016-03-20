@@ -90,17 +90,17 @@ public class PopularThreadFragment extends BaseFragment implements IPopularFragm
         recyclerView.setLayoutManager(layoutManager);
 
         popularThreadAdapter = new PopularScrapedStickyThreadAdapter(watchedThreadIdentifier, new StickyHeaderUtil(), preferencesGetter);
-        popularThreadAdapter.OnThreadClickedObservable
-                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), scrapedThread.getFORUMID()));
-        popularThreadAdapter.OnWatchClickedObservable.subscribe(thread
-                -> popularThreadsController.WatchThread(thread.getID()));
-        popularThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
-                popularThreadsController.UnwatchThread(recent.getID()));
-        popularThreadAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
-                popularThreadsController.MarkThreadAsRead(recent.getID()));
-        popularThreadAdapter.OnGoToLastPageClickedObservable.subscribe(scrapedThread -> {
+        mSubscriptions.add(popularThreadAdapter.OnThreadClickedObservable
+                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), scrapedThread.getFORUMID())));
+        mSubscriptions.add(popularThreadAdapter.OnWatchClickedObservable.subscribe(thread
+                -> popularThreadsController.WatchThread(thread.getID())));
+        mSubscriptions.add(popularThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
+                popularThreadsController.UnwatchThread(recent.getID())));
+        mSubscriptions.add(popularThreadAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
+                popularThreadsController.MarkThreadAsRead(recent.getID())));
+        mSubscriptions.add(popularThreadAdapter.OnGoToLastPageClickedObservable.subscribe(scrapedThread -> {
             listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), 0, scrapedThread.getPageCount(), scrapedThread.getFORUMID());
-        });
+        }));
 
         recyclerView.setAdapter(popularThreadAdapter);
         recyclerView.addItemDecoration(new StickyRecyclerHeadersDecoration(popularThreadAdapter));

@@ -96,18 +96,18 @@ public class RecentFragment extends BaseFragment implements IRecentFragment {
 
         stickyHeaderAdapter = new ThreadStickyHeaderAdapter<>(mIWatchedThreadService, new StickyHeaderUtil());
 
-        stickyHeaderAdapter.OnThreadClickedObservable.subscribe(
-                recent -> listener.OnThreadClicked(recent.getID(), recent.getTITLE(), WhirlpoolUtils.getNumberOfPage(recent.getREPLIES()), recent.getFORUMID()));
-        stickyHeaderAdapter.OnWatchClickedObservable.subscribe(thread
-                -> _controller.WatchThread(thread.getID()));
-        stickyHeaderAdapter.OnUnwatchClickedObservable.subscribe(recent ->
-                _controller.UnwatchThread(recent.getID()));
-        stickyHeaderAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
-                _controller.MarkThreadAsRead(recent.getID()));
-        stickyHeaderAdapter.OnGoToLastPageClickedObservable.subscribe(recent -> {
+        mSubscriptions.add(stickyHeaderAdapter.OnThreadClickedObservable.subscribe(
+                recent -> listener.OnThreadClicked(recent.getID(), recent.getTITLE(), WhirlpoolUtils.getNumberOfPage(recent.getREPLIES()), recent.getFORUMID())));
+        mSubscriptions.add(stickyHeaderAdapter.OnWatchClickedObservable.subscribe(thread
+                -> _controller.WatchThread(thread.getID())));
+        mSubscriptions.add(stickyHeaderAdapter.OnUnwatchClickedObservable.subscribe(recent ->
+                _controller.UnwatchThread(recent.getID())));
+        mSubscriptions.add(stickyHeaderAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
+                _controller.MarkThreadAsRead(recent.getID())));
+        mSubscriptions.add(stickyHeaderAdapter.OnGoToLastPageClickedObservable.subscribe(recent -> {
             int lastPage = WhirlpoolUtils.getNumberOfPage(recent.getREPLIES());
             listener.OnThreadClicked(recent.getID(), recent.getTITLE(), lastPage, 0, lastPage, recent.getFORUMID());
-        });
+        }));
 
         recentRecycleView.setAdapter(stickyHeaderAdapter);
         recentRecycleView.addItemDecoration(new StickyRecyclerHeadersDecoration(stickyHeaderAdapter));

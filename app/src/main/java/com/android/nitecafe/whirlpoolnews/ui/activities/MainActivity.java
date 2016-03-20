@@ -48,7 +48,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Subscriber;
 import rx.subjects.PublishSubject;
-import rx.subscriptions.CompositeSubscription;
 
 public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener, ForumFragment.IOnForumClicked, IOnThreadClicked, IOnWhimClicked, IOnSearchClicked {
 
@@ -68,7 +67,6 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Inject ISchedulerManager schedulerManager;
     private int mForumId;
     private int whimId;
-    private CompositeSubscription mSubscriptions = new CompositeSubscription();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,9 +211,9 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     }
 
     private void updateWhimDrawerItemBadge() {
-        whimsService.GetNumberOfUnreadWhims().
+        mSubscriptions.add(whimsService.GetNumberOfUnreadWhims().
                 subscribe(integer -> setPrivateMessagesBadgeCount(integer),
-                        throwable -> Log.e("MainActivity", "Failed to retrieve whim."));
+                        throwable -> Log.e("MainActivity", "Failed to retrieve whim.")));
     }
 
     private void setPrivateMessagesBadgeCount(Integer integer) {
@@ -287,21 +285,21 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     }
 
     private void setUpWhimReplyFab(IndividualWhimFragment individualWhimFragment) {
-        individualWhimFragment.OnFragmentDestroySubject.subscribe(aVoid ->
-                fabReplyWhim.setVisibility(View.GONE));
-        individualWhimFragment.OnFragmentCreateViewSubject.subscribe(aVoid -> {
+        mSubscriptions.add(individualWhimFragment.OnFragmentDestroySubject.subscribe(aVoid ->
+                fabReplyWhim.setVisibility(View.GONE)));
+        mSubscriptions.add(individualWhimFragment.OnFragmentCreateViewSubject.subscribe(aVoid -> {
             resetFabLocationToBottom(fabReplyWhim);
             fabReplyWhim.setVisibility(View.VISIBLE);
-        });
+        }));
     }
 
     private void setUpThreadCreateFab(PublishSubject<Void> createStream, PublishSubject<Void> destroyStream) {
-        destroyStream.subscribe(aVoid ->
-                fabCreateThread.setVisibility(View.GONE));
-        createStream.subscribe(aVoid -> {
+        mSubscriptions.add(destroyStream.subscribe(aVoid ->
+                fabCreateThread.setVisibility(View.GONE)));
+        mSubscriptions.add(createStream.subscribe(aVoid -> {
             resetFabLocationToBottom(fabCreateThread);
             fabCreateThread.setVisibility(View.VISIBLE);
-        });
+        }));
     }
 
     /**
@@ -392,12 +390,6 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     protected void onStop() {
         super.onStop();
         mCustomTabsActivityHelper.unbindCustomTabsService(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mSubscriptions.unsubscribe();
     }
 
     private void decodeBitmap(final int resource) {

@@ -131,17 +131,17 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
     }
 
     private void SubscribeToObservables() {
-        popularThreadAdapter.OnThreadClickedObservable
-                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), scrapedThread.getFORUMID()));
-        popularThreadAdapter.OnWatchClickedObservable.subscribe(thread
-                -> controller.WatchThread(thread.getID()));
-        popularThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
-                controller.UnwatchThread(recent.getID()));
-        popularThreadAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
-                controller.MarkThreadAsRead(recent.getID()));
-        popularThreadAdapter.OnGoToLastPageClickedObservable.subscribe(scrapedThread -> {
+        mSubscriptions.add(popularThreadAdapter.OnThreadClickedObservable
+                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), scrapedThread.getFORUMID())));
+        mSubscriptions.add(popularThreadAdapter.OnWatchClickedObservable.subscribe(thread
+                -> controller.WatchThread(thread.getID())));
+        mSubscriptions.add(popularThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
+                controller.UnwatchThread(recent.getID())));
+        mSubscriptions.add(popularThreadAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
+                controller.MarkThreadAsRead(recent.getID())));
+        mSubscriptions.add(popularThreadAdapter.OnGoToLastPageClickedObservable.subscribe(scrapedThread -> {
             listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), 0, scrapedThread.getPageCount(), scrapedThread.getFORUMID());
-        });
+        }));
     }
 
     @Override

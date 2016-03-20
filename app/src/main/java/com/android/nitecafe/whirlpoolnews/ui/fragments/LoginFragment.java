@@ -43,12 +43,12 @@ public class LoginFragment extends BaseFragment implements ILoginFragment {
         setToolbarTitle("");
         mLoginController.attachedView(this);
 
-        RxTextView.textChangeEvents(mApiKeyText).subscribe(event -> {
+        mSubscriptions.add(RxTextView.textChangeEvents(mApiKeyText).subscribe(event -> {
             if (event.text().length() > 3)
                 saveButton.setEnabled(true);
             else
                 saveButton.setEnabled(false);
-        });
+        }));
 
         progressLoader = new MaterialDialog.Builder(getContext())
                 .title("Logging In")

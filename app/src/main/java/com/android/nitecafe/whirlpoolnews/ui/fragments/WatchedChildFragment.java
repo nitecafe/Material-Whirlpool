@@ -97,17 +97,17 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
 
         stickyHeaderAdapter = new WatchedThreadAdapter(mIWatchedThreadService, new StickyHeaderUtil());
 
-        stickyHeaderAdapter.OnThreadClickedObservable.subscribe(watched1 -> {
+        mSubscriptions.add(stickyHeaderAdapter.OnThreadClickedObservable.subscribe(watched1 -> {
             listener.OnThreadClicked(watched1.getID(), watched1.getTITLE(), watched1.getLASTPAGE(), watched1.getLASTREAD(), WhirlpoolUtils.getNumberOfPage(watched1.getREPLIES()), watched1.getFORUMID());
-        });
-        stickyHeaderAdapter.OnUnwatchClickedObservable.subscribe(thread
-                -> _controller.UnwatchThread(thread.getID()));
-        stickyHeaderAdapter.OnMarkAsReadClickedObservable.subscribe(
-                watched -> _controller.MarkThreadAsRead(watched.getID()));
-        stickyHeaderAdapter.OnGoToLastPageClickedObservable.subscribe(watched -> {
+        }));
+        mSubscriptions.add(stickyHeaderAdapter.OnUnwatchClickedObservable.subscribe(thread
+                -> _controller.UnwatchThread(thread.getID())));
+        mSubscriptions.add(stickyHeaderAdapter.OnMarkAsReadClickedObservable.subscribe(
+                watched -> _controller.MarkThreadAsRead(watched.getID())));
+        mSubscriptions.add(stickyHeaderAdapter.OnGoToLastPageClickedObservable.subscribe(watched -> {
             int lastPage = WhirlpoolUtils.getNumberOfPage(watched.getREPLIES());
             listener.OnThreadClicked(watched.getID(), watched.getTITLE(), lastPage, 0, lastPage, watched.getFORUMID());
-        });
+        }));
 
         watchedRecycleView.setAdapter(stickyHeaderAdapter);
         stickyRecyclerHeadersDecoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);

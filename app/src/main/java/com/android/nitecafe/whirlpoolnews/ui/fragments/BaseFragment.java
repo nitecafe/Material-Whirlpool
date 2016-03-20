@@ -8,13 +8,22 @@ import android.support.v7.app.AppCompatActivity;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IThreadActionMessageFragment;
 
+import rx.subscriptions.CompositeSubscription;
+
 public class BaseFragment extends Fragment implements IThreadActionMessageFragment {
+
+    protected CompositeSubscription mSubscriptions = new CompositeSubscription();
 
     protected void setToolbarTitle(String title) {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         ActionBar supportActionBar = activity.getSupportActionBar();
         if (supportActionBar != null)
             supportActionBar.setTitle(title);
+    }
+
+    @Override public void onDestroy() {
+        mSubscriptions.unsubscribe();
+        super.onDestroy();
     }
 
     @Override

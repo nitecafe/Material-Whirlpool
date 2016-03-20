@@ -287,13 +287,13 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
         @Override
         public Fragment getItem(int position) {
             final ScrapedPostChildFragment scrapedPostChildFragment = ScrapedPostChildFragment.newInstance(mThreadId, mThreadTitle, position + 1, mPostLastReadId);
-            scrapedPostChildFragment.OnPageCountUpdateSubject.subscribe(integer -> {
+            mSubscriptions.add(scrapedPostChildFragment.OnPageCountUpdateSubject.subscribe(integer -> {
                 if (integer != mTotalPage) {
                     this.mTotalPage = integer;
                     notifyDataSetChanged();
                     updatePageCount(mTotalPage);
                 }
-            });
+            }));
             scrapedPostChildFragment.attachRefreshSubject(OnRefreshClickedSubject);
             return scrapedPostChildFragment;
         }

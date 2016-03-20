@@ -91,12 +91,12 @@ public class ForumFragment extends BaseFragment implements IForumFragment {
         forumRecycleView.setLayoutManager(layoutManager);
 
         stickyHeaderAdapter = new ForumStickyHeaderAdapter(controller.favouriteThreadService);
-        stickyHeaderAdapter.getOnForumClickedObservable()
-                .subscribe(forum1 -> listener.onForumClicked(forum1.getID(), forum1.getTITLE()));
-        stickyHeaderAdapter.getOnAddToFavClickedObservable()
-                .subscribe(forum -> controller.AddToFavouriteList(forum.getID(), forum.getTITLE()));
-        stickyHeaderAdapter.getOnRemoveFromFavClickedObservable()
-                .subscribe(forum -> controller.RemoveFromFavouriteList(forum.getID()));
+        mSubscriptions.add(stickyHeaderAdapter.getOnForumClickedObservable()
+                .subscribe(forum1 -> listener.onForumClicked(forum1.getID(), forum1.getTITLE())));
+        mSubscriptions.add(stickyHeaderAdapter.getOnAddToFavClickedObservable()
+                .subscribe(forum -> controller.AddToFavouriteList(forum.getID(), forum.getTITLE())));
+        mSubscriptions.add(stickyHeaderAdapter.getOnRemoveFromFavClickedObservable()
+                .subscribe(forum -> controller.RemoveFromFavouriteList(forum.getID())));
 
         forumRecycleView.setAdapter(stickyHeaderAdapter);
         stickyRecyclerHeadersDecoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);

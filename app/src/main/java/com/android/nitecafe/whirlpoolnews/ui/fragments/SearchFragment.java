@@ -34,12 +34,12 @@ public class SearchFragment extends BaseFragment {
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
         setToolbarTitle("");
 
-        RxTextView.textChangeEvents(mQueryText).subscribe(event -> {
+        mSubscriptions.add(RxTextView.textChangeEvents(mQueryText).subscribe(event -> {
             if (event.text().length() > 1)
                 searchButton.setEnabled(true);
             else
                 searchButton.setEnabled(false);
-        });
+        }));
 
         return inflate;
     }

@@ -77,8 +77,8 @@ public class PostBookmarkFragment extends BaseFragment implements IPostBookmarkF
         postBookmarkRecycleView.setLayoutManager(layoutManager);
 
         bookmarkAdapter = new PostBookmarksAdapter();
-        bookmarkAdapter.OnRemoveFromBookmarkClickedSubject.subscribe(integer -> _controller.RemovePostBookmark(integer));
-        bookmarkAdapter.OnBookmarkClickedSubject.subscribe(postBookmark -> openBookmark(postBookmark));
+        mSubscriptions.add(bookmarkAdapter.OnRemoveFromBookmarkClickedSubject.subscribe(integer -> _controller.RemovePostBookmark(integer)));
+        mSubscriptions.add(bookmarkAdapter.OnBookmarkClickedSubject.subscribe(postBookmark -> openBookmark(postBookmark)));
         postBookmarkRecycleView.setAdapter(bookmarkAdapter);
 
         postBookmarkRecycleView.setDefaultOnRefreshListener(() -> _controller.GetPostBookmarks());

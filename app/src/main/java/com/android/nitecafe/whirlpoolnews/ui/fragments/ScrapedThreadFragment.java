@@ -169,17 +169,17 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
         mRecycleView.setLayoutManager(layoutManager);
 
         forumThreadAdapter = new ScrapedThreadAdapter(mIWatchedThreadService, preferencesGetter);
-        forumThreadAdapter.OnThreadClickedObservable
-                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), scrapedThread.getFORUMID()));
-        forumThreadAdapter.OnWatchClickedObservable.subscribe(thread
-                -> _controller.WatchThread(thread.getID()));
-        forumThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
-                _controller.UnwatchThread(recent.getID()));
-        forumThreadAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
-                _controller.MarkThreadAsRead(recent.getID()));
-        forumThreadAdapter.OnGoToLastPageClickedObservable.subscribe(scrapedThread -> {
+        mSubscriptions.add(forumThreadAdapter.OnThreadClickedObservable
+                .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), scrapedThread.getFORUMID())));
+        mSubscriptions.add(forumThreadAdapter.OnWatchClickedObservable.subscribe(thread
+                -> _controller.WatchThread(thread.getID())));
+        mSubscriptions.add(forumThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
+                _controller.UnwatchThread(recent.getID())));
+        mSubscriptions.add(forumThreadAdapter.OnMarkAsReadClickedObservable.subscribe(recent ->
+                _controller.MarkThreadAsRead(recent.getID())));
+        mSubscriptions.add(forumThreadAdapter.OnGoToLastPageClickedObservable.subscribe(scrapedThread -> {
             listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), 0, scrapedThread.getPageCount(), scrapedThread.getFORUMID());
-        });
+        }));
 
         mRecycleView.setAdapter(forumThreadAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
