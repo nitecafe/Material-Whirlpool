@@ -20,3 +20,9 @@ Forum Link: https://forums.whirlpool.net.au/forum-replies.cfm?t=2503715
 I will try my best to continously improve and add new features to this project.
 
 Check Release page for informations about Changelog.
+
+##Donations:
+
+Really enjoyed my app? Feel free to buy me a coffee. Thanks for the support. I really appreciate it. I develop and maintain this app out of my free time.
+
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=2ZKM3VF6DNG9G&lc=AU&item_name=Material%20Whirlpool&currency_code=AUD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted">Donate Here</a>
