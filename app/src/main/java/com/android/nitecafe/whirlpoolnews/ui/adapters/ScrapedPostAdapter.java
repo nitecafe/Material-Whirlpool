@@ -32,6 +32,7 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
     public PublishSubject<ScrapedPost> OnReplyPostClickedObservable = PublishSubject.create();
     public PublishSubject<PostBookmark> OnAddToBookmarkClickedObservable = PublishSubject.create();
     public PublishSubject<Integer> OnRemoveFromBookmarkClickedObservable = PublishSubject.create();
+    public PublishSubject<Integer> OnViewUserInfoClickedObservable = PublishSubject.create();
     private List<ScrapedPost> scrapedPosts = new ArrayList<>();
     private ScrapedPostChildController scrapedPostChildController;
 
@@ -132,6 +133,13 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
                     .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "Reply", ""))
                     .subscribe(OnReplyPostClickedObservable);
 
+            MenuItem userInfo = menu.add(R.string.context_menu_view_user_info);
+            RxMenuItem.clicks(userInfo).map(aVoid -> {
+                ScrapedPost scrapedPost = scrapedPosts.get(getAdapterPosition());
+                return Integer.parseInt(scrapedPost.getUser().getUserId());
+            })
+                    .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "View user info", ""))
+                    .subscribe(OnViewUserInfoClickedObservable);
 
             if (scrapedPostChildController.isABookmark(scrapedPosts.get(getAdapterPosition()).getIdInteger())) {
                 MenuItem removeBookmark = menu.add(R.string.context_menu_remove_bookmarks);

@@ -140,6 +140,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         mSubscriptions.add(scrapedPostAdapter.OnReplyPostClickedObservable.subscribe(scrapedPost -> LaunchReplyPostInBrowser(mThreadId, scrapedPost.getId())));
         mSubscriptions.add(scrapedPostAdapter.OnAddToBookmarkClickedObservable.subscribe(bookmark -> addBookMark(bookmark)));
         mSubscriptions.add(scrapedPostAdapter.OnRemoveFromBookmarkClickedObservable.subscribe(integer -> _controller.removeFromBookmark(integer)));
+        mSubscriptions.add(scrapedPostAdapter.OnViewUserInfoClickedObservable.subscribe(integer -> launchUserInfoPage(integer)));
 
         mRecycleView.setAdapter(scrapedPostAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
@@ -166,6 +167,11 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
 
     private void LaunchReplyPostInBrowser(int mThreadId, String replyId) {
         Uri url = Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadId) + "&r=" + String.valueOf(replyId));
+        launchBrowserSubject.onNext(url);
+    }
+
+    private void launchUserInfoPage(int userId) {
+        Uri url = Uri.parse(StringConstants.USER_INFO_URL + userId);
         launchBrowserSubject.onNext(url);
     }
 
