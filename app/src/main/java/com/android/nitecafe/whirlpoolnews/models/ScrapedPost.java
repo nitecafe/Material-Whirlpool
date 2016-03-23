@@ -9,6 +9,7 @@ public class ScrapedPost {
     private boolean edited;
     private boolean op;
     private boolean deleted;
+    private String shortCode;
 
     public ScrapedPost(String id, User user, String posted_time, String content, boolean edited, boolean op) {
         this.id = id;
@@ -53,5 +54,13 @@ public class ScrapedPost {
 
     public int getIdInteger() {
         return Integer.parseInt(id);
+    }
+
+    public String getShortCode() {
+        return shortCode;
+    }
+
+    public void setShortCode(String shortCode) {
+        this.shortCode = shortCode;
     }
 }

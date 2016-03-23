@@ -1,5 +1,6 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -76,7 +77,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         mThreadId = getArguments().getInt(THREAD_ID, 0);
         mPageToLoad = getArguments().getInt(THREAD_PAGE, 0);
         mPostLastReadId = getArguments().getInt(POST_LAST_READ, 0);
-        mThreadTitle = getArguments().getString(THREAD_TITLE, "");
+        mThreadTitle = Html.fromHtml(getArguments().getString(THREAD_TITLE, "")).toString();
     }
 
     @Override
@@ -128,7 +129,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
      */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        setToolbarTitle(Html.fromHtml(mThreadTitle).toString());
+        setToolbarTitle(mThreadTitle);
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
@@ -138,6 +139,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
 
         scrapedPostAdapter = new ScrapedPostAdapter(_controller);
         mSubscriptions.add(scrapedPostAdapter.OnReplyPostClickedObservable.subscribe(scrapedPost -> LaunchReplyPostInBrowser(mThreadId, scrapedPost.getId())));
+        mSubscriptions.add(scrapedPostAdapter.OnSharePostClickedObservable.subscribe(scrapedPost -> sharePostToOtherApp(scrapedPost)));
         mSubscriptions.add(scrapedPostAdapter.OnAddToBookmarkClickedObservable.subscribe(bookmark -> addBookMark(bookmark)));
         mSubscriptions.add(scrapedPostAdapter.OnRemoveFromBookmarkClickedObservable.subscribe(integer -> _controller.removeFromBookmark(integer)));
         mSubscriptions.add(scrapedPostAdapter.OnViewUserInfoClickedObservable.subscribe(integer -> launchUserInfoPage(integer)));
@@ -146,6 +148,15 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
 
         mRecycleView.setDefaultOnRefreshListener(this::loadPosts);
+    }
+
+    private void sharePostToOtherApp(String shortCode) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, mThreadTitle + " " + shortCode);
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, getContext().getString(R.string.sharing_post_intent_title)));
+
     }
 
     private void addBookMark(PostBookmark bookmark) {

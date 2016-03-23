@@ -370,6 +370,14 @@ public class ThreadScraper implements IThreadScraper {
                 // no usergroup, probably a deleted scrapedPost
             }
 
+            //get shortlink
+            String shortLink = "";
+            try {
+                shortLink = reply.select(".shortcode").get(0).text();
+            } catch (IndexOutOfBoundsException e) {
+                // no shortcode
+            }
+
             // get posted time
             try {
                 Element date_element = reply.select(".date").get(0);
@@ -390,6 +398,7 @@ public class ThreadScraper implements IThreadScraper {
 
             scrapedPost.setDeleted(deleted);
 
+            scrapedPost.setShortCode(shortLink);
             scrapedPosts.add(scrapedPost);
         }
 
