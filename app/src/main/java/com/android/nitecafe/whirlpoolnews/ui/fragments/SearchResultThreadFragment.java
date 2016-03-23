@@ -23,6 +23,7 @@ import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
+import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersTouchListener;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
     private int forumId;
     private int groupId;
     private String queryString;
+    private ForumFragment.IOnForumClicked forumClickListener;
 
     public static SearchResultThreadFragment newInstance(String query, int forumId, int groupId) {
         SearchResultThreadFragment fragment = new SearchResultThreadFragment();
@@ -78,11 +80,17 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
             listener = (IOnThreadClicked) context;
         else
             throw new ClassCastException("Activity must implement IOnThreadClicked");
+
+        if (context instanceof ForumFragment.IOnForumClicked)
+            forumClickListener = (ForumFragment.IOnForumClicked) context;
+        else
+            throw new ClassCastException("Activity must implement IOnForumClicked");
     }
 
     @Override
     public void onDetach() {
         listener = null;
+        forumClickListener = null;
         super.onDetach();
     }
 
@@ -126,8 +134,21 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
         SubscribeToObservables();
 
         recyclerView.setAdapter(popularThreadAdapter);
-        recyclerView.addItemDecoration(new StickyRecyclerHeadersDecoration(popularThreadAdapter));
+        StickyRecyclerHeadersDecoration stickyRecyclerHeadersDecoration = new StickyRecyclerHeadersDecoration(popularThreadAdapter);
+        recyclerView.addItemDecoration(stickyRecyclerHeadersDecoration);
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
+
+        StickyRecyclerHeadersTouchListener stickyRecyclerHeadersTouchListener = new StickyRecyclerHeadersTouchListener(recyclerView.mRecyclerView, stickyRecyclerHeadersDecoration);
+        stickyRecyclerHeadersTouchListener.setOnHeaderClickListener((header, position, headerId) -> {
+            TextView textView = (TextView) header;
+            int forumId = Integer.parseInt(header.getTag().toString());
+            openForum(forumId, textView.getText());
+        });
+        recyclerView.addOnItemTouchListener(stickyRecyclerHeadersTouchListener);
+    }
+
+    private void openForum(int forumId, CharSequence forumTitle) {
+        forumClickListener.onForumClicked(forumId, forumTitle.toString());
     }
 
     private void SubscribeToObservables() {

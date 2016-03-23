@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
@@ -22,6 +23,7 @@ import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
+import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersTouchListener;
 
 import java.util.List;
 
@@ -43,6 +45,7 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
     private WatchedThreadAdapter stickyHeaderAdapter;
     private IOnThreadClicked listener;
     private StickyRecyclerHeadersDecoration stickyRecyclerHeadersDecoration;
+    private ForumFragment.IOnForumClicked forumClickListener;
 
     @Override
     public void onResume() {
@@ -68,11 +71,17 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
             listener = (IOnThreadClicked) context;
         else
             throw new ClassCastException("Activity must implement IOnThreadClicked");
+
+        if (context instanceof ForumFragment.IOnForumClicked)
+            forumClickListener = (ForumFragment.IOnForumClicked) context;
+        else
+            throw new ClassCastException("Activity must implement IOnForumClicked");
     }
 
     @Override
     public void onDetach() {
         listener = null;
+        forumClickListener = null;
         super.onDetach();
     }
 
@@ -114,7 +123,18 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
         watchedRecycleView.addItemDecoration(stickyRecyclerHeadersDecoration);
         watchedRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
 
+        StickyRecyclerHeadersTouchListener stickyRecyclerHeadersTouchListener = new StickyRecyclerHeadersTouchListener(watchedRecycleView.mRecyclerView, stickyRecyclerHeadersDecoration);
+        stickyRecyclerHeadersTouchListener.setOnHeaderClickListener((header, position, headerId) -> {
+            TextView textView = (TextView) header;
+            int forumId = Integer.parseInt(header.getTag().toString());
+            openForum(forumId, textView.getText());
+        });
+        watchedRecycleView.addOnItemTouchListener(stickyRecyclerHeadersTouchListener);
         watchedRecycleView.setDefaultOnRefreshListener(this::loadWatched);
+    }
+
+    private void openForum(int forumId, CharSequence forumTitle) {
+        forumClickListener.onForumClicked(forumId, forumTitle.toString());
     }
 
     @Override

@@ -11,6 +11,9 @@ import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGette
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IStickyHeaderUtil;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
+/**
+ * For scraped threads
+ */
 public class PopularScrapedStickyThreadAdapter extends ScrapedThreadAdapter {
 
     private IStickyHeaderUtil mStickyHeaderUtil;
@@ -43,5 +46,8 @@ public class PopularScrapedStickyThreadAdapter extends ScrapedThreadAdapter {
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
         TextView textView = (TextView) holder.itemView;
         textView.setText(threadsList.get(position).getForum());
+
+        //set forum id into tag
+        holder.itemView.setTag(threadsList.get(position).getFORUMID());
     }
 }

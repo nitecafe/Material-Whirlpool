@@ -16,6 +16,11 @@ import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 
 import org.joda.time.DateTime;
 
+/**
+ * For non scraped threads
+ *
+ * @param <T>
+ */
 public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends ForumThreadAdapter<T> {
 
     private IStickyHeaderUtil mStickyHeaderUtil;
@@ -72,5 +77,8 @@ public class ThreadStickyHeaderAdapter<T extends IWhirlpoolThread> extends Forum
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
         TextView textView = (TextView) holder.itemView;
         textView.setText(threadsList.get(position).getFORUMNAME());
+
+        //set forum id into tag
+        holder.itemView.setTag(threadsList.get(position).getFORUMID());
     }
 }
