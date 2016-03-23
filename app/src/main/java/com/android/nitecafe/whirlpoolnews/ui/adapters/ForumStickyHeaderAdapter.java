@@ -25,6 +25,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.subjects.PublishSubject;
 
 public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHeaderAdapter.ForumViewHolder> {
@@ -106,7 +107,9 @@ public class ForumStickyHeaderAdapter extends UltimateViewAdapter<ForumStickyHea
             super(itemView);
             itemView.setOnCreateContextMenuListener(this);
             ButterKnife.bind(this, itemView);
-            RxView.clicks(itemView).map(aVoid1 -> forums.get(getAdapterPosition())).subscribe(OnForumClickedObservable);
+            RxView.clicks(itemView).map(aVoid1 -> forums.get(getAdapterPosition()))
+                    .onErrorResumeNext(Observable.<Forum>empty())
+                    .subscribe(OnForumClickedObservable);
         }
 
         @Override public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
