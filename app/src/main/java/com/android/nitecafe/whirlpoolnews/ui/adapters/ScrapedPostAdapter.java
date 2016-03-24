@@ -30,6 +30,7 @@ import rx.subjects.PublishSubject;
 public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.ScrapedPostViewHolder> {
 
     public PublishSubject<ScrapedPost> OnReplyPostClickedObservable = PublishSubject.create();
+    public PublishSubject<ScrapedPost> OnOpenCustomTabClickedObservable = PublishSubject.create();
     public PublishSubject<PostBookmark> OnAddToBookmarkClickedObservable = PublishSubject.create();
     public PublishSubject<Integer> OnRemoveFromBookmarkClickedObservable = PublishSubject.create();
     public PublishSubject<Integer> OnViewUserInfoClickedObservable = PublishSubject.create();
@@ -142,7 +143,7 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
                     .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "View user info", ""))
                     .subscribe(OnViewUserInfoClickedObservable);
 
-            MenuItem sharePost = menu.add("Share Post");
+            MenuItem sharePost = menu.add(R.string.context_menu_share_post);
             RxMenuItem.clicks(sharePost).map(aVoid -> scrapedPosts.get(getAdapterPosition()).getShortCode())
                     .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "Share post", ""))
                     .subscribe(OnSharePostClickedObservable);
@@ -162,6 +163,10 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
                         .subscribe(OnAddToBookmarkClickedObservable);
             }
 
+            MenuItem openCustomTab = menu.add(R.string.context_menu_open_web_version);
+            RxMenuItem.clicks(openCustomTab).map(aVoid -> scrapedPosts.get(getAdapterPosition()))
+                    .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "Open in Custom Tab", ""))
+                    .subscribe(OnOpenCustomTabClickedObservable);
         }
     }
 }

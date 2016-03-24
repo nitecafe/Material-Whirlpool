@@ -143,6 +143,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         mSubscriptions.add(scrapedPostAdapter.OnAddToBookmarkClickedObservable.subscribe(bookmark -> addBookMark(bookmark)));
         mSubscriptions.add(scrapedPostAdapter.OnRemoveFromBookmarkClickedObservable.subscribe(integer -> _controller.removeFromBookmark(integer)));
         mSubscriptions.add(scrapedPostAdapter.OnViewUserInfoClickedObservable.subscribe(integer -> launchUserInfoPage(integer)));
+        mSubscriptions.add(scrapedPostAdapter.OnOpenCustomTabClickedObservable.subscribe(scrapedPost -> LaunchPostInBrowser(scrapedPost.getId())));
 
         mRecycleView.setAdapter(scrapedPostAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
@@ -234,8 +235,12 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
 
     @Override
     public void LaunchThreadInBrowser() {
+        LaunchPostInBrowser(String.valueOf(mPostLastReadId));
+    }
+
+    private void LaunchPostInBrowser(String postId) {
         final Uri parse = Uri.parse(StringConstants.THREAD_URL + String.valueOf(mThreadId) + "&p=" +
-                String.valueOf(mPageToLoad) + "&#r" + String.valueOf(mPostLastReadId));
+                String.valueOf(mPageToLoad) + "&#r" + postId);
         launchBrowserSubject.onNext(parse);
     }
 

@@ -95,5 +95,7 @@
     <string name="drawer_item_settings">Settings</string>
     <string name="context_menu_view_user_info">View User Info</string>
     <string name="sharing_post_intent_title">Send To</string>
+    <string name="context_menu_share_post">Share Post</string>
+    <string name="context_menu_open_web_version">Open Web Version</string>
 
 </resources>
