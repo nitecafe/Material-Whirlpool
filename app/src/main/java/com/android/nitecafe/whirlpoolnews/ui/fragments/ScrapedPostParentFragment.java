@@ -242,6 +242,10 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
                     WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_TOOLBAR, "Refresh Post", "");
                     OnRefreshClickedSubject.onNext(null);
                     break;
+                case R.id.menuitem_open_web_version:
+                    WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_TOOLBAR, "Open Web Version", "");
+                    launchThreadInBrowser();
+                    break;
             }
             return true;
         });
@@ -249,6 +253,12 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
 
     private void launchReplyPageInBrowser() {
         Uri parse = Uri.parse(StringConstants.REPLY_URL + String.valueOf(mThreadId));
+        launchBrowserSubject.onNext(parse);
+    }
+
+    private void launchThreadInBrowser() {
+        Uri parse = Uri.parse(StringConstants.THREAD_URL + String.valueOf(mThreadId) + "&p=" +
+                String.valueOf(mPageToLoad));
         launchBrowserSubject.onNext(parse);
     }
 

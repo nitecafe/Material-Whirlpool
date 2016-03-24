@@ -30,6 +30,12 @@
         app:showAsAction="ifRoom"
         />
     <item
+        android:id="@+id/menuitem_open_web_version"
+        android:orderInCategory="299"
+        android:title="@string/context_menu_open_web_version"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/menuitem_refresh"
         android:orderInCategory="300"
         android:title="Refresh"
@@ -46,5 +52,4 @@
         android:orderInCategory="302"
         android:title="Go To Last Page"
         app:showAsAction="never"/>
-
 </menu>
