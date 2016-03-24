@@ -25,12 +25,15 @@ import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhimsService;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.functions.Func2;
 
 public class WhimsIntentService extends IntentService {
 
@@ -65,26 +68,34 @@ public class WhimsIntentService extends IntentService {
     }
 
     private void createNotificationContent(List<Whim> whims) {
-
+        Observable<List<Whim>> sortedList = Observable.from(whims).toSortedList(new Func2<Whim, Whim, Integer>() {
+            @Override public Integer call(Whim whim, Whim whim2) {
+                DateTime date1 = WhirlpoolDateUtils.getLocalDateFromString(whim.getDATE());
+                DateTime date2 = WhirlpoolDateUtils.getLocalDateFromString(whim2.getDATE());
+                return date2.compareTo(date1);
+            }
+        });
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
-        List<String> names = new ArrayList<>();
-        for (Whim w : whims) {
-            String sender = w.getFROM().getNAME();
-            names.add(sender);
-            Spannable sb = new SpannableString(sender + " " + w.getMESSAGE());
-            sb.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sender.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            inboxStyle.addLine(sb);
-        }
-        String content = TextUtils.join(", ", names);
+        sortedList.subscribe(whims1 -> {
+            List<String> names = new ArrayList<>();
+            for (Whim w : whims) {
+                String sender = w.getFROM().getNAME();
+                names.add(sender);
+                Spannable sb = new SpannableString(sender + " " + w.getMESSAGE());
+                sb.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, sender.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                inboxStyle.addLine(sb);
+            }
+            String content = TextUtils.join(", ", names);
 
-        String title;
-        if (whims.size() > 1)
-            title = whims.size() + " new private messages";
-        else
-            title = whims.size() + " new private message";
+            String title;
+            if (whims.size() > 1)
+                title = whims.size() + " new private messages";
+            else
+                title = whims.size() + " new private message";
 
-        notifyNewUnreadWhims(title, content, inboxStyle);
+            notifyNewUnreadWhims(title, content, inboxStyle);
+        }, throwable -> Log.e("WhimsIntentService", throwable.getMessage()));
     }
 
     private void notifyNewUnreadWhims(String title, String content, NotificationCompat.InboxStyle inboxStyle) {

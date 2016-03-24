@@ -24,6 +24,8 @@ import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolDateUtils;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,24 +67,30 @@ public class WatchedThreadsIntentService extends IntentService {
 
     private void createNotificationContent(List<Watched> watcheds) {
 
+        Observable<List<Watched>> listObservable = Observable.from(watcheds).toSortedList((watched, watched2) -> {
+            DateTime firstDate = WhirlpoolDateUtils.getLocalDateFromString(watched.getLASTDATE());
+            DateTime secondDate = WhirlpoolDateUtils.getLocalDateFromString(watched2.getLASTDATE());
+            return secondDate.compareTo(firstDate);
+        });
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
-        List<String> titleList = new ArrayList<>();
-        for (Watched w : watcheds) {
-            String spanned = Html.fromHtml(w.getTITLE()).toString();
-            titleList.add(spanned);
-            inboxStyle.addLine(spanned);
-        }
-        String content = TextUtils.join(" | ", titleList);
+        listObservable.subscribe(orderedWatchedList -> {
+            List<String> titleList = new ArrayList<>();
+            for (Watched w : orderedWatchedList) {
+                String spanned = Html.fromHtml(w.getTITLE()).toString();
+                titleList.add(spanned);
+                inboxStyle.addLine(spanned);
+            }
+            String content = TextUtils.join(" | ", titleList);
 
-        String title;
-        if (watcheds.size() > 1)
-            title = watcheds.size() + " threads with new replies";
-        else
-            title = watcheds.size() + " thread with new replies";
+            String title;
+            if (watcheds.size() > 1)
+                title = watcheds.size() + " threads with new replies";
+            else
+                title = watcheds.size() + " thread with new replies";
 
-
-        notifyNewUnreadThreads(title, content, inboxStyle);
+            notifyNewUnreadThreads(title, content, inboxStyle);
+        }, throwable -> Log.e("WatchedIntentService", throwable.getMessage()));
     }
 
     private void notifyNewUnreadThreads(String title, String content, NotificationCompat.InboxStyle inboxStyle) {
