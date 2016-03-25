@@ -12,6 +12,7 @@ import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.models.IThreadBase;
+import com.android.nitecafe.whirlpoolnews.utilities.ThreadScraper;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.jakewharton.rxbinding.view.RxMenuItem;
 import com.jakewharton.rxbinding.view.RxView;
@@ -32,6 +33,7 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
     public PublishSubject<T> OnMarkAsReadClickedObservable = PublishSubject.create();
     public PublishSubject<T> OnUnwatchClickedObservable = PublishSubject.create();
     public PublishSubject<T> OnGoToLastPageClickedObservable = PublishSubject.create();
+    public PublishSubject<T> OnOpenWebVersionClickObservable = PublishSubject.create();
     protected List<T> threadsList = new ArrayList<>();
     private IWatchedThreadService mWatchedThreadIdentifier;
 
@@ -98,6 +100,13 @@ public abstract class ThreadBaseAdapter<T extends IThreadBase> extends UltimateV
             RxMenuItem.clicks(lastPage).map(aVoid -> t)
                     .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_THREAD_CONTEXT_MENU, "Go To Last Page", ""))
                     .subscribe(OnGoToLastPageClickedObservable);
+
+            if (ThreadScraper.isPublicForum(t.getFORUMID())) {
+                MenuItem openWebVersion = menu.add(R.string.context_menu_open_web_version);
+                RxMenuItem.clicks(openWebVersion).map(aVoid -> t)
+                        .doOnNext(integer -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_THREAD_CONTEXT_MENU, "Open Web Version", ""))
+                        .subscribe(OnOpenWebVersionClickObservable);
+            }
         }
     }
 }

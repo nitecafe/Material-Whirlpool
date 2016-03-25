@@ -107,6 +107,8 @@ public class RecentFragment extends BaseFragment implements IRecentFragment {
 
         mSubscriptions.add(stickyHeaderAdapter.OnThreadClickedObservable.subscribe(
                 recent -> listener.OnThreadClicked(recent.getID(), recent.getTITLE(), WhirlpoolUtils.getNumberOfPage(recent.getREPLIES()), recent.getFORUMID())));
+        mSubscriptions.add(stickyHeaderAdapter.OnOpenWebVersionClickObservable.subscribe(
+                recent -> listener.OnOpenWebVersionClicked(recent.getID(), WhirlpoolUtils.getNumberOfPage(recent.getREPLIES()))));
         mSubscriptions.add(stickyHeaderAdapter.OnWatchClickedObservable.subscribe(thread
                 -> _controller.WatchThread(thread.getID())));
         mSubscriptions.add(stickyHeaderAdapter.OnUnwatchClickedObservable.subscribe(recent ->

@@ -109,6 +109,9 @@ public class WatchedChildFragment extends BaseFragment implements IWatchedFragme
         mSubscriptions.add(stickyHeaderAdapter.OnThreadClickedObservable.subscribe(watched1 -> {
             listener.OnThreadClicked(watched1.getID(), watched1.getTITLE(), watched1.getLASTPAGE(), watched1.getLASTREAD(), WhirlpoolUtils.getNumberOfPage(watched1.getREPLIES()), watched1.getFORUMID());
         }));
+        mSubscriptions.add(stickyHeaderAdapter.OnOpenWebVersionClickObservable.subscribe(watched1 -> {
+            listener.OnOpenWebVersionClicked(watched1.getID(), watched1.getLASTPAGE(), watched1.getLASTREAD());
+        }));
         mSubscriptions.add(stickyHeaderAdapter.OnUnwatchClickedObservable.subscribe(thread
                 -> _controller.UnwatchThread(thread.getID())));
         mSubscriptions.add(stickyHeaderAdapter.OnMarkAsReadClickedObservable.subscribe(

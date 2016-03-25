@@ -264,10 +264,21 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         if (ThreadScraper.isPublicForum(forumId))
             startPostViewPagerFragment(threadId, threadTitle, totalPage, lastPageRead, lastReadId);
         else {
-            final Uri parse = Uri.parse(StringConstants.THREAD_URL + String.valueOf(threadId) + "&p=" +
-                    String.valueOf(lastPageRead) + "&#r" + String.valueOf(lastReadId));
-            launchCustomTab(parse);
+            OnOpenWebVersionClicked(threadId, lastPageRead, lastReadId);
         }
+    }
+
+    @Override public void OnOpenWebVersionClicked(int threadId, int totalPage) {
+        if (preferencesGetter.getOpenLastPage())
+            OnOpenWebVersionClicked(threadId, totalPage, 0);
+        else
+            OnOpenWebVersionClicked(threadId, 1, 0);
+    }
+
+    @Override public void OnOpenWebVersionClicked(int threadId, int lastPageRead, int lastReadId) {
+        final Uri parse = Uri.parse(StringConstants.THREAD_URL + String.valueOf(threadId) + "&p=" +
+                String.valueOf(lastPageRead) + "&#r" + String.valueOf(lastReadId));
+        launchCustomTab(parse);
     }
 
     private void launchCustomTab(Uri uri) {

@@ -123,6 +123,8 @@ public class ThreadFragment extends BaseFragment implements IThreadFragment {
 
         mSubscriptions.add(forumThreadAdapter.OnThreadClickedObservable.subscribe(
                 thread -> listener.OnThreadClicked(thread.getID(), thread.getTITLE(), WhirlpoolUtils.getNumberOfPage(thread.getREPLIES()), thread.getFORUMID())));
+        mSubscriptions.add(forumThreadAdapter.OnOpenWebVersionClickObservable.subscribe(
+                thread -> listener.OnOpenWebVersionClicked(thread.getID(), WhirlpoolUtils.getNumberOfPage(thread.getREPLIES()))));
         mSubscriptions.add(forumThreadAdapter.OnWatchClickedObservable.subscribe(thread
                 -> _controller.WatchThread(thread.getID())));
         mSubscriptions.add(forumThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->

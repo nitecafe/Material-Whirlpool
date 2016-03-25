@@ -154,6 +154,8 @@ public class SearchResultThreadFragment extends BaseFragment implements ISearchR
     private void SubscribeToObservables() {
         mSubscriptions.add(popularThreadAdapter.OnThreadClickedObservable
                 .subscribe(scrapedThread -> listener.OnThreadClicked(scrapedThread.getID(), scrapedThread.getTitle(), scrapedThread.getPageCount(), scrapedThread.getFORUMID())));
+        mSubscriptions.add(popularThreadAdapter.OnOpenWebVersionClickObservable
+                .subscribe(scrapedThread -> listener.OnOpenWebVersionClicked(scrapedThread.getID(), scrapedThread.getPageCount())));
         mSubscriptions.add(popularThreadAdapter.OnWatchClickedObservable.subscribe(thread
                 -> controller.WatchThread(thread.getID())));
         mSubscriptions.add(popularThreadAdapter.OnUnwatchClickedObservable.subscribe(recent ->
