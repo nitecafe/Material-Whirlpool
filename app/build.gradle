@@ -29,7 +29,7 @@ android {
         applicationId "com.android.nitecafe.whirlpoolnews"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 5
+        versionCode 6
         versionName "2.4"
     }
     buildTypes {
