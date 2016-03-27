@@ -211,6 +211,11 @@ public class ScrapedPostParentFragment extends BaseFragment implements IScrapedP
     }
 
     private void SetupToolbar() {
+        if (mController.isDarkTheme())
+            postToolbar.setPopupTheme(R.style.WhirlpoolToolbarStyle_Dark);
+        else
+            postToolbar.setPopupTheme(R.style.WhirlpoolToolbarStyle);
+
         postToolbar.inflateMenu(R.menu.menu_post_toolbar);
         postToolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
