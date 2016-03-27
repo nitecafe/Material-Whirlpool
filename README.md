@@ -25,4 +25,4 @@ Check Release page for informations about Changelog.
 
 Really enjoyed my app? Feel free to buy me a coffee. Thanks for the support. I really appreciate it. I develop and maintain this app out of my free time.
 
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=2ZKM3VF6DNG9G&lc=AU&item_name=Material%20Whirlpool&currency_code=AUD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted">Donate Here</a>
+https://www.paypal.me/nitecafe
