@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.nitecafe.whirlpoolnews.R;
@@ -234,7 +235,6 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
 
     private void SetSpinnerArrowToWhite() {
         mSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-
     }
 
     private int getCurrentGroupId(String item) {
@@ -261,13 +261,18 @@ public class ScrapedThreadFragment extends BaseFragment implements IScrapedThrea
             setSpinnerListener();
             mThreadGroups = groups;
         }
-
     }
 
     private void setSpinnerListener() {
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                SpinnerAdapter adapter = mSpinner.getAdapter();
+                int count = adapter.getCount();
+                //extra check to see if it can fix the elusive index out of bounds crash related to spinner
+                if (position >= count)
+                    return;
+
                 spinnerSelectedPosition = position;
                 final String item = (String) mSpinner.getAdapter().getItem(position);
                 int selectedGroupId = getCurrentGroupId(item);
