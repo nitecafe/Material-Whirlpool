@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_reply_post"
+        android:src="@drawable/ic_reply_24dp"
         android:visibility="gone"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -3,14 +3,14 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menuitem_back_thread"
-        android:icon="@drawable/ic_back_arrow"
+        android:icon="@drawable/ic_chevron_left_24dp"
         android:orderInCategory="200"
         android:title="Previous Page"
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/menuitem_next_thread"
-        android:icon="@drawable/ic_forward_arrow"
+        android:icon="@drawable/ic_chevron_right_24dp"
         android:orderInCategory="300"
         android:title="Next page"
         app:showAsAction="ifRoom"/>

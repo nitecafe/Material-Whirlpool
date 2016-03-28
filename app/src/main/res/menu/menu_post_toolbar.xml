@@ -3,53 +3,55 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menuitem_mark_read"
-        android:icon="@drawable/ic_mark_read"
+        android:icon="@drawable/ic_mark_as_read_24dp"
         android:orderInCategory="100"
         android:title="Mark as Read"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/menuitem_reply_post"
-        android:icon="@drawable/ic_reply_post"
+        android:icon="@drawable/ic_reply_24dp"
         android:orderInCategory="101"
         android:title="Reply"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/menuitem_watch_post"
-        android:icon="@drawable/ic_watch_thread"
+        android:icon="@drawable/ic_watch_thread_24dp"
         android:orderInCategory="200"
         android:title="Watch Thread"
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/menuitem_unwatch_post"
-        android:icon="@drawable/ic_unwatch_thread"
+        android:icon="@drawable/ic_unwatch_thread_24dp"
         android:orderInCategory="200"
         android:title="Unwatch Thread"
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/menuitem_open_web_version"
+        android:icon="@drawable/ic_open_web_version_24dp"
         android:orderInCategory="299"
         android:title="@string/context_menu_open_web_version"
-        app:showAsAction="never"/>
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/menuitem_refresh"
+        android:icon="@drawable/ic_refresh_24dp"
         android:orderInCategory="300"
         android:title="Refresh"
-        app:showAsAction="never"/>
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menuitem_go_to_first_page"
-        android:icon="@drawable/ic_go_to_first_post"
+        android:icon="@drawable/ic_go_first_page_24dp"
         android:orderInCategory="301"
         android:title="Go To First Page"
-        app:showAsAction="never"/>
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menuitem_go_to_last_page"
-        android:icon="@drawable/ic_go_to_last_post"
+        android:icon="@drawable/ic_go_last_page_24dp"
         android:orderInCategory="302"
         android:title="Go To Last Page"
-        app:showAsAction="never"/>
+        app:showAsAction="ifRoom"/>
 </menu>
