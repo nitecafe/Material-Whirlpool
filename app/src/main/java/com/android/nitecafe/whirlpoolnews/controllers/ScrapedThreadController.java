@@ -65,16 +65,20 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
     }
 
     public void loadNextPage(int forumId, int groupId) {
-        if (IsAtLastPage())
-            throw new IllegalArgumentException("Current page is the last page.");
+        if (IsAtLastPage()) {
+            return; //ui slow to update so can't throw exception
+//            throw new IllegalArgumentException("Current page is the last page.");
+        }
 
         threadFragment.ShowRefreshLoader();
         GetScrapedThreads(forumId, ++currentPage, groupId);
     }
 
     public void loadPreviousPage(int forumId, int groupId) {
-        if (IsAtFirstPage())
-            throw new IllegalArgumentException("Current page is the first page.");
+        if (IsAtFirstPage()) {
+            return; // ui slow to update so can't throw exception
+//            throw new IllegalArgumentException("Current page is the first page.");
+        }
 
         threadFragment.ShowRefreshLoader();
         GetScrapedThreads(forumId, --currentPage, groupId);
