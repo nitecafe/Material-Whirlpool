@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.nitecafe.whirlpoolnews.R;
@@ -18,6 +19,7 @@ import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
 import com.jakewharton.rxbinding.view.RxMenuItem;
+import com.jakewharton.rxbinding.view.RxView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 
 import java.util.ArrayList;
@@ -112,7 +114,7 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
 
     public class ScrapedPostViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         public View itemView;
-        @Bind(R.id.post_user) TextView postUser;
+        @Bind(R.id.post_user) Button postUser;
         @Bind(R.id.post_posted_time) TextView postPostedtime;
         @Bind(R.id.post_extra) TextView postExtra;
         @Bind(R.id.post_content) TextView postContent;
@@ -125,6 +127,13 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
             itemView.setOnCreateContextMenuListener(this);
             ButterKnife.bind(this, itemView);
             WhirlpoolUtils.allowLinksInTextViewToBeClickable(postContent);
+
+            RxView.clicks(postUser).map(aVoid -> {
+                ScrapedPost scrapedPost = scrapedPosts.get(getAdapterPosition());
+                return Integer.parseInt(scrapedPost.getUser().getUserId());
+            })
+                    .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "View user info", ""))
+                    .subscribe(OnViewUserInfoClickedObservable);
         }
 
         @Override
@@ -134,14 +143,6 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
             RxMenuItem.clicks(reply).map(aVoid -> scrapedPosts.get(getAdapterPosition()))
                     .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "Reply", ""))
                     .subscribe(OnReplyPostClickedObservable);
-
-            MenuItem userInfo = menu.add(R.string.context_menu_view_user_info);
-            RxMenuItem.clicks(userInfo).map(aVoid -> {
-                ScrapedPost scrapedPost = scrapedPosts.get(getAdapterPosition());
-                return Integer.parseInt(scrapedPost.getUser().getUserId());
-            })
-                    .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "View user info", ""))
-                    .subscribe(OnViewUserInfoClickedObservable);
 
             MenuItem sharePost = menu.add(R.string.context_menu_share_post);
             RxMenuItem.clicks(sharePost).map(aVoid -> scrapedPosts.get(getAdapterPosition()).getShortCode())
