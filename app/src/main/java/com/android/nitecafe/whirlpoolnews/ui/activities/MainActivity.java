@@ -51,7 +51,7 @@ import rx.subjects.PublishSubject;
 
 public class MainActivity extends NavigationDrawerActivity implements LoginFragment.OnShowHomeScreenListener, ForumFragment.IOnForumClicked, IOnThreadClicked, IOnWhimClicked, IOnSearchClicked {
 
-    private final String previousVersion = "2.3";
+    private final String previousVersion = "2.4";
     @Inject IWhirlpoolRestClient mWhirlpoolRestClient;
     @Bind(R.id.fab_create_thread) FloatingActionButton fabCreateThread;
     @Bind(R.id.fab_reply_whim) FloatingActionButton fabReplyWhim;
