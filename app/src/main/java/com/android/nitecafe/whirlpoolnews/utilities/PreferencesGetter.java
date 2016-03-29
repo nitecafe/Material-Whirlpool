@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.android.nitecafe.whirlpoolnews.R;
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 
 public class PreferencesGetter implements IPreferencesGetter {
@@ -51,5 +52,10 @@ public class PreferencesGetter implements IPreferencesGetter {
     @Override
     public String getWhimsNotificationFrequency() {
         return sharedPreferences.getString(context.getResources().getString(R.string.whims_notifications_frequency_key), "");
+    }
+
+    @Override
+    public String getUserName() {
+        return sharedPreferences.getString(StringConstants.USERNAME, "");
     }
 }

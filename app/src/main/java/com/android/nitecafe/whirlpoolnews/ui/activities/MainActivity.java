@@ -89,7 +89,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         mSubscriptions.add(prefetchSubject.subscribe(uri -> prefetchUrl(uri)));
         mSubscriptions.add(prefetchBundleSubject.subscribe(bundles -> prefetchBundle(bundles)));
 
-        final String userNameFromPreference = getUserNameFromPreference();
+        final String userNameFromPreference = preferencesGetter.getUserName();
         if (!userNameFromPreference.isEmpty()) {
             updateProfileDetails(userNameFromPreference);
             Pushbots.sharedInstance().setAlias(userNameFromPreference);
@@ -180,10 +180,6 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
             getTheme().applyStyle(R.style.VeryLargeTextSize, true);
         else if (fontSize.equals(getString(R.string.font_size_super_large)))
             getTheme().applyStyle(R.style.SuperLargeTextSize, true);
-    }
-
-    private String getUserNameFromPreference() {
-        return mSharedPreferences.getString(StringConstants.USERNAME, "");
     }
 
     private void parseInternalLink() {

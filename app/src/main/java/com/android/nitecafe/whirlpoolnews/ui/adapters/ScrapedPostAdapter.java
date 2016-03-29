@@ -1,5 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.ui.adapters;
 
+import android.content.res.ColorStateList;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
@@ -18,6 +20,7 @@ import com.android.nitecafe.whirlpoolnews.controllers.ScrapedPostChildController
 import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.jakewharton.rxbinding.view.RxMenuItem;
 import com.jakewharton.rxbinding.view.RxView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
@@ -39,9 +42,12 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
     public PublishSubject<String> OnSharePostClickedObservable = PublishSubject.create();
     private List<ScrapedPost> scrapedPosts = new ArrayList<>();
     private ScrapedPostChildController scrapedPostChildController;
+    private IPreferencesGetter preferencesGetter;
+    private ColorStateList userNameDefaultColor;
 
-    public ScrapedPostAdapter(ScrapedPostChildController scrapedPostChildController) {
+    public ScrapedPostAdapter(ScrapedPostChildController scrapedPostChildController, IPreferencesGetter preferencesGetter) {
         this.scrapedPostChildController = scrapedPostChildController;
+        this.preferencesGetter = preferencesGetter;
     }
 
     public void SetPosts(List<ScrapedPost> posts) {
@@ -62,9 +68,18 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
 
     @Override
     public void onBindViewHolder(ScrapedPostViewHolder holder, int position) {
+        if (userNameDefaultColor == null)
+            userNameDefaultColor = holder.postUser.getTextColors();
+
         final ScrapedPost scrapedPost = scrapedPosts.get(position);
 
-        holder.postUser.setText(scrapedPost.getUser().getUserName());
+        String userName = scrapedPost.getUser().getUserName();
+        if (userName.equals(preferencesGetter.getUserName()))
+            holder.postUser.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.orange));
+        else
+            holder.postUser.setTextColor(userNameDefaultColor);
+
+        holder.postUser.setText(userName);
         holder.postPostedtime.setText(scrapedPost.getPosted_time());
 
         if (scrapedPost.isEdited())

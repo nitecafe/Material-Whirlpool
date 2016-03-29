@@ -19,4 +19,6 @@ public interface IPreferencesGetter {
     String getWatchedThreadsNotificationFrequency();
 
     String getWhimsNotificationFrequency();
+
+    String getUserName();
 }

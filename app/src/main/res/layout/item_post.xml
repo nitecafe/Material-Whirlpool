@@ -27,7 +27,6 @@
             android:minWidth="0dp"
             android:padding="0dp"
             android:textAllCaps="false"
-            android:textStyle="bold"
             />
 
         <TextView

@@ -24,6 +24,7 @@ import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedPostAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostChildFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -49,6 +50,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     private final int maxNumberOfPostReplyPrefetch = 2;
     public PublishSubject<Integer> OnPageCountUpdateSubject = PublishSubject.create();
     @Inject ScrapedPostChildController _controller;
+    @Inject IPreferencesGetter preferencesGetter;
     @Inject @Named("browser") PublishSubject<Uri> launchBrowserSubject;
     @Inject @Named("prefetchBundle") PublishSubject<List<Bundle>> prefetchBundleSubject;
     @Bind(R.id.post_recycle_view) UltimateRecyclerView mRecycleView;
@@ -137,7 +139,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecycleView.setLayoutManager(layoutManager);
 
-        scrapedPostAdapter = new ScrapedPostAdapter(_controller);
+        scrapedPostAdapter = new ScrapedPostAdapter(_controller, preferencesGetter);
         mSubscriptions.add(scrapedPostAdapter.OnReplyPostClickedObservable.subscribe(scrapedPost -> LaunchReplyPostInBrowser(mThreadId, scrapedPost.getId())));
         mSubscriptions.add(scrapedPostAdapter.OnSharePostClickedObservable.subscribe(scrapedPost -> sharePostToOtherApp(scrapedPost)));
         mSubscriptions.add(scrapedPostAdapter.OnAddToBookmarkClickedObservable.subscribe(bookmark -> addBookMark(bookmark)));
