@@ -62,6 +62,8 @@ public class ScrapedThreadController extends ThreadBaseController<IScrapedThread
     private void saveGroups(Map<String, Integer> threadGroup) {
         if (threadGroup.size() > 0)
             groups = threadGroup;
+        else
+            groups.clear();
     }
 
     public void loadNextPage(int forumId, int groupId) {

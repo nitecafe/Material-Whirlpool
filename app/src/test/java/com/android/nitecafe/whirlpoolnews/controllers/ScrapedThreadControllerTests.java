@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.controllers;
 
 
+import com.android.nitecafe.whirlpoolnews.models.ScrapedThread;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedThreadList;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedThreadFragment;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
@@ -10,9 +11,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import rx.Observable;
 
@@ -43,6 +50,58 @@ public class ScrapedThreadControllerTests {
 
         //assert
         Mockito.verify(mIWhirlpoolRestClientMock).GetScrapedThreads(forumId, 1, groupId);
+    }
+
+    @Test
+    public void GetScrapedThreads_WhenOnlyThreadGroup_SetupSpinnerWithOneGroups() {
+
+        //arrange
+        int forumId = 111;
+        int groupId = 222;
+        ScrapedThreadList threadList = new ScrapedThreadList(forumId, "forum");
+        Map<String, Integer> groupsMap = new HashMap<>();
+        groupsMap.put("NBN", 123);
+        threadList.setGroups(groupsMap);
+        ScrapedThread scrapedThread = new ScrapedThread(1, "title", new Date(), "Graham", "forum", forumId);
+        ArrayList<ScrapedThread> scrapedThreads = new ArrayList<>();
+        scrapedThreads.add(scrapedThread);
+        threadList.setThreads(scrapedThreads);
+        Mockito.when(mIWhirlpoolRestClientMock.GetScrapedThreads(forumId, 1, groupId)).
+                thenReturn(Observable.just(threadList));
+
+        //act
+        controller.GetScrapedThreads(forumId, groupId);
+
+        //assert
+        ArgumentCaptor<HashMap> captor = ArgumentCaptor.forClass(HashMap.class);
+        Mockito.verify(mFragmentMock).SetupGroupSpinnerDropDown(captor.capture(), Mockito.anyInt());
+        Assert.assertEquals(1, captor.getValue().size());
+    }
+
+    @Test
+    public void GetScrapedThreads_WhenNoThreadGroup_SetupSpinnerWithNoGroups() {
+
+        //arrange
+        int forumId = 111;
+        int groupId = 222;
+        ScrapedThreadList threadList = new ScrapedThreadList(forumId, "forum");
+        Map<String, Integer> groupsMap = new HashMap<>();
+        threadList.setGroups(groupsMap);
+        ScrapedThread scrapedThread = new ScrapedThread(1, "title", new Date(), "Graham", "forum", forumId);
+        ArrayList<ScrapedThread> scrapedThreads = new ArrayList<>();
+        scrapedThreads.add(scrapedThread);
+        threadList.setThreads(scrapedThreads);
+        Mockito.when(mIWhirlpoolRestClientMock.GetScrapedThreads(forumId, 1, groupId)).
+                thenReturn(Observable.just(threadList));
+
+        //act
+        controller.GetScrapedThreads(forumId, groupId);
+
+        //assert
+        ArgumentCaptor<HashMap> captor = ArgumentCaptor.forClass(HashMap.class);
+        Mockito.verify(mFragmentMock).SetupGroupSpinnerDropDown(captor.capture(), Mockito.anyInt());
+        Assert.assertEquals(0, captor.getValue().size());
+
     }
 
     @Test(expected = IllegalArgumentException.class)
