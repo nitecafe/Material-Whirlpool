@@ -1,6 +1,7 @@
 package com.android.nitecafe.whirlpoolnews.ui.fragments;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -13,11 +14,13 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
+import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
 import com.android.nitecafe.whirlpoolnews.controllers.LoginController;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.ILoginFragment;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,6 +32,7 @@ public class LoginFragment extends BaseFragment implements ILoginFragment {
     public PublishSubject<String> UserNameSubject = PublishSubject.create();
     @Bind(R.id.input_apikey) EditText mApiKeyText;
     @Bind(R.id.btn_login) AppCompatButton saveButton;
+    @Inject @Named("browser") PublishSubject<Uri> launchBrowserSubject;
     @Inject LoginController mLoginController;
     private OnShowHomeScreenListener listener;
     private MaterialDialog progressLoader;
@@ -90,6 +94,11 @@ public class LoginFragment extends BaseFragment implements ILoginFragment {
     @OnClick(R.id.btn_login)
     public void login() {
         mLoginController.login(mApiKeyText.getText().toString());
+    }
+
+    @OnClick(R.id.link_signup)
+    public void openWebProfilePage() {
+        launchBrowserSubject.onNext(Uri.parse(StringConstants.WHIRLPOOL_PROFILE_URL));
     }
 
     @Override

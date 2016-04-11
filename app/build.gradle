@@ -70,12 +70,12 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
 
     //google
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:design:23.2.1'
-    compile 'com.android.support:preference-v7:23.2.1'
-    compile 'com.android.support:preference-v14:23.2.1'
-    compile 'com.android.support:cardview-v7:23.2.1'
-    compile 'com.android.support:customtabs:23.2.1'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:preference-v7:23.3.0'
+    compile 'com.android.support:preference-v14:23.3.0'
+    compile 'com.android.support:cardview-v7:23.3.0'
+    compile 'com.android.support:customtabs:23.3.0'
     compile 'com.google.android.gms:play-services-analytics:8.4.0'
 
     //retrofit
@@ -88,15 +88,15 @@ dependencies {
     provided 'frankiesardo:icepick-processor:3.2.0'
     
     //rxjava
-    compile 'io.reactivex:rxjava:1.1.1'
+    compile 'io.reactivex:rxjava:1.1.3'
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
 
     //injections
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.marshalchen.ultimaterecyclerview:library:0.4.0'
-    apt 'com.google.dagger:dagger-compiler:2.0.2'
-    compile 'com.google.dagger:dagger:2.0.2'
+    apt 'com.google.dagger:dagger-compiler:2.2'
+    compile 'com.google.dagger:dagger:2.2'
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
     //rxjava
@@ -109,25 +109,25 @@ dependencies {
 
     compile 'org.jsoup:jsoup:1.8.3'
     compile 'me.zhanghai.android.materialprogressbar:library:1.1.5'
-    compile('com.mikepenz:materialdrawer:5.1.4@aar') {
+    compile('com.mikepenz:materialdrawer:5.1.9@aar') {
         transitive = true
     }
     compile('com.github.ganfra:material-spinner:1.1.1') {
         exclude group: 'com.nineoldandroids', module: 'library'
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.7@aar') {
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.8@aar') {
         transitive = true
     }
 
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
-    compile('com.mikepenz:aboutlibraries:5.5.9@aar') {
+    compile('com.mikepenz:aboutlibraries:5.6.5@aar') {
         transitive = true
     }
     compile 'com.pushbots:pushbots-lib:2.0.13@aar'
-    compile 'joda-time:joda-time:2.9.2'
+    compile 'joda-time:joda-time:2.9.3'
 }
 
 apply plugin: 'com.google.gms.google-services'

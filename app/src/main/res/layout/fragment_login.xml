@@ -51,6 +51,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
+            android:clickable="true"
             android:gravity="center"
             android:text="No API key? Find it in Account settings"
             android:textSize="16sp"/>
