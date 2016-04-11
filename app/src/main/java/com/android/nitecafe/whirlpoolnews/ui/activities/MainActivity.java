@@ -208,8 +208,18 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     private void updateWhimDrawerItemBadge() {
         mSubscriptions.add(whimsService.GetNumberOfUnreadWhims().
-                subscribe(integer -> setPrivateMessagesBadgeCount(integer),
-                        throwable -> Log.e("MainActivity", "Failed to retrieve whim.")));
+                subscribe(integer -> {
+                            if (integer == 0)
+                                hidePrivateMessagesBadgeCount();
+                            else
+                                setPrivateMessagesBadgeCount(integer);
+                        },
+                        throwable -> Log.e("MainActivity", "Failed to retrieve whim.")
+                ));
+    }
+
+    private void hidePrivateMessagesBadgeCount() {
+        whimsDrawerItem.withBadge((String) null);
     }
 
     private void setPrivateMessagesBadgeCount(Integer integer) {
