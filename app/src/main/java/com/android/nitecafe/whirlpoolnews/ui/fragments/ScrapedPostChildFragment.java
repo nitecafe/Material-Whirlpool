@@ -140,6 +140,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         mRecycleView.setLayoutManager(layoutManager);
 
         scrapedPostAdapter = new ScrapedPostAdapter(_controller, preferencesGetter);
+        mSubscriptions.add(scrapedPostAdapter.OnEditPostClickedObservable.subscribe(scrapedPost -> LaunchEditPostInBrowser(scrapedPost.getId())));
         mSubscriptions.add(scrapedPostAdapter.OnReplyPostClickedObservable.subscribe(scrapedPost -> LaunchReplyPostInBrowser(mThreadId, scrapedPost.getId())));
         mSubscriptions.add(scrapedPostAdapter.OnSharePostClickedObservable.subscribe(scrapedPost -> sharePostToOtherApp(scrapedPost)));
         mSubscriptions.add(scrapedPostAdapter.OnAddToBookmarkClickedObservable.subscribe(bookmark -> addBookMark(bookmark)));
@@ -151,6 +152,11 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
 
         mRecycleView.setDefaultOnRefreshListener(this::loadPosts);
+    }
+
+    private void LaunchEditPostInBrowser(String postId) {
+        Uri url = Uri.parse(StringConstants.WHIRLPOOL_EDIT_URL + String.valueOf(postId));
+        launchBrowserSubject.onNext(url);
     }
 
     private void sharePostToOtherApp(String shortCode) {

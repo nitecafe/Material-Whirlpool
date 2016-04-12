@@ -35,6 +35,7 @@ import rx.subjects.PublishSubject;
 public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.ScrapedPostViewHolder> {
 
     public PublishSubject<ScrapedPost> OnReplyPostClickedObservable = PublishSubject.create();
+    public PublishSubject<ScrapedPost> OnEditPostClickedObservable = PublishSubject.create();
     public PublishSubject<ScrapedPost> OnOpenCustomTabClickedObservable = PublishSubject.create();
     public PublishSubject<PostBookmark> OnAddToBookmarkClickedObservable = PublishSubject.create();
     public PublishSubject<Integer> OnRemoveFromBookmarkClickedObservable = PublishSubject.create();
@@ -80,7 +81,7 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
             holder.postUser.setTextColor(userNameDefaultColor);
 
         holder.postUser.setText(userName);
-        holder.postPostedtime.setText(scrapedPost.getPosted_time());
+        holder.postPostedTime.setText(scrapedPost.getPosted_time());
 
         if (scrapedPost.isEdited())
             holder.editedText.setText(R.string.edited);
@@ -130,7 +131,7 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
     public class ScrapedPostViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         public View itemView;
         @Bind(R.id.post_user) Button postUser;
-        @Bind(R.id.post_posted_time) TextView postPostedtime;
+        @Bind(R.id.post_posted_time) TextView postPostedTime;
         @Bind(R.id.post_extra) TextView postExtra;
         @Bind(R.id.post_content) TextView postContent;
         @Bind(R.id.post_user_title) TextView postUserTitle;
@@ -154,33 +155,41 @@ public class ScrapedPostAdapter extends UltimateViewAdapter<ScrapedPostAdapter.S
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             menu.setHeaderTitle(R.string.context_menu_title);
+
+            ScrapedPost post = scrapedPosts.get(getAdapterPosition());
+            if (post.getUser().getUserName().equals(preferencesGetter.getUserName())) {
+                MenuItem edit = menu.add("Edit Post");
+                RxMenuItem.clicks(edit).map(aVoid -> post)
+                        .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "Edit Post", ""))
+                        .subscribe(OnEditPostClickedObservable);
+            }
+
             MenuItem reply = menu.add(R.string.context_menu_reply_browser);
-            RxMenuItem.clicks(reply).map(aVoid -> scrapedPosts.get(getAdapterPosition()))
+            RxMenuItem.clicks(reply).map(aVoid -> post)
                     .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "Reply", ""))
                     .subscribe(OnReplyPostClickedObservable);
 
             MenuItem sharePost = menu.add(R.string.context_menu_share_post);
-            RxMenuItem.clicks(sharePost).map(aVoid -> scrapedPosts.get(getAdapterPosition()).getShortCode())
+            RxMenuItem.clicks(sharePost).map(aVoid -> post.getShortCode())
                     .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "Share post", ""))
                     .subscribe(OnSharePostClickedObservable);
 
-            if (scrapedPostChildController.isABookmark(scrapedPosts.get(getAdapterPosition()).getIdInteger())) {
+            if (scrapedPostChildController.isABookmark(post.getIdInteger())) {
                 MenuItem removeBookmark = menu.add(R.string.context_menu_remove_bookmarks);
-                RxMenuItem.clicks(removeBookmark).map(aVoid -> scrapedPosts.get(getAdapterPosition()).getIdInteger()
+                RxMenuItem.clicks(removeBookmark).map(aVoid -> post.getIdInteger()
                 ).doOnNext(postId -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "Remove from Bookmark", ""))
                         .subscribe(OnRemoveFromBookmarkClickedObservable);
             } else {
                 MenuItem bookmark = menu.add(R.string.context_menu_add_bookmark);
                 RxMenuItem.clicks(bookmark).map(aVoid -> {
-                    final ScrapedPost scrapedPost = scrapedPosts.get(getAdapterPosition());
-                    final int i = Integer.parseInt(scrapedPost.getId());
+                    final int i = Integer.parseInt(post.getId());
                     return new PostBookmark(i, getAdapterPosition() + 1);
                 }).doOnNext(postBookmark -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "Add to Bookmark", ""))
                         .subscribe(OnAddToBookmarkClickedObservable);
             }
 
             MenuItem openCustomTab = menu.add(R.string.context_menu_open_web_version);
-            RxMenuItem.clicks(openCustomTab).map(aVoid -> scrapedPosts.get(getAdapterPosition()))
+            RxMenuItem.clicks(openCustomTab).map(aVoid -> post)
                     .doOnNext(scrapedPost -> WhirlpoolApp.getInstance().trackEvent(StringConstants.ANALYTIC_POST_CONTEXT_MENU, "Open in Custom Tab", ""))
                     .subscribe(OnOpenCustomTabClickedObservable);
         }
