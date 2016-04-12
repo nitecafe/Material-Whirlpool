@@ -3,6 +3,7 @@ package com.android.nitecafe.whirlpoolnews.ui.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsService;
 import android.support.design.widget.Snackbar;
@@ -56,11 +57,13 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     @Bind(R.id.post_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.post_progress_loader) MaterialProgressBar mMaterialProgressBar;
     @State int mPageToLoad;
+    @State Parcelable mScrollPosition;
     private int mThreadId;
     private ScrapedPostAdapter scrapedPostAdapter;
     private String mThreadTitle;
     private int mPostLastReadId;
     private int mTotalPageCount;
+    private LinearLayoutManager layoutManager;
 
     public static ScrapedPostChildFragment newInstance(int threadId, String threadTitle, int page, int postLastRead) {
         ScrapedPostChildFragment fragment = new ScrapedPostChildFragment();
@@ -86,6 +89,12 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     public void onResume() {
         super.onResume();
         WhirlpoolApp.getInstance().trackScreenView("Scraped Post Child Fragment");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveScrollPosition();
     }
 
     @Override
@@ -136,7 +145,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     }
 
     private void SetupRecycleView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager = new LinearLayoutManager(getContext());
         mRecycleView.setLayoutManager(layoutManager);
 
         scrapedPostAdapter = new ScrapedPostAdapter(_controller, preferencesGetter);
@@ -152,6 +161,10 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
 
         mRecycleView.setDefaultOnRefreshListener(this::loadPosts);
+    }
+
+    private void saveScrollPosition() {
+        mScrollPosition = layoutManager.onSaveInstanceState();
     }
 
     private void LaunchEditPostInBrowser(String postId) {
@@ -253,7 +266,9 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     }
 
     private void ScrollToFirstUnreadItem() {
-        if (mPostLastReadId > 0) {
+        if (mScrollPosition != null) {
+            mRecycleView.getLayoutManager().onRestoreInstanceState(mScrollPosition);
+        } else if (mPostLastReadId > 0) {
             //calculate number of post before and take away the answer
             int position = mPostLastReadId - ((mPageToLoad - 1) * StringConstants.POST_PER_PAGE);
             mRecycleView.scrollVerticallyToPosition(position - 1);
