@@ -19,7 +19,7 @@ import com.android.nitecafe.whirlpoolnews.ui.interfaces.IOnWhimClicked;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IWhimsFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
-import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
+import com.marshalchen.ultimaterecyclerview.ui.divideritemdecoration.HorizontalDividerItemDecoration;
 
 import java.util.List;
 

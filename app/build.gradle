@@ -2,6 +2,7 @@ buildscript {
     repositories {
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
+        maven { url "http://dl.bintray.com/jjhesk/maven" }
     }
 
     dependencies {
@@ -23,7 +24,7 @@ repositories {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.android.nitecafe.whirlpoolnews"
@@ -94,7 +95,6 @@ dependencies {
 
     //injections
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.marshalchen.ultimaterecyclerview:library:0.4.0'
     apt 'com.google.dagger:dagger-compiler:2.2'
     compile 'com.google.dagger:dagger:2.2'
     provided 'org.glassfish:javax.annotation:10.0-b28'
@@ -107,7 +107,10 @@ dependencies {
     compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-support-v4:0.4.0'
 
+    //parser
     compile 'org.jsoup:jsoup:1.8.3'
+
+    //ui
     compile 'me.zhanghai.android.materialprogressbar:library:1.1.5'
     compile('com.mikepenz:materialdrawer:5.1.9@aar') {
         transitive = true
@@ -119,13 +122,17 @@ dependencies {
     compile('com.github.afollestad.material-dialogs:core:0.8.5.8@aar') {
         transitive = true
     }
-
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
-        transitive = true;
-    }
+    compile 'com.hkm.slidingmenulib:libmenu:0.4.9'
     compile('com.mikepenz:aboutlibraries:5.6.5@aar') {
         transitive = true
     }
+
+    //crash reporting
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+        transitive = true;
+    }
+
+    //utils
     compile 'com.pushbots:pushbots-lib:2.0.13@aar'
     compile 'joda-time:joda-time:2.9.3'
 }

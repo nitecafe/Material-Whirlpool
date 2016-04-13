@@ -27,7 +27,7 @@ import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedPostAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostChildFragment;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
-import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
+import com.marshalchen.ultimaterecyclerview.ui.divideritemdecoration.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;

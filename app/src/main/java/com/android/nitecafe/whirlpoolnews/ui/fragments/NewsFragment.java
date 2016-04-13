@@ -19,7 +19,7 @@ import com.android.nitecafe.whirlpoolnews.ui.adapters.NewsAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.INewsFragment;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IRecycleViewItemClick;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
-import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
+import com.marshalchen.ultimaterecyclerview.ui.divideritemdecoration.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
