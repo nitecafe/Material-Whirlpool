@@ -7,14 +7,17 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsService;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
 import android.text.InputType;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.nitecafe.whirlpoolnews.R;
@@ -25,7 +28,9 @@ import com.android.nitecafe.whirlpoolnews.models.PostBookmark;
 import com.android.nitecafe.whirlpoolnews.models.ScrapedPost;
 import com.android.nitecafe.whirlpoolnews.ui.adapters.ScrapedPostAdapter;
 import com.android.nitecafe.whirlpoolnews.ui.interfaces.IScrapedPostChildFragment;
+import com.android.nitecafe.whirlpoolnews.utilities.WhirlpoolUtils;
 import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGetter;
+import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.ui.divideritemdecoration.HorizontalDividerItemDecoration;
 
@@ -56,6 +61,8 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     @Inject @Named("prefetchBundle") PublishSubject<List<Bundle>> prefetchBundleSubject;
     @Bind(R.id.post_recycle_view) UltimateRecyclerView mRecycleView;
     @Bind(R.id.post_progress_loader) MaterialProgressBar mMaterialProgressBar;
+    @Bind(R.id.post_recycle_view_header) RecyclerViewHeader mRecyclerViewHeader;
+    @Bind(R.id.post_note) TextView mNoteTextView;
     @State int mPageToLoad;
     @State Parcelable mScrollPosition;
     private int mThreadId;
@@ -123,13 +130,12 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
 
         ButterKnife.bind(this, inflate);
         ((WhirlpoolApp) getActivity().getApplication()).getDaggerComponent().inject(this);
+        mNoteTextView.setMovementMethod(LinkMovementMethod.getInstance());
         _controller.attach(this);
 
         Icepick.restoreInstanceState(this, savedInstanceState);
-
         SetupRecycleView();
         loadPosts();
-
         return inflate;
     }
 
@@ -157,6 +163,7 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
         mSubscriptions.add(scrapedPostAdapter.OnViewUserInfoClickedObservable.subscribe(integer -> launchUserInfoPage(integer)));
         mSubscriptions.add(scrapedPostAdapter.OnOpenCustomTabClickedObservable.subscribe(scrapedPost -> LaunchPostInBrowser(scrapedPost.getId())));
 
+        mRecyclerViewHeader.attachTo(mRecycleView.mRecyclerView);
         mRecycleView.setAdapter(scrapedPostAdapter);
         mRecycleView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).showLastDivider().build());
 
@@ -225,10 +232,24 @@ public class ScrapedPostChildFragment extends BaseFragment implements IScrapedPo
     }
 
     @Override
-    public void DisplayPosts(List<ScrapedPost> posts) {
+    public void DisplayPosts(List<ScrapedPost> posts, String note) {
         scrapedPostAdapter.SetPosts(posts);
+        SetupNoteBar(note);
         ScrollToFirstUnreadItem();
         prefetchSomeReplyUri(mThreadId, posts);
+    }
+
+    private void SetupNoteBar(String note) {
+        if (note != null && !note.isEmpty()) {
+            String s = WhirlpoolUtils.replaceAllWhirlpoolLinksWithInternalAppLinks(note, _controller.isDarkTheme());
+            mNoteTextView.setVisibility(View.VISIBLE);
+            mNoteTextView.setText(Html.fromHtml(s));
+            if(_controller.isDarkTheme())
+                mRecyclerViewHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.black));
+            else
+                mRecyclerViewHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.primary_light));
+        } else
+            mNoteTextView.setVisibility(View.GONE);
     }
 
     @Override

@@ -40,7 +40,7 @@ public class ScrapedPostChildController extends ThreadBaseController<IScrapedPos
         whirlpoolRestClient.GetScrapedPosts(threadId, page)
                 .subscribe(posts -> {
                     if (postFragment != null) {
-                        postFragment.DisplayPosts(posts.getScrapedPosts());
+                        postFragment.DisplayPosts(posts.getScrapedPosts(),posts.getNotebar());
                         postFragment.SetTitle(posts.getThread_title());
                         postFragment.HideCenterProgressBar();
                         postFragment.UpdatePageCount(posts.getPageCount());

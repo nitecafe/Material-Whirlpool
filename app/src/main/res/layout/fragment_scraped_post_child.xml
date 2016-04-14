@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragments.ScrapedPostFragment">
+    tools:context=".ui.fragments.ScrapedPostChildFragment">
 
     <me.zhanghai.android.materialprogressbar.MaterialProgressBar
         android:id="@+id/post_progress_loader"
@@ -21,5 +21,26 @@
         android:layout_height="wrap_content"
         app:recyclerviewScrollbars="vertical"
         >
+
+        <com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
+            android:id="@+id/post_recycle_view_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top">
+
+            <TextView
+                android:id="@+id/post_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:clickable="true"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:visibility="gone"/>
+
+        </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>
+
     </com.marshalchen.ultimaterecyclerview.UltimateRecyclerView>
 </RelativeLayout>

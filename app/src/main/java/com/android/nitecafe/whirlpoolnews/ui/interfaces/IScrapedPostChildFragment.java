@@ -9,7 +9,7 @@ public interface IScrapedPostChildFragment extends IThreadActionMessageFragment 
 
     void DisplayErrorMessage();
 
-    void DisplayPosts(List<ScrapedPost> posts);
+    void DisplayPosts(List<ScrapedPost> posts, String notebar);
 
     void SetTitle(String thread_title);
 

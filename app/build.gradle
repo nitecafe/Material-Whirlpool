@@ -135,6 +135,7 @@ dependencies {
     //utils
     compile 'com.pushbots:pushbots-lib:2.0.13@aar'
     compile 'joda-time:joda-time:2.9.3'
+    compile 'com.bartoszlipinski:recyclerviewheader2:2.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
