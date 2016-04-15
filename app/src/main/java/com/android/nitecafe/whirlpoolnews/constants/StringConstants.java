@@ -25,6 +25,7 @@ public class StringConstants {
     public static final String NOTIFICATION_INTENT_SCREEN_KEY = "startscreen";
     public static final String NOTIFICATION_INTENT_WATCHED_SCREEN_KEY = "watched";
     public static final String NOTIFICATION_INTENT_WHIMS_SCREEN_KEY = "whims";
+    public static final String LOG_ERROR_TAG = "WhirlMate";
 
     //google analytic
     public static final String ANALYTIC_RECYCLEVIEW_CLICK = "RecycleView Click";

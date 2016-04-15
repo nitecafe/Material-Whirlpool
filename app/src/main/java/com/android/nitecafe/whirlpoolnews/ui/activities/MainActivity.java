@@ -86,8 +86,10 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
         mSubscriptions.add(whimSubject.subscribe(aVoid -> updateWhimDrawerItemBadge()));
         mSubscriptions.add(launchBrowserSubject.subscribe(uri -> launchCustomTab(uri)));
-        mSubscriptions.add(prefetchSubject.subscribe(uri -> prefetchUrl(uri)));
-        mSubscriptions.add(prefetchBundleSubject.subscribe(bundles -> prefetchBundle(bundles)));
+        mSubscriptions.add(prefetchSubject.subscribe(uri -> prefetchUrl(uri)
+                , throwable -> Log.e(StringConstants.LOG_ERROR_TAG, "Failed to prefetch single link.")));
+        mSubscriptions.add(prefetchBundleSubject.subscribe(bundles -> prefetchBundle(bundles)
+                , throwable -> Log.e(StringConstants.LOG_ERROR_TAG, "Failed to prefetch links from bundle.")));
 
         final String userNameFromPreference = preferencesGetter.getUserName();
         if (!userNameFromPreference.isEmpty()) {
@@ -274,14 +276,16 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
         }
     }
 
-    @Override public void OnOpenWebVersionClicked(int threadId, int totalPage) {
+    @Override
+    public void OnOpenWebVersionClicked(int threadId, int totalPage) {
         if (preferencesGetter.getOpenLastPage())
             OnOpenWebVersionClicked(threadId, totalPage, 0);
         else
             OnOpenWebVersionClicked(threadId, 1, 0);
     }
 
-    @Override public void OnOpenWebVersionClicked(int threadId, int lastPageRead, int lastReadId) {
+    @Override
+    public void OnOpenWebVersionClicked(int threadId, int lastPageRead, int lastReadId) {
         final Uri parse = Uri.parse(StringConstants.THREAD_URL + String.valueOf(threadId) + "&p=" +
                 String.valueOf(lastPageRead) + "&#r" + String.valueOf(lastReadId));
         launchCustomTab(parse);
