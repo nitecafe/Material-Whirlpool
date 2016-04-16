@@ -49,6 +49,7 @@
             android:id="@+id/thread_recycle_view"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            app:recyclerviewEmptyView="@layout/empty_view"
             app:recyclerviewScrollbars="vertical"
             >
         </com.marshalchen.ultimaterecyclerview.UltimateRecyclerView>
