@@ -65,7 +65,7 @@
 -dontwarn rx.internal.util.unsafe.**
 -dontwarn com.squareup.leakcanary.**
 
-
+-dontwarn com.nineoldandroids.animation.**
 -dontwarn org.joda.convert.**
 -dontwarn org.joda.time.**
 -keep class org.joda.time.** { *; }
