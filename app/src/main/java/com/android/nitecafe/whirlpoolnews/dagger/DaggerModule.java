@@ -26,6 +26,7 @@ import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhimsService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
+import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.squareup.okhttp.OkHttpClient;
 
 import javax.inject.Singleton;
@@ -47,7 +48,9 @@ public class DaggerModule {
 
     @Provides
     @Singleton OkHttpClient provideOkHttpClient() {
-        return new OkHttpClient();
+        OkHttpClient client = new OkHttpClient();
+        client.networkInterceptors().add(new StethoInterceptor());
+        return client;
     }
 
     @Provides

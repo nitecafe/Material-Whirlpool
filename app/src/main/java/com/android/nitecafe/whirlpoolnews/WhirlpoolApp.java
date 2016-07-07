@@ -9,6 +9,7 @@ import com.android.nitecafe.whirlpoolnews.dagger.DaggerDaggerComponent;
 import com.android.nitecafe.whirlpoolnews.dagger.DaggerModule;
 import com.android.nitecafe.whirlpoolnews.dagger.SubjectModule;
 import com.crashlytics.android.Crashlytics;
+import com.facebook.stetho.Stetho;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
@@ -30,7 +31,7 @@ public class WhirlpoolApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        Stetho.initializeWithDefaults(this);
         if (!BuildConfig.DEBUG)
             Fabric.with(this, new Crashlytics());
 

@@ -17,6 +17,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.nitecafe.whirlpoolnews.R;
 import com.android.nitecafe.whirlpoolnews.WhirlpoolApp;
 import com.android.nitecafe.whirlpoolnews.constants.StringConstants;
+import com.android.nitecafe.whirlpoolnews.controllers.MainPresenter;
 import com.android.nitecafe.whirlpoolnews.scheduler.ISchedulerManager;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.ForumFragment;
 import com.android.nitecafe.whirlpoolnews.ui.fragments.IndividualWhimFragment;
@@ -67,6 +68,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Inject IPreferencesGetter preferencesGetter;
     @Inject CustomTabsActivityHelper mCustomTabsActivityHelper;
     @Inject ISchedulerManager schedulerManager;
+    @Inject MainPresenter mMainPresenter;
     private int mForumId;
     private int whimId;
 
@@ -289,9 +291,8 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
     @Override
     public void OnOpenWebVersionClicked(int threadId, int lastPageRead, int lastReadId) {
 
-        if(watchedThreadIdentifier.isThreadWatched(threadId))
-        {
-            mWhirlpoolRestService.MarkThreadAsRead(threadId).doOnError(throwable -> {});
+        if (mMainPresenter.IsThreadWatched(threadId) && preferencesGetter.isAutoMarkAsReadLastPage()) {
+            mMainPresenter.MarkThreadAsRead(threadId);
         }
 
         final Uri parse = Uri.parse(StringConstants.THREAD_URL + String.valueOf(threadId) + "&p=" +
