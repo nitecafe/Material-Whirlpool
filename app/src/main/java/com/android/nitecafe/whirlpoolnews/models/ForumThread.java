@@ -12,7 +12,7 @@ public class ForumThread implements IWhirlpoolThread {
 
     @SerializedName("LAST_DATE")
     private String LASTDATE;
-    @SerializedName("FORUM_DATE")
+    @SerializedName("FORUM_NAME")
     private String FORUMNAME;
     private Poster LAST;
     @SerializedName("FORUM_ID")
