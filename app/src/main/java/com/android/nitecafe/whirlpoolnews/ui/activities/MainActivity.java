@@ -34,6 +34,7 @@ import com.android.nitecafe.whirlpoolnews.utilities.interfaces.IPreferencesGette
 import com.android.nitecafe.whirlpoolnews.web.WhimsService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWatchedThreadService;
 import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestClient;
+import com.android.nitecafe.whirlpoolnews.web.interfaces.IWhirlpoolRestService;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.pushbots.push.Pushbots;
@@ -53,6 +54,7 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     private final String previousVersion = "2.4";
     @Inject IWhirlpoolRestClient mWhirlpoolRestClient;
+    @Inject IWhirlpoolRestService mWhirlpoolRestService;
     @Bind(R.id.fab_create_thread) FloatingActionButton fabCreateThread;
     @Bind(R.id.fab_reply_whim) FloatingActionButton fabReplyWhim;
     @Inject IWatchedThreadService watchedThreadIdentifier;
@@ -286,6 +288,12 @@ public class MainActivity extends NavigationDrawerActivity implements LoginFragm
 
     @Override
     public void OnOpenWebVersionClicked(int threadId, int lastPageRead, int lastReadId) {
+
+        if(watchedThreadIdentifier.isThreadWatched(threadId))
+        {
+            mWhirlpoolRestService.MarkThreadAsRead(threadId).doOnError(throwable -> {});
+        }
+
         final Uri parse = Uri.parse(StringConstants.THREAD_URL + String.valueOf(threadId) + "&p=" +
                 String.valueOf(lastPageRead) + "&#r" + String.valueOf(lastReadId));
         launchCustomTab(parse);
